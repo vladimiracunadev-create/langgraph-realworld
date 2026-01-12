@@ -24,65 +24,61 @@ class RunIn(BaseModel):
     thread_id: str = "rrhh-demo-1"
 
 
-@app.post("/api/run/stream")
-async def run_stream(payload: RunIn):
-    config = {"configurable": {"thread_id": payload.thread_id}}
+@app.post("/api/run")
+def run(payload: RunIn):
+    """Ejecuta el flujo y devuelve un snapshot final (sin streaming)."""
+    cfg = {"configurable": {"thread_id": payload.thread_id}}
+    out = GRAPH.invoke({"events": []}, config=cfg)
+    snapshot = {
+        "job": (out.get("job") or {}) if isinstance(out, dict) else {},
+        "scored": (out.get("scored") or []) if isinstance(out, dict) else [],
+        "shortlist": (out.get("shortlist") or []) if isinstance(out, dict) else [],
+        "scheduled": (out.get("scheduled") or []) if isinstance(out, dict) else [],
+        "events": (out.get("events") or []) if isinstance(out, dict) else [],
+        "done": bool(out.get("done")) if isinstance(out, dict) else False,
+    }
+    return JSONResponse(snapshot)
 
-    async def gen():
-        sent_events = [0]  # mutable counter
 
-        async for mode, chunk in GRAPH.astream(
-            {},
-            config=config,
-            stream_mode=["updates", "values"],
-        ):
-            if mode == "updates":
-                yield (json.dumps({"type": "update", "data": chunk}) + "\n").encode("utf-8")
+@app.get("/api/stream")
+def stream(thread_id: str = "rrhh-demo-1"):
+    """Streaming NDJSON para ver el flujo en tiempo real.
 
-            if mode == "values":
-                values: Dict[str, Any] = chunk
-                events = values.get("events") or []
-                if len(events) > sent_events[0]:
-                    for ev in events[sent_events[0]:]:
-                        yield (json.dumps({"type": "event", "event": ev}) + "\n").encode("utf-8")
-                    sent_events[0] = len(events)
+    El frontend (web/index.html) consume este endpoint y va pintando eventos.
+    """
+    cfg = {"configurable": {"thread_id": thread_id}}
 
-                snapshot = {
-                    "cursor": values.get("cursor", 0),
-                    "total": len(values.get("candidates", []) or []),
-                    "scored": values.get("scored", []) or [],
-                    "shortlist": values.get("shortlist", []) or [],
-                    "scheduled": values.get("scheduled", []) or [],
-                    "done": bool(values.get("done", False)),
-                    "job": values.get("job", {}) or {},
-                }
-                yield (json.dumps({"type": "snapshot", "snapshot": snapshot}) + "\n").encode("utf-8")
+    def gen():
+        # En LangGraph, stream() emite estados parciales.
+        for event in GRAPH.stream({"events": []}, config=cfg):
+            if isinstance(event, dict):
+                values = event
+            else:
+                values = {}
+
+            snapshot = {
+                "job": values.get("job", {}) or {},
+                "scored": values.get("scored", []) or [],
+                "shortlist": values.get("shortlist", []) or [],
+                "scheduled": values.get("scheduled", []) or [],
+                "events": values.get("events", []) or [],
+                "done": bool(values.get("done", False)),
+            }
+
+            payload = {"type": "snapshot", "snapshot": snapshot}
+            yield (json.dumps(payload) + "\n").encode("utf-8")
 
         yield (json.dumps({"type": "final", "ok": True}) + "\n").encode("utf-8")
 
     return StreamingResponse(gen(), media_type="application/x-ndjson")
 
 
-@app.get("/api/thread/{thread_id}/state")
-def thread_state(thread_id: str):
-    config = {"configurable": {"thread_id": thread_id}}
-    snap = GRAPH.get_state(config)
-    values = dict(getattr(snap, "values", {}) or {})
-    return JSONResponse({
-        "thread_id": thread_id,
-        "next": list(getattr(snap, "next", ())),
-        "values": values,
-        "metadata": getattr(snap, "metadata", None),
-        "created_at": getattr(snap, "created_at", None),
-    })
-
-# -----------------------------
-# Endpoints "reales" (stubs)
-# -----------------------------
+# ----------------------------
+# STUBS (para que lo vuelvas REAL)
+# ----------------------------
 # Estos endpoints NO resuelven el flujo real por sí solos (tú lo harás),
 # pero te dejan el lugar exacto y la librería lista (python-multipart) para empezar.
 
-from fastapi import UploadFile, File, HTTPException
 
 @app.post("/api/cv/upload")
 async def upload_cv(file: UploadFile = File(...)):
@@ -93,5 +89,5 @@ async def upload_cv(file: UploadFile = File(...)):
     - extract_candidate_signals(texto)
     - upsert_candidate_in_db(...)
     """
-    raise HTTPException(status_code=501, detail="Stub: implementar almacenamiento + parsing en src/integrations.py")
-
+    detail = "Stub: implementar almacenamiento + parsing en src/integrations.py"
+    raise HTTPException(status_code=501, detail=detail)

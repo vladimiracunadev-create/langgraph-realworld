@@ -1,16 +1,16 @@
 import json
+import operator
 import os
 import time
-from typing import TypedDict, List, Dict, Any, Literal
+from typing import Any, Annotated, Dict, List, Literal, TypedDict
 
-from langgraph.graph import StateGraph, START, END
 from langgraph.checkpoint.sqlite import SqliteSaver
+from langgraph.graph import END, START, StateGraph
 
-from .settings import load_settings, data_dir
+from .settings import data_dir, load_settings
 
 # Integraciones reales: ver src/integrations.py (stubs)
-# Integraciones reales (stubs + guías)
-#from .integrations import (
+# from .integrations import (
 #    parse_resume_to_text,
 #    extract_candidate_signals,
 #    upsert_candidate_in_db,
@@ -19,7 +19,7 @@ from .settings import load_settings, data_dir
 #    send_email_smtp_async,
 #    send_email_sendgrid,
 #    llm_generate_interview_questions,
-#)
+# )
 
 
 class ScreeningState(TypedDict, total=False):
@@ -33,25 +33,42 @@ class ScreeningState(TypedDict, total=False):
     done: bool
 
 
-def _push_event(kind: str, payload: Dict[str, Any]) -> Dict[str, Any]:
-    # Reducer operator.add en el grafo hará append de eventos
-    return {"events": [{"ts": time.time(), "kind": kind, **payload}]}
+def _now_ms() -> int:
+    return int(time.time() * 1000)
 
 
-def load_inputs(_: ScreeningState) -> ScreeningState:
+def _push_event(event_type: str, data: Dict[str, Any]) -> Dict[str, Any]:
+    return {
+        "events": [
+            {
+                "ts": _now_ms(),
+                "type": event_type,
+                "data": data,
+            }
+        ]
+    }
+
+
+def load_inputs(state: ScreeningState) -> ScreeningState:
+    """Carga job + candidates desde data/ para que el demo sea determinista."""
     load_settings()
-    ddir = data_dir()
-    # TODO REAL: reemplazar data/job.json por lectura desde tu ATS (o BD) usando httpx.
-    # Ejemplo: obtener vacante por job_id desde un endpoint interno.
-    with open(os.path.join(ddir, "job.json"), "r", encoding="utf-8") as f:
+
+    job_path = os.path.join(data_dir(), "job.json")
+    candidates_path = os.path.join(data_dir(), "candidates.json")
+
+    with open(job_path, "r", encoding="utf-8") as f:
         job = json.load(f)
-    # TODO REAL: candidatos desde CVs reales:
-    # 1) Recibir archivos (endpoint /api/cv/upload) o leer desde un bucket (S3) o carpeta compartida.
-    # 2) parse_resume_to_text(file_path) -> texto
-    # 3) extract_candidate_signals(texto) -> skills/años/links
-    # 4) upsert_candidate_in_db(...) para persistir
-    with open(os.path.join(ddir, "candidates.json"), "r", encoding="utf-8") as f:
+
+    with open(candidates_path, "r", encoding="utf-8") as f:
         candidates = json.load(f)
+
+    # TODO REAL (cuando lo hagas real):
+    # - Recibir CVs via /api/cv/upload o desde un bucket (S3/Drive)
+    # - parse_resume_to_text(file_path) -> texto
+    # - extract_candidate_signals(texto) -> skills/años/links
+    # - upsert_candidate_in_db(...)
+    # - update_ats_status(...)
+    # - llm_generate_interview_questions(...)
 
     out: ScreeningState = {
         "job": job,
@@ -60,6 +77,7 @@ def load_inputs(_: ScreeningState) -> ScreeningState:
         "scored": [],
         "shortlist": [],
         "scheduled": [],
+        "events": state.get("events", []) or [],
         "done": False,
     }
     out.update(
@@ -68,141 +86,122 @@ def load_inputs(_: ScreeningState) -> ScreeningState:
             {"job_id": job.get("job_id"), "count_candidates": len(candidates)},
         )
     )
-
- #  out.update(_push_event("loaded", {"job_id": job.get("job_id"), "count_candidates": len(candidates)}))
     return out
 
 
 def score_one(state: ScreeningState) -> ScreeningState:
-    """Scoring incremental: evalúa 1 candidato por iteración para mostrar progreso en tiempo real."""
+    """Scoring incremental: evalúa 1 candidato por iteración para mostrar progreso."""
     job = state["job"]
     candidates = state["candidates"]
-    i = state.get("cursor", 0)
+    cursor = int(state.get("cursor", 0))
 
-    if i >= len(candidates):
-        return {"done": True}
+    if cursor >= len(candidates):
+        return {}
 
-    c = candidates[i]
-    must_have = set(job.get("must_have", []))
-    nice = set(job.get("nice_to_have", []))
-    skills = set(c.get("skills", []))
+    c = candidates[cursor]
 
-    scoring = job.get("scoring", {})
-    must_each = int(scoring.get("must_have_each", 12))
-    nice_each = int(scoring.get("nice_to_have_each", 5))
-    years_w = int(scoring.get("years_experience_weight", 10))
-    edu_w = int(scoring.get("education_weight", 6))
-    port_w = int(scoring.get("portfolio_weight", 8))
-    soft_w = int(scoring.get("soft_skills_weight", 8))
-    penalty_missing = int(scoring.get("penalty_missing_must_have", 10))
+    must = job.get("must_have", []) or []
+    nice = job.get("nice_to_have", []) or []
+    min_years = float(job.get("min_years", 0) or 0)
 
-    must_hits = len(must_have.intersection(skills))
-    must_misses = len(must_have.difference(skills))
-    nice_hits = len(nice.intersection(skills))
+    c_skills = [s.lower() for s in (c.get("skills") or [])]
+    must_hits = sum(1 for s in must if s.lower() in c_skills)
+    nice_hits = sum(1 for s in nice if s.lower() in c_skills)
 
-    years = int(c.get("years_experience", 0))
-    years_score = min(years, 5) / 5 * years_w
+    must_each = 15.0
+    nice_each = 5.0
+    penalty_missing = 12.0
+
+    must_misses = max(0, len(must) - must_hits)
+    years = float(c.get("years_experience", 0) or 0)
+
+    years_score = 0.0
+    if min_years > 0:
+        years_score = min(20.0, max(0.0, (years - min_years) * 5.0 + 10.0))
 
     edu = (c.get("education") or "").lower()
-    edu_score = {
-        "universitario": edu_w,
-        "técnico": edu_w * 0.7,
-        "bootcamp": edu_w * 0.6,
-        "autodidacta": edu_w * 0.45,
-    }.get(edu, edu_w * 0.4)
+    edu_score = 10.0 if any(x in edu for x in ["ing", "engineer", "informat", "cs"]) else 4.0
 
-    portfolio_score = port_w if (c.get("portfolio_url") or "").strip() else 0
+    portfolio = (c.get("portfolio_url") or "").strip()
+    portfolio_score = 8.0 if portfolio else 0.0
 
-    soft_skills = set(c.get("soft_skills", []))
-    soft_need = set(job.get("soft_skills", []))
-    soft_hits = len(soft_need.intersection(soft_skills))
-    soft_score = (soft_hits / max(1, len(soft_need))) * soft_w
+    soft = [s.lower() for s in (c.get("soft_skills") or [])]
+    soft_score = 2.0 * min(5, len(soft))
 
     base = must_hits * must_each + nice_hits * nice_each
     penalty = must_misses * penalty_missing
     total = max(0, round(base + years_score + edu_score + portfolio_score + soft_score - penalty, 2))
 
     result = {
-        **c,
+        "candidate_id": c.get("candidate_id"),
+        "name": c.get("name"),
+        "email": c.get("email"),
         "score": total,
         "must_hits": must_hits,
-        "must_misses": must_misses,
         "nice_hits": nice_hits,
-        "explain": {
-            "base": base,
-            "years_score": round(years_score, 2),
-            "edu_score": round(edu_score, 2),
-            "portfolio_score": portfolio_score,
-            "soft_score": round(soft_score, 2),
-            "penalty": penalty,
-        },
-        "status": "scored",
+        "years": years,
+        "portfolio_url": portfolio,
     }
 
-    time.sleep(0.15)
-
     out: ScreeningState = {
-        "cursor": i + 1,
+        "cursor": cursor + 1,
         "scored": [result],
     }
     out.update(
         _push_event(
-                "scored", 
-                {"candidate_id": c["candidate_id"], "name": c["name"], "score": total}
-                )
-            )
+            "scored",
+            {"candidate_id": c.get("candidate_id"), "name": c.get("name"), "score": total},
+        )
+    )
     return out
 
 
 def build_shortlist(state: ScreeningState) -> ScreeningState:
-    job = state["job"]
+    """Construye shortlist a partir de los scores acumulados."""
     scored = state.get("scored", []) or []
-    min_score = float(job.get("shortlist_min_score", 55))
-    top_n = int(job.get("shortlist_top_n", 4))
+    top_n = int(state["job"].get("top_n", 5) or 5)
+    min_score = float(state["job"].get("min_score", 60) or 60)
 
-    ordered = sorted(scored, key=lambda x: x.get("score", 0), reverse=True)
-    shortlist = [c for c in ordered if c.get("score", 0) >= min_score][:top_n]
-    for c in shortlist:
-        c["status"] = "shortlisted"
+    filtered = [x for x in scored if float(x.get("score", 0) or 0) >= min_score]
+    filtered.sort(key=lambda x: float(x.get("score", 0) or 0), reverse=True)
+    shortlist = filtered[:top_n]
 
     out: ScreeningState = {"shortlist": shortlist}
-    out.update(_push_event("shortlist", {"count": len(shortlist), "min_score": min_score, "top_n": top_n}))
+    out.update(
+        _push_event(
+            "shortlist",
+            {"count": len(shortlist), "min_score": min_score, "top_n": top_n},
+        )
+    )
     return out
 
 
 def schedule_interviews(state: ScreeningState) -> ScreeningState:
-    job = state["job"]
-    slots = list(job.get("interview_slots", []))
-    shortlist = state.get("shortlist", []) or []
-    scheduled = []
+    """Stub de agendamiento: asigna slots de entrevista a la shortlist.
 
+    TODO REAL:
+    - create_google_calendar_event(...)
+    - send_email_smtp_async(...) / send_email_sendgrid(...)
+    """
+    shortlist = state.get("shortlist", []) or []
+    base_ts = int(time.time()) + 3600  # +1h
+
+    scheduled: List[Dict[str, Any]] = []
     for idx, c in enumerate(shortlist):
-        slot = slots[idx] if idx < len(slots) else "POR DEFINIR"
-        # TODO REAL: aquí es donde lo vuelves real:
-        # - create_google_calendar_event(...) para crear el evento en Calendar
-        # - send_email_sendgrid(...) o send_email_smtp_async(...) para notificar
-        # - update_ats_status(candidate_id, "interview_scheduled")
-        item = {
-            "candidate_id": c["candidate_id"],
-            "name": c["name"],
-            "email": c["email"],
-            "slot": slot,
-            "email_preview": (
-                f"Hola {c['name']},\n\n"
-                f"¡Gracias por postular a {job.get('title')}!\n"
-                f"Te proponemos entrevista el {slot}.\n\n"
-                f"Saludos,\nRR.HH."
-            ),
-        }
-        scheduled.append(item)
+        start_ts = base_ts + idx * 3600
+        scheduled.append(
+            {
+                "candidate_id": c.get("candidate_id"),
+                "name": c.get("name"),
+                "email": c.get("email"),
+                "slot_iso": time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime(start_ts)),
+                "duration_min": 45,
+                "status": "stub_scheduled",
+            }
+        )
 
     out: ScreeningState = {"scheduled": scheduled, "done": True}
-    out.update(
-        _push_event(
-            "scheduled",
-             {"count": len(scheduled)}
-             )
-             )
+    out.update(_push_event("scheduled", {"count": len(scheduled)}))
     return out
 
 
@@ -213,9 +212,6 @@ def should_keep_scoring(state: ScreeningState) -> Literal["score_one", "build_sh
 
 
 def compile_graph():
-    from typing_extensions import Annotated
-    import operator
-
     class State(TypedDict, total=False):
         job: Dict[str, Any]
         candidates: List[Dict[str, Any]]
