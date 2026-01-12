@@ -25,6 +25,10 @@ jobs:
       - name: Compile (syntax check)
         run: |
           python -m compileall cases/09-rrhh-screening-agenda/backend/src -q
+      - name: Tests (pytest)
+        run: |
+          pytest -q cases/09-rrhh-screening-agenda/backend/tests
+
 
   docker_build_all_cases:
     name: "Docker build (all cases)"

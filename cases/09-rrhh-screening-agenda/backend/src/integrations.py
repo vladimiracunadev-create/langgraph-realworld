@@ -2,9 +2,8 @@
 
 Este módulo NO implementa la integración final (eso lo harás tú),
 pero deja:
-- librerías instaladas (requirements.txt)
 - funciones stub
-- comentarios precisos de cómo conectarlo.
+- comentarios precisos de cómo conectarlo
 """
 
 from __future__ import annotations

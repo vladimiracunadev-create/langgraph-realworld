@@ -7,7 +7,7 @@ from typing import Annotated, Any, Dict, List, Literal, TypedDict
 from langgraph.checkpoint.sqlite import SqliteSaver
 from langgraph.graph import END, START, StateGraph
 
-from .settings import data_dir, load_settings
+from .settings import checkpoint_db_path, data_dir, load_settings
 
 
 class ScreeningState(TypedDict, total=False):
@@ -209,5 +209,5 @@ def compile_graph():
     g.add_edge("build_shortlist", "schedule_interviews")
     g.add_edge("schedule_interviews", END)
 
-    checkpointer = SqliteSaver.from_conn_string("checkpoints.sqlite")
+    checkpointer = SqliteSaver.from_conn_string(checkpoint_db_path())
     return g.compile(checkpointer=checkpointer)
