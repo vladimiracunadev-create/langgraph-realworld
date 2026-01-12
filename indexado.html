@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>LangGraph – Casos del mundo real</title>
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial;
+      color-scheme: dark;
+    }
+    body {
+      margin: 0;
+      background: radial-gradient(1200px 600px at 10% 0%, rgba(31,111,235,.18), transparent 60%),
+                  radial-gradient(900px 500px at 90% 10%, rgba(35,134,54,.16), transparent 55%),
+                  #0b0f14;
+      color: #e6edf3;
+    }
+    header {
+      padding: 22px 18px 10px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      position: sticky; top: 0; backdrop-filter: blur(10px);
+      background: rgba(11,15,20,.65);
+    }
+    .wrap { max-width: 1100px; margin: 0 auto; }
+    .h1 { font-weight: 800; letter-spacing: .2px; font-size: 22px; }
+    .sub { opacity: .82; margin-top: 6px; line-height: 1.35; }
+    .pillrow { display:flex; flex-wrap:wrap; gap:8px; margin-top: 12px; }
+    .pill {
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      font-size: 12px; opacity:.95;
+    }
+    main { padding: 16px 18px 28px; }
+    .grid {
+      display:grid;
+      grid-template-columns: repeat( auto-fit, minmax(250px, 1fr) );
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .card {
+      text-decoration:none; color: inherit;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      padding: 14px;
+      display:flex; flex-direction:column; gap:10px;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
+      min-height: 130px;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255,255,255,.18);
+      background: rgba(255,255,255,.05);
+    }
+    .top { display:flex; justify-content:space-between; align-items:center; }
+    .num { font-weight: 800; font-size: 14px; opacity:.9; }
+    .badge {
+      font-size: 11px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.02);
+      opacity:.9;
+    }
+    .badge.ok {
+      border-color: rgba(35,134,54,.55);
+      background: rgba(35,134,54,.12);
+    }
+    .title { font-weight: 750; letter-spacing:.15px; }
+    .desc { opacity:.82; line-height:1.35; font-size: 13px; }
+    .meta { opacity:.85; font-size: 12px; margin-top:auto; }
+    footer {
+      padding: 14px 18px 22px;
+      opacity:.75;
+      font-size: 12px;
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono";
+      background: rgba(0,0,0,.25);
+      border: 1px solid rgba(255,255,255,.10);
+      padding: 2px 6px; border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="h1">LangGraph – Casos del mundo real</div>
+      <div class="sub">
+        Repo scaffold con 25 casos. Cada tarjeta abre un demo. El Caso <b>09</b> está implementado con
+        backend + streaming para ver en tiempo real el flujo de RR.HH.
+      </div>
+      <div class="pillrow">
+        <div class="pill">✅ Caso 09 implementado</div>
+        <div class="pill">🧠 Flujos con estado (LangGraph)</div>
+        <div class="pill">🧾 Streaming NDJSON</div>
+        <div class="pill">💾 Memoria por <code>thread_id</code></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="grid">
+      
+      <a class="card" href="cases/01-soporte-cliente-omnicanal/demo/index.html">
+        <div class="top">
+          <div class="num">01</div>
+          <div class="badge ">PLANTILLA</div>
+        </div>
+        <div class="title">Soporte al cliente omnicanal</div>
+        <div class="desc">Clasificación, KB, escalamiento a humano.</div>
+        <div class="meta">Abrir demo →</div>
+      </a>
+    
+      <a class="card" href="cases/02-mesa-ayuda-ti-runbooks/demo/index.html">
+        <div class="top">
+          <div class="num">02</div>
+          <div class="badge ">PLANTILLA</div>
+        </div>
+        <div class="title">Mesa de ayuda TI / Runbooks</div>
+        <div class="desc">Diagnóstico y ejecución de runbooks con verificación.</div>
+        <div class="meta">Abrir demo →</div>
+      </a>
+    
+      <a class="card" href="cases/03-incident-response-sre/demo/index.html">
+        <div class="top">
+          <div class="num">03</div>
+          <div class="badge ">PLANTILLA</div>
+        </div>
+        <div class="title">Incident response (SRE)</div>
+        <div class="desc">Orquesta métricas/logs/acciones con aprobación.</div>
+        <div class="meta">Abrir demo →</div>
+      </a>
+    
+      <a class="card" href="cases/04-soc-triage-alertas/demo/index.html">
+        <div class="top">
+          <div class="num">04</div>
+          <div class="badge ">PLANTILLA</div>
+        </div>
+        <div class="title">SOC / Triage de alertas</div>
+        <div class="desc">Correlación y enriquecimiento de alertas de seguridad.</div>
+        <div class="meta">Abrir demo →</div>
+      </a>
+    
+      <a class="card" href="cases/05-analista-documentos/demo/index.html">
+        <div class="top">
+          <div class="num">05</div>
+          <div class="badge ">PLANTILLA</div>
+        </div>
+        <div class="title">Analista de documentos</div>
+        <div class="desc">Extracción de cláusulas, riesgos y checklist.</div>
+        <div class="meta">Abrir demo →</div>
+      </a>
+    
+      <a class="card" href="cases/06-compliance-auditorias/demo/index.html">
+        <div class="top">
+          <div class="num">06</div>
+          <div class="badge ">PLANTILLA</div>
+        </div>
+        <div class="title">Compliance / Auditorías</div>
+        <div class="desc">Flujo con evidencias, faltantes y trazabilidad.</div>
+        <div class="meta">Abrir demo →</div>
+      </a>
+    
+      <a class="card" href="cases/07-compras-abastecimiento/demo/index.html">
+        <div class="top">
+          <div class="num">07</div>
+          <div class="badge ">PLANTILLA</div>
+        </div>
+        <div class="title">Compras y abastecimiento</div>
+        <div class="desc">Cotiza, compara, recomienda y genera orden.</div>
+        <div class="meta">Abrir demo →</div>
+      </a>
+    
+      <a class="card" href="cases/08-ventas-b2b-crm/demo/index.html">
+        <div class="top">
+          <div class="num">08</div>
+          <div class="badge ">PLANTILLA</div>
+        </div>
+        <div class="title">Ventas B2B + CRM</div>
+        <div class="desc">Prospección, outreach y seguimiento.</div>
+        <div class="meta">Abrir demo →</div>
+      </a>
+    
+      <a class="card" href="cases/09-rrhh-screening-agenda/demo/index.html">
+        <div class="top">
+          <div class="num">09</div>
+          <div class="badge ok">IMPLEMENTADO</div>
+        </div>
+        <div class="title">RR.HH. Screening + Agenda</div>
+        <div class="desc">Filtra CVs, genera shortlist y agenda entrevistas.</div>
+        <div class="meta">Abrir demo →</div>
+      </a>
+    
+      <a class="card" href="cases/10-onboarding-empleados/demo/index.html">
+        <div class="top">
+          <div class="num">10</div>
+          <div class="badge ">PLANTILLA</div>
+        </div>
+        <div class="title">Onboarding de empleados</div>
+        <div class="desc">Cuentas, accesos, checklist y confirmación.</div>
+        <div class="meta">Abrir demo →</div>
+      </a>
+    
+      <a class="card" href="cases/11-educacion-tutor-adaptativo/demo/index.html">
+        <div class="top">
+          <div class="num">11</div>
+          <div class="badge ">PLANTILLA</div>
+        </div>
+        <div class="title">Tutor adaptativo</div>
+        <div class="desc">Diagnóstico y adaptación por desempeño.</div>
+        <div class="meta">Abrir demo →</div>
+      </a>
+    
+      <a class="card" href="cases/12-psicometria-evaluaciones/demo/index.html">
+        <div class="top">
+          <div class="num">12</div>
+          <div class="badge ">PLANTILLA</div>
+        </div>
+        <div class="title">Psicometría / Evaluaciones</div>
+        <div class="desc">Genera ítems, valida y produce informes.</div>
+        <div class="meta">Abrir demo →</div>
+      </a>
+    
+      <a class="card" href="cases/13-bi-analista-datos/demo/index.html">
+        <div class="top">
+          <div class="num">13</div>
+          <div class="badge ">PLANTILLA</div>
+        </div>
+        <div class="title">Analista de datos (BI)</div>
+        <div class="desc">Genera SQL, ejecuta y narra resultados.</div>
+        <div class="meta">Abrir demo →</div>
+      </a>
+    
+      <a class="card" href="cases/14-finanzas-conciliacion/demo/index.html">
+        <div class="top">
+          <div class="num">14</div>
+          <div class="badge ">PLANTILLA</div>
+        </div>
+        <div class="title">Finanzas / Conciliación</div>
+        <div class="desc">Clasifica, detecta outliers y sugiere acciones.</div>
+        <div class="meta">Abrir demo →</div>
+      </a>
+    
+      <a class="card" href="cases/15-ecommerce-postventa/demo/index.html">
+        <div class="top">
+          <div class="num">15</div>
+          <div class="badge ">PLANTILLA</div>
+        </div>
+        <div class="title">E-commerce postventa</div>
+        <div class="desc">Tracking, devolución/cambio y etiquetas.</div>
+        <div class="meta">Abrir demo →</div>
+      </a>
+    
+      <a class="card" href="cases/16-viajes-planificador/demo/index.html">
+        <div class="top">
+          <div class="num">16</div>
+          <div class="badge ">PLANTILLA</div>
+        </div>
+        <div class="title">Planificador de viajes</div>
+        <div class="desc">Itinerario con restricciones y ajustes iterativos.</div>
+        <div class="meta">Abrir demo →</div>
+      </a>
+    
+      <a class="card" href="cases/17-legal-intake/demo/index.html">
+        <div class="top">
+          <div class="num">17</div>
+          <div class="badge ">PLANTILLA</div>
+        </div>
+        <div class="title">Legal intake</div>
+        <div class="desc">Entrevista estructurada y borradores con revisión.</div>
+        <div class="meta">Abrir demo →</div>
+      </a>
+    
+      <a class="card" href="cases/18-marketing-contenido-qa/demo/index.html">
+        <div class="top">
+          <div class="num">18</div>
+          <div class="badge ">PLANTILLA</div>
+        </div>
+        <div class="title">Marketing con QA</div>
+        <div class="desc">Genera, revisa estilo/hechos y aprueba.</div>
+        <div class="meta">Abrir demo →</div>
+      </a>
+    
+      <a class="card" href="cases/19-devex-pr-review/demo/index.html">
+        <div class="top">
+          <div class="num">19</div>
+          <div class="badge ">PLANTILLA</div>
+        </div>
+        <div class="title">DevEx: PR review</div>
+        <div class="desc">Revisión de PRs, riesgos y changelog.</div>
+        <div class="meta">Abrir demo →</div>
+      </a>
+    
+      <a class="card" href="cases/20-migracion-legacy/demo/index.html">
+        <div class="top">
+          <div class="num">20</div>
+          <div class="badge ">PLANTILLA</div>
+        </div>
+        <div class="title">Migración legacy</div>
+        <div class="desc">Plan, refactor por lotes, tests y validación.</div>
+        <div class="meta">Abrir demo →</div>
+      </a>
+    
+      <a class="card" href="cases/21-docs-auto/demo/index.html">
+        <div class="top">
+          <div class="num">21</div>
+          <div class="badge ">PLANTILLA</div>
+        </div>
+        <div class="title">Documentación automática</div>
+        <div class="desc">Scan repo → outline → escribir → QA.</div>
+        <div class="meta">Abrir demo →</div>
+      </a>
+    
+      <a class="card" href="cases/22-backoffice-automatizacion/demo/index.html">
+        <div class="top">
+          <div class="num">22</div>
+          <div class="badge ">PLANTILLA</div>
+        </div>
+        <div class="title">Backoffice automatización</div>
+        <div class="desc">Solicitudes → verificación → ejecución → registro.</div>
+        <div class="meta">Abrir demo →</div>
+      </a>
+    
+      <a class="card" href="cases/23-salud-pretriage/demo/index.html">
+        <div class="top">
+          <div class="num">23</div>
+          <div class="badge ">PLANTILLA</div>
+        </div>
+        <div class="title">Salud: pre-triage admin</div>
+        <div class="desc">Recopila info y deriva (sin diagnóstico).</div>
+        <div class="meta">Abrir demo →</div>
+      </a>
+    
+      <a class="card" href="cases/24-pm-assistant/demo/index.html">
+        <div class="top">
+          <div class="num">24</div>
+          <div class="badge ">PLANTILLA</div>
+        </div>
+        <div class="title">Asistente PM</div>
+        <div class="desc">Ideas → épicas → tareas → seguimiento.</div>
+        <div class="meta">Abrir demo →</div>
+      </a>
+    
+      <a class="card" href="cases/25-supervisor-workers/demo/index.html">
+        <div class="top">
+          <div class="num">25</div>
+          <div class="badge ">PLANTILLA</div>
+        </div>
+        <div class="title">Supervisor + Workers</div>
+        <div class="desc">Orquestación multi-agente por subtareas.</div>
+        <div class="meta">Abrir demo →</div>
+      </a>
+    
+    </div>
+  </main>
+
+  <footer class="wrap">
+    Para ejecutar el Caso 09 localmente: <code>cases/09-rrhh-screening-agenda/backend</code> → <code>uvicorn src.api:app --port 8009</code>.
+  </footer>
+</body>
+</html>

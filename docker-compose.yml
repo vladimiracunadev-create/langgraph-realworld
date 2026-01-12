@@ -1,0 +1,19 @@
+services:
+  site:
+    build:
+      context: .
+      dockerfile: Dockerfile.site
+    ports:
+      - "8080:80"
+
+  case09:
+    build:
+      context: ./cases/09-rrhh-screening-agenda/backend
+    ports:
+      - "8009:8009"
+    environment:
+      - DATA_DIR=/app/data
+    # Persistencia de checkpoints (SQLite) fuera del contenedor
+    volumes:
+      - ./cases/09-rrhh-screening-agenda/data:/app/data:ro
+      - ./cases/09-rrhh-screening-agenda/backend/checkpoints.sqlite:/app/checkpoints.sqlite

@@ -1,0 +1,47 @@
+fastapi
+uvicorn[standard]
+python-dotenv
+
+# LangGraph
+langgraph>=0.2.0
+langgraph-checkpoint-sqlite>=3.0.1
+
+# Calidad y pruebas (para hacerlo "real" con CI local)
+ruff
+pytest
+
+# HTTP / retries / logging
+httpx
+tenacity
+loguru
+rich
+
+# Carga de archivos (CVs) y parsing
+python-multipart
+pypdf
+pdfminer.six
+python-docx
+
+# Matching y normalización
+rapidfuzz
+python-dateutil
+dateparser
+
+# Integraciones típicas "reales"
+# Email: SMTP async + proveedor API (SendGrid opcional)
+aiosmtplib
+sendgrid
+
+# Calendar (Google Calendar API)
+google-api-python-client
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
+
+# Cloud opcional (ej: guardar CVs en S3)
+boto3
+
+# LLM opcional (si luego quieres scoring/preguntas con modelos)
+openai
+langchain-core
+langchain-openai

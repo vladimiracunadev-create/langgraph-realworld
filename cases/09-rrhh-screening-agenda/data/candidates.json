@@ -1,0 +1,168 @@
+[
+  {
+    "candidate_id": "C001",
+    "name": "Camila Rojas",
+    "email": "camila.rojas@example.com",
+    "years_experience": 2,
+    "education": "Bootcamp",
+    "skills": [
+      "Docker",
+      "Git",
+      "HTML/CSS",
+      "JavaScript",
+      "Linux",
+      "React",
+      "SQL"
+    ],
+    "portfolio_url": "https://github.com/example/camilarojas",
+    "soft_skills": [
+      "Aprendizaje continuo"
+    ],
+    "notes": "Buscando primer empleo formal."
+  },
+  {
+    "candidate_id": "C002",
+    "name": "Diego Muñoz",
+    "email": "diego.munoz@example.com",
+    "years_experience": 3,
+    "education": "Autodidacta",
+    "skills": [
+      "HTML/CSS",
+      "JavaScript",
+      "Linux",
+      "Node.js",
+      "PHP",
+      "SQL"
+    ],
+    "portfolio_url": "https://github.com/example/diegomuñoz",
+    "soft_skills": [
+      "Comunicación"
+    ],
+    "notes": "Participó en proyectos académicos."
+  },
+  {
+    "candidate_id": "C003",
+    "name": "Valentina Soto",
+    "email": "valentina.soto@example.com",
+    "years_experience": 3,
+    "education": "Autodidacta",
+    "skills": [
+      "AWS",
+      "Docker",
+      "Git",
+      "JavaScript",
+      "SQL"
+    ],
+    "portfolio_url": "",
+    "soft_skills": [
+      "Comunicación",
+      "Trabajo en equipo"
+    ],
+    "notes": "Participó en proyectos académicos."
+  },
+  {
+    "candidate_id": "C004",
+    "name": "Matías Pérez",
+    "email": "matias.perez@example.com",
+    "years_experience": 2,
+    "education": "Técnico",
+    "skills": [
+      "Git",
+      "HTML/CSS",
+      "JavaScript",
+      "Python",
+      "SQL"
+    ],
+    "portfolio_url": "",
+    "soft_skills": [
+      "Comunicación"
+    ],
+    "notes": "Interés en aprender y crecer."
+  },
+  {
+    "candidate_id": "C005",
+    "name": "Fernanda Silva",
+    "email": "fernanda.silva@example.com",
+    "years_experience": 2,
+    "education": "Técnico",
+    "skills": [
+      "Git",
+      "HTML/CSS",
+      "JavaScript",
+      "Linux",
+      "React",
+      "SQL"
+    ],
+    "portfolio_url": "https://github.com/example/fernandasilva",
+    "soft_skills": [
+      "Comunicación",
+      "Trabajo en equipo",
+      "Aprendizaje continuo"
+    ],
+    "notes": "Interés en aprender y crecer."
+  },
+  {
+    "candidate_id": "C006",
+    "name": "Javier Contreras",
+    "email": "javier.contreras@example.com",
+    "years_experience": 1,
+    "education": "Universitario",
+    "skills": [
+      "HTML/CSS",
+      "JavaScript",
+      "Linux",
+      "PHP",
+      "Python",
+      "React",
+      "SQL",
+      "TypeScript"
+    ],
+    "portfolio_url": "",
+    "soft_skills": [
+      "Aprendizaje continuo",
+      "Comunicación",
+      "Trabajo en equipo"
+    ],
+    "notes": "Ha colaborado en proyectos open-source."
+  },
+  {
+    "candidate_id": "C007",
+    "name": "Antonia Torres",
+    "email": "antonia.torres@example.com",
+    "years_experience": 4,
+    "education": "Técnico",
+    "skills": [
+      "Docker",
+      "Git",
+      "JavaScript",
+      "React",
+      "SQL"
+    ],
+    "portfolio_url": "",
+    "soft_skills": [
+      "Aprendizaje continuo"
+    ],
+    "notes": "Experiencia en soporte y scripts."
+  },
+  {
+    "candidate_id": "C008",
+    "name": "Sebastián Fuentes",
+    "email": "sebastian.fuentes@example.com",
+    "years_experience": 0,
+    "education": "Autodidacta",
+    "skills": [
+      "AWS",
+      "Docker",
+      "Git",
+      "HTML/CSS",
+      "JavaScript",
+      "Python",
+      "SQL"
+    ],
+    "portfolio_url": "https://github.com/example/sebastiánfuentes",
+    "soft_skills": [
+      "Trabajo en equipo"
+    ],
+    "notes": "Experiencia en soporte y scripts."
+  }
+]

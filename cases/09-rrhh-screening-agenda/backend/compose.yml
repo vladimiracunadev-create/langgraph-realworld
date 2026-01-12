@@ -1,0 +1,10 @@
+services:
+  case09:
+    build: .
+    ports:
+      - "8009:8009"
+    environment:
+      - DATA_DIR=/app/data
+    volumes:
+      - ../data:/app/data:ro
+      - ./checkpoints.sqlite:/app/checkpoints.sqlite

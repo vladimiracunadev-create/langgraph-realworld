@@ -1,0 +1,5 @@
+# Simple static site to browse all demos (indexado.html + cases/*/demo)
+FROM nginx:alpine
+COPY indexado.html /usr/share/nginx/html/indexado.html
+COPY index.html /usr/share/nginx/html/index.html
+COPY cases /usr/share/nginx/html/cases

@@ -1,0 +1,42 @@
+{
+  "job_id": "JR-FS-CHILE-001",
+  "title": "Desarrollador/a Full-Stack (Junior/Medio)",
+  "location": "Santiago (híbrido)",
+  "must_have": [
+    "JavaScript",
+    "SQL",
+    "Git",
+    "HTML/CSS"
+  ],
+  "nice_to_have": [
+    "Node.js",
+    "TypeScript",
+    "Docker",
+    "AWS"
+  ],
+  "min_years_experience": 1,
+  "language": "Español",
+  "soft_skills": [
+    "Comunicación",
+    "Trabajo en equipo",
+    "Aprendizaje continuo"
+  ],
+  "scoring": {
+    "must_have_each": 12,
+    "nice_to_have_each": 5,
+    "years_experience_weight": 10,
+    "education_weight": 6,
+    "portfolio_weight": 8,
+    "soft_skills_weight": 8,
+    "penalty_missing_must_have": 10
+  },
+  "shortlist_top_n": 4,
+  "shortlist_min_score": 55,
+  "interview_slots": [
+    "2026-01-05 10:00",
+    "2026-01-05 11:30",
+    "2026-01-06 09:30",
+    "2026-01-06 16:00",
+    "2026-01-07 10:30"
+  ]
+}

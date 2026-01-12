@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  python_case09:
+    name: "Python checks (case 09)"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install ruff
+          pip install -r cases/09-rrhh-screening-agenda/backend/requirements.txt
+      - name: Lint (ruff)
+        run: |
+          ruff --version
+          ruff check cases/09-rrhh-screening-agenda/backend/src
+      - name: Compile (syntax check)
+        run: |
+          python -m compileall cases/09-rrhh-screening-agenda/backend/src -q
+
+  docker_build_all_cases:
+    name: "Docker build (all cases)"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        case:
+          - "01-soporte-cliente-omnicanal"
+          - "02-mesa-ayuda-ti-runbooks"
+          - "03-incident-response-sre"
+          - "04-soc-triage-alertas"
+          - "05-analista-documentos"
+          - "06-compliance-auditorias"
+          - "07-compras-abastecimiento"
+          - "08-ventas-b2b-crm"
+          - "09-rrhh-screening-agenda"
+          - "10-onboarding-empleados"
+          - "11-educacion-tutor-adaptativo"
+          - "12-psicometria-evaluaciones"
+          - "13-bi-analista-datos"
+          - "14-finanzas-conciliacion"
+          - "15-ecommerce-postventa"
+          - "16-viajes-planificador"
+          - "17-legal-intake"
+          - "18-marketing-contenido-qa"
+          - "19-devex-pr-review"
+          - "20-migracion-legacy"
+          - "21-docs-auto"
+          - "22-backoffice-automatizacion"
+          - "23-salud-pretriage"
+          - "24-pm-assistant"
+          - "25-supervisor-workers"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build case demo image
+        run: |
+          echo "Building cases/${{ matrix.case }}/demo"
+          docker build -t "lg-case-${{ matrix.case }}:ci" "cases/${{ matrix.case }}/demo"
+      - name: Build case backend image (if present)
+        run: |
+          if [ -f "cases/${{ matrix.case }}/backend/Dockerfile" ]; then
+            echo "Building cases/${{ matrix.case }}/backend"
+            docker build -t "lg-backend-${{ matrix.case }}:ci" "cases/${{ matrix.case }}/backend"
+          else
+            echo "No backend Dockerfile for ${{ matrix.case }} (ok)."
+          fi
+
+  docker_build_root_site:
+    name: "Docker build (root site)"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build root site
+        run: |
+          docker build -t lg-site:ci -f Dockerfile.site .

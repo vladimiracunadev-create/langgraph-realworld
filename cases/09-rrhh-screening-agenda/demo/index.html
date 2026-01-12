@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Demo Caso 09 – RR.HH. (UI estática)</title>
+  <style>
+    :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial; color-scheme: dark; }
+    body { margin:0; background:#0b0f14; color:#e6edf3; }
+    header { padding: 14px 16px; border-bottom:1px solid rgba(255,255,255,.08); display:flex; gap:12px; align-items:center; }
+    header .title { font-weight: 800; letter-spacing:.2px; }
+    header .pill { padding:6px 10px; border:1px solid rgba(255,255,255,.12); border-radius:999px; font-size:12px; opacity:.9; }
+    main { max-width: 1150px; margin: 0 auto; padding: 16px; display:grid; grid-template-columns: 1.2fr .8fr; gap: 12px; }
+    .panel { background: rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); border-radius: 16px; overflow:hidden; }
+    .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; padding: 12px; border-bottom:1px solid rgba(255,255,255,.08); }
+    label { font-size:12px; opacity:.85; display:block; margin-bottom: 4px; }
+    input[type="text"] { background: rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.12); color:#e6edf3; border-radius: 12px; padding: 10px; min-width: 260px; }
+    button { background:#1f6feb; border:0; color:white; border-radius: 12px; padding: 10px 14px; cursor:pointer; font-weight: 650; }
+    button.secondary { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); }
+    button:disabled { opacity:.6; cursor:not-allowed; }
+    .kpi { display:flex; gap:10px; align-items:center; }
+    .kpi .box { padding: 8px 10px; border-radius: 12px; border:1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.22); font-size:12px; }
+    table { width:100%; border-collapse: collapse; }
+    th, td { padding: 10px 10px; border-bottom: 1px solid rgba(255,255,255,.08); font-size: 13px; text-align:left; }
+    th { opacity:.85; font-size: 12px; }
+    .tag { font-size: 11px; padding: 4px 8px; border-radius: 999px; border:1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.03); }
+    .tag.ok { border-color: rgba(35,134,54,.55); background: rgba(35,134,54,.12); }
+    .tag.dim { opacity:.8; }
+    .log { max-height: 560px; overflow:auto; padding: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono"; font-size: 12px; }
+    .logline { opacity:.95; border-bottom:1px dashed rgba(255,255,255,.08); padding: 8px 0; }
+    .small { font-size: 12px; opacity:.8; }
+    a { color:#79c0ff; text-decoration:none; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="title">Demo Caso 09 – RR.HH. (UI estática)</div>
+    <div class="pill">Necesita backend</div>
+    <a class="pill" href="../../../indexado.html">Volver al index</a>
+  </header>
+
+  <main>
+    <div class="panel">
+      <div class="row">
+        <div>
+          <label>API Base</label>
+          <input id="apiBase" type="text" value="http://localhost:8009" />
+        </div>
+        <div>
+          <label>thread_id</label>
+          <input id="threadId" type="text" />
+        </div>
+        <button id="run">Ejecutar (stream)</button>
+        <button id="new" class="secondary">Nuevo hilo</button>
+
+        <div class="kpi" style="margin-left:auto;">
+          <div class="box">Progreso: <span id="progress">0/0</span></div>
+          <div class="box">Shortlist: <span id="shortN">0</span></div>
+          <div class="box">Agendados: <span id="schedN">0</span></div>
+        </div>
+      </div>
+
+      <div class="row" style="border-bottom:0;">
+        <div style="width:100%;">
+          <div class="small" id="jobTitle">Vacante: (cargando…)</div>
+          <div class="small">Si abres este archivo con <code>file://</code> puede fallar por CORS. Mejor usa el UI del backend: <code>http://localhost:8009</code>.</div>
+        </div>
+      </div>
+
+      <div style="padding: 0 12px 12px;">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th><th>Nombre</th><th>Score</th><th>Must</th><th>Nice</th><th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="row">
+        <div style="font-weight:800;">Eventos</div>
+      </div>
+      <div id="log" class="log"></div>
+    </div>
+  </main>
+
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+
+  const apiBase = $("apiBase");
+  const threadId = $("threadId");
+  const runBtn = $("run");
+  const newBtn = $("new");
+  const log = $("log");
+  const rows = $("rows");
+  const progress = $("progress");
+  const shortN = $("shortN");
+  const schedN = $("schedN");
+  const jobTitle = $("jobTitle");
+
+  function randId() {
+    return "rrhh-" + Math.random().toString(16).slice(2) + "-" + Date.now().toString(16);
+  }
+
+  function logLine(obj) {
+    const div = document.createElement("div");
+    div.className = "logline";
+    div.textContent = JSON.stringify(obj);
+    log.appendChild(div);
+    log.scrollTop = log.scrollHeight;
+  }
+
+  const byId = new Map();
+
+  function renderTable(scored, shortlist) {
+    const shortlisted = new Set((shortlist || []).map(x => x.candidate_id));
+    for (const c of scored || []) byId.set(c.candidate_id, c);
+
+    const all = Array.from(byId.values()).sort((a,b) => (b.score||0)-(a.score||0));
+    rows.innerHTML = "";
+    for (const c of all) {
+      const status = shortlisted.has(c.candidate_id) ? "shortlisted" : (c.status || "scored");
+      const tagClass = shortlisted.has(c.candidate_id) ? "tag ok" : "tag dim";
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${c.candidate_id}</td>
+        <td>${c.name}</td>
+        <td>${(c.score ?? "").toString()}</td>
+        <td>${c.must_hits ?? ""}/${(c.must_hits ?? 0) + (c.must_misses ?? 0)}</td>
+        <td>${c.nice_hits ?? ""}</td>
+        <td><span class="${tagClass}">${status}</span></td>
+      `;
+      rows.appendChild(tr);
+    }
+  }
+
+  async function run() {
+    const base = apiBase.value.trim().replace(/\/$/, "");
+    const tid = threadId.value.trim();
+    if (!base || !tid) return;
+
+    runBtn.disabled = true;
+    log.innerHTML = "";
+    byId.clear();
+    rows.innerHTML = "";
+
+    const url = base + "/api/run/stream";
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({thread_id: tid})
+    });
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+
+    while (true) {
+      const {value, done} = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, {stream: true});
+      const lines = buffer.split("\n");
+      buffer = lines.pop();
+
+      for (const line of lines) {
+        const t = line.trim();
+        if (!t) continue;
+        let evt;
+        try { evt = JSON.parse(t); } catch(e) { continue; }
+        logLine(evt);
+
+        if (evt.type === "snapshot") {
+          const s = evt.snapshot || {};
+          const total = s.total || 0;
+          const cur = s.cursor || 0;
+          progress.textContent = `${Math.min(cur,total)}/${total}`;
+          shortN.textContent = (s.shortlist || []).length;
+          schedN.textContent = (s.scheduled || []).length;
+          if (s.job && s.job.title) jobTitle.textContent = "Vacante: " + s.job.title + " — " + (s.job.location || "");
+          renderTable(s.scored || [], s.shortlist || []);
+        }
+      }
+    }
+
+    runBtn.disabled = false;
+  }
+
+  newBtn.addEventListener("click", () => {
+    threadId.value = randId();
+    log.innerHTML = "";
+    rows.innerHTML = "";
+    byId.clear();
+    progress.textContent = "0/0";
+    shortN.textContent = "0";
+    schedN.textContent = "0";
+    jobTitle.textContent = "Vacante: (cargando…)";
+  });
+
+  runBtn.addEventListener("click", run);
+
+  threadId.value = randId();
+})();
+</script>
+</body>
+</html>
