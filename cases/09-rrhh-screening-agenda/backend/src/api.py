@@ -1,5 +1,4 @@
 import json
-from typing import Any, Dict
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.responses import HTMLResponse, JSONResponse, StreamingResponse
@@ -42,19 +41,12 @@ def run(payload: RunIn):
 
 @app.get("/api/stream")
 def stream(thread_id: str = "rrhh-demo-1"):
-    """Streaming NDJSON para ver el flujo en tiempo real.
-
-    El frontend (web/index.html) consume este endpoint y va pintando eventos.
-    """
+    """Streaming NDJSON para ver el flujo en tiempo real."""
     cfg = {"configurable": {"thread_id": thread_id}}
 
     def gen():
-        # En LangGraph, stream() emite estados parciales.
         for event in GRAPH.stream({"events": []}, config=cfg):
-            if isinstance(event, dict):
-                values = event
-            else:
-                values = {}
+            values = event if isinstance(event, dict) else {}
 
             snapshot = {
                 "job": values.get("job", {}) or {},
@@ -74,20 +66,11 @@ def stream(thread_id: str = "rrhh-demo-1"):
 
 
 # ----------------------------
-# STUBS (para que lo vuelvas REAL)
+# STUB (para volverlo REAL)
 # ----------------------------
-# Estos endpoints NO resuelven el flujo real por sí solos (tú lo harás),
-# pero te dejan el lugar exacto y la librería lista (python-multipart) para empezar.
-
 
 @app.post("/api/cv/upload")
 async def upload_cv(file: UploadFile = File(...)):
-    """Subir un CV (stub).
-    Idea real:
-    - Guardar en disco/S3
-    - parse_resume_to_text(ruta)
-    - extract_candidate_signals(texto)
-    - upsert_candidate_in_db(...)
-    """
+    """Subir un CV (stub)."""
     detail = "Stub: implementar almacenamiento + parsing en src/integrations.py"
     raise HTTPException(status_code=501, detail=detail)

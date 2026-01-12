@@ -9,3 +9,4 @@ def load_settings() -> None:
 
 def data_dir() -> str:
     return os.getenv("DATA_DIR", "../data")
+

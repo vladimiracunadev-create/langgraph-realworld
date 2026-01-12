@@ -2,24 +2,12 @@ import json
 import operator
 import os
 import time
-from typing import Any, Annotated, Dict, List, Literal, TypedDict
+from typing import Annotated, Any, Dict, List, Literal, TypedDict
 
 from langgraph.checkpoint.sqlite import SqliteSaver
 from langgraph.graph import END, START, StateGraph
 
 from .settings import data_dir, load_settings
-
-# Integraciones reales: ver src/integrations.py (stubs)
-# from .integrations import (
-#    parse_resume_to_text,
-#    extract_candidate_signals,
-#    upsert_candidate_in_db,
-#    update_ats_status,
-#    create_google_calendar_event,
-#    send_email_smtp_async,
-#    send_email_sendgrid,
-#    llm_generate_interview_questions,
-# )
 
 
 class ScreeningState(TypedDict, total=False):
@@ -61,14 +49,6 @@ def load_inputs(state: ScreeningState) -> ScreeningState:
 
     with open(candidates_path, "r", encoding="utf-8") as f:
         candidates = json.load(f)
-
-    # TODO REAL (cuando lo hagas real):
-    # - Recibir CVs via /api/cv/upload o desde un bucket (S3/Drive)
-    # - parse_resume_to_text(file_path) -> texto
-    # - extract_candidate_signals(texto) -> skills/años/links
-    # - upsert_candidate_in_db(...)
-    # - update_ats_status(...)
-    # - llm_generate_interview_questions(...)
 
     out: ScreeningState = {
         "job": job,
@@ -177,12 +157,7 @@ def build_shortlist(state: ScreeningState) -> ScreeningState:
 
 
 def schedule_interviews(state: ScreeningState) -> ScreeningState:
-    """Stub de agendamiento: asigna slots de entrevista a la shortlist.
-
-    TODO REAL:
-    - create_google_calendar_event(...)
-    - send_email_smtp_async(...) / send_email_sendgrid(...)
-    """
+    """Stub de agendamiento: asigna slots de entrevista a la shortlist."""
     shortlist = state.get("shortlist", []) or []
     base_ts = int(time.time()) + 3600  # +1h
 
