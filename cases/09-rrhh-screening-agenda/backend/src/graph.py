@@ -15,11 +15,12 @@ _SQLITE_CONN: sqlite3.Connection | None = None
 
 
 def _get_sqlite_conn(db_path: str) -> sqlite3.Connection:
-    """Crea/rehusa conexión SQLite (instancia real, no context-manager)."""
+    """Crea/reutiliza conexión SQLite (instancia real, no context-manager)."""
     global _SQLITE_CONN
     if _SQLITE_CONN is not None:
         return _SQLITE_CONN
 
+    # Asegura carpeta (cuando no es :memory:)
     if db_path != ":memory:":
         Path(db_path).parent.mkdir(parents=True, exist_ok=True)
 
@@ -163,4 +164,72 @@ def build_shortlist(state: ScreeningState) -> ScreeningState:
     filtered.sort(key=lambda x: float(x.get("score", 0) or 0), reverse=True)
     shortlist = filtered[:top_n]
 
-    out: Scree
+    out: ScreeningState = {"shortlist": shortlist}
+    out.update(_push_event("shortlist", {"count": len(shortlist), "min_score": min_score, "top_n": top_n}))
+    return out
+
+
+def schedule_interviews(state: ScreeningState) -> ScreeningState:
+    """Stub de agendamiento: asigna slots de entrevista a la shortlist."""
+    shortlist = state.get("shortlist", []) or []
+    base_ts = int(time.time()) + 3600  # +1h
+
+    scheduled: List[Dict[str, Any]] = []
+    for idx, c in enumerate(shortlist):
+        start_ts = base_ts + idx * 3600
+        scheduled.append(
+            {
+                "candidate_id": c.get("candidate_id"),
+                "name": c.get("name"),
+                "email": c.get("email"),
+                "slot_iso": time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime(start_ts)),
+                "duration_min": 45,
+                "status": "stub_scheduled",
+            }
+        )
+
+    out: ScreeningState = {"scheduled": scheduled, "done": True}
+    out.update(_push_event("scheduled", {"count": len(scheduled)}))
+    return out
+
+
+def should_keep_scoring(state: ScreeningState) -> Literal["score_one", "build_shortlist"]:
+    if state.get("cursor", 0) < len(state.get("candidates", []) or []):
+        return "score_one"
+    return "build_shortlist"
+
+
+def compile_graph():
+    """Crea el StateGraph con acumulación de eventos y scoring incremental."""
+    class State(TypedDict, total=False):
+        job: Dict[str, Any]
+        candidates: List[Dict[str, Any]]
+        cursor: int
+        scored: Annotated[List[Dict[str, Any]], operator.add]
+        shortlist: List[Dict[str, Any]]
+        scheduled: List[Dict[str, Any]]
+        events: Annotated[List[Dict[str, Any]], operator.add]
+        done: bool
+
+    g = StateGraph(State)
+
+    g.add_node("load_inputs", load_inputs)
+    g.add_node("score_one", score_one)
+    g.add_node("build_shortlist", build_shortlist)
+    g.add_node("schedule_interviews", schedule_interviews)
+
+    g.add_edge(START, "load_inputs")
+    g.add_edge("load_inputs", "score_one")
+    g.add_conditional_edges("score_one", should_keep_scoring, ["score_one", "build_shortlist"])
+    g.add_edge("build_shortlist", "schedule_interviews")
+    g.add_edge("schedule_interviews", END)
+
+    db_path = checkpoint_db_path()
+
+    # Si alguien desactiva checkpoints con CHECKPOINT_DB=none/false, compila sin checkpointer
+    if not db_path or db_path.lower() in {"none", "false", "0"}:
+        return g.compile(checkpointer=None)
+
+    conn = _get_sqlite_conn(db_path)
+    checkpointer = SqliteSaver(conn)
+    return g.compile(checkpointer=checkpointer)
