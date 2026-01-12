@@ -12,9 +12,8 @@ dónde tocar y qué credenciales necesitas.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Tuple
 import os
+from typing import Any, Dict, List
 import re
 
 # ----------------------------

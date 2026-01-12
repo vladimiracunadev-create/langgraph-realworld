@@ -1,13 +1,12 @@
 import json
 from typing import Any, Dict
 
-from fastapi import FastAPI
-from fastapi.responses import HTMLResponse, StreamingResponse, JSONResponse
+from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi.responses import HTMLResponse, JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from .graph import compile_graph
-
 
 app = FastAPI(title="Caso 09 – RR.HH. Screening + Agenda")
 app.mount("/static", StaticFiles(directory="web"), name="static")

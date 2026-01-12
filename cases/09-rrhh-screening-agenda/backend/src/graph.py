@@ -7,18 +7,19 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.checkpoint.sqlite import SqliteSaver
 
 from .settings import load_settings, data_dir
-# Integraciones reales (stubs + guías)
-from .integrations import (
-    parse_resume_to_text,
-    extract_candidate_signals,
-    upsert_candidate_in_db,
-    update_ats_status,
-    create_google_calendar_event,
-    send_email_smtp_async,
-    send_email_sendgrid,
-    llm_generate_interview_questions,
-)
 
+# Integraciones reales: ver src/integrations.py (stubs)
+# Integraciones reales (stubs + guías)
+#from .integrations import (
+#    parse_resume_to_text,
+#    extract_candidate_signals,
+#    upsert_candidate_in_db,
+#    update_ats_status,
+#    create_google_calendar_event,
+#    send_email_smtp_async,
+#    send_email_sendgrid,
+#    llm_generate_interview_questions,
+#)
 
 
 class ScreeningState(TypedDict, total=False):
@@ -61,7 +62,14 @@ def load_inputs(_: ScreeningState) -> ScreeningState:
         "scheduled": [],
         "done": False,
     }
-    out.update(_push_event("loaded", {"job_id": job.get("job_id"), "count_candidates": len(candidates)}))
+    out.update(
+        _push_event(
+            "loaded",
+            {"job_id": job.get("job_id"), "count_candidates": len(candidates)},
+        )
+    )
+
+ #  out.update(_push_event("loaded", {"job_id": job.get("job_id"), "count_candidates": len(candidates)}))
     return out
 
 
@@ -137,7 +145,12 @@ def score_one(state: ScreeningState) -> ScreeningState:
         "cursor": i + 1,
         "scored": [result],
     }
-    out.update(_push_event("scored", {"candidate_id": c["candidate_id"], "name": c["name"], "score": total}))
+    out.update(
+        _push_event(
+                "scored", 
+                {"candidate_id": c["candidate_id"], "name": c["name"], "score": total}
+                )
+            )
     return out
 
 
@@ -184,7 +197,12 @@ def schedule_interviews(state: ScreeningState) -> ScreeningState:
         scheduled.append(item)
 
     out: ScreeningState = {"scheduled": scheduled, "done": True}
-    out.update(_push_event("scheduled", {"count": len(scheduled)}))
+    out.update(
+        _push_event(
+            "scheduled",
+             {"count": len(scheduled)}
+             )
+             )
     return out
 
 
