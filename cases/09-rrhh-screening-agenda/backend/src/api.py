@@ -1,4 +1,5 @@
 import json
+from functools import lru_cache
 from pathlib import Path
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
@@ -15,11 +16,15 @@ app = FastAPI(title="Caso 09 – RR.HH. Screening + Agenda")
 BACKEND_ROOT = Path(__file__).resolve().parents[1]
 WEB_DIR = BACKEND_ROOT / "web"
 
-# Solo montar estáticos si existe el directorio (en tests/CI igual existe, pero robustez extra)
+# Solo montar estáticos si existe el directorio
 if WEB_DIR.exists():
     app.mount("/static", StaticFiles(directory=str(WEB_DIR)), name="static")
 
-GRAPH = compile_graph()
+
+@lru_cache(maxsize=1)
+def get_graph():
+    """Compila el grafo SOLO cuando se necesita (evita romper pytest/CI al importar)."""
+    return compile_graph()
 
 
 @app.get("/healthz")
@@ -31,7 +36,6 @@ def healthz():
 def index():
     index_path = WEB_DIR / "index.html"
     if not index_path.exists():
-        # En CI/test no siempre se usa /, pero si alguien lo llama, entrega mensaje claro
         return HTMLResponse(
             "<h1>UI no disponible</h1><p>Falta backend/web/index.html</p>",
             status_code=404,
@@ -46,8 +50,9 @@ class RunIn(BaseModel):
 @app.post("/api/run")
 def run(payload: RunIn):
     """Ejecuta el flujo y devuelve un snapshot final (sin streaming)."""
+    graph = get_graph()
     cfg = {"configurable": {"thread_id": payload.thread_id}}
-    out = GRAPH.invoke({"events": []}, config=cfg)
+    out = graph.invoke({"events": []}, config=cfg)
 
     snapshot = {
         "job": (out.get("job") or {}) if isinstance(out, dict) else {},
@@ -63,10 +68,11 @@ def run(payload: RunIn):
 @app.get("/api/stream")
 def stream(thread_id: str = "rrhh-demo-1"):
     """Streaming NDJSON para ver el flujo en tiempo real."""
+    graph = get_graph()
     cfg = {"configurable": {"thread_id": thread_id}}
 
     def gen():
-        for event in GRAPH.stream({"events": []}, config=cfg):
+        for event in graph.stream({"events": []}, config=cfg):
             values = event if isinstance(event, dict) else {}
 
             snapshot = {
