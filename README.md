@@ -2,6 +2,8 @@
 
 Este repositorio contiene **25 casos** típicos donde LangGraph encaja muy bien (flujos con estado, rutas, herramientas y memoria).
 
+> **Estado (importante):** Actualmente **solo el Caso 09 (09-rrhh-screening-agenda)** es operativo (backend + UI). Los demás casos son plantillas/ejemplos (scaffolds) y no están implementados por completo o no pueden ejecutarse sin trabajo adicional.
+
 - Cada caso vive en `cases/<NN>-<slug>/`
 - La raíz tiene `indexado.html` (moderno) que **indexa** los casos y enlaza a un demo por caso.
 - Por desafío/complejidad se implementa completo el **Caso 09 (RR.HH. Screening + Agenda)**, con:

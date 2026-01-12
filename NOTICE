@@ -1,0 +1,9 @@
+NOTICE
+
+Este proyecto puede incluir (o depender de) paquetes y componentes de terceros.
+Por favor, añade aquí las notas legales, atribuciones y avisos requeridos por los terceros que se empaqueten o distribuyan con el proyecto.
+
+Plantilla:
+- NombrePaquete vX.Y.Z — Licencia: [MIT|Apache-2.0|GPL-3.0|...] — URL: https://...
+
+Si no hay componentes de terceros que requieran avisos, conserva este archivo como espacio reservado para documentar cualquier incorporación futura.
