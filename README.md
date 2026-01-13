@@ -11,11 +11,6 @@ Repositorio de portafolio con **25 escenarios reales** donde **LangGraph** brill
 
 ---
 
-## 🌐 Demos
-- **UI estática (GitHub Pages):** *(pon aquí tu link)*  
-  Ej: `https://<usuario>.github.io/langgraph-realworld/`
----
-
 ## ✅ Estado del repo
 - ✅ **Caso 09 (RR.HH. Screening + Agenda)**: implementado (backend + UI streaming).
 - 🧩 Casos 01–08 y 10–25: scaffold + demo UI (plantilla).
