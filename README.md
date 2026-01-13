@@ -51,9 +51,9 @@ Repositorio de portafolio con **25 escenarios reales** donde **LangGraph** brill
 
 ```mermaid
 flowchart LR
-  A[UI demo / browser] -->|SSE/WebSocket*| B[FastAPI :8009]
-  B --> C[LangGraph graph]
-  C --> D[Tools / reglas / scoring]
-  C --> E[(Checkpoint / memoria)]
-  B --> F[Logs / tracing (opcional)]
+  UI[UI demo - browser] -->|streaming| API[FastAPI - puerto 8009]
+  API --> LG[LangGraph - graph]
+  LG --> TL[Tools - reglas - scoring]
+  LG --> CK[Checkpoints - memoria]
+  API --> OB[Logs - tracing]
 
