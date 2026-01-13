@@ -2,28 +2,58 @@
 
 [![CI](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml/badge.svg)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml)
 
-Este repositorio agrupa **25 escenarios reales** donde **LangGraph** calza muy bien (flujos con estado, rutas condicionales, herramientas, memoria, checkpoints y observabilidad).
+Repositorio de portafolio con **25 escenarios reales** donde **LangGraph** brilla: flujos con **estado**, **rutas condicionales**, **tools**, **memoria**, **checkpoints** y (opcional) **observabilidad**.
 
-## Estado del repo
+**TL;DR (30s):**
+- ✅ **Caso 09** completo: **FastAPI + LangGraph** + **UI con streaming** en tiempo real.
+- 🧩 **Casos 01–08 y 10–25**: scaffold + UI demo para completar lógica real.
+- 🎯 Enfoque portafolio: estructura repetible + CI + demos navegables.
 
-- ✅ **Caso 09 (RR.HH. Screening + Agenda)**: implementado con backend **FastAPI + LangGraph** y UI web con **streaming** (tiempo real).
-- 🧩 Casos 01–08 y 10–25: **scaffold + demo UI** (plantilla) para que completes la lógica real de cada caso.
+---
 
-> Los demos en GitHub Pages funcionan como UI estática.  
-> Para ver “tiempo real” en el Caso 09 debes correr el backend localmente (o con Docker).
+## 🌐 Demos
+- **UI estática (GitHub Pages):** *(pon aquí tu link)*  
+  Ej: `https://<usuario>.github.io/langgraph-realworld/`
 
-## Estructura
+> Nota: GitHub Pages es UI estática. Para ver “tiempo real” del Caso 09 debes levantar el backend local (o Docker).
 
+---
+
+## ✅ Estado del repo
+- ✅ **Caso 09 (RR.HH. Screening + Agenda)**: implementado (backend + UI streaming).
+- 🧩 Casos 01–08 y 10–25: scaffold + demo UI (plantilla).
+
+---
+
+## 🧭 Índice de casos (resumen rápido)
+
+| Caso | Nombre | Estado |
+|------|--------|--------|
+| 09 | RR.HH. Screening + Agenda | ✅ Implementado |
+| 01–08 | Varios | 🧩 Scaffold |
+| 10–25 | Varios | 🧩 Scaffold |
+
+> Si quieres, más adelante puedes marcar 2–3 casos extra como “implementados” para elevar aún más el repo HERO.
+
+---
+
+## 🗂️ Estructura
 - Cada caso vive en: `cases/<NN>-<slug>/`
-- Índice moderno: `indexado.html` (en la raíz)
+- Índice moderno: `indexado.html` (raíz)
 - Caso 09 completo:
   - `cases/09-rrhh-screening-agenda/backend/` (FastAPI + LangGraph)
   - `cases/09-rrhh-screening-agenda/data/` (datos simulados)
   - `cases/09-rrhh-screening-agenda/demo/` (UI estática que apunta a `localhost:8009`)
 
-## Quickstart (Docker)
+---
 
-Requisitos: Docker Desktop (o Docker Engine + Compose)
+## 🏗️ Arquitectura Caso 09 (alto nivel)
 
-```bash
-docker compose up --build
+```mermaid
+flowchart LR
+  A[UI demo / browser] -->|SSE/WebSocket*| B[FastAPI :8009]
+  B --> C[LangGraph graph]
+  C --> D[Tools / reglas / scoring]
+  C --> E[(Checkpoint / memoria)]
+  B --> F[Logs / tracing (opcional)]
+
