@@ -25,8 +25,6 @@ Repositorio de portafolio con **25 escenarios reales** donde **LangGraph** brill
 | 01–08 | Varios | 🧩 Scaffold |
 | 10–25 | Varios | 🧩 Scaffold |
 
-> Si quieres, más adelante puedes marcar 2–3 casos extra como “implementados” para elevar aún más el repo HERO.
-
 ---
 
 ## 🗂️ Estructura
