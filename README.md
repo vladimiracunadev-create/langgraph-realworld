@@ -9,7 +9,7 @@ Repositorio de portafolio con **25 escenarios reales** donde **LangGraph** brill
 - 🧩 **Casos 01–08 y 10–25**: scaffold + UI demo para completar lógica real.
 - 🎯 Enfoque portafolio: estructura repetible + CI + demos navegables.
 
----
+----
 
 ## ✅ Estado del repo
 - ✅ **Caso 09 (RR.HH. Screening + Agenda)**: implementado (backend + UI streaming).
