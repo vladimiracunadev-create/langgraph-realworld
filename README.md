@@ -14,9 +14,6 @@ Repositorio de portafolio con **25 escenarios reales** donde **LangGraph** brill
 ## 🌐 Demos
 - **UI estática (GitHub Pages):** *(pon aquí tu link)*  
   Ej: `https://<usuario>.github.io/langgraph-realworld/`
-
-> Nota: GitHub Pages es UI estática. Para ver “tiempo real” del Caso 09 debes levantar el backend local (o Docker).
-
 ---
 
 ## ✅ Estado del repo
