@@ -45,9 +45,10 @@ Este repositorio aplica prácticas modernas de seguridad:
 
 | Caso | Nombre | Estado |
 |------|--------|--------|
-| 09 | RR.HH. Screening + Agenda | ✅ Implementado |
-| 01–08 | Varios | 🚧 Scaffold |
-| 10–25 | Varios | 🚧 Scaffold |
+| 09 | RR.HH. Screening + Agenda | ✅ Implementado (Standardized) |
+| 01 | Soporte Cliente Omnicanal | 🚧 Scaffold (Standardized) |
+| 02–08 | Varios | 🚧 Scaffold (Legacy) |
+| 10–25 | Varios | 🚧 Scaffold (Legacy) |
 
 ---
 
