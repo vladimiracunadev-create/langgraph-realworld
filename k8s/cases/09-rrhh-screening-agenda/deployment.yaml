@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: case09
+  namespace: cases
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: case09
+  template:
+    metadata:
+      labels:
+        app: case09
+    spec:
+      containers:
+      - name: case09
+        image: langgraph-case09:v1.0.0
+        ports:
+        - containerPort: 8009
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+        env:
+        - name: DATA_DIR
+          value: "/app/data"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: case09
+  namespace: cases
+spec:
+  selector:
+    app: case09
+  ports:
+  - port: 8009
+    targetPort: 8009
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: case09-deny-external
+  namespace: cases
+spec:
+  podSelector:
+    matchLabels:
+      app: case09
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: hub-gateway
+  egress:
+  - ports:
+    - port: 53
+      protocol: UDP
+    - port: 53
+      protocol: TCP
+  - to:
+    - ipBlock: # Allow Internet Access for OpenAI/LangSmith
+        cidr: 0.0.0.0/0
+        except:
+        - 10.0.0.0/8
+        - 192.168.0.0/16
+        - 172.16.0.0/12

@@ -1,0 +1,6 @@
+entrypoint: echo "Case 01 placeholder"
+serve: docker compose -f demo/compose.yml up
+ports:
+  - 8081
+dockerfile: demo/Dockerfile
+compose: demo/compose.yml

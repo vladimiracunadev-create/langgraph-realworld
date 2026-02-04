@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: case01
+  namespace: cases
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: case01
+  template:
+    metadata:
+      labels:
+        app: case01
+    spec:
+      containers:
+      - name: case01
+        image: langgraph-case01:v1.0.0
+        ports:
+        - containerPort: 8080
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 101
+          allowPrivilegeEscalation: false
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: case01
+  namespace: cases
+spec:
+  selector:
+    app: case01
+  ports:
+  - port: 80
+    targetPort: 8080
