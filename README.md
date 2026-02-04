@@ -8,7 +8,8 @@ python hub.py doctor    # Verificar entorno
 make case-up CASE=09    # Levantar un caso específico
 ```
 > [!NOTE]
-> El Hub es opcional. Puedes seguir usando los métodos directos (Docker, CD, etc.) descritos abajo.
+> El Hub es completamente **opcional** y respeta la filosofía Python-first del repo.
+> Ver documentación completa en [docs/HUB.md](docs/HUB.md).
 
 [![CI](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml/badge.svg)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml)
 [![Security Scan](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml/badge.svg)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml)
