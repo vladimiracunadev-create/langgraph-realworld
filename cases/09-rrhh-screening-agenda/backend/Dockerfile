@@ -1,4 +1,4 @@
-FROM python:3.11.10-slim@sha256:7198e0404323d90f23075c3caaba2df1206f47053e1be11484ce961a8779930e
+FROM python:3.11.10-slim
 
 # Security Hardening: don't run as root
 RUN groupadd -r appuser && useradd -r -g appuser appuser
