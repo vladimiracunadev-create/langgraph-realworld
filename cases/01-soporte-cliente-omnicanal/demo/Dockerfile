@@ -1,4 +1,4 @@
-FROM nginx:1.27.3-alpine@sha256:29669528d228c290a1804938a9d16f881079d865520a06df52e728e93297a77e
+FROM nginx:1.27.3-alpine
 
 # Install permissions for non-root user
 RUN chown -R nginx:nginx /usr/share/nginx/html && \
