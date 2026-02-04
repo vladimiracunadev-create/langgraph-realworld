@@ -18,7 +18,7 @@ COPY src /app/src
 COPY web /app/web
 
 # Default data location
-RUN mkdir -p /app/data && chown -p appuser:appuser /app/data
+RUN mkdir -p /app/data && chown -R appuser:appuser /app/data
 ENV DATA_DIR=/app/data
 
 USER appuser
