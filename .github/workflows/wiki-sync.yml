@@ -20,7 +20,6 @@ jobs:
         uses: newrelic/wiki-sync-action@v1.0.1
         with:
           source: docs/wiki
-          destination: wiki
           token: ${{ secrets.GITHUB_TOKEN }}
           gitAuthorName: "github-actions[bot]"
           gitAuthorEmail: "github-actions[bot]@users.noreply.github.com"

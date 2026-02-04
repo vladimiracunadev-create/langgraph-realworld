@@ -19,4 +19,3 @@ Un flujo completo de screening de candidatos con:
 
 ## 🤝 Contribuir
 Consulta el `CONTRIBUTING.md` en la raíz del repositorio para guías de desarrollo.
-<!-- Wiki forced update retry 2 -->
