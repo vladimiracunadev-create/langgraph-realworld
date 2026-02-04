@@ -1,4 +1,5 @@
 name: Wiki Sync
+# Updated to use Andrew-Chen-Wang action
 
 on:
   push:
