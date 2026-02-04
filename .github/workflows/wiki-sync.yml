@@ -6,6 +6,8 @@ on:
       - main
     paths:
       - 'docs/wiki/**'
+permissions:
+  contents: write
 
 jobs:
   update-wiki:
