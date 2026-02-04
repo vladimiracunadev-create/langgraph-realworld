@@ -19,3 +19,5 @@ Un flujo completo de screening de candidatos con:
 
 ## 🤝 Contribuir
 Consulta el `CONTRIBUTING.md` en la raíz del repositorio para guías de desarrollo.
+
+<!-- Última actualización: 2026-02-04 19:16 -->
