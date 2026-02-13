@@ -6,14 +6,41 @@ pero deja:
 - comentarios precisos de cómo conectarlo
 """
 
-from __future__ import annotations
-
+import logging
 import os
+import random
+import time
 from typing import Any, Dict, List
+from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
+
+# Configuración básica de logging
+logger = logging.getLogger(__name__)
 
 
+def simulate_delay_and_reliability(func_name: str):
+    """Simula latencia y fallas ocasionales para probar guardrails."""
+    # Latencia pequeña siempre
+    time.sleep(random.uniform(0.05, 0.15))
+
+    # 10% de probabilidad de falla para probar reintentos
+    if random.random() < 0.10:
+        logger.warning(f"Simulando falla en {func_name}")
+        raise RuntimeError(f"Error externo simulado en {func_name}")
+
+
+# Decorador de resiliencia real
+resilient_call = retry(
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(multiplier=1, min=1, max=4),
+    retry=retry_if_exception_type(RuntimeError),
+    before_sleep=lambda retry_state: logger.info(f"Reintentando llamada ({retry_state.attempt_number})...")
+)
+
+
+@resilient_call
 def parse_resume_to_text(file_path: str) -> str:
-    """Convierte un CV (PDF/DOCX/TXT) a texto plano (stub)."""
+    """Convierte un CV (PDF/DOCX/TXT) a texto plano (con reintentos)."""
+    simulate_delay_and_reliability("parse_resume_to_text")
     ext = os.path.splitext(file_path)[1].lower()
 
     if ext == ".txt":
@@ -48,6 +75,7 @@ def update_ats_status(candidate_id: str, status: str) -> None:
     return
 
 
+@resilient_call
 def create_google_calendar_event(
     *,
     summary: str,
@@ -56,7 +84,8 @@ def create_google_calendar_event(
     end_iso: str,
     attendee_emails: List[str],
 ) -> Dict[str, Any]:
-    """Crea un evento de Google Calendar (stub)."""
+    """Crea un evento de Google Calendar (con reintentos)."""
+    simulate_delay_and_reliability("create_google_calendar_event")
     return {
         "summary": summary,
         "description": description,
@@ -107,8 +136,10 @@ def send_email_sendgrid(
     return
 
 
+@resilient_call
 def llm_generate_interview_questions(job: Dict[str, Any], candidate: Dict[str, Any]) -> List[str]:
-    """Genera preguntas de entrevista (stub)."""
+    """Genera preguntas de entrevista (con reintentos)."""
+    simulate_delay_and_reliability("llm_generate_interview_questions")
     _ = (job, candidate)
     return [
         "Cuéntame sobre un proyecto reciente y tu rol exacto.",

@@ -9,6 +9,7 @@ Crear un conjunto de demos y casos de uso reproducibles que sirvan como referenc
 - Documentación: mejorar guías de inicio rápido y ejemplos en `cases/*`.
 - Tests básicos y CI para asegurar que los demos arranquen en Docker.
 - Plantillas y linters para uniformidad (autorouter, ruff, etc.).
+- **Milestone 09**: Implementado estándar de resiliencia y observabilidad (Caso 09).
 
 ## Prioridades a medio plazo (3–9 meses) 🔧
 - Añadir más casos de ejemplo completos con backend y datos de muestra.

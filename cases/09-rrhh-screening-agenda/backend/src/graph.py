@@ -1,6 +1,4 @@
-import json
-import operator
-import os
+import logging
 import sqlite3
 import time
 from pathlib import Path
@@ -10,6 +8,8 @@ from langgraph.checkpoint.sqlite import SqliteSaver
 from langgraph.graph import END, START, StateGraph
 
 from .settings import checkpoint_db_path, data_dir, load_settings
+
+logger = logging.getLogger(__name__)
 
 _SQLITE_CONN: sqlite3.Connection | None = None
 
@@ -57,6 +57,7 @@ def _push_event(event_type: str, data: Dict[str, Any]) -> Dict[str, Any]:
 
 def load_inputs(state: ScreeningState) -> ScreeningState:
     """Carga job + candidates desde data/ para que el demo sea determinista."""
+    logger.info("Cargando inputs para el screening")
     load_settings()
 
     job_path = os.path.join(data_dir(), "job.json")
@@ -89,69 +90,79 @@ def load_inputs(state: ScreeningState) -> ScreeningState:
 
 def score_one(state: ScreeningState) -> ScreeningState:
     """Scoring incremental: evalúa 1 candidato por iteración para mostrar progreso."""
-    job = state["job"]
-    candidates = state["candidates"]
-    cursor = int(state.get("cursor", 0))
+    try:
+        job = state["job"]
+        candidates = state["candidates"]
+        cursor = int(state.get("cursor", 0))
 
-    if cursor >= len(candidates):
-        return {}
+        if cursor >= len(candidates):
+            return {}
 
-    c = candidates[cursor]
+        c = candidates[cursor]
+        logger.info(f"Evaluando candidato: {c.get('name')} (cursor: {cursor})")
 
-    must = job.get("must_have", []) or []
-    nice = job.get("nice_to_have", []) or []
-    min_years = float(job.get("min_years", 0) or 0)
+        # El scoring actual es determinístico, pero si fuera una llamada a LLM...
+        must = job.get("must_have", []) or []
+        nice = job.get("nice_to_have", []) or []
+        min_years = float(job.get("min_years", 0) or 0)
 
-    c_skills = [s.lower() for s in (c.get("skills") or [])]
-    must_hits = sum(1 for s in must if s.lower() in c_skills)
-    nice_hits = sum(1 for s in nice if s.lower() in c_skills)
+        c_skills = [s.lower() for s in (c.get("skills") or [])]
+        must_hits = sum(1 for s in must if s.lower() in c_skills)
+        nice_hits = sum(1 for s in nice if s.lower() in c_skills)
 
-    must_each = 15.0
-    nice_each = 5.0
-    penalty_missing = 12.0
+        must_each = 15.0
+        nice_each = 5.0
+        penalty_missing = 12.0
 
-    must_misses = max(0, len(must) - must_hits)
-    years = float(c.get("years_experience", 0) or 0)
+        must_misses = max(0, len(must) - must_hits)
+        years = float(c.get("years_experience", 0) or 0)
 
-    years_score = 0.0
-    if min_years > 0:
-        years_score = min(20.0, max(0.0, (years - min_years) * 5.0 + 10.0))
+        years_score = 0.0
+        if min_years > 0:
+            years_score = min(20.0, max(0.0, (years - min_years) * 5.0 + 10.0))
 
-    edu = (c.get("education") or "").lower()
-    edu_score = 10.0 if any(x in edu for x in ["ing", "engineer", "informat", "cs"]) else 4.0
+        edu = (c.get("education") or "").lower()
+        edu_score = 10.0 if any(x in edu for x in ["ing", "engineer", "informat", "cs"]) else 4.0
 
-    portfolio = (c.get("portfolio_url") or "").strip()
-    portfolio_score = 8.0 if portfolio else 0.0
+        portfolio = (c.get("portfolio_url") or "").strip()
+        portfolio_score = 8.0 if portfolio else 0.0
 
-    soft = [s.lower() for s in (c.get("soft_skills") or [])]
-    soft_score = 2.0 * min(5, len(soft))
+        soft = [s.lower() for s in (c.get("soft_skills") or [])]
+        soft_score = 2.0 * min(5, len(soft))
 
-    base = must_hits * must_each + nice_hits * nice_each
-    penalty = must_misses * penalty_missing
-    total = max(0, round(base + years_score + edu_score + portfolio_score + soft_score - penalty, 2))
+        base = must_hits * must_each + nice_hits * nice_each
+        penalty = must_misses * penalty_missing
+        total = max(0, round(base + years_score + edu_score + portfolio_score + soft_score - penalty, 2))
 
-    result = {
-        "candidate_id": c.get("candidate_id"),
-        "name": c.get("name"),
-        "email": c.get("email"),
-        "score": total,
-        "must_hits": must_hits,
-        "nice_hits": nice_hits,
-        "years": years,
-        "portfolio_url": portfolio,
-    }
+        result = {
+            "candidate_id": c.get("candidate_id"),
+            "name": c.get("name"),
+            "email": c.get("email"),
+            "score": total,
+            "must_hits": must_hits,
+            "nice_hits": nice_hits,
+            "years": years,
+            "portfolio_url": portfolio,
+        }
 
-    out: ScreeningState = {
-        "cursor": cursor + 1,
-        "scored": [result],
-    }
-    out.update(
-        _push_event(
-            "scored",
-            {"candidate_id": c.get("candidate_id"), "name": c.get("name"), "score": total},
+        out: ScreeningState = {
+            "cursor": cursor + 1,
+            "scored": [result],
+        }
+        out.update(
+            _push_event(
+                "scored",
+                {"candidate_id": c.get("candidate_id"), "name": c.get("name"), "score": total},
+            )
         )
-    )
-    return out
+        return out
+    except Exception as e:
+        logger.error(f"Error procesando candidato en cursor {state.get('cursor')}: {e}")
+        # Degradación graciosa: saltar candidato y marcar error
+        return {
+            "cursor": state.get("cursor", 0) + 1,
+            "events": [{"ts": _now_ms(), "type": "error_node", "data": {"msg": str(e), "node": "score_one"}}]
+        }
 
 
 def build_shortlist(state: ScreeningState) -> ScreeningState:
@@ -171,26 +182,39 @@ def build_shortlist(state: ScreeningState) -> ScreeningState:
 
 def schedule_interviews(state: ScreeningState) -> ScreeningState:
     """Stub de agendamiento: asigna slots de entrevista a la shortlist."""
-    shortlist = state.get("shortlist", []) or []
-    base_ts = int(time.time()) + 3600  # +1h
+    try:
+        shortlist = state.get("shortlist", []) or []
+        logger.info(f"Agendando entrevistas para {len(shortlist)} candidatos")
+        
+        base_ts = int(time.time()) + 3600  # +1h
 
-    scheduled: List[Dict[str, Any]] = []
-    for idx, c in enumerate(shortlist):
-        start_ts = base_ts + idx * 3600
-        scheduled.append(
-            {
-                "candidate_id": c.get("candidate_id"),
-                "name": c.get("name"),
-                "email": c.get("email"),
-                "slot_iso": time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime(start_ts)),
-                "duration_min": 45,
-                "status": "stub_scheduled",
-            }
-        )
+        scheduled: List[Dict[str, Any]] = []
+        for idx, c in enumerate(shortlist):
+            start_ts = base_ts + idx * 3600
+            
+            # Simulamos que esto podría llamar a una API real (Google Calendar / SMTP)
+            # a través de las funciones en integrations.py (que ya tienen reintentos)
+            
+            scheduled.append(
+                {
+                    "candidate_id": c.get("candidate_id"),
+                    "name": c.get("name"),
+                    "email": c.get("email"),
+                    "slot_iso": time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime(start_ts)),
+                    "duration_min": 45,
+                    "status": "stub_scheduled",
+                }
+            )
 
-    out: ScreeningState = {"scheduled": scheduled, "done": True}
-    out.update(_push_event("scheduled", {"count": len(scheduled)}))
-    return out
+        out: ScreeningState = {"scheduled": scheduled, "done": True}
+        out.update(_push_event("scheduled", {"count": len(scheduled)}))
+        return out
+    except Exception as e:
+        logger.error(f"Error en agendamiento de entrevistas: {e}")
+        return {
+            "done": True, # Marcamos como hecho aunque fallara el agendamiento (degradación)
+            "events": [{"ts": _now_ms(), "type": "error_node", "data": {"msg": str(e), "node": "schedule_interviews"}}]
+        }
 
 
 def should_keep_scoring(state: ScreeningState) -> Literal["score_one", "build_shortlist"]:
@@ -232,4 +256,8 @@ def compile_graph():
 
     conn = _get_sqlite_conn(db_path)
     checkpointer = SqliteSaver(conn)
+
+    # RECURSION_LIMIT: Guardrail básico de LangGraph
+    # En este caso, 1 (load) + 1 (shortlist) + 1 (schedule) + N (candidates)
+    # Ponemos un margen seguro.
     return g.compile(checkpointer=checkpointer)

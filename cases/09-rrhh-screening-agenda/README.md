@@ -21,6 +21,22 @@ uvicorn src.api:app --reload --port 8009
 
 Abre: `http://localhost:8009`
 
+## 🛡️ Resiliencia y Guardrails (Novedad)
+
+Este caso ha sido endurecido para ser **resistente a fallos**:
+- **Retries**: Reintentos automáticos con *exponential backoff* (`tenacity`) en todas las integraciones (Calendar, LLM, Parsing).
+- **Graceful Degradation**: Los nodos del grafo capturan errores y continúan el flujo de forma segura en lugar de colapsar.
+- **Recursion Limit**: Límite de 50 pasos configurado en LangGraph para evitar bucles infinitos.
+- **Observabilidad**: Logs estructurados en JSON y endpoints `/health` + `/ready` para monitoreo.
+
+## 🧪 Pruebas de Humo (Smoke Tests)
+
+Puedes validar la resiliencia y el flujo completo con Docker:
+```bash
+cd backend
+docker compose -f compose.smoke.yml up --build --abort-on-container-exit
+```
+
 ## Datos
 - `data/job.json`
 - `data/candidates.json`

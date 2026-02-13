@@ -1,0 +1,24 @@
+services:
+  backend:
+    build: .
+    environment:
+      - CHECKPOINT_DB=:memory:
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 5s
+      timeout: 2s
+      retries: 5
+
+  smoke-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      backend:
+        condition: service_healthy
+    command: >
+      sh -c "pip install requests && python tests/smoke_test.py"
+    environment:
+      - BASE_URL=http://backend:8000
