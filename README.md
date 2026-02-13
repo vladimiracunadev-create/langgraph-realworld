@@ -87,6 +87,16 @@ Para habilitar el razonamiento avanzado en el Caso 09 (sustituyendo el modo demo
             └── .env  <-- Crear este archivo aquí
 ```
 
+### 🔍 Modo Demo vs. IA Real (Híbrido)
+El Caso 09 detecta automáticamente la presencia de una API Key y ajusta su "cerebro":
+
+| Característica | 🧪 Modo Demo (Mock) | 🧠 Modo IA Real (OpenAI) |
+| :--- | :--- | :--- |
+| **Lógica de Scoring** | Basada en reglas fijas (strings/num) | Análisis semántico y contextual |
+| **Preguntas Entrevista** | Fallback estático (idéntico) | Generación dinámica y personalizada |
+| **Costo** | $0 (Laboratorio local) | Consumo de tokens (Producción) |
+| **Resiliencia** | Probada localmente | Usa `tenacity` para reintentar fallos |
+
 > [!NOTE]
 > Para una guía completa de despliegue (Docker, K8s, Local), consulta la [**Guía de Instalación**](docs/INSTALL.md).
 

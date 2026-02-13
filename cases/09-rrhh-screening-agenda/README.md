@@ -25,6 +25,22 @@ graph TD
 
 ---
 
+## 🧠 Arquitectura Híbrida (Demo vs. Real IA)
+Este caso está diseñado para funcionar en dos modalidades, detectando automáticamente si existe una llave de API en el archivo `.env`:
+
+| Característica | 🧪 Modo Demo (Mock) | 🧠 Modo IA Real (OpenAI) |
+| :--- | :--- | :--- |
+| **Origen del Scoring** | Código determinista (Reglas fijas) | Análisis semántico del LLM |
+| **Generación de Preguntas** | Lista estática (Fallback) | Preguntas personalizadas por candidato |
+| **Motor de Razonamiento** | Algoritmos IF/ELSE | GPT-4o-mini (o superior) |
+| **Latencia** | < 100ms | 1s - 3s (depende de la red/API) |
+
+### ¿Qué hace el sistema exactamente?
+1. **Screening (Nodo `score_one`)**: Evalúa el CV contra el Job Description. En modo IA, extrae matices cualitativos que el código fijo ignora.
+2. **Personalización (Nodo `integrations.py`)**: Mientras el modo demo envía preguntas genéricas, el modo IA genera desafíos técnicos basados en los proyectos específicos que el candidato menciona en su CV.
+
+---
+
 ## 🛡️ Resiliencia y Guardrails (Enterprise Grade)
 
 | Característica | Implementación | Propósito |
