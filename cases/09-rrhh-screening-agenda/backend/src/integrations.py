@@ -10,7 +10,7 @@ import logging
 import os
 import random
 import time
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
 
@@ -139,7 +139,28 @@ def send_email_sendgrid(
 
 @resilient_call
 def llm_generate_interview_questions(job: Dict[str, Any], candidate: Dict[str, Any]) -> List[str]:
-    """Genera preguntas de entrevista (con reintentos)."""
+    """Genera preguntas de entrevista (con reintentos).
+    Activa OpenAI si OPENAI_API_KEY está presente. En su defecto, usa fallback determinista.
+    """
+    api_key = os.getenv("OPENAI_API_KEY")
+    if api_key:
+        try:
+            from langchain_openai import ChatOpenAI
+            from langchain_core.messages import SystemMessage, HumanMessage
+            
+            llm = ChatOpenAI(model=os.getenv("MODEL", "gpt-4o-mini"), api_key=api_key)
+            prompt = f"Genera 3 preguntas técnicas para {candidate['name']} para el puesto {job['title']}. Skills: {candidate['skills']}"
+            
+            resp = llm.invoke([
+                SystemMessage(content="Eres un reclutador técnico experto."),
+                HumanMessage(content=prompt)
+            ])
+            # Parse simple para el demo
+            return [q.strip() for q in resp.content.split("\n") if q.strip()][:3]
+        except Exception as e:
+            logger.error(f"Error llamando a OpenAI: {e}. Usando fallback.")
+
+    # Fallback Determinista (Industrial Mode)
     simulate_delay_and_reliability("llm_generate_interview_questions")
     _ = (job, candidate)
     return [
