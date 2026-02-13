@@ -18,7 +18,10 @@ Para elevar el proyecto a un estándar profesional "Real-World", se han realizad
     - **Modo Desarrollador**: Scripts `serve_site.py` y `mock_api.py` para correr todo sin Docker.
     - **Modo IA Requerido**: Guía clara para activar el motor real de agentes usando `.env`.
 5.  **Conectividad Robusta**: Sincronización masiva de links internos para asegurar que la navegación entre el portal (Puerto 8080) y los demos (Puerto 8009) sea bidireccional y sin errores.
-6.  **Wiki Reconstruida**: Mapeo completo de la documentación técnica local hacia la Wiki de GitHub para mantener una fuente de verdad única y profesional.
+6. **Wiki Reconstruida**: Mapeo completo de la documentación técnica local hacia la Wiki de GitHub para mantener una fuente de verdad única y profesional.
+
+> [!TIP]
+> Puedes consultar el historial detallado de todas las versiones y cambios en el [CHANGELOG.md](CHANGELOG.md).
 
 ---
 
