@@ -7,18 +7,27 @@ Este documento define las especificaciones técnicas necesarias para ejecutar lo
 ## 🖥️ Hardware
 
 ### Mínimo (Entorno de Pruebas)
+- **CPU**: 2 Cores (2.0 GHz+) - Necesario para procesamiento paralelo básico.
+- **RAM**: 4 GB (Docker / WSL2).
+- **Almacenamiento**: 1 GB libre para imágenes y persistencia básica.
 
-- **CPU**: 2 Cores (2.0 GHz+) - Necesario para procesamiento paralelo de agentes.
-- **RAM**: 4 GB (Docker Desktop / WSL2).
-- **Almacenamiento**: 500 MB libres para imágenes Docker y persistencia de checkpoints.
-- **Pantalla**: Resolución 1280x720 para visualización de dashboards.
+### Recomendado (Desarrollo Activo / Producción)
+- **CPU**: 4 Cores+ (optimizado para múltiples hilos de LangGraph).
+- **RAM**: 8 GB - 16 GB (para levantar múltiples micro-servicios simultáneamente).
+- **Almacenamiento**: 5 GB+ (para logs históricos, bases de datos SQLite y volúmenes Docker).
 
-### Recomendado (Producción / Escalado)
+### Escala / Extreme (Cargas de Producción)
+- **CPU**: 8 Cores+ (Instancias tipo c6g.2xlarge en AWS).
+- **RAM**: 32 GB (para manejo de contexto extenso y grafos de alta concurrencia).
+- **Red**: Acceso estable con latencia < 150ms a proveedores de LLM.
 
-- **CPU**: 4 Cores+ (para múltiples hilos de LangGraph).
-- **RAM**: 8 GB+.
-- **Almacenamiento**: 2 GB+ (para logs históricos y bases de datos SQLite persistentes).
-- **Red**: Acceso estable a internet para llamadas a APIs de LLM (OpenAI, Anthropic).
+---
+
+## 📡 Requisitos de Red y Conectividad
+
+- **Ancho de Banda**: Mínimo 2 Mbps de subida/bajada para streaming fluido de eventos.
+- **Puertos**: Debe tener libre el rango `8000-8025` para el hosting de los 25 casos.
+- **Protocolos**: Soporte para HTTP/1.1 (Chunked Transfer Encoding) para streaming de NDJSON.
 
 ---
 

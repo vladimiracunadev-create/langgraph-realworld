@@ -8,15 +8,18 @@ Antes de comenzar, asegúrese de que su máquina cumpla con los siguientes requi
 
 - **CPU**: 4 núcleos (Intel i5/Ryzen 5 o superior).
 - **RAM**: 8 GB (16 GB recomendado para correr múltiples casos en Docker).
-- **Almacenamiento**: 10 GB de espacio libre para imágenes de Docker y datos.
+- **Almacenamiento**: 5 GB+ (para logs históricos, bases de datos SQLite y volúmenes Docker).
+
+### Escala / Extreme (Cargas de Producción)
+- **CPU**: 8 Cores+ (Instancias tipo c6g.2xlarge en AWS).
+- **RAM**: 32 GB.
+- **Red**: Acceso estable con latencia < 150ms.
 
 ---
 
-## 🛠️ Software Necesario
+## 📡 Requisitos de Red
 
-1.  **Docker Desktop** (o Docker Engine en Linux).
-2.  **Git** para el control de versiones.
-3.  **Python 3.11+** (Solo si desea ejecutar sin Docker).
-4.  **Make** (Opcional, pero recomendado para usar los shortcuts).
+- **Ancho de Banda**: Mínimo 2 Mbps.
+- **Puertos**: Rango `8000-8025` libre.
 
 Consulte la lista detallada de dependencias en [REQUIREMENTS.md](../REQUIREMENTS.md).

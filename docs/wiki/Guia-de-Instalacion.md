@@ -22,12 +22,10 @@ La forma más sencilla de ejecutar los casos es utilizando Docker Compose:
 
 ---
 
-## 🐍 Vía Python Local
+## 🎮 Modalidades de Ejecución
 
-Si prefiere ejecutar el código directamente:
+1.  **Modo Desarrollador**: `python cases/09-backend/src/api.py`.
+2.  **Modo Hub CLI**: `python hub.py serve 09`.
+3.  **Modo Docker Compose**: `make up` (Recomendado).
 
-1.  **Crear venv**: `python -m venv venv`
-2.  **Activar venv**: `source venv/bin/activate` (o `venv\Scripts\activate` en Windows)
-3.  **Instalar dependencias**: `pip install -r requirements.txt`
-
-Para más detalles sobre la configuración, consulte [INSTALL.md](../INSTALL.md).
+Consulte la guía completa en [INSTALL.md](../INSTALL.md).

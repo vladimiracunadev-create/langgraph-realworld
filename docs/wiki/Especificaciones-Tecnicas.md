@@ -13,11 +13,10 @@ Detalle del stack tecnológico y los estándares operativos aplicados en este pr
 
 ---
 
-## 🏥 Contratos de Observabilidad
+## 🛡️ Contrato de Resiliencia
 
-Cada servicio implementa los siguientes estándares:
-- **Liveness**: `/health` -> `{"status": "ok", "ts": <timestamp>}`.
-- **Readiness**: `/ready` -> `{"status": "ready"}`.
-- **Logs**: Formato JSON estructurado enviado a `stdout`.
+- **Reintentos**: Mínimo 3.
+- **Persistencia**: SQLite/Redis obligatorio.
+- **Timeout**: 60s por paso.
 
 Consulte las especificaciones completas en [TECHNICAL_SPECS.md](../TECHNICAL_SPECS.md).

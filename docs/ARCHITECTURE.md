@@ -43,14 +43,19 @@ graph TD
 
 ---
 
-## 🔄 Flujo de Ejecución (Estandarizado)
+## 🛡️ Resiliencia y Persistencia de Estado (Residencia)
 
-El Caso 09 (Screening + Agenda) actúa como el **modelo de referencia** para el flujo de datos:
+Uno de los pilares de este entorno es su capacidad para resolver problemas de **residencia** (persistencia de larga duración) y recuperación ante fallos.
 
-1.  **Ingesta**: Carga de datos de entrada (JSON/PDF) y persistencia en el `State`.
-2.  **Iteración Resiliente**: Cada nodo del grafo ejecuta llamadas a herramientas envueltas en decoradores de reintento (`tenacity`).
-3.  **Manejo de Fallos**: Si una herramienta falla definitivamente, el nodo captura la excepción y emite un evento `error_node` al stream, permitiendo que el flujo continúe (Degradación Graciosa).
-4.  **Checkpointing**: Cada paso se guarda en SQLite, permitiendo reanudar el flujo en caso de interrupción del servidor.
+### 1. Persistencia con LangGraph Checkpoints
+Utilizamos `SqliteSaver` para registrar el estado completo del grafo tras la ejecución de cada nodo. 
+- **Recuperación**: Si el servidor se apaga o el contenedor se reinicia, el agente puede retomar la tarea exactamente donde la dejó usando su `thread_id`.
+- **Auditoría**: Cada cambio de estado queda registrado, permitiendo un "viaje en el tiempo" por las decisiones del agente.
+
+### 2. Estrategia de Reintento con Tenacity
+Todas las integraciones externas (APIs de OpenAI, Google Calendar, etc.) están protegidas por políticas de reintento:
+- **Exponential Backoff**: Los reintentos se espacian matemáticamente para evitar saturar servicios externos.
+- **Circuit Breaker**: Si un servicio falla repetidamente, el agente entra en un estado de degradación graciosa en lugar de colapsar.
 
 ---
 

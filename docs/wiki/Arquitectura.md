@@ -16,6 +16,15 @@ Utilizamos **SQLite** para almacenar el estado del grafo en cada paso, permitien
 
 ---
 
+## 🛡️ Resiliencia y Residencia
+
+Este sistema resuelve problemas de **residencia de estado** mediante:
+- **Checkpoints**: Persistencia automática en SQLite.
+- **Recovery**: Capacidad de retomar flujos interrumpidos vía `thread_id`.
+- **Tenacity**: Reintentos inteligentes con exponential backoff.
+
+---
+
 ## 📊 Diagrama de Resiliencia
 
 ```mermaid

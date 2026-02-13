@@ -57,6 +57,17 @@ Siguiendo nuestro estándar de observabilidad, cada backend debe implementar:
 
 ---
 
+## 🛡️ Contrato de Resiliencia (Resilience Standards)
+
+Para garantizar la robustez, cada agente debe cumplir con:
+
+1.  **Reintentos**: Mínimo 3 intentos para llamadas de red.
+2.  **Persistencia**: Uso obligatorio de un `checkpointer` (SQLite/Redis) para threads de larga duración.
+3.  **Timeout**: Límite máximo de 60 segundos por paso del grafo (evita bucles infinitos y costos excesivos).
+4.  **Error Schema**: Todas las excepciones deben ser capturadas y transformadas en eventos de log estructurados antes de propagarse.
+
+---
+
 ## 🛠️ Guía de Estilo
 
 - **Ruff**: Linter y formateador oficial. Se debe ejecutar antes de cada commit.

@@ -56,6 +56,39 @@ uvicorn src.api:app --reload --port 8009
 
 ---
 
+## 🎮 Modalidades de Ejecución
+
+Este sistema está diseñado para ser flexible según el perfil del usuario:
+
+### 1. Modo Desarrollador (Python Pure)
+Ideal para debuggear la lógica del grafo sin overhead de contenedores.
+```bash
+python cases/09-rrhh-screening-agenda/backend/src/api.py
+```
+
+### 2. Modo Estándar (Hub CLI)
+Usa el punto de entrada unificado del proyecto.
+```bash
+python hub.py serve 09
+```
+
+### 3. Modo Aislado (Docker Standalone)
+Para probar un micro-servicio de forma independiente.
+```bash
+docker build -t caso-09 -f cases/09-rrhh-screening-agenda/backend/Dockerfile .
+docker run -p 8009:8009 caso-09
+```
+
+### 4. Modo Ecosistema (Docker Compose) - **RECOMENDADO**
+Levanta el backend, la UI y el entorno de monitoreo en un solo comando.
+```bash
+make up  # Levanta el sitio principal y los casos activos
+# o manualmente:
+docker compose -f cases/09-rrhh-screening-agenda/backend/compose.yml up
+```
+
+---
+
 ## 🧪 Validación de la Instalación (Smoke Tests)
 
 Para asegurar que todo está configurado correctamente, puedes ejecutar los tests de humo automatizados:
