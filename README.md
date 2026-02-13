@@ -1,4 +1,15 @@
-# LangGraph – 25 casos del mundo real (repo de demos)
+# 🚀 LangGraph – 25 casos del mundo real (repo de demos)
+
+## 🧭 ¿Por dónde empezar? (Elige tu camino)
+
+| Si eres... | Te recomendamos leer... | ¿Qué aprenderás? |
+| :--- | :--- | :--- |
+| **💼 Reclutador / Manager** | [**Guía para Reclutadores**](RECRUITER.md) | Valor de negocio, madurez técnica y casos de éxito. |
+| **💻 Desarrollador / DevOps** | [**Caso 09 (Standard)**](cases/09-rrhh-screening-agenda/README.md) | Implementación real: FastAPI, streaming y resiliencia. |
+| **🔒 Experto en Seguridad** | [**SECURITY.md**](SECURITY.md) | Detalles de SAST, Secret Scanning y endurecimiento. |
+| **🛠️ Contribuidor** | [**CONTRIBUTING.md**](CONTRIBUTING.md) | Cómo completar los scaffolds de los casos 01–25. |
+
+---
 
 ## 🚀 Hub CLI (Novedad)
 Este repo incluye un **Hub CLI** estandarizado para gestionar los casos sin romper la estructura original.
@@ -16,11 +27,12 @@ make case-up CASE=09    # Levantar un caso específico
 
 [![CI](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml/badge.svg)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml)
 [![Security Scan](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml/badge.svg)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml)
+[![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 
-Repositorio de portafolio con **25 escenarios reales** donde **LangGraph** brilla: flujos con **estado**, **rutas condicionales**, **tools**, **memoria**, **checkpoints** y (opcional) **observabilidad**.
+Repositorio de portafolio con **25 escenarios reales** donde **LangGraph** brilla: flujos con **estado**, **rutas condicionales**, **tools**, **memoria**, **checkpoints** y una capa sólida de **resiliencia**.
 
 **TL;DR (30s):**
-- ✅ **Caso 09** completo: **FastAPI + LangGraph** + **UI con streaming** en tiempo real.
+- ✅ **Caso 09** completo: **FastAPI + LangGraph** + **Resiliencia (Tenacity)** + **UI streaming**.
 - 🚧 **Casos 01–08 y 10–25**: scaffold + UI demo para completar lógica real.
 - 🧪 **Enfoque portafolio**: estructura repetible + CI + demos navegables.
 

@@ -1,87 +1,82 @@
-# Caso 09: RR.HH. Screening + Agenda (IMPLEMENTADO)
+# 🤖 Caso 09: RR.HH. Screening + Agenda (Standardized)
 
-Flujo:
-1) cargar vacante + candidatos (datos simulados),
-2) scoring incremental (1 candidato por iteración),
-3) shortlist (top N con umbral),
-4) agenda entrevistas (slots),
-5) “emails” simulados.
+**Detección de talento y agendamiento automatizado** con una arquitectura de agentes altamente resiliente. Este caso sirve como el **estándar de oro** del repositorio para implementaciones de producción.
 
-## Ejecutar backend
+## 🏗️ Arquitectura del Flujo
+
+```mermaid
+graph TD
+  START((Inicio)) --> Load[Cargar Job + Candidatos]
+  Load --> Score{Scoring Loop}
+  Score -->|Procesar 1| SNode[score_one]
+  SNode -->|Resilient Call| Integrations[integrations.py]
+  Integrations -->|Tenacity Retry| LLM[LLM/Parsing Simulation]
+  SNode --> Score
+  Score -->|Completado| Shortlist[build_shortlist]
+  Shortlist --> Schedule[schedule_interviews]
+  Schedule --> END((Fin))
+
+  subgraph "Capa de Resiliencia"
+    Tenacity[Exponential Backoff]
+    Degradation[Graceful Degradation]
+    Recursion[Recursion Limit: 50]
+  end
+```
+
+---
+
+## 🛡️ Resiliencia y Guardrails (Enterprise Grade)
+
+| Característica | Implementación | Propósito |
+| :--- | :--- | :--- |
+| **Retries** | `tenacity` (backoff exponencial) | Manejo de errores intermitentes en APIs externas. |
+| **Error Handling** | `try/except` en nodos del grafo | Evita el colapso del flujo; captura errores y continúa. |
+| **Step Limits** | `recursion_limit: 50` | Previene bucles infinitos en el agente. |
+| **Checkpoints** | `SqliteSaver` | Persistencia de estado e idempotencia. |
+| **Health Checks** | `/health` & `/ready` | Monitoreo de liveness y readiness para CI/CD. |
+
+---
+
+## 🛠️ Tech Stack
+
+- **Core**: [LangGraph](https://github.com/langchain-ai/langgraph) (Orquestación de agentes con estado).
+- **Backend API**: [FastAPI](https://fastapi.tiangolo.com/) (Streaming NDJSON).
+- **Resilience**: [Tenacity](https://tenacity.readthedocs.io/) (Estrategias de reintento).
+- **Quality**: [Ruff](https://beta.ruff.rs/docs/) (Linting & Formatting).
+- **Container**: [Docker](https://www.docker.com/) (Entorno reproducible).
+
+---
+
+## 🚀 Cómo empezar
+
+### Ejecución Local
 
 ```bash
 cd backend
 python -m venv .venv
 source .venv/bin/activate  # Windows: .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
-
-cp .env.example .env  # opcional
 uvicorn src.api:app --reload --port 8009
 ```
-
 Abre: `http://localhost:8009`
 
-## 🛡️ Resiliencia y Guardrails (Novedad)
+### Validación con Docker (Smoke Tests)
 
-Este caso ha sido endurecido para ser **resistente a fallos**:
-- **Retries**: Reintentos automáticos con *exponential backoff* (`tenacity`) en todas las integraciones (Calendar, LLM, Parsing).
-- **Graceful Degradation**: Los nodos del grafo capturan errores y continúan el flujo de forma segura en lugar de colapsar.
-- **Recursion Limit**: Límite de 50 pasos configurado en LangGraph para evitar bucles infinitos.
-- **Observabilidad**: Logs estructurados en JSON y endpoints `/health` + `/ready` para monitoreo.
-
-## 🧪 Pruebas de Humo (Smoke Tests)
-
-Puedes validar la resiliencia y el flujo completo con Docker:
+Para validar la resiliencia y el flujo completo:
 ```bash
 cd backend
 docker compose -f compose.smoke.yml up --build --abort-on-container-exit
 ```
 
-## Datos
-- `data/job.json`
-- `data/candidates.json`
+---
 
-## Docker (recomendado)
+## 🧭 Roadmap de Implementación "Real"
 
-Desde `cases/09-rrhh-screening-agenda/backend`:
+Para convertir este demo en un sistema productivo, sigue este orden:
+1. **Parsing**: Implementa `parse_resume_to_text` en `backend/src/integrations.py` (usando `pypdf`/`docx`).
+2. **Database**: Conecta un motor real (Postgres/S3) para la carga de CVs.
+3. **Calendar**: Activa las credenciales de Google API en `create_google_calendar_event`.
 
-```bash
-docker compose -f compose.yml up --build
-```
-
-Abre: `http://localhost:8009`
-
-## Para volverlo REAL (guía rápida)
-
-Este caso ya trae instaladas las librerías típicas para que lo conviertas en un flujo real:
-
-- Parsing CV: `pypdf`, `pdfminer.six`, `python-docx`
-- Upload: `python-multipart`
-- Email: `aiosmtplib` (SMTP) y `sendgrid` (API)
-- Calendar: Google Calendar API libs
-- Reintentos: `tenacity`
-- HTTP: `httpx`
-
-### Dónde implementar cada parte
-
-- **Parsing y extracción**: `backend/src/integrations.py`
-  - `parse_resume_to_text()`
-  - `extract_candidate_signals()`
-
-- **Persistencia / ATS**: `backend/src/integrations.py`
-  - `upsert_candidate_in_db()`
-  - `update_ats_status()`
-
-- **Calendar + Email**: `backend/src/graph.py` en `schedule_interviews()`
-  - ahí está el comentario “TODO REAL” con las funciones a llamar.
-
-- **Subida de CVs (endpoint)**: `backend/src/api.py`
-  - `/api/cv/upload` existe como stub (501) con instrucciones.
-
-### Recomendación práctica
-
-Primero haz real el *ingreso de candidatos*:
-1) Implementa upload + guardado de archivos.
-2) Implementa parsing a texto y extracción de skills.
-3) Guarda en una DB real.
-Luego recién conectas calendar y email.
+---
+> [!IMPORTANT]
+> Los logs están configurados en formato **JSON estructurado** para facilitar la integración con Datadog, ELK o CloudWatch.
