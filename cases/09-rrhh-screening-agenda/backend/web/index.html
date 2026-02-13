@@ -294,26 +294,39 @@
   <div id="aiModal" class="modal">
     <div class="modal-content">
       <span class="close-modal" id="closeAiModal">&times;</span>
-      <h2>🚀 Cómo activar la IA Real</h2>
-      <div class="step">
-        <span class="step-num">1</span> <strong>Configura el Entorno:</strong> Crea un archivo <code>.env</code> en
-        <code>backend/</code>
+      <h2>🚀 Guía de Activación: IA Real</h2>
+
+      <div
+        style="background: #0d1117; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px dashed var(--accent); font-family: monospace; font-size: 13px;">
+        <strong style="color:var(--accent);">📍 LOCALIZACIÓN:</strong><br>
+        cases / 09-rrhh-screening-agenda / backend / <b>.env</b>
       </div>
-      <pre>OPENAI_API_KEY=tu_secreto_aquí
+
+      <div class="step">
+        <span class="step-num">1</span> <strong>Crea el archivo <code>.env</code></strong> en la carpeta mencionada
+        arriba.
+      </div>
+
+      <div class="step">
+        <span class="step-num">2</span> <strong>Configura tu llave:</strong>
+      </div>
+      <pre>OPENAI_API_KEY=tu-token-real-aqui
 MODEL=gpt-4o-mini</pre>
+
       <div class="step">
-        <span class="step-num">2</span> <strong>Instala Dependencias:</strong> Ejecuta
-        <code>pip install -r requirements.txt</code>
-      </div>
-      <div class="step">
-        <span class="step-num">3</span> <strong>Inicia el Backend Industrial:</strong> Asegúrate de usar el servidor
-        FastAPI:
+        <span class="step-num">3</span> <strong>Reinicia el Servidor:</strong> Detén el proceso actual y ejecuta:
       </div>
       <pre>uvicorn src.api:app --port 8009</pre>
-      <p style="font-size: 13px; opacity: 0.8; margin-top: 20px;">
-        * Una vez configurado, el indicador cambiará a <span style="color:var(--accent)">MODO IA REAL</span> y el
-        sistema usará LLMs para evaluar candidatos.
-      </p>
+
+      <div
+        style="margin-top:20px; font-size: 11px; opacity: 0.6; line-height: 1.4; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px;">
+        <strong>Mapa Visual de Carpetas:</strong><br>
+        📁 <b>proyectos-aws</b> (Raíz)<br>
+        &nbsp;&nbsp;📂 cases/<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;📂 09-rrhh-screening-agenda/<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📂 <b>backend/</b> <--- AQUÍ va el archivo<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 <b>.env</b>
+      </div>
     </div>
   </div>
 
