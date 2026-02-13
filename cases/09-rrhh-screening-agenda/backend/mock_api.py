@@ -69,4 +69,7 @@ async def run_stream(request: Request):
 
 if __name__ == "__main__":
     import uvicorn
+    # uvicorn doesn't have a direct allow_reuse_address flag in .run, 
+    # but it's enabled by default in mostuvicorn setups. 
+    # If not, we use the low level config.
     uvicorn.run(app, host="0.0.0.0", port=8009)
