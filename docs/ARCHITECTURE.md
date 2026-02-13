@@ -59,6 +59,15 @@ Todas las integraciones externas (APIs de OpenAI, Google Calendar, etc.) están 
 
 ---
 
+## 🏗️ Compatibilidad: Docker vs Python
+
+Este sistema está diseñado bajo una arquitectura de **"Contenedor Primero"**, pero mantiene una alta flexibilidad para el desarrollo local.
+
+- **Modo Docker (Producción/Staging)**: Es el estándar oficial. Garantiza que el software y hardware (residencia de estado en volúmenes, aislamiento de red) funcionen de forma idéntica en cualquier servidor. El fallo de Docker en demostraciones controladas suele deberse a la ausencia del daemon local, no a una limitación del código.
+- **Modo Python (Desarrollo/Debug)**: Es una vía rápida para probar la lógica de LangGraph. Permite ejecutar el backend directamente (`uvicorn`) para una iteración más ágil sin el ciclo de build de imágenes.
+
+---
+
 ## 🛠️ Estándares de Implementación
 
 - **LangGraph**: Uso estricto de `StateGraph` con `Annotated` para reducers de estado (ej: `operator.add` para logs de eventos).

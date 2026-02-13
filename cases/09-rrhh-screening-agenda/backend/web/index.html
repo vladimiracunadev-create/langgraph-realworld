@@ -1,43 +1,220 @@
 <!doctype html>
 <html lang="es">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Caso 09 – RR.HH. Screening + Agenda (Tiempo real)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial; color-scheme: dark; }
-    body { margin:0; background:#0b0f14; color:#e6edf3; }
-    header { padding: 14px 16px; border-bottom:1px solid rgba(255,255,255,.08); display:flex; gap:12px; align-items:center; }
-    header .title { font-weight: 800; letter-spacing:.2px; }
-    header .pill { padding:6px 10px; border:1px solid rgba(255,255,255,.12); border-radius:999px; font-size:12px; opacity:.9; }
-    main { max-width: 1150px; margin: 0 auto; padding: 16px; display:grid; grid-template-columns: 1.2fr .8fr; gap: 12px; }
-    .panel { background: rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); border-radius: 16px; overflow:hidden; }
-    .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; padding: 12px; border-bottom:1px solid rgba(255,255,255,.08); }
-    input[type="text"] { background: rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.12); color:#e6edf3; border-radius: 12px; padding: 10px; min-width: 260px; }
-    button { background:#1f6feb; border:0; color:white; border-radius: 12px; padding: 10px 14px; cursor:pointer; font-weight: 650; }
-    button.secondary { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); }
-    button:disabled { opacity:.6; cursor:not-allowed; }
-    .kpi { display:flex; gap:10px; align-items:center; }
-    .kpi .box { padding: 8px 10px; border-radius: 12px; border:1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.22); font-size:12px; }
-    table { width:100%; border-collapse: collapse; }
-    th, td { padding: 10px 10px; border-bottom: 1px solid rgba(255,255,255,.08); font-size: 13px; text-align:left; }
-    th { opacity:.85; font-size: 12px; }
-    .tag { font-size: 11px; padding: 4px 8px; border-radius: 999px; border:1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.03); }
-    .tag.ok { border-color: rgba(35,134,54,.55); background: rgba(35,134,54,.12); }
-    .tag.dim { opacity:.8; }
-    .log { max-height: 560px; overflow:auto; padding: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono"; font-size: 12px; }
-    .logline { opacity:.95; border-bottom:1px dashed rgba(255,255,255,.08); padding: 8px 0; }
-    .small { font-size: 12px; opacity:.8; }
-    .link { color:#79c0ff; text-decoration:none; }
+    :root {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color-scheme: dark;
+      --accent: #2f81f7;
+    }
+
+    body {
+      margin: 0;
+      background: #0d1117;
+      color: #e6edf3;
+    }
+
+    header {
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, .1);
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      background: rgba(13, 17, 23, 0.8);
+      backdrop-filter: blur(10px);
+      sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    header .title {
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      font-size: 1.1rem;
+    }
+
+    header .pill {
+      padding: 6px 12px;
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 999px;
+      font-size: 11px;
+      opacity: .8;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 20px;
+    }
+
+    .panel {
+      background: rgba(33, 38, 45, 0.4);
+      border: 1px solid rgba(240, 246, 252, 0.1);
+      border-radius: 16px;
+      overflow: hidden;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    .row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      padding: 16px;
+      border-bottom: 1px solid rgba(240, 246, 252, 0.1);
+    }
+
+    input[type="text"] {
+      background: rgba(13, 17, 23, 0.6);
+      border: 1px solid rgba(240, 246, 252, 0.2);
+      color: #e6edf3;
+      border-radius: 8px;
+      padding: 10px 14px;
+      min-width: 260px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--accent);
+    }
+
+    button {
+      background: var(--accent);
+      border: 0;
+      color: white;
+      border-radius: 8px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform 0.1s, background 0.2s;
+    }
+
+    button:hover {
+      background: #4493f8;
+      transform: translateY(-1px);
+    }
+
+    button.secondary {
+      background: rgba(255, 255, 255, .05);
+      border: 1px solid rgba(255, 255, 255, .1);
+    }
+
+    button:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .kpi {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .kpi .box {
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, .1);
+      background: rgba(0, 0, 0, .3);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, .05);
+      font-size: 13px;
+      text-align: left;
+    }
+
+    th {
+      color: #8b949e;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .tag {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, .1);
+      background: rgba(255, 255, 255, .05);
+      font-weight: 500;
+    }
+
+    .tag.ok {
+      border-color: #238636;
+      background: rgba(35, 134, 54, 0.15);
+      color: #3fb950;
+    }
+
+    .tag.dim {
+      opacity: .7;
+    }
+
+    .log {
+      max-height: 600px;
+      overflow: auto;
+      padding: 16px;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .logline {
+      border-bottom: 1px solid rgba(255, 255, 255, .03);
+      padding: 8px 0;
+      color: #8b949e;
+    }
+
+    .small {
+      font-size: 11px;
+      color: #8b949e;
+      margin-bottom: 4px;
+      font-weight: 500;
+    }
+
+    .link {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .link:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
+
 <body>
   <header>
     <div class="title">Caso 09 – RR.HH. Screening + Agenda</div>
     <div class="pill">LangGraph loop por candidato</div>
     <div class="pill">Streaming NDJSON</div>
     <div class="pill">SQLite + thread_id</div>
-    <a class="pill link" href="../../../../indexado.html">Volver al index</a>
+    <a class="pill link" href="http://localhost:8080/indexado.html">Volver al index</a>
   </header>
 
   <main>
@@ -66,7 +243,12 @@
         <table>
           <thead>
             <tr>
-              <th>ID</th><th>Nombre</th><th>Score</th><th>Must</th><th>Nice</th><th>Status</th>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Score</th>
+              <th>Must</th>
+              <th>Nice</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody id="rows"></tbody>
@@ -82,45 +264,45 @@
     </div>
   </main>
 
-<script>
-(function () {
-  const $ = (id) => document.getElementById(id);
+  <script>
+    (function () {
+      const $ = (id) => document.getElementById(id);
 
-  const threadId = $("threadId");
-  const runBtn = $("run");
-  const newBtn = $("new");
-  const log = $("log");
-  const rows = $("rows");
-  const progress = $("progress");
-  const shortN = $("shortN");
-  const schedN = $("schedN");
-  const jobTitle = $("jobTitle");
+      const threadId = $("threadId");
+      const runBtn = $("run");
+      const newBtn = $("new");
+      const log = $("log");
+      const rows = $("rows");
+      const progress = $("progress");
+      const shortN = $("shortN");
+      const schedN = $("schedN");
+      const jobTitle = $("jobTitle");
 
-  function randId() {
-    return "rrhh-" + Math.random().toString(16).slice(2) + "-" + Date.now().toString(16);
-  }
+      function randId() {
+        return "rrhh-" + Math.random().toString(16).slice(2) + "-" + Date.now().toString(16);
+      }
 
-  function logLine(obj) {
-    const div = document.createElement("div");
-    div.className = "logline";
-    div.textContent = JSON.stringify(obj);
-    log.appendChild(div);
-    log.scrollTop = log.scrollHeight;
-  }
+      function logLine(obj) {
+        const div = document.createElement("div");
+        div.className = "logline";
+        div.textContent = JSON.stringify(obj);
+        log.appendChild(div);
+        log.scrollTop = log.scrollHeight;
+      }
 
-  const byId = new Map();
+      const byId = new Map();
 
-  function renderTable(scored, shortlist) {
-    const shortlisted = new Set((shortlist || []).map(x => x.candidate_id));
-    for (const c of scored || []) byId.set(c.candidate_id, c);
+      function renderTable(scored, shortlist) {
+        const shortlisted = new Set((shortlist || []).map(x => x.candidate_id));
+        for (const c of scored || []) byId.set(c.candidate_id, c);
 
-    const all = Array.from(byId.values()).sort((a,b) => (b.score||0)-(a.score||0));
-    rows.innerHTML = "";
-    for (const c of all) {
-      const status = shortlisted.has(c.candidate_id) ? "shortlisted" : (c.status || "scored");
-      const tagClass = shortlisted.has(c.candidate_id) ? "tag ok" : "tag dim";
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
+        const all = Array.from(byId.values()).sort((a, b) => (b.score || 0) - (a.score || 0));
+        rows.innerHTML = "";
+        for (const c of all) {
+          const status = shortlisted.has(c.candidate_id) ? "shortlisted" : (c.status || "scored");
+          const tagClass = shortlisted.has(c.candidate_id) ? "tag ok" : "tag dim";
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
         <td>${c.candidate_id}</td>
         <td>${c.name}</td>
         <td>${(c.score ?? "").toString()}</td>
@@ -128,74 +310,75 @@
         <td>${c.nice_hits ?? ""}</td>
         <td><span class="${tagClass}">${status}</span></td>
       `;
-      rows.appendChild(tr);
-    }
-  }
-
-  async function run() {
-    const tid = threadId.value.trim();
-    if (!tid) return;
-
-    runBtn.disabled = true;
-    log.innerHTML = "";
-    byId.clear();
-    rows.innerHTML = "";
-
-    const res = await fetch("/api/run/stream", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({thread_id: tid})
-    });
-
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder();
-    let buffer = "";
-
-    while (true) {
-      const {value, done} = await reader.read();
-      if (done) break;
-      buffer += decoder.decode(value, {stream: true});
-      const lines = buffer.split("\n");
-      buffer = lines.pop();
-
-      for (const line of lines) {
-        const t = line.trim();
-        if (!t) continue;
-        let evt;
-        try { evt = JSON.parse(t); } catch(e) { continue; }
-        logLine(evt);
-
-        if (evt.type === "snapshot") {
-          const s = evt.snapshot || {};
-          const total = s.total || 0;
-          const cur = s.cursor || 0;
-          progress.textContent = `${Math.min(cur,total)}/${total}`;
-          shortN.textContent = (s.shortlist || []).length;
-          schedN.textContent = (s.scheduled || []).length;
-          if (s.job && s.job.title) jobTitle.textContent = "Vacante: " + s.job.title + " — " + (s.job.location || "");
-          renderTable(s.scored || [], s.shortlist || []);
+          rows.appendChild(tr);
         }
       }
-    }
 
-    runBtn.disabled = false;
-  }
+      async function run() {
+        const tid = threadId.value.trim();
+        if (!tid) return;
 
-  newBtn.addEventListener("click", () => {
-    threadId.value = randId();
-    log.innerHTML = "";
-    rows.innerHTML = "";
-    byId.clear();
-    progress.textContent = "0/0";
-    shortN.textContent = "0";
-    schedN.textContent = "0";
-    jobTitle.textContent = "Vacante: (cargando…)";
-  });
+        runBtn.disabled = true;
+        log.innerHTML = "";
+        byId.clear();
+        rows.innerHTML = "";
 
-  runBtn.addEventListener("click", run);
+        const res = await fetch("/api/run/stream", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ thread_id: tid })
+        });
 
-  threadId.value = randId();
-})();
-</script>
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split("\n");
+          buffer = lines.pop();
+
+          for (const line of lines) {
+            const t = line.trim();
+            if (!t) continue;
+            let evt;
+            try { evt = JSON.parse(t); } catch (e) { continue; }
+            logLine(evt);
+
+            if (evt.type === "snapshot") {
+              const s = evt.snapshot || {};
+              const total = s.total || 0;
+              const cur = s.cursor || 0;
+              progress.textContent = `${Math.min(cur, total)}/${total}`;
+              shortN.textContent = (s.shortlist || []).length;
+              schedN.textContent = (s.scheduled || []).length;
+              if (s.job && s.job.title) jobTitle.textContent = "Vacante: " + s.job.title + " — " + (s.job.location || "");
+              renderTable(s.scored || [], s.shortlist || []);
+            }
+          }
+        }
+
+        runBtn.disabled = false;
+      }
+
+      newBtn.addEventListener("click", () => {
+        threadId.value = randId();
+        log.innerHTML = "";
+        rows.innerHTML = "";
+        byId.clear();
+        progress.textContent = "0/0";
+        shortN.textContent = "0";
+        schedN.textContent = "0";
+        jobTitle.textContent = "Vacante: (cargando…)";
+      });
+
+      runBtn.addEventListener("click", run);
+
+      threadId.value = randId();
+    })();
+  </script>
 </body>
+
 </html>
