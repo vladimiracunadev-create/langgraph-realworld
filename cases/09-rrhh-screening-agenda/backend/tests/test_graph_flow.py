@@ -1,4 +1,4 @@
-from src.graph import build_shortlist, load_inputs, schedule_interviews, score_one
+from src.graph import build_shortlist, load_inputs, notify_candidates, schedule_interviews, score_one
 
 
 def test_flow_produces_shortlist_and_schedule():
@@ -25,8 +25,14 @@ def test_flow_produces_shortlist_and_schedule():
     out_sched = schedule_interviews(state)
     state.update(out_sched)
 
-    assert state.get("done") is True
+    assert state.get("done") is False  # Now scheduling is not the end
     assert isinstance(state.get("scheduled"), list)
+
+    out_notify = notify_candidates(state)
+    state.update(out_notify)
+
+    assert state.get("done") is True
+    assert "notified" in [e["type"] for e in state.get("events", [])]
 
 
 def test_shortlist_respects_min_score_top_n():
