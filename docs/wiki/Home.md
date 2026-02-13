@@ -1,31 +1,94 @@
-# Bienvenido a la Wiki de LangGraph Real-World 🚀
+# 🚀 LangGraph – Agentic Resilience Hub
 
-**LangGraph Real-World** es un portafolio de ingeniería de élite que demuestra el uso de grafos cíclicos con estado para resolver problemas empresariales complejos. Este repositorio aplica estándares de **DevOps**, **Seguridad** y **Resiliencia** para transformar modelos de IA en soluciones empresariales robustas.
+[![CI](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml/badge.svg)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml)
+[![Security Scan](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml/badge.svg)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
----
-
-## 🧭 Rutas de Aprendizaje
-
-Para una experiencia óptima, te recomendamos seguir estas rutas según tu perfil:
-
-### 💼 Perfil Ejecutivo / Reclutador
-- **[Valor de Negocio (RECRUITER)](RECRUITER)**: Visión de alto nivel y capacidades técnicas.
-- **[Hoja de Ruta (Roadmap)](Roadmap)**: Futuro y evolución del proyecto.
-
-### 💻 Perfil Técnico / DevOps
-- **[Arquitectura del Sistema](Arquitectura)**: Profundización en LangGraph y persistencia en SQLite.
-- **[Especificaciones Técnicas](Especificaciones-Tecnicas)**: Stack, lints y contratos de salud.
-- **[Guía de Instalación](Guia-de-Instalacion)**: Despliegue en Local, Docker y Kubernetes.
-- **[Seguridad](Security)**: Protocolos de hardening y gestión de secretos.
-
-### 🐣 Perfil Principiante
-- **[Guía para Principiantes](Guia-para-Principiantes)**: Recorrido por la estructura del Monorepo.
-- **[Hub CLI](Hub-CLI)**: Gestión centralizada de los 25 casos de uso.
+**Portafolio de arquitectura de agentes con estado, flujos cíclicos y capas de resiliencia empresarial.** Este repositorio demuestra cómo llevar LangGraph a producción con un enfoque en seguridad, observabilidad y recuperación ante fallos.
 
 ---
 
-## 🤝 Contribución y Gobernanza
-- **[Guía de Contribución](Guia-de-Contribucion)**: Estándares para añadir nuevos agentes.
-- **[Requisitos del Sistema](Requisitos-del-Sistema)**: Hardware y software necesario.
+## �️ Implementación Industrial (v3.2.0)
 
-> **Visión**: Establecer el estándar de oro para arquitecturas agenticas resilientes, donde la potencia de la IA se une a la estabilidad operativa.
+Para elevar el proyecto a un estándar profesional "Real-World", se han realizado las siguientes modificaciones:
+
+1.  **Punto de Entrada Unificado**: Consolidación del portal premium en **`index.html`** (eliminando `indexado.html`).
+2.  **Diseño Premium**: Implementación de tipografía **Inter** y efectos **Glassmorphism** avanzados.
+3.  **Resiliencia e Integridad**: Persistencia con `SqliteSaver` y validación de estado mediante **Pydantic**.
+4.  **Telemetría Ready**: Rastrabilidad de flujos con `trace_id` inyectado en logs JSON.
+5.  **Dual-Mode Execution**: Soporte para **Modo IA Real** (LLM) y **Modo Instant Demo** (Mock).
+6.  **Interconectividad**: Sincronización global de links y reconstrucción de la Wiki técnica.
+
+> [!TIP]
+> Consulta el historial técnico detallado en el [CHANGELOG.md](CHANGELOG.md).
+
+---
+
+## 🧭 ¿Por dónde empezar? (Rutas Personalizadas)
+
+| Perfil | Ruta Recomendada | Objetivo |
+| :--- | :--- | :--- |
+| **💼 Reclutador / Manager** | [**Guía para Reclutadores**](RECRUITER.md) | Entender el valor de negocio y madurez técnica. |
+| **💻 Desarrollador / DevOps** | [**Caso 09 (Reference Case - Industrial)**](cases/09-rrhh-screening-agenda/README.md) | Explorar código real: FastAPI, streaming, Pydantic y grafos. |
+| **🔒 Experto en Seguridad** | [**SECURITY.md**](SECURITY.md) | Analizar protocolos de SAST y Hardening. |
+| **🐣 Principiante** | [**Guía para Principiantes**](docs/BEGINNERS_GUIDE.md) | Primeros pasos con el repo y el Hub. |
+
+---
+
+## 🏗️ Arquitectura de Alto Nivel
+
+```mermaid
+flowchart LR
+  UI[Dashboards Premium] -->|streaming| API[FastAPI Server]
+  API --> LG[LangGraph Engine]
+  LG --> CK[(SQLite Checkpoints)]
+  LG --> TL[Resilient Tools Layer]
+  TL --> EXT[External Systems]
+```
+
+---
+
+## 🚀 Operación del Hub (Orquestación)
+
+Gestiona los 25 casos de forma centralizada. El **Hub CLI** (`hub.py`) es una herramienta en Python que orquesta tanto la ejecución local como el lanzamiento de contenedores Docker.
+
+```bash
+# 1. Operación Directa (Nivel 1: Laboratorio)
+python serve_site.py             # Portal 8080
+python cases/09-*/backend/mock_api.py   # Backend 8009
+
+# 2. Operación vía Hub (Nivel 2: Orquestación)
+python hub.py list      # Listar casos y su estado
+python hub.py doctor    # Verificar salud del entorno
+make case-up CASE=09    # Lanzar Caso 09 (Usa Docker si está disponible)
+```
+
+> [!NOTE]
+> Para una guía completa de despliegue (Docker, K8s, Local), consulta la [**Guía de Instalación**](docs/INSTALL.md).
+
+---
+
+## 🛡️ Seguridad y Gobernanza
+
+Este repositorio aplica un modelo de **Defensa en Profundidad**:
+
+- 🔍 **Secret Scanning**: Auditoría constante con `detect-secrets`.
+- 📦 **Non-Root Containers**: Aislamiento de privilegios en todas las imágenes.
+- 🔄 **Exponential Backoff**: Resiliencia ante fallos de APIs externas mediante `tenacity`.
+- 📜 **Killed.md**: Documentación de antipatrones prohibidos en el desarrollo.
+
+---
+
+## 📚 Documentación Técnica Completa
+
+- 🏗️ [**Arquitectura Detallada**](docs/ARCHITECTURE.md): Diagramas y motor de persistencia.
+- 🛠️ [**Especificaciones Técnicas**](docs/TECHNICAL_SPECS.md): Tech stack y contratos de API.
+- 📋 [**Requisitos del Sistema**](docs/REQUIREMENTS.md): Hardware y compatibilidad.
+- 🛣️ [**Roadmap**](ROADMAP.md): Hitos y visión a futuro.
+
+---
+
+
+---
+> [!IMPORTANT]
+> **He diseñado este repositorio para que sea fácil de auditar.** El **Caso 09** es el punto de referencia para evaluar mi capacidad de integrar IA en flujos de trabajo empresariales complejos.
