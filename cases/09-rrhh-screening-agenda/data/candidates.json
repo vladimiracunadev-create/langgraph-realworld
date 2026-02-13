@@ -3,6 +3,7 @@
     "candidate_id": "C001",
     "name": "Camila Rojas",
     "email": "camila.rojas@example.com",
+    "phone": "+56911111111",
     "years_experience": 2,
     "education": "Bootcamp",
     "skills": [
@@ -24,6 +25,7 @@
     "candidate_id": "C002",
     "name": "Diego Muñoz",
     "email": "diego.munoz@example.com",
+    "phone": "+56922222222",
     "years_experience": 3,
     "education": "Autodidacta",
     "skills": [
@@ -44,6 +46,7 @@
     "candidate_id": "C003",
     "name": "Valentina Soto",
     "email": "valentina.soto@example.com",
+    "phone": "+56933333333",
     "years_experience": 3,
     "education": "Autodidacta",
     "skills": [
@@ -64,6 +67,7 @@
     "candidate_id": "C004",
     "name": "Matías Pérez",
     "email": "matias.perez@example.com",
+    "phone": "+56944444444",
     "years_experience": 2,
     "education": "Técnico",
     "skills": [
@@ -83,6 +87,7 @@
     "candidate_id": "C005",
     "name": "Fernanda Silva",
     "email": "fernanda.silva@example.com",
+    "phone": "+56955555555",
     "years_experience": 2,
     "education": "Técnico",
     "skills": [
@@ -105,6 +110,7 @@
     "candidate_id": "C006",
     "name": "Javier Contreras",
     "email": "javier.contreras@example.com",
+    "phone": "+56966666666",
     "years_experience": 1,
     "education": "Universitario",
     "skills": [
@@ -129,6 +135,7 @@
     "candidate_id": "C007",
     "name": "Antonia Torres",
     "email": "antonia.torres@example.com",
+    "phone": "+56977777777",
     "years_experience": 4,
     "education": "Técnico",
     "skills": [
@@ -148,6 +155,7 @@
     "candidate_id": "C008",
     "name": "Sebastián Fuentes",
     "email": "sebastian.fuentes@example.com",
+    "phone": "+56988888888",
     "years_experience": 0,
     "education": "Autodidacta",
     "skills": [

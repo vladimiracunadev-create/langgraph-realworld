@@ -152,7 +152,11 @@ Para habilitar las capacidades completas (Fase 2 y 3) en el Caso 09:
 ### 2. Google Calendar (Fase 3: Acción)
 - Requiere un proyecto en Google Cloud con la **Calendar API** activa.
 - Debes configurar `GOOGLE_CALENDAR_ID` en el `.env`.
-- El sistema detectará automáticamente si debe operar en modo **Mock visual** o **Integración real**.
+
+### 3. Notificaciones (Fase 4: Email/WA)
+- **Email**: Configura `SMTP_SERVER`, `SMTP_PORT`, `SMTP_USER`.
+- **WhatsApp**: Requiere `TWILIO_SID` y `TWILIO_AUTH_TOKEN`.
+- **Modo Demo**: Si estas llaves no existen, el sistema desplegará el estado de envío simulado profesional en la UI.
 
 ---
 

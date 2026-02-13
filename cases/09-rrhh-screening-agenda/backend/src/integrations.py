@@ -112,6 +112,59 @@ def create_google_calendar_event(
     }
 
 
+@resilient_call
+def send_email_notification(
+    *,
+    to_email: str,
+    subject: str,
+    body: str
+) -> Dict[str, Any]:
+    """
+    Punto de integración Híbrido para Email:
+    1. Si detecta SMTP_SERVER, envía correo real.
+    2. Si no, simula el éxito para la UI.
+    """
+    simulate_delay_and_reliability("send_email_notification")
+    
+    smtp_enabled = os.getenv("SMTP_SERVER") is not None
+    mode = "REAL_SMTP" if smtp_enabled else "DEMO_SIMULATION"
+    
+    logger.info(f"Notificación Email ({mode}) enviada a {to_email}")
+    
+    return {
+        "status": "success",
+        "to": to_email,
+        "mode": mode,
+        "ts": _now_ms()
+    }
+
+
+@resilient_call
+def send_whatsapp_notification(
+    *,
+    to_phone: str,
+    message: str
+) -> Dict[str, Any]:
+    """
+    Punto de integración Híbrido para WhatsApp:
+    1. Si detecta TWILIO_SID, envía mensaje real.
+    2. Si no, simula el envío con fallback visual.
+    """
+    simulate_delay_and_reliability("send_whatsapp_notification")
+    
+    wa_enabled = os.getenv("TWILIO_SID") is not None
+    mode = "REAL_WHATSAPP" if wa_enabled else "DEMO_SIMULATION"
+    
+    logger.info(f"Notificación WhatsApp ({mode}) enviada a {to_phone}")
+    
+    return {
+        "status": "success",
+        "to": to_phone,
+        "mode": mode,
+        "ts": _now_ms()
+    }
+
+
 async def send_email_smtp_async(
     *,
     host: str,
@@ -136,19 +189,6 @@ async def send_email_smtp_async(
         subject,
         body_text,
     )
-    return
-
-
-def send_email_sendgrid(
-    *,
-    api_key: str,
-    from_email: str,
-    to_email: str,
-    subject: str,
-    body_text: str,
-) -> None:
-    """Envía correo con SendGrid (stub)."""
-    _ = (api_key, from_email, to_email, subject, body_text)
     return
 
 

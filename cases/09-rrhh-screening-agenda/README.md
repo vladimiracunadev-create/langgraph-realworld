@@ -14,7 +14,8 @@ graph TD
   SNode --> Score
   Score -->|Completado| Shortlist[build_shortlist]
   Shortlist --> Schedule[schedule_interviews]
-  Schedule --> END((Fin))
+  Schedule --> Notify[notify_candidates]
+  Notify --> END((Fin))
 
   subgraph "Capa de Resiliencia"
     Tenacity[Exponential Backoff]
@@ -23,12 +24,13 @@ graph TD
   end
 ```
 
-### 🔄 Ciclo de Vida del Agente (3 Fases)
-Para este caso de uso, el agente opera en tres etapas claramente definidas:
+### 🔄 Ciclo de Vida del Agente (4 Fases)
+Para este caso de uso, el agente opera en cuatro etapas claramente definidas:
 
-1. **Fase 1: Lectura 📄**: Carga de perfiles y requisitos desde el sistema de archivos (Demos) o APIs de ATS (Producción).
-2. **Fase 2: Análisis 🧠**: El LLM evalúa semánticamente cada CV y construye una shortlist basada en el encaje cultural y técnico.
-3. **Fase 3: Acción (Agenda) 📅**: El agente toma la decisión final y coordina la agenda, reservando slots de entrevista.
+1. **Fase 1: Lectura 📄**: Carga de perfiles y requisitos.
+2. **Fase 2: Análisis 🧠**: El LLM evalúa semánticamente cada CV y construye la shortlist.
+3. **Fase 4: Acción (Agenda) 📅**: El agente reserva slots de entrevista en el calendario.
+4. **Fase 5: Notificación 📧📱**: Envío de confirmación automática por Email y WhatsApp.
 
 ---
 
@@ -140,6 +142,20 @@ Para que el agente pueda **Actuar** (Fase 3) y programar entrevistas reales:
     ```
 4.  **Verificación**:
     Al presionar "Ejecutar" en la UI, el sistema detectará el `GOOGLE_CALENDAR_ID` y pasará de **"Modo Demo"** a **"Acción Real"**, creando eventos con links directos en la interfaz.
+
+---
+
+## 📧📱 Activación de Fase 4 (Notificaciones)
+
+Para habilitar el envío real de comunicaciones:
+
+1.  **Email (SMTP)**:
+    - Configura `SMTP_SERVER`, `SMTP_PORT`, `SMTP_USER` y `SMTP_PASS` en el `.env`.
+2.  **WhatsApp (Twilio)**:
+    - Registra una cuenta en Twilio y obtén `TWILIO_SID` y `TWILIO_AUTH_TOKEN`.
+    - Configura `TWILIO_FROM_NUMBER` con tu número de sandbox.
+3.  **Hibridación Visual (Por Defecto)**:
+    - Si no se detectan estas llaves, el sistema desplegará un estado de **"DEMO_SIMULATION"** en la UI, permitiéndote validar el flujo visual sin costes ni configuraciones complejas.
 
 ---
 

@@ -237,15 +237,64 @@ def schedule_interviews(state: ScreeningState) -> ScreeningState:
                 "event_id": res.get("calendar_event_id")
             })
 
-        out: ScreeningState = {"scheduled": scheduled, "done": True}
+        out: ScreeningState = {"scheduled": scheduled, "done": False} # No hemos terminado aún, falta Phase 4
         out.update(_push_event("scheduled", {"count": len(scheduled)}))
         return out
     except Exception as e:
         logger.error(f"Error en agendamiento de entrevistas: {e}")
         return {
-            "done": True, # Marcamos como hecho aunque fallara el agendamiento (degradación)
+            "done": False, # Intentamos seguir a Phase 4 aunque agendamiento fallara
             "events": [{"ts": _now_ms(), "type": "error_node", "data": {"msg": str(e), "node": "schedule_interviews"}}]
         }
+
+
+def notify_candidates(state: ScreeningState) -> ScreeningState:
+    """
+    Fase 4: Notificación.
+    Envía Email y WhatsApp a los candidatos en la shortlist agendada.
+    """
+    try:
+        scheduled = state.get("scheduled", []) or []
+        logger.info(f"Notificando a {len(scheduled)} candidatos")
+        
+        from .integrations import send_email_notification, send_whatsapp_notification
+        
+        notified: List[Dict[str, Any]] = []
+        for s in scheduled:
+            # Encontrar el candidato original para obtener el teléfono
+            candidate = next((c for c in state.get("candidates", []) if c["candidate_id"] == s["candidate_id"]), {})
+            
+            # 1. Enviar Email
+            email_res = send_email_notification(
+                to_email=candidate.get("email", "unknown@example.com"),
+                subject="¡Tu entrevista ha sido agendada!",
+                body=f"Hola {s['name']}, tu entrevista es el {s['slot_iso']}. Link: {s['calendar_link']}"
+            )
+            
+            # 2. Enviar WhatsApp
+            wa_res = send_whatsapp_notification(
+                to_phone=candidate.get("phone", "+56900000000"),
+                message=f"Hola {s['name']}, agenda confirmada: {s['slot_iso']}"
+            )
+            
+            notified.append({
+                "candidate_id": s["candidate_id"],
+                "email_status": email_res["mode"],
+                "wa_status": wa_res["mode"]
+            })
+            
+            # Actualizamos el item en scheduled para que la UI lo vea
+            s["email_status"] = email_res["mode"]
+            s["wa_status"] = wa_res["mode"]
+
+        out: ScreeningState = {"scheduled": state.get("scheduled", []), "done": True} # FIN DEL CICLO
+        out.update(_push_event("notified", {"count": len(notified)}))
+        # Actualizamos la lista scheduled con el estado de notificación para la UI
+        # (Nota: En LangGraph profesional, esto se haría acumulando en un campo 'notified' dedicado)
+        return out
+    except Exception as e:
+        logger.error(f"Error en notify_candidates: {e}")
+        return {"done": True}
 
 
 def should_keep_scoring(state: ScreeningState) -> Literal["score_one", "build_shortlist"]:
@@ -267,12 +316,14 @@ def compile_graph():
     g.add_node("score_one", score_one)
     g.add_node("build_shortlist", build_shortlist)
     g.add_node("schedule_interviews", schedule_interviews)
+    g.add_node("notify_candidates", notify_candidates)
 
     g.add_edge(START, "load_inputs")
     g.add_edge("load_inputs", "score_one")
     g.add_conditional_edges("score_one", should_keep_scoring, ["score_one", "build_shortlist"])
     g.add_edge("build_shortlist", "schedule_interviews")
-    g.add_edge("schedule_interviews", END)
+    g.add_edge("schedule_interviews", "notify_candidates")
+    g.add_edge("notify_candidates", END)
 
     db_path = checkpoint_db_path()
 

@@ -9,15 +9,16 @@ Este documento describe la estructura técnica de **LangGraph Realworld**, centr
 
 ## 🛰️ Visión General
 
-El proyecto está diseñado como un **Monorepo de Casos de Uso**, donde cada "caso" es un ecosistema autocontenido que sigue un ciclo de vida de tres etapas: **Lectura, Análisis y Acción**.
+El proyecto está diseñado como un **Monorepo de Casos de Uso**, donde cada "caso" es un ecosistema autocontenido que sigue un ciclo de vida de cuatro etapas: **Lectura, Análisis, Acción y Notificación**.
 
-### 🔄 El Ciclo de Vida del Agente (3 Fases)
+### 🔄 El Ciclo de Vida del Agente (4 Fases)
 
 | Fase | Nombre | Responsabilidad Técnica | Nodo LangGraph |
 | :--- | :--- | :--- | :--- |
 | **Fase 1** | **Lectura** | Ingesta de datos (CVs/Jobs) y normalización. | `load_inputs` |
 | **Fase 2** | **Análisis** | Evaluación cognitiva y filtrado (Scoring). | `score_one` / `build_shortlist` |
-| **Fase 3** | **Acción** | Ejecución de tareas externas (Agenda/Email). | `schedule_interviews` |
+| **Fase 3** | **Acción** | Ejecución de tareas de infraestructura (Agenda). | `schedule_interviews` |
+| **Fase 4** | **Notificación** | Comunicación final con el cliente (Email/WA). | `notify_candidates` |
 
 ```mermaid
 graph TD

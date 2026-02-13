@@ -92,6 +92,16 @@ Para que un caso sea considerado **Industrial (v3.2)**, la fase de acción debe 
 
 ---
 
+## 📱 Contrato de la Fase 4 (Notificaciones Email/WA)
+
+Para garantizar una comunicación industrial, la fase de notificación debe cumplir:
+
+- **Protocolo Híbrido**: El sistema debe conmutar entre proveedores reales (Twilio, SMTP) y simulaciones visuales profesionales.
+- **Privacidad de Datos**: El uso de correos y teléfonos debe estar restringido a la Fase 4 y no persistirse en logs públicos.
+- **Resiliencia de Envío**: Uso de reintentos exponenciales para manejar caídas en las pasarelas de mensajería.
+
+---
+
 ## 🛠️ Guía de Estilo
 
 - **Ruff**: Linter y formateador oficial. Se debe ejecutar antes de cada commit.
