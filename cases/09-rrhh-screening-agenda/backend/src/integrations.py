@@ -18,6 +18,11 @@ from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_ex
 logger = logging.getLogger(__name__)
 
 
+def _now_ms() -> int:
+    """Helper para obtener el timestamp actual en milisegundos."""
+    return int(time.time() * 1000)
+
+
 def simulate_delay_and_reliability(func_name: str):
     """Simula latencia y fallas ocasionales para probar guardrails."""
     # Latencia pequeña siempre
