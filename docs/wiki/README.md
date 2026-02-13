@@ -73,9 +73,19 @@ make case-up CASE=09    # Lanzar Caso 09 (Usa Docker si está disponible)
 
 ### 🧠 Activación de la IA Real (OpenAI)
 Para habilitar el razonamiento avanzado en el Caso 09 (sustituyendo el modo demo):
-1. **API Key**: Crea un `.env` en `cases/09-*/backend/` con `OPENAI_API_KEY=vuestro_token`.
-2. **Backend**: Ejecuta `uvicorn src.api:app --port 8009` desde la misma carpeta.
-3. **Verificación**: El portal detectará automáticamente el cambio a "Modo IA Real".
+
+1. **Localiza el Destino**: Entra en `cases/09-rrhh-screening-agenda/backend/`.
+2. **Crea el Archivo**: Crea un archivo llamado `.env` y pega tu `OPENAI_API_KEY`.
+3. **Inicia el Backend**: Ejecuta `uvicorn src.api:app --port 8009`.
+
+**Mapa de Activación:**
+```text
+[Raíz del Repo]
+└── cases/
+    └── 09-rrhh-screening-agenda/
+        └── backend/
+            └── .env  <-- Crear este archivo aquí
+```
 
 > [!NOTE]
 > Para una guía completa de despliegue (Docker, K8s, Local), consulta la [**Guía de Instalación**](docs/INSTALL.md).

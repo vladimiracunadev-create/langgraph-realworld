@@ -70,12 +70,29 @@ docker compose -f compose.smoke.yml up --build --abort-on-container-exit
 
 ---
 
-## 🧭 Roadmap de Implementación "Real"
+## 🧭 Activación "Real IA" (Paso a Paso)
 
-Para convertir este demo en un sistema productivo, sigue este orden:
-1. **Parsing**: Implementa `parse_resume_to_text` en `backend/src/integrations.py` (usando `pypdf`/`docx`).
-2. **Database**: Conecta un motor real (Postgres/S3) para la carga de CVs.
-3. **Calendar**: Activa las credenciales de Google API en `create_google_calendar_event`.
+Para habilitar el cerebro de agentes LangGraph (OpenAI) en lugar de la demo:
+
+1. **Localiza la carpeta**: `cases/09-rrhh-screening-agenda/backend/`
+2. **Crea el archivo `.env`**:
+   ```env
+   OPENAI_API_KEY=tu_key_aqui
+   MODEL=gpt-4o-mini
+   ```
+3. **Inicia el servidor real**:
+   ```bash
+   uvicorn src.api:app --port 8009
+   ```
+
+**Ubicación física en el disco:**
+```text
+[PROYECTO_RAIZ]
+└── cases/
+    └── 09-rrhh-screening-agenda/
+        └── backend/
+            └── .env  <-- ESTE ES EL ARCHIVO QUE DEBES CREAR
+```
 
 ---
 > [!IMPORTANT]
