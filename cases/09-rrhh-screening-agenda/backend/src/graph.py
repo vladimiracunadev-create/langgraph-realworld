@@ -33,6 +33,11 @@ def _get_sqlite_conn(db_path: str) -> sqlite3.Connection:
 
 
 class ScreeningState(BaseModel):
+    """
+    Estado centralizado del agente (Single Source of Truth).
+    Utiliza Pydantic para validación y Annotated para definir cómo 
+    se combinan los resultados de los nodos (operator.add permite acumulación).
+    """
     job: Dict[str, Any] = Field(default_factory=dict)
     candidates: List[Dict[str, Any]] = Field(default_factory=list)
     cursor: int = 0
@@ -60,7 +65,10 @@ def _push_event(event_type: str, data: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def load_inputs(state: ScreeningState) -> ScreeningState:
-    """Carga job + candidates desde data/ para que el demo sea determinista."""
+    """
+    Nodo inicial: Carga la configuración del puesto y la lista de candidatos.
+    En un entorno real, esto consultaría una base de Datos SQL o un ATS.
+    """
     logger.info("Cargando inputs para el screening")
     load_settings()
 
@@ -93,7 +101,12 @@ def load_inputs(state: ScreeningState) -> ScreeningState:
 
 
 def score_one(state: ScreeningState) -> ScreeningState:
-    """Scoring incremental: evalúa 1 candidato por iteración para mostrar progreso."""
+    """
+    Nodo de procesamiento cíclico:
+    1. Toma al candidato indicado por el cursor.
+    2. Aplica lógica de scoring (Puntos por experiencia, educación y portafolio).
+    3. Devuelve solo el cambio incremental (el score del candidato actual).
+    """
     try:
         job = state["job"]
         candidates = state["candidates"]
@@ -222,6 +235,11 @@ def schedule_interviews(state: ScreeningState) -> ScreeningState:
 
 
 def should_keep_scoring(state: ScreeningState) -> Literal["score_one", "build_shortlist"]:
+    """
+    Lógica de control del flujo (Router): 
+    Si aún quedan candidatos por procesar, vuelve a 'score_one'.
+    De lo contrario, avanza a la creación de la 'shortlist'.
+    """
     if state.get("cursor", 0) < len(state.get("candidates", []) or []):
         return "score_one"
     return "build_shortlist"

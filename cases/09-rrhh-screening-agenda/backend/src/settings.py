@@ -12,8 +12,9 @@ def load_settings() -> None:
 
 
 def case_root() -> Path:
-    """Ruta del caso (cases/09-...).
-
+    """
+    Resuelve la ruta raíz del caso de uso.
+    Util para localizar archivos de datos y configuraciones específicas del módulo.
     src/settings.py -> parents[2] = .../cases/09-rrhh-screening-agenda
     """
     return Path(__file__).resolve().parents[2]
@@ -25,11 +26,11 @@ def backend_root() -> Path:
 
 
 def data_dir() -> str:
-    """Directorio de datos.
-
-    Prioridad:
-    1) env DATA_DIR (útil en Docker)
-    2) <case_root>/data (robusto para ejecución local/CI)
+    """
+    Define el directorio de datos (JSONs de entrada).
+    Sustenta la portabilidad:
+    1. Si existe la variable DATA_DIR (como en Docker), la usa.
+    2. Si no, busca la carpeta 'data' relativa a la raíz del caso.
     """
     env = os.getenv("DATA_DIR")
     if env:

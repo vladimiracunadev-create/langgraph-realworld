@@ -29,7 +29,9 @@ def simulate_delay_and_reliability(func_name: str):
         raise RuntimeError(f"Error externo simulado en {func_name}")
 
 
-# Decorador de resiliencia real
+# Decorador de resiliencia empresarial:
+# Aplica reintentos automáticos con backoff exponencial.
+# multiplier=1, min=1, max=4 significa que esperará 1s, luego 2s, luego 4s antes de desistir.
 resilient_call = retry(
     stop=stop_after_attempt(3),
     wait=wait_exponential(multiplier=1, min=1, max=4),
@@ -85,7 +87,11 @@ def create_google_calendar_event(
     end_iso: str,
     attendee_emails: List[str],
 ) -> Dict[str, Any]:
-    """Crea un evento de Google Calendar (con reintentos)."""
+    """
+    Punto de integración con Google Calendar API.
+    Utiliza el decorador @resilient_call para manejar fallos temporales de red.
+    En producción, aquí se usarían las credenciales de Service Account o OAuth2.
+    """
     simulate_delay_and_reliability("create_google_calendar_event")
     return {
         "summary": summary,
@@ -139,8 +145,11 @@ def send_email_sendgrid(
 
 @resilient_call
 def llm_generate_interview_questions(job: Dict[str, Any], candidate: Dict[str, Any]) -> List[str]:
-    """Genera preguntas de entrevista (con reintentos).
-    Activa OpenAI si OPENAI_API_KEY está presente. En su defecto, usa fallback determinista.
+    """
+    Motor Híbrido de Generación de Preguntas:
+    1. Si existe OPENAI_API_KEY, realiza una llamada real a un LLM (OpenAI).
+    2. Si no, usa un banco de preguntas determinista (Fallback Industrial).
+    Esto permite que el sistema funcione en 'Demos' sin llaves de API, pero escale a 'Industrial' con facilidad.
     """
     api_key = os.getenv("OPENAI_API_KEY")
     if api_key:

@@ -13,10 +13,13 @@ from pydantic import BaseModel
 
 from .graph import compile_graph
 
-# ContextVar para rastreo de solicitudes (Trace ID)
+# ContextVar para rastreo de solicitudes (Trace ID). 
+# Permite acceder al ID único de la petición en cualquier parte del código (logs, base de datos)
+# sin tener que pasarlo explícitamente como argumento de función.
 trace_id_var: ContextVar[str] = ContextVar("trace_id", default="system")
 
 class TraceIdFilter(logging.Filter):
+    """Filtro para inyectar el trace_id actual en cada registro de log."""
     def filter(self, record):
         record.trace_id = trace_id_var.get()
         return True
@@ -44,7 +47,12 @@ if WEB_DIR.exists():
 
 @app.middleware("http")
 async def add_trace_id_middleware(request, call_next):
-    """Genera y asigna un Trace ID único para cada solicitud http."""
+    """
+    Middleware de nivel industrial para observabilidad:
+    1. Genera un UUID único (Trace ID).
+    2. Lo inyecta en el ContextVar para que los logs lo capturen automáticamente.
+    3. Lo añade a la cabecera X-Trace-ID de la respuesta.
+    """
     id = str(uuid.uuid4())
     token = trace_id_var.set(id)
     try:
@@ -52,6 +60,7 @@ async def add_trace_id_middleware(request, call_next):
         response.headers["X-Trace-ID"] = id
         return response
     finally:
+        # Importante: El token asegura que restauramos el estado previo del ContextVar
         trace_id_var.reset(token)
 
 
@@ -127,7 +136,12 @@ def run(payload: RunIn):
 
 @app.get("/api/stream")
 def stream(thread_id: str = "rrhh-demo-1"):
-    """Streaming NDJSON para ver el flujo en tiempo real con soporte de cancelación."""
+    """
+    Endpoint de Streaming NDJSON (Newtonsoft JSON):
+    - Permite al frontend recibir actualizaciones parciales del grafo de agentes.
+    - Útil para interfaces "vivas" que muestran el progreso paso a paso.
+    - Soporta thread_id para persistencia de sesión por usuario.
+    """
     logger.info(f"Iniciando stream para thread_id: {thread_id}")
     graph = get_graph()
     cfg = {"configurable": {"thread_id": thread_id}, "recursion_limit": 50}
