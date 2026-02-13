@@ -217,6 +217,9 @@
     <div class="pill" style="border-color:var(--accent); color:var(--accent); display:none;" id="traceDisplay">Trace:
       <span id="traceIdVal">-</span>
     </div>
+    <div class="pill" id="aiMode" style="background: rgba(35, 134, 54, 0.1); border-color: #238636; color: #3fb950;">
+      Detección...
+    </div>
     <a class="pill link" href="http://localhost:8080/index.html">Volver al index</a>
   </header>
 
@@ -282,6 +285,23 @@
       const jobTitle = $("jobTitle");
       const traceDisplay = $("traceDisplay");
       const traceIdVal = $("traceIdVal");
+      const aiMode = $("aiMode");
+
+      async function checkAI() {
+        try {
+          const r = await fetch("/health");
+          if (r.ok) {
+            aiMode.textContent = "⚙️ MODO IA REAL (INDUSTRIAL)";
+            aiMode.style.borderColor = "#2f81f7";
+            aiMode.style.color = "#4493f8";
+          } else { throw new Error(); }
+        } catch (e) {
+          aiMode.textContent = "🧪 MODO DEMO INSTANTÁNEA";
+          aiMode.style.borderColor = "#f85149";
+          aiMode.style.color = "#ff7b72";
+        }
+      }
+      checkAI();
 
       function randId() {
         return "rrhh-" + Math.random().toString(16).slice(2) + "-" + Date.now().toString(16);
@@ -328,7 +348,21 @@
         byId.clear();
         rows.innerHTML = "";
 
-        const res = await fetch("/api/stream?thread_id=" + tid);
+        // Detectar si estamos en modo Real (FastAPI src.api) o Mock (mock_api.py)
+        // src.api usa GET /api/stream, mock_api usa POST /api/run/stream
+        let res;
+        try {
+          // Intento 1: Estándar Industrial (GET)
+          res = await fetch("/api/stream?thread_id=" + tid);
+          if (!res.ok) throw new Error("GET fails");
+        } catch (e) {
+          // Fallback: Modo Mock (POST)
+          res = await fetch("/api/run/stream", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ thread_id: tid })
+          });
+        }
 
         // Capturar Trace ID de los headers de la respuesta
         const traceHeader = res.headers.get("X-Trace-ID");
