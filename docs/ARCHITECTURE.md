@@ -26,7 +26,7 @@ graph TD
     Tools[Tools / Integrations]
   end
 
-  subgraph "Capa de Resiliencia"
+  subgraph Resilience ["Capa de Resiliencia"]
     Ten[Tenacity - Exponential Backoff]
     Deg[Graceful Degradation Logic]
     Guard[Guardrails / Step Limits]
@@ -37,8 +37,8 @@ graph TD
   API --> LG
   LG --> Check
   LG --> Tools
-  Tools --> Capa de Resiliencia
-  Capa de Resiliencia --> Integrations[External APIs / Stubs]
+  Tools --> Resilience
+  Resilience --> Integrations[External APIs / Stubs]
 ```
 
 ---
