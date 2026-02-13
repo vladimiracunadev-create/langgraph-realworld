@@ -1,188 +1,62 @@
-# 👔 Guía para Reclutadores
+# 👔 Guía Estratégica para Reclutadores (RECRUITER)
 
-> **TL;DR**: Este repositorio demuestra capacidad para construir sistemas de IA complejos y production-ready usando LangGraph, con énfasis en arquitectura, seguridad y DevOps.
-
----
-
-## 🎯 ¿Qué es este proyecto?
-
-Este es un **portafolio técnico** que muestra **25 casos de uso reales** de aplicaciones LLM con estado, implementados con **LangGraph** (framework de LangChain para workflows complejos).
-
-**Valor de negocio**: Cada caso resuelve un problema empresarial concreto:
-- **RR.HH.**: Screening automatizado de candidatos con scoring y agenda
-- **Soporte**: Asistente omnicanal con memoria de conversaciones
-- **IT/SRE**: Respuesta a incidentes con runbooks automatizados
-- **Compliance**: Auditorías y análisis de documentos regulatorios
+> **Executive Summary**: Este repositorio demuestra maestría técnica en el orquestación de Agentes LLM con estado, DevOps avanzado y diseño de sistemas resilientes preparados para producción.
 
 ---
 
-## 🏆 Caso Destacado: **Caso 09 - RR.HH. Screening + Agenda**
+## 🎯 Valor de Negocio y Visión
 
-### ¿Qué hace?
-Un sistema completo de reclutamiento que:
-1. Recibe CVs en PDF
-2. Extrae información estructurada (skills, experiencia)
-3. Aplica scoring basado en reglas de negocio
-4. Envía emails automáticos a candidatos aprobados
-5. Agenda entrevistas en calendario
+Este proyecto no es solo una colección de scripts; es un **Agentic Resilience Hub** que resuelve problemas críticos de negocio mediante IA:
+- **Automatización de Procesos**: Reducción de tiempos en tareas de bajo valor (Screening, Soporte).
+- **Confiabilidad**: Arquitectura diseñada para fallar con gracia y recuperarse (Zero Data Loss).
+- **Escalabilidad**: Contenerización estandarizada para despliegues rápidos en la nube.
 
-### Stack Técnico
-```
-Frontend:  HTML/CSS/JS (streaming en tiempo real)
-Backend:   FastAPI + LangGraph
-LLM:       OpenAI GPT-4 (configurable)
-Storage:   SQLite (checkpoints para persistencia)
-Deploy:    Docker + Kubernetes
-```
+---
 
-### Arquitectura
-```mermaid
-flowchart LR
-  UI[UI Browser] -->|SSE Stream| API[FastAPI]
-  API --> LG[LangGraph Workflow]
-  LG --> T1[Tool: Parse PDF]
-  LG --> T2[Tool: Score Candidate]
-  LG --> T3[Tool: Send Email]
-  LG --> T4[Tool: Calendar API]
-  LG --> DB[(SQLite Checkpoints)]
-```
+## 🏗️ Decisiones Arquitectónicas Clave
 
-### Demo Rápida
-```bash
-# Clonar y ejecutar en 3 comandos
-git clone https://github.com/vladimiracunadev-create/langgraph-realworld.git
-cd langgraph-realworld
-make case-up CASE=09  # Levanta backend + UI en localhost:8009
-```
+1.  **LangGraph sobre cadenas lineales**: Permite flujos cíclicos complejos, re-intentos inteligentes y razonamiento iterativo.
+2.  **Streaming NDJSON**: Feedback instantáneo al usuario, mejorando radicalmente la UX de aplicaciones de IA.
+3.  **Persistencia en SQLite**: Implementación de checkpoints para asegurar la continuidad del flujo en entornos inestables.
+4.  **Capa de Resiliencia (Tenacity)**: Separación de la lógica de negocio de la lógica de reintento de infraestructura.
 
-**Resultado**: Interfaz web donde puedes subir un CV y ver el proceso de screening en tiempo real con streaming.
+---
+
+## 🏆 Caso de Éxito: Caso 09 (Screening + Agenda)
+
+Este es nuestro **modelo de referencia** que demuestra el stack completo:
+- **Frontend**: Dashboard Glassmorphism con streaming en tiempo real.
+- **Backend API**: FastAPI asíncrono.
+- **Motor AI**: LangGraph con 5+ nodos de razonamiento y herramientas.
+- **DevOps**: Docker + K8s + Smoke Testing automatizado.
 
 ---
 
 ## 🛠️ Habilidades Técnicas Demostradas
 
-### 1. **Arquitectura de Software**
-- ✅ Separación de concerns (backend/frontend/data)
-- ✅ Workflows con estado usando grafos (LangGraph)
-- ✅ Persistencia de checkpoints para recuperación ante fallos
-- ✅ Streaming de eventos en tiempo real (SSE)
-
-### 2. **DevOps & Infrastructure**
-- ✅ **Docker**: Multi-stage builds, non-root users, health checks
-- ✅ **Kubernetes**: Deployments, Services, NetworkPolicies, ResourceLimits
-- ✅ **CI/CD**: GitHub Actions (tests, linting, security scans, Docker builds)
-- ✅ **Makefile**: Comandos estandarizados para desarrollo
-
-### 3. **Seguridad (Hardening)**
-- ✅ Contenedores **non-root** (usuarios 1000/101)
-- ✅ Tags de imagen fijos (no `latest`)
-- ✅ **Secret scanning**: Pre-commit hooks + CI (TruffleHog)
-- ✅ **Dependency scanning**: Safety checks en CI
-- ✅ **Network Policies**: Deny-all por defecto + allowlist
-- ✅ **SecurityContext**: `runAsNonRoot`, `allowPrivilegeEscalation: false`
-
-### 4. **Python & LLMs**
-- ✅ FastAPI para APIs asíncronas
-- ✅ LangGraph para workflows complejos con estado
-- ✅ LangChain tools para integración con servicios externos
-- ✅ Prompt engineering y manejo de contexto
-- ✅ Testing con pytest
-
-### 5. **Documentación & Comunicación**
-- ✅ README claro con quickstart
-- ✅ Wiki con guías técnicas (Hub CLI, Seguridad)
-- ✅ Código comentado y estructurado
-- ✅ Este documento para reclutadores 😉
+| Área | Competencias |
+| :--- | :--- |
+| **Backend** | Python 3.11+, FastAPI, Asincronía, Logging Estructurado. |
+| **IA / Agentes** | LangGraph, LangChain, Prompt Engineering, Guardrails. |
+| **DevOps** | CI/CD (GitHub Actions), Docker, Kubernetes, Makefile. |
+| **Seguridad** | Secret Scanning, Non-Root UID, Network Policies. |
+| **Quality Assurance** | Ruff (Linting), Smoke Tests, Walkthroughs técnicos. |
 
 ---
 
-## 📂 Estructura del Repositorio
+## 🧭 Tour Guiado de Evaluación (5 min)
 
-```
-langgraph-realworld/
-├── cases/
-│   ├── 01-soporte-cliente-omnicanal/    # Scaffold standardized
-│   ├── 09-rrhh-screening-agenda/        # ✅ IMPLEMENTADO COMPLETO
-│   │   ├── backend/                     # FastAPI + LangGraph
-│   │   ├── data/                        # Datos de prueba
-│   │   └── demo/                        # UI estática
-│   └── 10-25.../                        # Scaffolds (plantillas)
-├── k8s/                                 # Manifiestos Kubernetes
-├── .github/workflows/                   # CI/CD (ci.yml, security.yml)
-├── docs/wiki/                           # Documentación Wiki
-├── hub.py                               # CLI para gestionar casos
-├── Makefile                             # Comandos de desarrollo
-└── SECURITY.md                          # Política de seguridad
-```
+Si tiene poco tiempo, le recomiendo seguir este recorrido:
+1.  **Código Central**: Vea la definición del grafo en [`cases/09-rrhh-screening-agenda/backend/src/graph.py`](cases/09-rrhh-screening-agenda/backend/src/graph.py).
+2.  **Resiliencia**: Observe cómo manejamos las APIs externas en [`cases/09-rrhh-screening-agenda/backend/src/integrations.py`](cases/09-rrhh-screening-agenda/backend/src/integrations.py).
+3.  **Infraestructura**: Revise los manifiestos de K8s en [`k8s/cases/09-rrhh-screening-agenda/`](k8s/cases/09-rrhh-screening-agenda/).
 
 ---
 
-## 🚀 Cómo Evaluar Este Proyecto (5 minutos)
+## 📊 Madurez Técnica
 
-### Opción 1: Revisar el Código (sin ejecutar)
-1. **Backend**: [`cases/09-rrhh-screening-agenda/backend/src/`](cases/09-rrhh-screening-agenda/backend/src/)
-   - `api.py`: FastAPI con streaming SSE
-   - `graph.py`: Definición del workflow LangGraph
-   - `tools.py`: Implementación de herramientas (PDF, email, calendar)
-
-2. **Infraestructura**: [`k8s/cases/09-rrhh-screening-agenda/`](k8s/cases/09-rrhh-screening-agenda/)
-   - `deployment.yaml`: SecurityContext, ResourceLimits
-   - `network-policy.yaml`: Políticas de red restrictivas
-
-3. **CI/CD**: [`.github/workflows/`](.github/workflows/)
-   - `ci.yml`: Tests, linting, Docker builds (25 casos)
-   - `security.yml`: Secret scanning, dependency checks
-
-### Opción 2: Ejecutar el Demo (10 minutos)
-```bash
-# Prerrequisitos: Docker, Python 3.11+, Make
-git clone https://github.com/vladimiracunadev-create/langgraph-realworld.git
-cd langgraph-realworld
-
-# Configurar API keys
-cp .env.example .env
-# Editar .env con tu OPENAI_API_KEY
-
-# Levantar caso 09
-make case-up CASE=09
-
-# Abrir http://localhost:8009 en el navegador
-# Subir un CV de prueba desde cases/09-rrhh-screening-agenda/data/
-```
-
-### Opción 3: Ver la Wiki
-- [Home](../../wiki/Home): Visión general
-- [Hub CLI](../../wiki/Hub-CLI): Herramienta de gestión
-- [Security](../../wiki/Security): Prácticas de hardening
+Nuestra arquitectura adhiere a los principios de **12-Factor App** y **Clean Code**, garantizando que el proyecto sea mantenible y fácil de escalar por un equipo de ingeniería.
 
 ---
-
-## 💼 Perfil del Desarrollador
-
-**Fortalezas evidenciadas en este repo:**
-- ✅ Capacidad para trabajar con tecnologías emergentes (LLMs, LangGraph)
-- ✅ Mentalidad DevOps (CI/CD, containerización, K8s)
-- ✅ Conciencia de seguridad (hardening, secret management)
-- ✅ Documentación clara y orientada a audiencias diversas
-- ✅ Código limpio y mantenible (linting, tests, estructura)
-
-**Ideal para roles de:**
-- Senior Backend Engineer (Python/FastAPI)
-- ML/AI Engineer (LLM Applications)
-- DevOps Engineer (K8s, CI/CD)
-- Full-Stack Engineer (con énfasis en backend)
-
----
-
-## 📞 Contacto
-
-Para preguntas técnicas o discusión de casos de uso específicos, por favor abre un [Issue](../../issues) en este repositorio.
-
----
-
-## 🔗 Enlaces Rápidos
-
-- [README Principal](README.md) - Quickstart y estado del proyecto
-- [SECURITY.md](SECURITY.md) - Política de seguridad y reportes
-- [Wiki](../../wiki) - Documentación técnica completa
-- [GitHub Actions](../../actions) - Estado de CI/CD en tiempo real
+> [!TIP]
+> **¿Desea una entrevista técnica?** Estoy preparado para discutir en profundidad cualquiera de las decisiones documentadas en nuestra [Arquitectura Detallada](docs/ARCHITECTURE.md).

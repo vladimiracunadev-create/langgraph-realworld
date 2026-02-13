@@ -1,0 +1,81 @@
+# Guía de Instalación y Despliegue (INSTALL) 🚀
+
+Este documento proporciona las instrucciones paso a paso para poner en marcha los agentes de **LangGraph Realworld** en diferentes entornos.
+
+---
+
+## 📋 Requisitos Previos
+
+Antes de comenzar, asegúrate de cumplir con los [Requisitos del Sistema](REQUIREMENTS.md) y tener a mano:
+- Una clave de API de OpenAI (u otro proveedor soportado).
+- Git instalado.
+- Docker Desktop (Recomendado).
+
+---
+
+## 🐳 Opción 1: Docker (Recomendada)
+
+Esta es la forma más rápida y segura de ejecutar los casos sin preocuparse por las dependencias de Python locales.
+
+### 1. Clonar el repositorio
+```bash
+git clone https://github.com/vladimiracunadev-create/langgraph-realworld.git
+cd langgraph-realworld
+```
+
+### 2. Configurar variables de entorno
+```bash
+cp .env.example .env
+# Edita el archivo .env y añade tu OPENAI_API_KEY
+```
+
+### 3. Levantar un caso específico (Ej: Caso 09)
+```bash
+make case-up CASE=09
+```
+*Esto descargará las imágenes, compilará el backend y levantará la UI en `http://localhost:8009`.*
+
+---
+
+## 🐍 Opción 2: Instalación Local (venv)
+
+Si prefieres trabajar directamente con el código sin contenedores:
+
+### 1. Preparar el entorno para un caso
+```bash
+cd cases/09-rrhh-screening-agenda/backend
+python -m venv .venv
+source .venv/bin/activate  # Windows: .\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+```
+
+### 2. Ejecutar el servidor
+```bash
+uvicorn src.api:app --reload --port 8009
+```
+
+---
+
+## 🧪 Validación de la Instalación (Smoke Tests)
+
+Para asegurar que todo está configurado correctamente, puedes ejecutar los tests de humo automatizados:
+
+```bash
+cd cases/09-rrhh-screening-agenda/backend
+docker compose -f compose.smoke.yml up --build --abort-on-container-exit
+```
+
+---
+
+## ⚠️ Solución de Problemas Comunes
+
+- **Error: `ModuleNotFoundError`**: Asegúrate de haber activado el entorno virtual (`.venv`) y ejecutado `pip install`.
+- **Error: `InsufficientQuotaError`**: Tu clave de OpenAI no tiene saldo o has alcanzado el límite.
+- **Error de Docker en Windows**: Asegúrate de que Docker Desktop esté corriendo y que el motor de WSL2 esté habilitado.
+
+---
+
+## 💡 Tips de Rendimiento
+
+- **SQLite**: No requiere configuración, pero asegúrate de que el proceso tenga permisos de escritura en la carpeta `backend/` para los checkpoints.
+- **Hot-Reload**: El servidor FastAPI tiene `--reload` activo por defecto en modo local para facilitar el desarrollo.
