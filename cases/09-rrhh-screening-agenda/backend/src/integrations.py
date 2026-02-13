@@ -18,6 +18,14 @@ from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_ex
 logger = logging.getLogger(__name__)
 
 
+class ResilienceException(Exception):
+    """Excepción especializada para fallos en la capa de resiliencia."""
+    def __init__(self, message: str, service: str, can_retry: bool = True):
+        super().__init__(message)
+        self.service = service
+        self.can_retry = can_retry
+
+
 def _now_ms() -> int:
     """Helper para obtener el timestamp actual en milisegundos."""
     return int(time.time() * 1000)
@@ -39,9 +47,11 @@ def simulate_delay_and_reliability(func_name: str):
 # multiplier=1, min=1, max=4 significa que esperará 1s, luego 2s, luego 4s antes de desistir.
 resilient_call = retry(
     stop=stop_after_attempt(3),
-    wait=wait_exponential(multiplier=1, min=1, max=4),
-    retry=retry_if_exception_type(RuntimeError),
-    before_sleep=lambda retry_state: logger.info(f"Reintentando llamada ({retry_state.attempt_number})...")
+    wait=wait_exponential(multiplier=1, min=2, max=10),
+    retry=(retry_if_exception_type(RuntimeError) | retry_if_exception_type(ResilienceException)),
+    before_sleep=lambda retry_state: logger.info(
+        f"Reintentando llamada al servicio ({retry_state.attempt_number})... Motivo: {retry_state.outcome.exception()}"
+    )
 )
 
 

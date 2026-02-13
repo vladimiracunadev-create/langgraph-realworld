@@ -102,6 +102,30 @@ Para garantizar una comunicación industrial, la fase de notificación debe cump
 
 ---
 
+## 🛡️ Patrones de Resiliencia Avanzada (v3.2.1)
+
+El sistema implementa una arquitectura de "Misión Crítica" basada en:
+
+### 1. Aislamiento de Errores (Error Boundaries)
+Cada fase del grafo y cada elemento dentro de un bucle de procesamiento (ej: notificaciones a múltiples candidatos) está envuelto en bloques `try/except` independientes. Un fallo en el envío a un candidato **no detiene** el flujo de los demás.
+
+### 2. Backoff Adaptativo e Industrial
+- **Multiplexor de Reintentos**: Uso de `tenacity` con esperas exponenciales (`min=2s`, `max=10s`).
+- **ResilienceException**: Tipado de errores para distinguir fallos transitorios de red de errores de lógica de negocio.
+
+### 3. Matriz de Degradación Graciosa
+
+| Componente | Fallo Detectado | Comportamiento en Degradación | Estado UI |
+| :--- | :--- | :--- | :--- |
+| **IA (Capa 2)** | API Offline / Rate Limit | Uso de Fallback Heurístico (Banco de Preguntas) | `MOCK_INDUSTRIAL` |
+| **Agenda (Capa 3)** | Calendar API Error | Reserva Visual Local (sin link externo) | `DEMO_LOCAL` |
+| **Email (Capa 4)** | SMTP Failure | Marcado de fallo individual, WA continúa | `FAILED_DEGRADED` |
+| **WhatsApp (Capa 4)**| Sandbox/Twilio Error | Marcado de fallo individual, Email continúa | `FAILED_DEGRADED` |
+
+---
+
+---
+
 ## 🛠️ Guía de Estilo
 
 - **Ruff**: Linter y formateador oficial. Se debe ejecutar antes de cada commit.

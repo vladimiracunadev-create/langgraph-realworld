@@ -261,31 +261,41 @@ def notify_candidates(state: ScreeningState) -> ScreeningState:
         
         notified: List[Dict[str, Any]] = []
         for s in scheduled:
-            # Encontrar el candidato original para obtener el teléfono
-            candidate = next((c for c in state.get("candidates", []) if c["candidate_id"] == s["candidate_id"]), {})
-            
-            # 1. Enviar Email
-            email_res = send_email_notification(
-                to_email=candidate.get("email", "unknown@example.com"),
-                subject="¡Tu entrevista ha sido agendada!",
-                body=f"Hola {s['name']}, tu entrevista es el {s['slot_iso']}. Link: {s['calendar_link']}"
-            )
-            
-            # 2. Enviar WhatsApp
-            wa_res = send_whatsapp_notification(
-                to_phone=candidate.get("phone", "+56900000000"),
-                message=f"Hola {s['name']}, agenda confirmada: {s['slot_iso']}"
-            )
-            
-            notified.append({
-                "candidate_id": s["candidate_id"],
-                "email_status": email_res["mode"],
-                "wa_status": wa_res["mode"]
-            })
-            
-            # Actualizamos el item en scheduled para que la UI lo vea
-            s["email_status"] = email_res["mode"]
-            s["wa_status"] = wa_res["mode"]
+            try:
+                # Encontrar el candidato original para obtener el teléfono
+                candidate = next((c for c in state.get("candidates", []) if c["candidate_id"] == s["candidate_id"]), {})
+                
+                # 1. Enviar Email (con aislamiento)
+                try:
+                    email_res = send_email_notification(
+                        to_email=candidate.get("email", "unknown@example.com"),
+                        subject="¡Tu entrevista ha sido agendada!",
+                        body=f"Hola {s['name']}, tu entrevista es el {s['slot_iso']}. Link: {s['calendar_link']}"
+                    )
+                    s["email_status"] = email_res["mode"]
+                except Exception as e:
+                    logger.error(f"Falla crítica en notificación Email para {s['name']}: {e}")
+                    s["email_status"] = "FAILED_DEGRADED"
+
+                # 2. Enviar WhatsApp (con aislamiento)
+                try:
+                    wa_res = send_whatsapp_notification(
+                        to_phone=candidate.get("phone", "+56900000000"),
+                        message=f"Hola {s['name']}, agenda confirmada: {s['slot_iso']}"
+                    )
+                    s["wa_status"] = wa_res["mode"]
+                except Exception as e:
+                    logger.error(f"Falla crítica en notificación WhatsApp para {s['name']}: {e}")
+                    s["wa_status"] = "FAILED_DEGRADED"
+
+                notified.append({
+                    "candidate_id": s["candidate_id"],
+                    "email_status": s["email_status"],
+                    "wa_status": s["wa_status"]
+                })
+            except Exception as e:
+                logger.error(f"Error procesando notificaciones para candidato {s.get('name')}: {e}")
+                continue
 
         out: ScreeningState = {"scheduled": state.get("scheduled", []), "done": True} # FIN DEL CICLO
         out.update(_push_event("notified", {"count": len(notified)}))
