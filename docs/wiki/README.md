@@ -55,13 +55,19 @@ Gestiona los 25 casos de forma centralizada. El **Hub CLI** (`hub.py`) es una he
 ```bash
 # 1. Operación Directa (Nivel 1: Laboratorio)
 python serve_site.py             # Portal 8080
-python cases/09-*/backend/mock_api.py   # Backend 8009
+python cases/09-*/backend/mock_api.py   # Backend 8009 (Modo Demo)
 
 # 2. Operación vía Hub (Nivel 2: Orquestación)
 python hub.py list      # Listar casos y su estado
 python hub.py doctor    # Verificar salud del entorno
 make case-up CASE=09    # Lanzar Caso 09 (Usa Docker si está disponible)
 ```
+
+### 🧠 Activación de la IA Real (OpenAI)
+Para habilitar el razonamiento avanzado en el Caso 09 (sustituyendo el modo demo):
+1. **API Key**: Crea un `.env` en `cases/09-*/backend/` con `OPENAI_API_KEY=vuestro_token`.
+2. **Backend**: Ejecuta `uvicorn src.api:app --port 8009` desde la misma carpeta.
+3. **Verificación**: El portal detectará automáticamente el cambio a "Modo IA Real".
 
 > [!NOTE]
 > Para una guía completa de despliegue (Docker, K8s, Local), consulta la [**Guía de Instalación**](docs/INSTALL.md).

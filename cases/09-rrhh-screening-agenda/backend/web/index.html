@@ -205,6 +205,71 @@
     .link:hover {
       text-decoration: underline;
     }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-content {
+      background: #161b22;
+      margin: 10% auto;
+      padding: 30px;
+      border: 1px solid var(--accent);
+      border-radius: 16px;
+      width: 80%;
+      max-width: 600px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal h2 {
+      margin-top: 0;
+      color: var(--accent);
+    }
+
+    .modal pre {
+      background: #0d1117;
+      padding: 15px;
+      border-radius: 8px;
+      overflow: auto;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .close-modal {
+      float: right;
+      cursor: pointer;
+      font-size: 24px;
+      opacity: 0.7;
+    }
+
+    .close-modal:hover {
+      opacity: 1;
+    }
+
+    .step {
+      margin-bottom: 15px;
+    }
+
+    .step-num {
+      background: var(--accent);
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      margin-right: 10px;
+    }
   </style>
 </head>
 
@@ -217,11 +282,40 @@
     <div class="pill" style="border-color:var(--accent); color:var(--accent); display:none;" id="traceDisplay">Trace:
       <span id="traceIdVal">-</span>
     </div>
-    <div class="pill" id="aiMode" style="background: rgba(35, 134, 54, 0.1); border-color: #238636; color: #3fb950;">
+    <div class="pill" id="aiMode"
+      style="cursor:help; background: rgba(35, 134, 54, 0.1); border-color: #238636; color: #3fb950;"
+      title="Click para ver cómo activar">
       Detección...
     </div>
     <a class="pill link" href="http://localhost:8080/index.html">Volver al index</a>
   </header>
+
+  <!-- AI Activation Modal -->
+  <div id="aiModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" id="closeAiModal">&times;</span>
+      <h2>🚀 Cómo activar la IA Real</h2>
+      <div class="step">
+        <span class="step-num">1</span> <strong>Configura el Entorno:</strong> Crea un archivo <code>.env</code> en
+        <code>backend/</code>
+      </div>
+      <pre>OPENAI_API_KEY=tu_secreto_aquí
+MODEL=gpt-4o-mini</pre>
+      <div class="step">
+        <span class="step-num">2</span> <strong>Instala Dependencias:</strong> Ejecuta
+        <code>pip install -r requirements.txt</code>
+      </div>
+      <div class="step">
+        <span class="step-num">3</span> <strong>Inicia el Backend Industrial:</strong> Asegúrate de usar el servidor
+        FastAPI:
+      </div>
+      <pre>uvicorn src.api:app --port 8009</pre>
+      <p style="font-size: 13px; opacity: 0.8; margin-top: 20px;">
+        * Una vez configurado, el indicador cambiará a <span style="color:var(--accent)">MODO IA REAL</span> y el
+        sistema usará LLMs para evaluar candidatos.
+      </p>
+    </div>
+  </div>
 
   <main>
     <div class="panel">
@@ -286,6 +380,12 @@
       const traceDisplay = $("traceDisplay");
       const traceIdVal = $("traceIdVal");
       const aiMode = $("aiMode");
+      const aiModal = $("aiModal");
+      const closeAiModal = $("closeAiModal");
+
+      aiMode.onclick = () => aiModal.style.display = "block";
+      closeAiModal.onclick = () => aiModal.style.display = "none";
+      window.onclick = (e) => { if (e.target == aiModal) aiModal.style.display = "none"; };
 
       async function checkAI() {
         try {
