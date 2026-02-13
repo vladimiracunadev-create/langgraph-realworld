@@ -4,7 +4,8 @@ Este repositorio contiene **25 casos de uso reales** demostrando el poder de Lan
 
 ## 🚀 Navegación Rápida
 - **[Hub CLI](Hub-CLI)**: Herramienta estándar para ejecutar y gestionar los casos.
-- **[Seguridad](Security)**: Políticas de seguridad, hardening y configuración de contenedores.
+- [Seguridad](Security): Políticas de la plataforma.
+- **[Wiki Async](Async-Processing)**: Guía de resiliencia y procesamiento asíncrono.
 
 ## 📂 Casos Destacados
 ### Caso 09: RR.HH. Screening + Agenda
