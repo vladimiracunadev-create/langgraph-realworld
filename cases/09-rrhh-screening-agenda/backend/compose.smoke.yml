@@ -4,9 +4,9 @@ services:
     environment:
       - CHECKPOINT_DB=:memory:
     ports:
-      - "8000:8000"
+      - "8009:8009"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8009/health"]
       interval: 5s
       timeout: 2s
       retries: 5
@@ -21,4 +21,4 @@ services:
     command: >
       sh -c "pip install requests && python tests/smoke_test.py"
     environment:
-      - BASE_URL=http://backend:8000
+      - BASE_URL=http://backend:8009
