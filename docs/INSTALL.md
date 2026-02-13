@@ -61,9 +61,18 @@ uvicorn src.api:app --reload --port 8009
 Este sistema está diseñado para ser flexible según el perfil del usuario:
 
 ### 1. Modo Desarrollador (Python Pure)
-Ideal para debuggear la lógica del grafo sin overhead de contenedores.
+Ideal para debuggear la lógica del grafo o navegar el portal sin Docker.
+
+**Para el portal (Port 8080):**
+```bash
+python serve_site.py
+```
+
+**Para el backend del Caso 09 (Port 8009):**
 ```bash
 python cases/09-rrhh-screening-agenda/backend/src/api.py
+# o si necesitas el mock:
+python cases/09-rrhh-screening-agenda/backend/mock_api.py
 ```
 
 ### 2. Modo Estándar (Hub CLI)
