@@ -1,7 +1,7 @@
 # 🛠️ Especificaciones Técnicas
 
 > [!NOTE]
-> **Versión**: 3.1.0 | **Estado**: Estable | **Audiencia**: Desarrolladores Backend, QA, SRE
+> **Versión**: 3.2.0 | **Estado**: Industrial | **Audiencia**: Seniors, DevOps
 
 Este documento detalla el stack tecnológico, los estándares de código y los contratos de observabilidad para asegurar la excelencia operativa del proyecto.
 

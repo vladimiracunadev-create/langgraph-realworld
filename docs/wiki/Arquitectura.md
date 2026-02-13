@@ -1,7 +1,7 @@
 # 🏗️ Arquitectura del Sistema
 
 > [!NOTE]
-> **Versión**: 3.1.0 | **Estado**: Estable | **Audiencia**: Arquitectos, DevOps, Seniors
+> **Versión**: 3.2.0 | **Estado**: Industrial | **Audiencia**: Arquitectos, DevOps, Seniors
 
 Este documento describe la estructura técnica de **LangGraph Realworld**, centrándose en la orquestación de agentes con estado y el motor de resiliencia del Caso 09.
 
@@ -99,6 +99,14 @@ sequenceDiagram
 ```
 
 ---
+
+## 🛡️ Estándares Industriales (v3.2)
+
+A partir de la versión 3.2, el repositorio introduce el estándar **Industrial-Grade** para casos críticos:
+
+1.  **Validación con Pydantic**: El estado del grafo ya no usa `TypedDict` genéricos, sino modelos de **Pydantic** que garantizan tipos y restricciones en runtime.
+2.  **Identificadores de Rastreo (Trace IDs)**: Cada ejecución genera un `trace_id` único inyectado en los logs estructurados, permitiendo el rastreo de errores en flujos asíncronos complejos.
+3.  **Observabilidad Distribuida**: Los logs están preparados para ser ingeridos por sistemas como **Datadog**, **ELK** o **OpenTelemetry**.
 
 ---
 

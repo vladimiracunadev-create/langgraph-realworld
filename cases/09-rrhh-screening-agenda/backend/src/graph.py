@@ -5,7 +5,8 @@ import os
 import sqlite3
 import time
 from pathlib import Path
-from typing import Annotated, Any, Dict, List, Literal, TypedDict
+from typing import Annotated, Any, Dict, List, Literal
+from pydantic import BaseModel, Field
 
 from langgraph.checkpoint.sqlite import SqliteSaver
 from langgraph.graph import END, START, StateGraph
@@ -31,15 +32,15 @@ def _get_sqlite_conn(db_path: str) -> sqlite3.Connection:
     return _SQLITE_CONN
 
 
-class ScreeningState(TypedDict, total=False):
-    job: Dict[str, Any]
-    candidates: List[Dict[str, Any]]
-    cursor: int
-    scored: List[Dict[str, Any]]
-    shortlist: List[Dict[str, Any]]
-    scheduled: List[Dict[str, Any]]
-    events: List[Dict[str, Any]]
-    done: bool
+class ScreeningState(BaseModel):
+    job: Dict[str, Any] = Field(default_factory=dict)
+    candidates: List[Dict[str, Any]] = Field(default_factory=list)
+    cursor: int = 0
+    scored: Annotated[List[Dict[str, Any]], operator.add] = Field(default_factory=list)
+    shortlist: List[Dict[str, Any]] = Field(default_factory=list)
+    scheduled: List[Dict[str, Any]] = Field(default_factory=list)
+    events: Annotated[List[Dict[str, Any]], operator.add] = Field(default_factory=list)
+    done: bool = False
 
 
 def _now_ms() -> int:
@@ -228,17 +229,7 @@ def should_keep_scoring(state: ScreeningState) -> Literal["score_one", "build_sh
 
 def compile_graph():
     """Crea el StateGraph con acumulación de eventos y scoring incremental."""
-    class State(TypedDict, total=False):
-        job: Dict[str, Any]
-        candidates: List[Dict[str, Any]]
-        cursor: int
-        scored: Annotated[List[Dict[str, Any]], operator.add]
-        shortlist: List[Dict[str, Any]]
-        scheduled: List[Dict[str, Any]]
-        events: Annotated[List[Dict[str, Any]], operator.add]
-        done: bool
-
-    g = StateGraph(State)
+    g = StateGraph(ScreeningState)
 
     g.add_node("load_inputs", load_inputs)
     g.add_node("score_one", score_one)

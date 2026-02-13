@@ -1,6 +1,8 @@
 import json
 import logging
 import time
+import uuid
+from contextvars import ContextVar
 from functools import lru_cache
 from pathlib import Path
 
@@ -11,13 +13,21 @@ from pydantic import BaseModel
 
 from .graph import compile_graph
 
-# Configuración de Logging Estructurado
+# ContextVar para rastreo de solicitudes (Trace ID)
+trace_id_var: ContextVar[str] = ContextVar("trace_id", default="system")
+
+class TraceIdFilter(logging.Filter):
+    def filter(self, record):
+        record.trace_id = trace_id_var.get()
+        return True
+
+# Configuración de Logging Estructurado con Trace ID
 logging.basicConfig(
     level=logging.INFO,
-    format='{"ts": "%(asctime)s", "level": "%(levelname)s", "name": "%(name)s", "msg": "%(message)s"}',
+    format='{"ts": "%(asctime)s", "level": "%(levelname)s", "name": "%(name)s", "msg": "%(message)s", "trace_id": "%(trace_id)s"}',
 )
-logger = logging.getLogger("api")
-
+root_logger = logging.getLogger()
+root_logger.addFilter(TraceIdFilter())
 logger = logging.getLogger("api")
 
 app = FastAPI(title="Caso 09 – RR.HH. Screening + Agenda")
@@ -30,6 +40,18 @@ WEB_DIR = BACKEND_ROOT / "web"
 # Solo montar estáticos si existe el directorio
 if WEB_DIR.exists():
     app.mount("/static", StaticFiles(directory=str(WEB_DIR)), name="static")
+
+@app.middleware("http")
+async def add_trace_id_middleware(request, call_next):
+    """Genera y asigna un Trace ID único para cada solicitud http."""
+    id = str(uuid.uuid4())
+    token = trace_id_var.set(id)
+    try:
+        response = await call_next(request)
+        response.headers["X-Trace-ID"] = id
+        return response
+    finally:
+        trace_id_var.reset(token)
 
 
 @lru_cache(maxsize=1)

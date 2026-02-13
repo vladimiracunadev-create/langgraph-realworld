@@ -29,7 +29,7 @@
       align-items: center;
       background: rgba(13, 17, 23, 0.8);
       backdrop-filter: blur(10px);
-      sticky;
+      position: sticky;
       top: 0;
       z-index: 10;
     }
@@ -214,6 +214,9 @@
     <div class="pill">LangGraph loop por candidato</div>
     <div class="pill">Streaming NDJSON</div>
     <div class="pill">SQLite + thread_id</div>
+    <div class="pill" style="border-color:var(--accent); color:var(--accent); display:none;" id="traceDisplay">Trace:
+      <span id="traceIdVal">-</span>
+    </div>
     <a class="pill link" href="http://localhost:8080/index.html">Volver al index</a>
   </header>
 
@@ -277,6 +280,8 @@
       const shortN = $("shortN");
       const schedN = $("schedN");
       const jobTitle = $("jobTitle");
+      const traceDisplay = $("traceDisplay");
+      const traceIdVal = $("traceIdVal");
 
       function randId() {
         return "rrhh-" + Math.random().toString(16).slice(2) + "-" + Date.now().toString(16);
@@ -323,11 +328,15 @@
         byId.clear();
         rows.innerHTML = "";
 
-        const res = await fetch("/api/run/stream", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ thread_id: tid })
-        });
+        const res = await fetch("/api/stream?thread_id=" + tid);
+
+        // Capturar Trace ID de los headers de la respuesta
+        const traceHeader = res.headers.get("X-Trace-ID");
+        if (traceHeader) {
+          traceIdVal.textContent = traceHeader.slice(0, 8) + "...";
+          traceDisplay.style.display = "block";
+          traceDisplay.title = "Full Trace ID: " + traceHeader;
+        }
 
         const reader = res.body.getReader();
         const decoder = new TextDecoder();
