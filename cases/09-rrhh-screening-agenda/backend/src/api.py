@@ -9,6 +9,8 @@ from fastapi.responses import HTMLResponse, JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
+from .graph import compile_graph
+
 # Configuración de Logging Estructurado
 logging.basicConfig(
     level=logging.INFO,
@@ -16,7 +18,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger("api")
 
-from .graph import compile_graph
+logger = logging.getLogger("api")
 
 app = FastAPI(title="Caso 09 – RR.HH. Screening + Agenda")
 
