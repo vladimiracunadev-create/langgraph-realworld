@@ -63,16 +63,32 @@ Este sistema está diseñado para ser flexible según el perfil del usuario:
 ### 1. Modo Desarrollador (Python Pure)
 Ideal para debuggear la lógica del grafo o navegar el portal sin Docker.
 
-**Para el portal (Port 8080):**
+#### **A. Ejecución del Portal (Front-end Central)**
+Este comando levanta el portal en el puerto **8080** para navegar los 25 casos.
 ```bash
 python serve_site.py
 ```
 
-**Para el backend del Caso 09 (Port 8009):**
+#### **B. Configuración de IA (LLM vs Mock)**
+El Caso 09 permite dos modalidades de backend:
+
+| Modalidad | Script | Requisitos | Uso |
+| :--- | :--- | :--- | :--- |
+| **Instant Demo (Mock)** | `mock_api.py` | Ninguno | Prueba visual inmediata, sin costo de API. |
+| **AI Real (LangGraph)** | `src/api.py` | `OPENAI_API_KEY` | Procesamiento real con agentes e inteligencia artificial. |
+
+**Para configurar el modo AI Real:**
+1. Copia `.env.example` a un nuevo archivo `.env`.
+2. Edita el `.env` y coloca tu clave en `OPENAI_API_KEY=sk-...`.
+3. El archivo `.env` está en el `.gitignore`, por lo que tus claves permanecerán **seguras y ocultas** al subir cambios.
+
+**Ejecución del Backend (Puerto 8009):**
 ```bash
-python cases/09-rrhh-screening-agenda/backend/src/api.py
-# o si necesitas el mock:
+# Para el demo instantáneo (Sin LLM):
 python cases/09-rrhh-screening-agenda/backend/mock_api.py
+
+# Para el modo Inteligencia Artificial (Con LLM):
+python cases/09-rrhh-screening-agenda/backend/src/api.py
 ```
 
 ### 2. Modo Estándar (Hub CLI)

@@ -1,5 +1,27 @@
 # 🚀 LangGraph – Agentic Resilience Hub (25 Real World Cases)
 
+---
+
+## 🛠️ Mejoras Recientes e Implementaciones
+
+Para elevar el proyecto a un estándar profesional "Real-World", se han realizado las siguientes modificaciones y mejoras:
+
+1.  **Punto de Entrada Unificado**: Se eliminó `indexado.html` y se consolidó todo el portal premium en **`index.html`**, eliminando redirecciones y simplificando el acceso.
+2.  **Diseño Premium (UI/UX)**:
+    - Implementación de la tipografía **Inter** en todo el ecosistema.
+    - Aplicación de **Glassmorphism** avanzado (backdrop-filter) en los dashboards.
+    - Refactorización visual del Caso 09 para coincidir con estándares corporativos.
+3.  **Resiliencia y Residencia de Datos**:
+    - Documentación técnica sobre la persistencia en **SQLite** mediante `SqliteSaver` de LangGraph.
+    - Soporte para recuperación de hilo mediante `thread_id`.
+4.  **Flexibilidad de Ejecución (4 Modos)**:
+    - **Modo Desarrollador**: Scripts `serve_site.py` y `mock_api.py` para correr todo sin Docker.
+    - **Modo IA Requerido**: Guía clara para activar el motor real de agentes usando `.env`.
+5.  **Conectividad Robusta**: Sincronización masiva de links internos para asegurar que la navegación entre el portal (Puerto 8080) y los demos (Puerto 8009) sea bidireccional y sin errores.
+6.  **Wiki Reconstruida**: Mapeo completo de la documentación técnica local hacia la Wiki de GitHub para mantener una fuente de verdad única y profesional.
+
+---
+
 **Portafolio de arquitectura de agentes con estado, flujos cíclicos y capas de resiliencia empresarial.** Este repositorio demuestra cómo llevar LangGraph a producción con un enfoque en seguridad, observabilidad y recuperación ante fallos.
 
 ---
