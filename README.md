@@ -4,7 +4,7 @@
 
 ---
 
-## 🛠️ Mejoras Recientes e Implementaciones (v3.1.0)
+## 🛠️ Mejoras Recientes e Implementaciones (v3.2.0)
 
 Para elevar el proyecto a un estándar profesional "Real-World", se han realizado las siguientes modificaciones:
 

@@ -29,7 +29,14 @@ def cmd_list(args):
             case_id = d.name.split("-")[0]
             name = "-".join(d.name.split("-")[1:])
             has_config = (d / "case.yml").exists()
-            status = "Standardized" if has_config else "Legacy"
+            # Status logic for coherence with V3.2 documentation
+            if case_id == "09":
+                status = "Industrial (v3.2)"
+            elif has_config:
+                status = "Scaffold (v1.0)"
+            else:
+                status = "Legacy"
+            
             print(f"{case_id:<5} | {name[:30]:<30} | {status}")
 
 def cmd_run(args):
