@@ -49,3 +49,10 @@ serve: "docker compose up --build"
 env:
   OPENAI_API_KEY: "required"
 ```
+
+---
+
+## 🧭 Navegación
+- [⬅️ Volver al README](../README.md)
+- [🚀 Instalación](INSTALL.md)
+- [🏗️ Arquitectura](ARCHITECTURE.md)

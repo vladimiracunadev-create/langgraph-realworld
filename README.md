@@ -43,20 +43,19 @@ flowchart LR
 
 ---
 
-## 🚀 Hub CLI & Operación Local
+## 🚀 Operación del Hub (Orquestación)
 
-Gestiona los 25 casos de forma estandarizada con nuestra herramienta centralizada.
+Gestiona los 25 casos de forma centralizada. El **Hub CLI** (`hub.py`) es una herramienta en Python que orquesta tanto la ejecución local como el lanzamiento de contenedores Docker.
 
 ```bash
-# 1. Levantar el portal principal (Puerto 8080)
-python serve_site.py
+# 1. Operación Directa (Nivel 1: Laboratorio)
+python serve_site.py             # Portal 8080
+python cases/09-*/backend/mock_api.py   # Backend 8009
 
-# 2. Levantar el Backend del Caso 09 (Puerto 8009)
-python cases/09-rrhh-screening-agenda/backend/mock_api.py
-
-# 3. Usar el Hub CLI
+# 2. Operación vía Hub (Nivel 2: Orquestación)
 python hub.py list      # Listar casos y su estado
 python hub.py doctor    # Verificar salud del entorno
+make case-up CASE=09    # Lanzar Caso 09 (Usa Docker si está disponible)
 ```
 
 > [!NOTE]

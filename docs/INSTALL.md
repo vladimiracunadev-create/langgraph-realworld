@@ -7,6 +7,21 @@ Este documento proporciona las instrucciones paso a paso para poner en marcha lo
 
 ---
 
+## 🪜 Escalera de Ejecución: ¿Qué herramienta usar?
+
+Este repositorio es "Python-First", pero utiliza capas de abstracción para escalar desde un simple script hasta un clúster de producción. No son herramientas excluyentes, sino complementarias:
+
+| Nivel | Herramienta | Objetivo | Cuándo usarlo |
+| :--- | :--- | :--- | :--- |
+| **1. Laboratorio** | `python` | Ejecución directa de scripts. | Pruebas rápidas de grafos, debugging local sin overhead. |
+| **2. Orquestación** | `hub.py` / `make` | Comandos centralizados para los 25 casos. | Cuando quieres listar, verificar o lanzar casos sin navegar carpetas. |
+| **3. Producción** | `docker` / `k8s` | Aislamiento, persistencia y escalabilidad. | Demos estables, despliegue en la nube, pruebas de residencia de estado. |
+
+> [!IMPORTANT]
+> **El Hub CLI (`hub.py`) es un script de Python**. Actúa como el cerebro que orquesta tanto la ejecución de Python local como el lanzamiento de contenedores Docker. El `Makefile` simplemente ofrece "atajos" para que no tengas que escribir comandos largos.
+
+---
+
 ## 📋 Requisitos Previos
 
 Antes de comenzar, asegúrate de cumplir con los [Requisitos del Sistema](REQUIREMENTS.md) y tener a mano:

@@ -38,7 +38,7 @@ Este es nuestro **modelo de referencia** que demuestra el stack completo:
 | :--- | :--- |
 | **Backend** | Python 3.11+, FastAPI, Asincronía, Logging Estructurado. |
 | **IA / Agentes** | LangGraph, LangChain, Prompt Engineering, Guardrails. |
-| **DevOps** | CI/CD (GitHub Actions), Docker, Kubernetes, Makefile. |
+| **DevOps** | CI/CD (GitHub Actions), Docker, Kubernetes, Hub CLI (Orchestration). |
 | **Seguridad** | Secret Scanning, Non-Root UID, Network Policies. |
 | **Quality Assurance** | Ruff (Linting), Smoke Tests, Walkthroughs técnicos. |
 
