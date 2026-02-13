@@ -28,6 +28,13 @@ Para asegurar la transparencia técnica, cada caso se clasifica en uno de estos 
 - **🏗️ Scaffold (v1.0)**: Estándar base con orquestación y Docker Ready (Caso 01).
 - **📜 Legacy**: Plantillas de arquitectura para futura expansión.
 
+### 📊 Estado de los Casos
+
+| Case ID | Nombre | Estado | Stack |
+| :--- | :--- | :--- | :--- |
+| **01** | [Simple Router](cases/01-simple-router/README.md) | `SCAFFOLD` | LangGraph Basics |
+| **09** | [RRHH Screening Agenda](cases/09-rrhh-screening-agenda/README.md) | `COMPLETADO` | FastAPI + Sqlite + Pydantic + Resilience |
+
 ---
 
 ---
