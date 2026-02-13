@@ -1,21 +1,51 @@
-# Guía de Contribución 🤝
+# Guía de Contribución (CONTRIBUTING)
 
-¡Gracias por tu interés en mejorar este portafolio de ingeniería! Seguimos un proceso estructurado para mantener la calidad de los 25 casos.
+> [!NOTE]
+> **Versión**: 1.1.0 | **Estado**: Activo | **Audiencia**: Colaboradores, Desarrolladores Open Source
 
----
-
-## 🛠️ Flujo de Trabajo
-
-1.  **Fork** del repositorio.
-2.  **Rama de Feature**: Crea una rama con el formato `feature/caso-XX-descripcion`.
-3.  **Linter**: Ejecuta `make lint` y `make format` antes de enviar tu PR.
-4.  **Tests**: Asegúrate de que los tests de tu caso pasen con `pytest`.
+Bienvenido al ecosistema de **LangGraph Realwork**. Este es un repositorio diseñado bajo una arquitectura de **Monorepo Modular** (25 casos de uso). Para mantener la excelencia técnica y la portabilidad, seguimos reglas estrictas de contribución.
 
 ---
 
-## 🎨 Estándares de Código
+## 🏗️ Estructura de Contribución
 
-- **Python**: Sigue las especificaciones de `TECHNICAL_SPECS.md` y usa `Ruff`.
-- **Docs**: Si añades un nuevo caso, no olvides actualizar su `README.md` y añadir una entrada en la wiki.
+Cada caso de uso debe ser **autocontenido** y seguir el patrón de "Agente con Estado".
 
-Consulte la guía completa en [CONTRIBUTING.md](../../CONTRIBUTING.md).
+- **Ubicación**: Todo nuevo caso o mejora debe vivir en `cases/NN-slug/`.
+- **Estructura Requerida**:
+  - `backend/Dockerfile`: Para garantizar la residencia y repetibilidad.
+  - `backend/requirements.txt`: Gestión de dependencias aislada.
+  - `backend/src/`: Código fuente siguiendo patrones 12-factor.
+  - `demo/index.html`: Una interfaz de demostración funcional (preferiblemente con Glassmorphism).
+
+---
+
+## 🛠️ Estándares de Código
+
+Para asegurar la calidad, el pipeline de CI rechazará cualquier cambio que no cumpla con:
+
+1.  **Python**:
+    - Linter & Formatter: **Ruff**. Ejecuta `ruff check .` antes de subir.
+    - Estilo: Adhesión estricta a tipos mediante `typing` y `Annotated`.
+2.  **Documentación**:
+    - Cada caso debe tener su propio `README.md` explicando el flujo del grafo.
+    - Los diagramas Mermaid son obligatorios para visualizar el `StateGraph`.
+
+---
+
+## 🚀 Flujo de Trabajo (Workflow)
+
+1.  **Fork & Branch**: Crea una rama descriptiva (ej: `feature/case-26-legal-advisor`).
+2.  **Docker First**: Asegúrate de que tu caso corra perfectamente con `docker build`.
+3.  **Smoke Tests**: Agrega un archivo `compose.smoke.yml` si el caso está "Implementado".
+4.  **Pull Request**: Describe el valor de negocio y el patrón de LangGraph utilizado.
+
+---
+
+## 🛡️ Seguridad
+
+Nunca incluyas secretos. El pre-commit hook de `detect-secrets` bloqueará cualquier intento de subir claves de APIs. Si encuentras una vulnerabilidad, consulta nuestro [SECURITY.md](SECURITY.md).
+
+---
+> [!IMPORTANT]
+> **Buscamos Calidad sobre Cantidad.** Preferimos casos con grafos bien definidos, manejo de errores robusto y dashboards pulidos.

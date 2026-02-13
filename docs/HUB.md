@@ -1,4 +1,7 @@
-# Hub CLI
+# 🚀 Hub CLI
+
+> [!NOTE]
+> **Versión**: 1.0.0 | **Estado**: Opcional/Estable | **Audiencia**: Desarrolladores, DevOps
 
 El **Hub CLI** es una herramienta **opcional** para estandarizar el manejo de los 25 casos de este repositorio.
 

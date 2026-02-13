@@ -1,6 +1,9 @@
-# Hoja de ruta (Roadmap)
+# 🛣️ Hoja de Ruta (Roadmap)
 
-Esta hoja de ruta presenta objetivos y prioridades generales. Está pensada para ser actualizada periódicamente mediante PRs o Issues.
+> [!NOTE]
+> **Versión**: 1.2.0 | **Estado**: Activo | **Audiencia**: Stakeholders, Colaboradores
+
+Esta hoja de ruta presenta objetivos y prioridades generales para el desarrollo de **LangGraph Realworld**.
 
 ## Visión
 Crear un conjunto de demos y casos de uso reproducibles que sirvan como referencia para proyectos que integran LangGraph y arquitecturas de agentes conversacionales.

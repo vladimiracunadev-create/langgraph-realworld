@@ -1,4 +1,7 @@
-# Guía de Instalación y Despliegue (INSTALL) 🚀
+# 🚀 Guía de Instalación y Despliegue
+
+> [!NOTE]
+> **Versión**: 3.1.0 | **Estado**: Estable | **Audiencia**: Desarrolladores, DevOps
 
 Este documento proporciona las instrucciones paso a paso para poner en marcha los agentes de **LangGraph Realworld** en diferentes entornos.
 
@@ -137,3 +140,11 @@ docker compose -f compose.smoke.yml up --build --abort-on-container-exit
 
 - **SQLite**: No requiere configuración, pero asegúrate de que el proceso tenga permisos de escritura en la carpeta `backend/` para los checkpoints.
 - **Hot-Reload**: El servidor FastAPI tiene `--reload` activo por defecto en modo local para facilitar el desarrollo.
+
+---
+
+## 🧭 Navegación
+- [⬅️ Volver al README](../README.md)
+- [📋 Requisitos](REQUIREMENTS.md)
+- [🛠️ Especificaciones Técnicas](TECHNICAL_SPECS.md)
+- [🏗️ Arquitectura](ARCHITECTURE.md)

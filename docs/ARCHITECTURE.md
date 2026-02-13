@@ -1,4 +1,7 @@
-# 🏗️ Arquitectura del Sistema (ARCHITECTURE)
+# 🏗️ Arquitectura del Sistema
+
+> [!NOTE]
+> **Versión**: 3.1.0 | **Estado**: Estable | **Audiencia**: Arquitectos, DevOps, Seniors
 
 Este documento describe la estructura técnica de **LangGraph Realworld**, centrándose en la orquestación de agentes con estado y el motor de resiliencia del Caso 09.
 
@@ -97,8 +100,10 @@ sequenceDiagram
 
 ---
 
-## 📚 Documentos Relacionados
+---
 
-- 📚 [Specs Técnicas](TECHNICAL_SPECS.md): Detalle del stack y protocolos.
-- 📋 [Requisitos](REQUIREMENTS.md): Hardware y software necesario.
-- 🛡️ [Seguridad](../SECURITY.md): Política de protección de datos y secretos.
+## 🧭 Navegación
+- [⬅️ Volver al README](../README.md)
+- [📋 Requisitos](REQUIREMENTS.md)
+- [🛠️ Especificaciones Técnicas](TECHNICAL_SPECS.md)
+- [🛡️ Seguridad](../SECURITY.md)

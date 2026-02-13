@@ -1,4 +1,7 @@
-# Requisitos del Sistema (REQUIREMENTS)
+# 📋 Requisitos del Sistema
+
+> [!NOTE]
+> **Versión**: 3.1.0 | **Estado**: Estable | **Audiencia**: Infraestructura, DevOps, Reclutadores
 
 Este documento define las especificaciones técnicas necesarias para ejecutar los casos de uso de **LangGraph Realworld** de manera óptima.
 
@@ -71,3 +74,11 @@ Los dashboards de los casos (como el Caso 09) utilizan CSS moderno y Web APIs pa
 | Smoke Tests | ✅ | ✅ | ⚠️ (In-cluster) |
 
 > **Nota**: Para el uso de LLMs reales, se requiere una clave de API válida (OpenAI, etc.) configurada en el archivo `.env`.
+
+---
+
+## 🧭 Navegación
+- [⬅️ Volver al README](../README.md)
+- [🚀 Instalación](INSTALL.md)
+- [🏗️ Arquitectura](ARCHITECTURE.md)
+- [🛠️ Especificaciones Técnicas](TECHNICAL_SPECS.md)

@@ -1,6 +1,9 @@
-# Guía para Principiantes (BEGINNERS_GUIDE) 🐣
+# 🐣 Guía para Principiantes
 
-Si quieres entender exactamente qué hay dentro de cada "cajón" de este proyecto y cómo empezar a jugar con los agentes de LangGraph, este manual es para ti.
+> [!NOTE]
+> **Versión**: 1.1.0 | **Estado**: Estable | **Audiencia**: Nuevos Usuarios, Juniors
+
+Si quieres entender exactamente qué hay dentro de cada "cajón" de este proyecto y cómo empezar con LangGraph, este manual es para ti.
 
 ---
 

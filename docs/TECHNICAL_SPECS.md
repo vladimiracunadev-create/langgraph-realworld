@@ -1,4 +1,7 @@
-# Especificaciones Técnicas (TECHNICAL_SPECS)
+# 🛠️ Especificaciones Técnicas
+
+> [!NOTE]
+> **Versión**: 3.1.0 | **Estado**: Estable | **Audiencia**: Desarrolladores Backend, QA, SRE
 
 Este documento detalla el stack tecnológico, los estándares de código y los contratos de observabilidad para asegurar la excelencia operativa del proyecto.
 
@@ -74,3 +77,10 @@ Para garantizar la robustez, cada agente debe cumplir con:
 - **CamelCase**: Para nombres de clases y componentes React/Frontend.
 - **snake_case**: Para variables, funciones y métodos en Python.
 - **Kebab-case**: Para nombres de carpetas y archivos estáticos.
+---
+
+## 🧭 Navegación
+- [⬅️ Volver al README](../README.md)
+- [🏗️ Arquitectura](ARCHITECTURE.md)
+- [🚀 Instalación](INSTALL.md)
+- [🛡️ Seguridad](../SECURITY.md)

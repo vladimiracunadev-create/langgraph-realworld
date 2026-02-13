@@ -1,6 +1,9 @@
-# Política de Seguridad (SECURITY.md) 🛡️
+# 🛡️ Política de Seguridad
 
-La seguridad es el pilar fundamental de **LangGraph Realworld**. Este documento define nuestra postura oficial y los protocolos de protección de datos aplicados en todos los casos de uso.
+> [!NOTE]
+> **Versión**: 2.0.0 | **Estado**: Estable | **Audiencia**: Auditores, CISO, Desarrolladores
+
+La seguridad es el pilar fundamental de **LangGraph Realworld**. Este documento define nuestra postura oficial y protocolos de protección.
 
 ---
 

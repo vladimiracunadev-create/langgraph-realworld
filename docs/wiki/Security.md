@@ -1,29 +1,51 @@
-# Seguridad y Hardening 🔒
+# 🛡️ Política de Seguridad
 
-La seguridad es un pilar fundamental en la construcción de agentes de IA. Este documento detalla nuestras políticas y herramientas de protección automática aplicadas en el portafolio.
+> [!NOTE]
+> **Versión**: 2.0.0 | **Estado**: Estable | **Audiencia**: Auditores, CISO, Desarrolladores
 
----
-
-## 🛡️ Herramientas de Seguridad (GitHub Actions)
-
-Contamos con escaneos automáticos en cada cambio de código para asegurar la integridad del ecosistema:
-
-1.  **Trivy**: Escanea vulnerabilidades conocidas tanto en los paquetes de Python (via `requirements.txt`) como en las capas de las imágenes de Docker.
-2.  **Detect-Secrets**: Verificación estática para evitar que credenciales de APIs (como OpenAI o AWS) se filtren accidentalmente en los commits.
-3.  **SAST**: Análisis estático de código para detectar debilidades estructurales y patrones de ataque comunes.
+La seguridad es el pilar fundamental de **LangGraph Realworld**. Este documento define nuestra postura oficial y protocolos de protección.
 
 ---
 
-## 🐳 Seguridad en Contenedores
+## 🛡️ Protocolos de Protección de Datos
 
-Siguiendo las mejores prácticas de la industria, aplicamos hardening a nivel de infraestructura:
+### 1. Gestión de Secretos (12-Factor App)
+Nunca guardamos claves de APIs (OpenAI, Anthropic, etc.) en el código fuente. Toda la información sensible se gestiona mediante:
+- Archivos `.env` (excluidos de Git via `.gitignore`).
+- Secretos de Kubernetes (en entornos de producción).
+- Inyección de variables en tiempo de ejecución.
 
-- **Non-privileged User**: Todas nuestras imágenes (ej: Caso 09) corren bajo el usuario `1000:1000` (appuser), limitando el radio de explosión en caso de compromiso.
-- **Minimal Images**: Utilizamos versiones `slim` o `alpine` de las imágenes base para reducir la superficie de ataque.
+### 2. Aislamiento de Procesos (Container Hardening)
+Al utilizar Docker y Kubernetes, cada agente se ejecuta en un entorno aislado. Esto previene que un compromiso en un nodo del grafo afecte a la integridad del sistema operativo anfitrión.
+- **Imágenes Non-Root**: Todos los procesos corren con el usuario `1000` (no privilegiado).
+- **Network Policies**: Restricción de tráfico este-oeste para limitar el movimiento lateral.
+
+### 3. Resiliencia y Control de Flujo
+Nuestra arquitectura incluye salvaguardas contra fallos y bucles infinitos:
+- **Recursion Limits**: Máximo de 50 pasos por agente.
+- **Tenacity Retries**: Estrategias de reintento para evitar fallos por latencia de red en APIs externas.
 
 ---
 
-## 📚 Referencias
-Para un análisis técnico profundo y configuraciones específicas, consulte:
-- [SECURITY.md](../../SECURITY.md): Política global de seguridad del repositorio.
-- [GitHub Actions](GitHub-Actions): Detalle de los workflows de seguridad automatizados.
+## 📝 Reporte de Vulnerabilidades
+
+Valoramos enormemente el trabajo de los investigadores de seguridad. Si descubre un fallo:
+
+1. **No abra un Issue público**.
+2. Contacte directamente a través de un mensaje privado al mantenedor en GitHub.
+3. Proporcione una prueba de concepto (PoC) detallada.
+
+Nos comprometemos a:
+- Acusar recibo en **menos de 48 horas**.
+- Proporcionar un parche de seguridad prioritario según la severidad.
+
+---
+
+## 🚫 Despliegue en Entornos Públicos
+
+**ADVERTENCIA**: Este repositorio está diseñado como una herramienta de demostración y portafolio técnico.
+
+Si planea exponer estos agentes a la web pública, es **obligatorio**:
+1. Utilizar **HTTPS/TLS** para todas las comunicaciones de streaming.
+2. Implementar una capa de **Autenticación (OIDC/JWT)**, ya que los endpoints `/api/run` son abiertos por defecto.
+3. Configurar **Rate Limiting** para protegerse contra ataques de denegación de servicio y costos excesivos de API LLM.
