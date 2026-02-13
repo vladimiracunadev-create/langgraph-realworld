@@ -143,6 +143,14 @@ Para que el agente pueda **Actuar** (Fase 3) y programar entrevistas reales:
 4.  **Verificación**:
     Al presionar "Ejecutar" en la UI, el sistema detectará el `GOOGLE_CALENDAR_ID` y pasará de **"Modo Demo"** a **"Acción Real"**, creando eventos con links directos en la interfaz.
 
+### ✅ Prueba de Resiliencia (Chaos Testing)
+Para validar que el sistema resiste fallos parciales (ej: caída de SMTP), ejecuta el script de verificación manual:
+```bash
+# Desde la raíz del repositorio
+python cases/09-rrhh-screening-agenda/backend/tests/verify_resilience.py
+```
+*Expected Output*: Verás que un candidato falla en Email pero envía WhatsApp, y el otro viceversa, sin detener el flujo.
+
 ---
 
 ## 📧📱 Activación de Fase 4 (Notificaciones)
