@@ -1,7 +1,7 @@
 # 🛣️ Hoja de Ruta (Roadmap)
 
 > [!NOTE]
-> **Versión**: 1.2.0 | **Estado**: Activo | **Audiencia**: Stakeholders, Colaboradores
+> **Versión**: 3.2.0 | **Estado**: Industrial | **Audiencia**: Stakeholders, Colaboradores
 
 Esta hoja de ruta presenta objetivos y prioridades generales para el desarrollo de **LangGraph Realworld**.
 
