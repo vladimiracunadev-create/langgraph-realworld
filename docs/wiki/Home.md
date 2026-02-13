@@ -1,24 +1,44 @@
-# Bienvenido a LangGraph Real-World
+# Bienvenido a la Wiki de LangGraph Real-World 🚀
 
-Este repositorio contiene **25 casos de uso reales** demostrando el poder de LangGraph para construir aplicaciones complejas con LLMs.
+**LangGraph Real-World** es un portafolio de ingeniería que demuestra el uso de grafos cíclicos con estado para resolver problemas empresariales complejos. Este repositorio aplica estándares modernos de **DevOps**, **Seguridad** y **Observabilidad** para transformar scripts de IA en aplicaciones production-ready.
 
-## 🚀 Navegación Rápida
-- **[Hub CLI](Hub-CLI)**: Herramienta estándar para ejecutar y gestionar los casos.
-- [Seguridad](Security): Políticas de la plataforma.
-- **[Wiki Async](Async-Processing)**: Guía de resiliencia y procesamiento asíncrono.
+---
 
-## 📂 Casos Destacados
-### Caso 09: RR.HH. Screening + Agenda
-Un flujo completo de screening de candidatos con:
-- **FastAPI** backend con streaming.
-- **LangGraph** workflow con persistencia (SQLite).
-- **Tools**: Parsing de PDF, envío de correos, gestión de calendario.
-- **UI**: Interfaz reactiva para demostración.
+## 🧭 ¿Por dónde empezar?
 
-### Caso 01: Soporte Omnicanal
-(Scaffold Standardized) Base para un sistema de atención al cliente multicanal.
+Si eres nuevo en el proyecto, te recomendamos seguir este orden:
 
-## 🤝 Contribuir
-Consulta el `CONTRIBUTING.md` en la raíz del repositorio para guías de desarrollo.
+1. **[Guía para Principiantes](Guia-para-Principiantes)**: Un recorrido visual por la estructura del proyecto y sus 25 casos.
+2. **[Guía de Instalación](Guia-de-Instalacion)**: Levanta el entorno en Docker en menos de 5 minutos.
+3. **[Requisitos del Sistema](Requisitos-del-Sistema)**: Hardware y software necesario.
 
-<!-- Última actualización: 2026-02-04 19:16 -->
+---
+
+## 🏗️ Para Desarrolladores y Reclutadores
+
+Este repositorio es un ecosistema técnico que aplica:
+
+- **Arquitectura de Agentes**: Orquestación con LangGraph y persistencia en SQLite.
+- **DevOps (Wiki Async)**: CI/CD profesional con Docker y sincronización automatizada.
+- **Calidad de Código**: Lints (Ruff), Análisis Estático y Tests de Integración.
+
+Explora la documentación técnica:
+
+- **[Arquitectura](Arquitectura)**
+- **[Especificaciones Técnicas](Especificaciones-Tecnicas)**
+- **[GitHub Actions (Wiki Async)](GitHub-Actions)**
+- **[Seguridad](Security)**
+
+---
+
+## 🤝 Comunidad y Contribución
+
+¡Tu ayuda es bienvenida!
+
+- Revisa nuestra **[Guía de Contribución](Guia-de-Contribucion)** para aprender cómo añadir tu propio caso de uso.
+- Consulta el **[Roadmap](Roadmap)** para ver los próximos hitos del proyecto.
+
+> **Visión**: Crear la referencia definitiva de patrones de agentes resilientes, donde la potencia de la IA se une a la estabilidad operativa.
+
+---
+*Última actualización: Febrero 2026*

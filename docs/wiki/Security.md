@@ -1,55 +1,29 @@
-# Seguridad y Hardening
+# Seguridad y Hardening 🔒
 
-Este repositorio aplica prácticas "Production-Ready" para asegurar los despliegues de LangGraph.
+La seguridad es un pilar fundamental en la construcción de agentes de IA. Este documento detalla nuestras políticas y herramientas de protección automática aplicadas en el portafolio.
 
-## 🛡️ Principios Generales
-1.  **Least Privilege**: Los contenedores corren como usuarios no-root.
-2.  **Immutability**: Tags de imágenes fijos (`v1.0.0`) en despliegues.
-3.  **Isolation**: Políticas de red para restringir tráfico lateral y egreso no autorizado.
+---
 
-## 🔒 Hardening de Contenedores
-### Dockerfile
-Todos los `Dockerfile` (ej. Caso 09) siguen este patrón:
+## 🛡️ Herramientas de Seguridad (GitHub Actions)
 
-```dockerfile
-# Base segura
-FROM python:3.11-slim
+Contamos con escaneos automáticos en cada cambio de código para asegurar la integridad del ecosistema:
 
-# Crear usuario sin privilegios
-RUN groupadd -r appuser && useradd -r -g appuser appuser
+1.  **Trivy**: Escanea vulnerabilidades conocidas tanto en los paquetes de Python (via `requirements.txt`) como en las capas de las imágenes de Docker.
+2.  **Detect-Secrets**: Verificación estática para evitar que credenciales de APIs (como OpenAI o AWS) se filtren accidentalmente en los commits.
+3.  **SAST**: Análisis estático de código para detectar debilidades estructurales y patrones de ataque comunes.
 
-# ... instalación de deps ...
+---
 
-# Cambiar a usuario no-root
-USER appuser
-```
+## 🐳 Seguridad en Contenedores
 
-### Kubernetes SecurityContext
-Los despliegues en K8s fuerzan el uso del usuario no-root:
+Siguiendo las mejores prácticas de la industria, aplicamos hardening a nivel de infraestructura:
 
-```yaml
-securityContext:
-  runAsNonRoot: true
-  runAsUser: 1000
-  allowPrivilegeEscalation: false
-  capabilities:
-    drop:
-      - ALL
-```
+- **Non-privileged User**: Todas nuestras imágenes (ej: Caso 09) corren bajo el usuario `1000:1000` (appuser), limitando el radio de explosión en caso de compromiso.
+- **Minimal Images**: Utilizamos versiones `slim` o `alpine` de las imágenes base para reducir la superficie de ataque.
 
-## 🌐 Network Policies
-Por defecto, se recomienda una política **Deny-All** y permitir solo lo necesario.
+---
 
-**Ejemplo (Caso 09):**
-- **Ingress**: Permitido desde `hub-gateway`.
-- **Egress**:
-    - DNS (UDP/TCP 53)
-    - Internet (API Calls a OpenAI, LangSmith)
-    - *Bloqueado*: Tráfico a red interna privada (10.x, 192.168.x).
-
-## 🔑 Gestión de Secretos
-- **Detección**: Pre-commit hooks con `detect-secrets` y escaneo en CI `security.yml` (TruffleHog).
-- **Manejo**: `.env.example` proporcionado como plantilla. Nunca subir `.env` reales.
-
-## 📋 Auditoría
-Consultar `killed.md` en la raíz del repositorio para decisiones de arquitectura de seguridad históricas.
+## 📚 Referencias
+Para un análisis técnico profundo y configuraciones específicas, consulte:
+- [SECURITY.md](../../SECURITY.md): Política global de seguridad del repositorio.
+- [GitHub Actions](GitHub-Actions): Detalle de los workflows de seguridad automatizados.
