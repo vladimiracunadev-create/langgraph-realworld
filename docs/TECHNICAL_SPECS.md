@@ -82,6 +82,16 @@ Para garantizar la robustez, cada agente debe cumplir con:
 
 ---
 
+## 📅 Contrato de la Fase 3 (Acción y Agendamiento)
+
+Para que un caso sea considerado **Industrial (v3.2)**, la fase de acción debe cumplir:
+
+- **Detección de Credenciales**: El sistema debe verificar la presencia de `GOOGLE_CALENDAR_ID` o secretos equivalentes.
+- **Hibridación Visual**: Si no hay credenciales, la UI debe mostrar los slots programados de forma simulada pero profesional.
+- **Idempotencia**: El agendamiento no debe duplicar eventos en el calendario si se re-ejecuta el mismo `thread_id`.
+
+---
+
 ## 🛠️ Guía de Estilo
 
 - **Ruff**: Linter y formateador oficial. Se debe ejecutar antes de cada commit.

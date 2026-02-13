@@ -141,6 +141,21 @@ docker compose -f cases/09-rrhh-screening-agenda/backend/compose.yml up
 
 ---
 
+## 🔑 Integración de Servicios Externos (Real-World)
+
+Para habilitar las capacidades completas (Fase 2 y 3) en el Caso 09:
+
+### 1. Inteligencia Artificial (Fase 2)
+- Requiere `OPENAI_API_KEY`.
+- Configúralo en el archivo `.env` del backend del caso.
+
+### 2. Google Calendar (Fase 3: Acción)
+- Requiere un proyecto en Google Cloud con la **Calendar API** activa.
+- Debes configurar `GOOGLE_CALENDAR_ID` en el `.env`.
+- El sistema detectará automáticamente si debe operar en modo **Mock visual** o **Integración real**.
+
+---
+
 ## 🧪 Validación de la Instalación (Smoke Tests)
 
 Para asegurar que todo está configurado correctamente, puedes ejecutar los tests de humo automatizados:

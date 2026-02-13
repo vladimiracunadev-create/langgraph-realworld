@@ -23,6 +23,15 @@ graph TD
   end
 ```
 
+### 🔄 Ciclo de Vida del Agente (3 Fases)
+Para este caso de uso, el agente opera en tres etapas claramente definidas:
+
+1. **Fase 1: Lectura 📄**: Carga de perfiles y requisitos desde el sistema de archivos (Demos) o APIs de ATS (Producción).
+2. **Fase 2: Análisis 🧠**: El LLM evalúa semánticamente cada CV y construye una shortlist basada en el encaje cultural y técnico.
+3. **Fase 3: Acción (Agenda) 📅**: El agente toma la decisión final y coordina la agenda, reservando slots de entrevista.
+
+---
+
 ---
 
 ## 🧠 Arquitectura Híbrida (Demo vs. Real IA)
@@ -109,6 +118,30 @@ Para habilitar el cerebro de agentes LangGraph (OpenAI) en lugar de la demo:
         └── backend/
             └── .env  <-- ESTE ES EL ARCHIVO QUE DEBES CREAR
 ```
+
+---
+
+## 📅 Activación de Fase 3 (Google Calendar)
+
+Para que el agente pueda **Actuar** (Fase 3) y programar entrevistas reales:
+
+1.  **Google Cloud Console**:
+    - Crea un proyecto en [Google Cloud](https://console.cloud.google.com/).
+    - Habilita la **Google Calendar API**.
+    - Crea una **Service Account** y descarga la llave JSON.
+2.  **Configuración del Caso 09**:
+    - Comparte tu calendario de Google con el email de la Service Account (permisos de editor).
+    - Copia el `Calendar ID` (ej: `tuemail@gmail.com` o el ID del calendario secundario).
+3.  **Actualización del `.env`**:
+    Añade estas líneas al archivo `.env` del backend:
+    ```env
+    GOOGLE_CALENDAR_ID=id_de_tu_calendario
+    # Opcional: GOOGLE_APPLICATION_CREDENTIALS=ruta/a/tu/llave.json
+    ```
+4.  **Verificación**:
+    Al presionar "Ejecutar" en la UI, el sistema detectará el `GOOGLE_CALENDAR_ID` y pasará de **"Modo Demo"** a **"Acción Real"**, creando eventos con links directos en la interfaz.
+
+---
 
 ---
 > [!IMPORTANT]
