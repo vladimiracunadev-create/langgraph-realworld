@@ -22,6 +22,14 @@ Para elevar el proyecto a un estándar profesional "Real-World", se han realizad
 > [!TIP]
 > Consulta el historial técnico detallado en el [CHANGELOG.md](CHANGELOG.md).
 
+### 🛠️ Taxonomía de Implementación
+Para asegurar la transparencia técnica, cada caso se clasifica en uno de estos tres niveles:
+- **🛡️ Industrial (v3.2)**: Casos de referencia con FastAPI, Streaming, Pydantic y Observabilidad (Caso 09).
+- **🏗️ Scaffold (v1.0)**: Estándar base con orquestación y Docker Ready (Caso 01).
+- **📜 Legacy**: Plantillas de arquitectura para futura expansión.
+
+---
+
 ---
 
 ## 🧭 ¿Por dónde empezar? (Rutas Personalizadas)
