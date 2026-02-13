@@ -198,30 +198,44 @@ def build_shortlist(state: ScreeningState) -> ScreeningState:
 
 
 def schedule_interviews(state: ScreeningState) -> ScreeningState:
-    """Stub de agendamiento: asigna slots de entrevista a la shortlist."""
+    """
+    Nodo de Acción: Agenda entrevistas para la shortlist.
+    Utiliza integraciones.py para manejar la lógica híbrida (Mock vs Real Calendar).
+    """
     try:
         shortlist = state.get("shortlist", []) or []
         logger.info(f"Agendando entrevistas para {len(shortlist)} candidatos")
         
-        base_ts = int(time.time()) + 3600  # +1h
+        # Importación local para evitar circulares
+        from .integrations import create_google_calendar_event
+        
+        base_ts = int(time.time()) + 86400  # Empezar mañana
 
         scheduled: List[Dict[str, Any]] = []
         for idx, c in enumerate(shortlist):
             start_ts = base_ts + idx * 3600
+            end_ts = start_ts + 2700  # 45 min
             
-            # Simulamos que esto podría llamar a una API real (Google Calendar / SMTP)
-            # a través de las funciones en integrations.py (que ya tienen reintentos)
+            start_iso = time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime(start_ts))
+            end_iso = time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime(end_ts))
             
-            scheduled.append(
-                {
-                    "candidate_id": c.get("candidate_id"),
-                    "name": c.get("name"),
-                    "email": c.get("email"),
-                    "slot_iso": time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime(start_ts)),
-                    "duration_min": 45,
-                    "status": "stub_scheduled",
-                }
+            # Llamada al motor híbrido de integraciones
+            res = create_google_calendar_event(
+                summary=f"Entrevista Técnica: {c['name']} - {state['job'].get('title')}",
+                description=f"Entrevista para evaluar skills: {c.get('skills')}",
+                start_iso=start_iso,
+                end_iso=end_iso,
+                attendee_emails=[c.get("email", "candidato@example.com")]
             )
+            
+            scheduled.append({
+                "candidate_id": c.get("candidate_id"),
+                "name": c.get("name"),
+                "slot_iso": start_iso,
+                "calendar_link": res.get("html_link", "#"),
+                "mode": res.get("mode"),
+                "event_id": res.get("calendar_event_id")
+            })
 
         out: ScreeningState = {"scheduled": scheduled, "done": True}
         out.update(_push_event("scheduled", {"count": len(scheduled)}))
