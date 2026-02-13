@@ -22,10 +22,11 @@ class TraceIdFilter(logging.Filter):
         return True
 
 # Configuración de Logging Estructurado con Trace ID
-logging.basicConfig(
-    level=logging.INFO,
-    format='{"ts": "%(asctime)s", "level": "%(levelname)s", "name": "%(name)s", "msg": "%(message)s", "trace_id": "%(trace_id)s"}',
+LOG_FORMAT = (
+    '{"ts": "%(asctime)s", "level": "%(levelname)s", '
+    '"name": "%(name)s", "msg": "%(message)s", "trace_id": "%(trace_id)s"}'
 )
+logging.basicConfig(level=logging.INFO, format=LOG_FORMAT)
 root_logger = logging.getLogger()
 root_logger.addFilter(TraceIdFilter())
 logger = logging.getLogger("api")
