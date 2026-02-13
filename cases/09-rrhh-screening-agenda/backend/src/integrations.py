@@ -10,7 +10,7 @@ import logging
 import os
 import random
 import time
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
 
@@ -145,11 +145,14 @@ def llm_generate_interview_questions(job: Dict[str, Any], candidate: Dict[str, A
     api_key = os.getenv("OPENAI_API_KEY")
     if api_key:
         try:
+            from langchain_core.messages import HumanMessage, SystemMessage
             from langchain_openai import ChatOpenAI
-            from langchain_core.messages import SystemMessage, HumanMessage
             
             llm = ChatOpenAI(model=os.getenv("MODEL", "gpt-4o-mini"), api_key=api_key)
-            prompt = f"Genera 3 preguntas técnicas para {candidate['name']} para el puesto {job['title']}. Skills: {candidate['skills']}"
+            prompt = (
+                f"Genera 3 preguntas técnicas para {candidate['name']} "
+                f"para el puesto {job['title']}. Skills: {candidate['skills']}"
+            )
             
             resp = llm.invoke([
                 SystemMessage(content="Eres un reclutador técnico experto."),
