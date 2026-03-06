@@ -155,3 +155,13 @@ Este repositorio aplica un modelo de **Defensa en Profundidad**:
 ---
 > [!IMPORTANT]
 > **He diseñado este repositorio para que sea fácil de auditar.** Los **Casos 09 y 10** son los puntos de referencia para evaluar mi capacidad de integrar IA en flujos de trabajo empresariales complejos.
+
+
+## 📚 Documentación del Proyecto
+
+Como parte de los estándares de este ecosistema, la documentación detallada se divide en:
+- [📘 Guía de Instalación y Despliegue (INSTALL.md)](INSTALL.md)
+- [📜 Historial de Cambios (CHANGELOG.md)](CHANGELOG.md)
+- [🤝 Guía de Contribución (CONTRIBUTING.md)](CONTRIBUTING.md)
+- [🛡️ Política de Seguridad (SECURITY.md)](SECURITY.md)
+- [⚖️ Código de Conducta (CODE_OF_CONDUCT.md)](CODE_OF_CONDUCT.md)
