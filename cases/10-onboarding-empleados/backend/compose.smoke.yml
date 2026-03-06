@@ -1,0 +1,27 @@
+services:
+  backend:
+    build: .
+    environment:
+      - CHECKPOINT_DB=:memory:
+      - DATA_DIR=/app/../data
+    ports:
+      - "8010:8010"
+    volumes:
+      - ../../data:/app/../data:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8010/health"]
+      interval: 5s
+      timeout: 2s
+      retries: 5
+
+  smoke-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      backend:
+        condition: service_healthy
+    command: >
+      sh -c "pip install requests && python tests/smoke_integration.py"
+    environment:
+      - BASE_URL=http://backend:8010

@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Caso 10 – Onboarding de Empleados | LangGraph Hub</title>
+  <meta name="description" content="Automatización de onboarding empresarial con LangGraph: provisioning de herramientas, cuentas corporativas y checklist personalizado." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:        #0a0f1e;
+      --surface:   rgba(255,255,255,0.04);
+      --glass:     rgba(255,255,255,0.07);
+      --border:    rgba(255,255,255,0.10);
+      --accent:    #6c63ff;
+      --accent2:   #00d4aa;
+      --accent3:   #f59e0b;
+      --text:      #e8eaf6;
+      --muted:     #8892b0;
+      --success:   #10b981;
+      --error:     #ef4444;
+      --warn:      #f59e0b;
+      --radius:    16px;
+      --glow:      0 0 40px rgba(108,99,255,0.15);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Background ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: -1;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 0%, rgba(108,99,255,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 100%, rgba(0,212,170,0.08) 0%, transparent 60%);
+    }
+
+    /* ── Layout ── */
+    .container { max-width: 1000px; margin: 0 auto; padding: 32px 24px; }
+
+    /* ── Header ── */
+    header { text-align: center; padding: 48px 0 40px; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(108,99,255,0.15); border: 1px solid rgba(108,99,255,0.3);
+      color: var(--accent); padding: 6px 16px; border-radius: 100px;
+      font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 20px;
+    }
+    h1 { font-size: clamp(28px,5vw,42px); font-weight: 800; line-height: 1.2; margin-bottom: 14px; }
+    h1 span { background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .subtitle { color: var(--muted); font-size: 16px; max-width: 560px; margin: 0 auto 32px; line-height: 1.6; }
+
+    /* ── Action button ── */
+    #btn-run {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: linear-gradient(135deg, var(--accent), #9c94ff);
+      color: #fff; border: none; padding: 14px 36px;
+      border-radius: 100px; font-size: 15px; font-weight: 600; cursor: pointer;
+      box-shadow: 0 8px 30px rgba(108,99,255,0.35);
+      transition: transform .2s, box-shadow .2s, opacity .2s;
+    }
+    #btn-run:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(108,99,255,0.5); }
+    #btn-run:disabled { opacity: .5; cursor: not-allowed; }
+    #btn-run .spinner {
+      width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; display: none;
+    }
+    #btn-run.loading .spinner { display: block; }
+    #btn-run.loading .btn-text { opacity: .6; }
+
+    /* ── Employee card ── */
+    #employee-section { display: none; margin-bottom: 24px; }
+    .employee-card {
+      background: var(--glass); backdrop-filter: blur(20px);
+      border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 24px 28px; display: flex; gap: 20px; align-items: center;
+      box-shadow: var(--glow);
+    }
+    .employee-avatar {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; flex-shrink: 0;
+    }
+    .employee-info h2 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+    .employee-info p { color: var(--muted); font-size: 14px; }
+    .role-badge {
+      margin-left: auto; padding: 6px 14px;
+      background: rgba(0,212,170,0.12); border: 1px solid rgba(0,212,170,0.25);
+      color: var(--accent2); border-radius: 100px; font-size: 12px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .5px; white-space: nowrap;
+    }
+
+    /* ── Pipeline steps ── */
+    .pipeline { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+    .step-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 18px 22px;
+      display: flex; align-items: flex-start; gap: 16px;
+      transition: border-color .3s, background .3s, transform .2s;
+    }
+    .step-card.active { border-color: var(--accent); background: rgba(108,99,255,0.06); transform: translateX(4px); }
+    .step-card.done { border-color: rgba(16,185,129,0.35); background: rgba(16,185,129,0.04); }
+    .step-card.error { border-color: rgba(239,68,68,0.35); }
+
+    .step-icon {
+      width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 18px;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+      transition: background .3s, border-color .3s;
+    }
+    .step-card.active .step-icon { background: rgba(108,99,255,0.2); border-color: var(--accent); }
+    .step-card.done .step-icon { background: rgba(16,185,129,0.2); border-color: var(--success); }
+
+    .step-body { flex: 1; min-width: 0; }
+    .step-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+    .step-title .status-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+      background: var(--muted);
+      transition: background .3s;
+    }
+    .step-card.active .status-dot { background: var(--accent); animation: pulse 1.2s infinite; }
+    .step-card.done .status-dot { background: var(--success); }
+    .step-card.error .status-dot { background: var(--error); }
+
+    .step-detail { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .step-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 10px; border-radius: 100px; font-size: 11px; font-weight: 500;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: var(--muted);
+    }
+    .tag.success { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.25); color: var(--success); }
+    .tag.demo { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.25); color: var(--warn); }
+    .tag.real { background: rgba(0,212,170,0.1); border-color: rgba(0,212,170,0.25); color: var(--accent2); }
+
+    /* ── Checklist section ── */
+    #checklist-section { display: none; margin-bottom: 24px; }
+    .section-card {
+      background: var(--glass); backdrop-filter: blur(20px);
+      border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 24px 28px; box-shadow: var(--glow);
+    }
+    .section-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+    .checklist-group { margin-bottom: 14px; }
+    .checklist-group h4 { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-bottom: 8px; }
+    .checklist-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 13px; color: var(--text);
+    }
+    .checklist-item:last-child { border-bottom: none; }
+    .checklist-item::before { content: '○'; color: var(--success); font-size: 14px; }
+
+    /* ── Completion banner ── */
+    #completion-banner { display: none; margin-bottom: 24px; }
+    .banner {
+      background: linear-gradient(135deg, rgba(16,185,129,0.12), rgba(0,212,170,0.08));
+      border: 1px solid rgba(16,185,129,0.25);
+      border-radius: var(--radius); padding: 28px 32px; text-align: center;
+      box-shadow: 0 0 40px rgba(16,185,129,0.10);
+    }
+    .banner .emoji { font-size: 48px; display: block; margin-bottom: 12px; }
+    .banner h3 { font-size: 22px; font-weight: 800; color: var(--success); margin-bottom: 8px; }
+    .banner p { color: var(--muted); font-size: 14px; }
+    .stats-row { display: flex; justify-content: center; gap: 32px; margin-top: 20px; flex-wrap: wrap; }
+    .stat { text-align: center; }
+    .stat .num { font-size: 28px; font-weight: 800; color: var(--accent2); }
+    .stat .lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+
+    /* ── Event log ── */
+    #log-section { display: none; margin-bottom: 40px; }
+    .log-box {
+      background: rgba(0,0,0,0.3); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 16px 20px;
+      max-height: 220px; overflow-y: auto;
+      font-family: 'Courier New', monospace; font-size: 12px; color: var(--muted);
+    }
+    .log-line { padding: 2px 0; }
+    .log-line.info { color: var(--accent2); }
+    .log-line.done { color: var(--success); }
+    .log-line.error { color: var(--error); }
+
+    /* ── Footer nav ── */
+    .nav-back { text-align: center; margin-top: 16px; }
+    .nav-back a { color: var(--muted); font-size: 13px; text-decoration: none; }
+    .nav-back a:hover { color: var(--text); }
+
+    /* ── Animations ── */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.4; } }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+    .fade-in { animation: fadeIn .4s ease forwards; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <header>
+    <div class="badge">⚡ LangGraph · Caso 10</div>
+    <h1>Onboarding de <span>Empleados</span></h1>
+    <p class="subtitle">
+      Automatización end-to-end: provisioning de herramientas según rol,
+      cuentas corporativas, permisos RBAC y bienvenida — todo en segundos.
+    </p>
+    <button id="btn-run" onclick="runOnboarding()">
+      <div class="spinner"></div>
+      <span class="btn-text">▶ Iniciar Onboarding</span>
+    </button>
+  </header>
+
+  <!-- Employee Card -->
+  <div id="employee-section">
+    <div class="employee-card fade-in">
+      <div class="employee-avatar">👩‍💻</div>
+      <div class="employee-info">
+        <h2 id="emp-name">—</h2>
+        <p id="emp-meta">—</p>
+      </div>
+      <div class="role-badge" id="emp-role">—</div>
+    </div>
+  </div>
+
+  <!-- Pipeline Steps -->
+  <div class="pipeline" id="pipeline">
+    <div class="step-card" id="step-loaded">
+      <div class="step-icon">📄</div>
+      <div class="step-body">
+        <div class="step-title"><span class="status-dot"></span>Fase 1 · Lectura de Perfil</div>
+        <div class="step-detail">Cargando datos del empleado y configuración de roles...</div>
+      </div>
+    </div>
+    <div class="step-card" id="step-classified">
+      <div class="step-icon">🎯</div>
+      <div class="step-body">
+        <div class="step-title"><span class="status-dot"></span>Fase 2 · Clasificación de Rol</div>
+        <div class="step-detail">Detectando tipo de empleado para adaptar el flujo...</div>
+        <div class="step-tags" id="tags-role"></div>
+      </div>
+    </div>
+    <div class="step-card" id="step-tools">
+      <div class="step-icon">🔧</div>
+      <div class="step-body">
+        <div class="step-title"><span class="status-dot"></span>Fase 3 · Provisioning de Herramientas</div>
+        <div class="step-detail">Configurando herramientas específicas del rol...</div>
+        <div class="step-tags" id="tags-tools"></div>
+      </div>
+    </div>
+    <div class="step-card" id="step-accounts">
+      <div class="step-icon">🏢</div>
+      <div class="step-body">
+        <div class="step-title"><span class="status-dot"></span>Fase 4 · Cuentas Corporativas</div>
+        <div class="step-detail">Creando Google Workspace, Slack y correo corporativo...</div>
+        <div class="step-tags" id="tags-accounts"></div>
+      </div>
+    </div>
+    <div class="step-card" id="step-perms">
+      <div class="step-icon">🔒</div>
+      <div class="step-body">
+        <div class="step-title"><span class="status-dot"></span>Fase 5 · Permisos RBAC</div>
+        <div class="step-detail">Asignando permisos en GitHub y AWS IAM según rol...</div>
+        <div class="step-tags" id="tags-perms"></div>
+      </div>
+    </div>
+    <div class="step-card" id="step-checklist">
+      <div class="step-icon">📋</div>
+      <div class="step-body">
+        <div class="step-title"><span class="status-dot"></span>Fase 6 · Checklist Personalizado</div>
+        <div class="step-detail">Generando plan de incorporación semana a semana...</div>
+        <div class="step-tags" id="tags-checklist"></div>
+      </div>
+    </div>
+    <div class="step-card" id="step-welcome">
+      <div class="step-icon">📨</div>
+      <div class="step-body">
+        <div class="step-title"><span class="status-dot"></span>Fase 7 · Paquete de Bienvenida</div>
+        <div class="step-detail">Enviando email al empleado y Slack al manager...</div>
+        <div class="step-tags" id="tags-welcome"></div>
+      </div>
+    </div>
+    <div class="step-card" id="step-done">
+      <div class="step-icon">✅</div>
+      <div class="step-body">
+        <div class="step-title"><span class="status-dot"></span>Fase 8 · Confirmación Final</div>
+        <div class="step-detail">Registrando onboarding completado en el sistema...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Checklist expandible -->
+  <div id="checklist-section">
+    <div class="section-card fade-in">
+      <div class="section-title">📋 Plan de Incorporación</div>
+      <div id="checklist-body"></div>
+    </div>
+  </div>
+
+  <!-- Completion Banner -->
+  <div id="completion-banner">
+    <div class="banner fade-in">
+      <span class="emoji">🎉</span>
+      <h3>¡Onboarding Completado!</h3>
+      <p id="banner-msg">El empleado está listo para empezar.</p>
+      <div class="stats-row">
+        <div class="stat"><div class="num" id="stat-tools">—</div><div class="lbl">Herramientas</div></div>
+        <div class="stat"><div class="num" id="stat-accounts">—</div><div class="lbl">Cuentas</div></div>
+        <div class="stat"><div class="num" id="stat-perms">—</div><div class="lbl">Permisos</div></div>
+        <div class="stat"><div class="num" id="stat-checklist">—</div><div class="lbl">Tareas</div></div>
+        <div class="stat"><div class="num" id="stat-notifs">—</div><div class="lbl">Notificaciones</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Event Log -->
+  <div id="log-section">
+    <div class="section-title" style="font-size:14px;font-weight:600;margin-bottom:10px;">📡 Log de Eventos</div>
+    <div class="log-box" id="log-box"></div>
+  </div>
+
+  <div class="nav-back"><a href="/">← Volver al Hub</a></div>
+</div>
+
+<script>
+  const ROLE_LABELS = {
+    dev_backend: '👩‍💻 Dev Backend', dev_frontend: '🎨 Dev Frontend',
+    sales: '💼 Ventas', ops: '⚙️ Operaciones', mgmt: '🏛️ Gerencia'
+  };
+
+  function setStep(id, status /* 'active'|'done'|'error' */) {
+    const el = document.getElementById('step-' + id);
+    if (!el) return;
+    el.classList.remove('active', 'done', 'error');
+    if (status) el.classList.add(status);
+  }
+
+  function addTags(containerId, items, cls = 'success') {
+    const c = document.getElementById(containerId);
+    if (!c) return;
+    c.innerHTML = '';
+    (items || []).forEach(txt => {
+      const t = document.createElement('span');
+      t.className = 'tag ' + cls;
+      t.textContent = txt;
+      c.appendChild(t);
+    });
+  }
+
+  function addLog(msg, type = 'info') {
+    const box = document.getElementById('log-box');
+    const line = document.createElement('div');
+    line.className = 'log-line ' + type;
+    line.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+    box.appendChild(line);
+    box.scrollTop = box.scrollHeight;
+  }
+
+  function renderChecklist(items) {
+    const body = document.getElementById('checklist-body');
+    body.innerHTML = '';
+    const groups = {};
+    (items || []).forEach(item => {
+      const m = item.match(/^\[([^\]]+)\]\s*(.*)/);
+      const grp = m ? m[1] : 'General';
+      const task = m ? m[2] : item;
+      if (!groups[grp]) groups[grp] = [];
+      groups[grp].push(task);
+    });
+    Object.entries(groups).forEach(([grp, tasks]) => {
+      const div = document.createElement('div');
+      div.className = 'checklist-group';
+      div.innerHTML = `<h4>${grp}</h4>` +
+        tasks.map(t => `<div class="checklist-item">${t}</div>`).join('');
+      body.appendChild(div);
+    });
+    document.getElementById('checklist-section').style.display = 'block';
+  }
+
+  function applySnapshot(snap) {
+    const emp = snap.employee || {};
+    const evTypes = (snap.events || []).map(e => e.type);
+
+    // Employee card
+    if (emp.name) {
+      document.getElementById('emp-name').textContent = emp.name;
+      document.getElementById('emp-meta').textContent =
+        `${emp.department || ''} · Inicio: ${emp.start_date || '—'} · ${emp.location || ''}`;
+      document.getElementById('employee-section').style.display = 'block';
+    }
+
+    // Role badge
+    if (snap.role_type) {
+      document.getElementById('emp-role').textContent =
+        ROLE_LABELS[snap.role_type] || snap.role_type;
+    }
+
+    // Steps
+    if (evTypes.includes('loaded')) { setStep('loaded', 'done'); addLog('✅ Perfil cargado', 'done'); }
+    if (evTypes.includes('classified')) {
+      setStep('classified', 'done');
+      addTags('tags-role', [snap.role_type], 'real');
+      addLog(`✅ Rol clasificado: ${snap.role_type}`, 'done');
+    }
+    if (evTypes.includes('tools_provisioned')) {
+      setStep('tools', 'done');
+      const tools = (snap.tools_provisioned || []).map(t =>
+        `${t.tool} (${t.mode === 'DEMO_SIMULATION' ? '🟡' : '🟢'})`
+      );
+      addTags('tags-tools', tools, snap.tools_provisioned?.[0]?.mode === 'DEMO_SIMULATION' ? 'demo' : 'real');
+      addLog(`✅ ${snap.tools_provisioned?.length || 0} herramientas provisionadas`, 'done');
+    }
+    if (evTypes.includes('accounts_created')) {
+      setStep('accounts', 'done');
+      addTags('tags-accounts', (snap.accounts || []).map(a => a.service), 'success');
+      addLog(`✅ ${snap.accounts?.length || 0} cuentas creadas`, 'done');
+    }
+    if (evTypes.includes('permissions_assigned')) {
+      setStep('perms', 'done');
+      const ps = (snap.permissions || []).map(p => p.team || p.group || p.policy).filter(Boolean);
+      addTags('tags-perms', ps, 'success');
+      addLog(`✅ ${snap.permissions?.length || 0} permisos asignados`, 'done');
+    }
+    if (evTypes.includes('checklist_generated')) {
+      setStep('checklist', 'done');
+      const mode = (snap.events || []).find(e => e.type === 'checklist_generated')?.data?.mode || '';
+      addTags('tags-checklist', [mode === 'LLM' ? '🧠 Generado por IA' : '📄 Plantilla'], mode === 'LLM' ? 'real' : 'demo');
+      renderChecklist(snap.checklist);
+      addLog(`✅ Checklist generado (${snap.checklist?.length || 0} tareas)`, 'done');
+    }
+    if (evTypes.includes('welcome_sent')) {
+      setStep('welcome', 'done');
+      addTags('tags-welcome',
+        (snap.notifications || []).map(n => `${n.recipient === 'employee' ? '📧' : '💬'} ${n.type}`),
+        'success');
+      addLog(`✅ Bienvenida enviada (${snap.notifications?.length || 0} notificaciones)`, 'done');
+    }
+    if (snap.done) {
+      setStep('done', 'done');
+      addLog('🎉 Onboarding completado', 'done');
+      // stats
+      document.getElementById('stat-tools').textContent = snap.tools_provisioned?.length || 0;
+      document.getElementById('stat-accounts').textContent = snap.accounts?.length || 0;
+      document.getElementById('stat-perms').textContent = snap.permissions?.length || 0;
+      document.getElementById('stat-checklist').textContent = snap.checklist?.length || 0;
+      document.getElementById('stat-notifs').textContent = snap.notifications?.length || 0;
+      document.getElementById('banner-msg').textContent =
+        `${emp.name || 'El empleado'} está listo para comenzar el ${emp.start_date || 'día de inicio'}.`;
+      document.getElementById('completion-banner').style.display = 'block';
+    }
+  }
+
+  async function runOnboarding() {
+    const btn = document.getElementById('btn-run');
+    btn.disabled = true; btn.classList.add('loading');
+    btn.querySelector('.btn-text').textContent = 'Procesando...';
+
+    // Reset
+    ['loaded','classified','tools','accounts','perms','checklist','welcome','done']
+      .forEach(s => setStep(s, ''));
+    ['tags-role','tags-tools','tags-accounts','tags-perms','tags-checklist','tags-welcome']
+      .forEach(id => { const el = document.getElementById(id); if(el) el.innerHTML=''; });
+    document.getElementById('checklist-section').style.display = 'none';
+    document.getElementById('completion-banner').style.display = 'none';
+    document.getElementById('log-section').style.display = 'block';
+    document.getElementById('log-box').innerHTML = '';
+    document.getElementById('employee-section').style.display = 'none';
+
+    addLog('Iniciando flujo de onboarding...', 'info');
+
+    try {
+      const threadId = 'onboarding-' + Date.now();
+      const resp = await fetch(`/api/stream?thread_id=${threadId}`);
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder();
+      let buf = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buf += decoder.decode(value, { stream: true });
+        const lines = buf.split('\n');
+        buf = lines.pop(); // guarda línea incompleta
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          try {
+            const msg = JSON.parse(line);
+            if (msg.type === 'snapshot') applySnapshot(msg.snapshot);
+            if (msg.type === 'error') addLog('❌ Error: ' + msg.detail, 'error');
+          } catch (_) {}
+        }
+      }
+    } catch (err) {
+      addLog('❌ Error de conexión: ' + err.message, 'error');
+    } finally {
+      btn.disabled = false; btn.classList.remove('loading');
+      btn.querySelector('.btn-text').textContent = '▶ Iniciar Onboarding';
+    }
+  }
+</script>
+</body>
+</html>

@@ -13,6 +13,7 @@ Crear un conjunto de demos y casos de uso reproducibles que sirvan como referenc
 - Tests básicos y CI para asegurar que los demos arranquen en Docker.
 - Plantillas y linters para uniformidad (autorouter, ruff, etc.).
 - **Milestone 09**: Implementado estándar de resiliencia y observabilidad (Caso 09).
+- **Milestone 10**: Automatización de Onboarding Empresarial con RBAC (Caso 10).
 
 ## Prioridades a medio plazo (3–9 meses) 🔧
 - **Observabilidad Avanzada**: Integración nativa con **LangSmith** y **OpenTelemetry** para rastreo de trazas de agentes en producción.

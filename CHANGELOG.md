@@ -5,6 +5,14 @@ Todas las novedades y cambios notables de este proyecto se documentarán en este
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/),
 y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [3.3.0] - 2026-03-06
+
+### Añadido
+- **Caso 10: Onboarding Empleados (Industrial)**: Implementación completa de un flujo de 8 nodos con ramificación condicional por rol.
+- **Provisionamiento Híbrido**: Motor en `integrations.py` que detecta dinámicamente credenciales para Google Workspace, Slack, GitHub y AWS.
+- **Checklist Dinámico con IA**: El agente genera tareas personalizadas para el nuevo empleado usando GPT-4o-mini (con fallback a plantilla estática).
+- **Premium Dashboard**: Interfaz de usuario dedicada con streaming NDJSON y visualización de progreso en tiempo real.
+
 ## [3.2.0] - 2026-02-13
 
 ### Añadido

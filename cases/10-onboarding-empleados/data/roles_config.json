@@ -1,0 +1,171 @@
+{
+    "dev_backend": {
+        "label": "Desarrollador Backend",
+        "tools": [
+            "GitHub",
+            "AWS IAM",
+            "Jira",
+            "Confluence",
+            "VS Code Remote"
+        ],
+        "slack_channels": [
+            "#engineering",
+            "#backend-team",
+            "#dev-general"
+        ],
+        "github_teams": [
+            "backend-developers"
+        ],
+        "aws_groups": [
+            "developers-rw"
+        ],
+        "checklist": {
+            "Semana 1": [
+                "Configurar entorno local",
+                "Primer PR de bienvenida al repo",
+                "Meet & greet con el equipo de backend"
+            ],
+            "Semana 2": [
+                "Primer ticket de Jira asignado",
+                "Code review con un compañero",
+                "Setup de monitoreo local"
+            ],
+            "Mes 1": [
+                "Deploy a entorno staging",
+                "Presentación técnica al equipo",
+                "Proponer mejora en arquitectura"
+            ]
+        }
+    },
+    "dev_frontend": {
+        "label": "Desarrollador Frontend",
+        "tools": [
+            "GitHub",
+            "Figma",
+            "Jira",
+            "Vercel",
+            "Storybook"
+        ],
+        "slack_channels": [
+            "#engineering",
+            "#frontend-team",
+            "#design"
+        ],
+        "github_teams": [
+            "frontend-developers"
+        ],
+        "aws_groups": [],
+        "checklist": {
+            "Semana 1": [
+                "Acceder a Figma y revisar Design System",
+                "Instalar extensiones recomendadas",
+                "Revisar componentes existentes en Storybook"
+            ],
+            "Semana 2": [
+                "Primer componente nuevo en Storybook",
+                "Demo al equipo de diseño"
+            ],
+            "Mes 1": [
+                "Contribución al Design System aprobada",
+                "PR merged a producción"
+            ]
+        }
+    },
+    "sales": {
+        "label": "Ejecutivo de Ventas",
+        "tools": [
+            "HubSpot CRM",
+            "Salesforce",
+            "Outreach",
+            "LinkedIn Sales Navigator"
+        ],
+        "slack_channels": [
+            "#sales",
+            "#commercial-latam",
+            "#wins"
+        ],
+        "github_teams": [],
+        "aws_groups": [],
+        "checklist": {
+            "Semana 1": [
+                "Configurar CRM y primer pipeline",
+                "Revisar libro de ventas",
+                "Shadow call con vendedor senior"
+            ],
+            "Semana 2": [
+                "Primera llamada de prospección propia",
+                "Actualización de leads en Salesforce"
+            ],
+            "Mes 1": [
+                "Primera oportunidad abierta",
+                "Presentación de KPIs al manager"
+            ]
+        }
+    },
+    "ops": {
+        "label": "Analista de Operaciones",
+        "tools": [
+            "ERP Interno",
+            "Tableau",
+            "Asana",
+            "Google Analytics"
+        ],
+        "slack_channels": [
+            "#operations",
+            "#data-team"
+        ],
+        "github_teams": [],
+        "aws_groups": [],
+        "checklist": {
+            "Semana 1": [
+                "Tour guiado del ERP",
+                "Conocer los flujos operativos críticos"
+            ],
+            "Semana 2": [
+                "Primer reporte operativo generado"
+            ],
+            "Mes 1": [
+                "Propuesta de mejora de proceso presentada al equipo"
+            ]
+        }
+    },
+    "mgmt": {
+        "label": "Gerente / Directivo",
+        "tools": [
+            "GitHub (read-only)",
+            "AWS Console",
+            "Jira",
+            "HubSpot CRM",
+            "Tableau",
+            "ERP Interno",
+            "Panel Admin"
+        ],
+        "slack_channels": [
+            "#management",
+            "#leadership",
+            "#all-hands",
+            "#engineering",
+            "#sales"
+        ],
+        "github_teams": [
+            "all-teams-read"
+        ],
+        "aws_groups": [
+            "managers-readonly"
+        ],
+        "checklist": {
+            "Semana 1": [
+                "1:1 con todos los Team Leads",
+                "Revisión de OKRs del trimestre en curso"
+            ],
+            "Semana 2": [
+                "Primer All-Hands facilitado",
+                "Acceso verificado a todos los paneles de KPI"
+            ],
+            "Mes 1": [
+                "Roadmap del área definido",
+                "Presentación de visión al CEO"
+            ]
+        }
+    }
+}

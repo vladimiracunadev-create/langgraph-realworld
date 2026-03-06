@@ -19,6 +19,7 @@ El proyecto está diseñado como un **Monorepo de Casos de Uso**, donde cada "ca
 | **Fase 2** | **Análisis** | Evaluación cognitiva y filtrado (Scoring). | `score_one` / `build_shortlist` |
 | **Fase 3** | **Acción** | Ejecución de tareas de infraestructura (Agenda). | `schedule_interviews` |
 | **Fase 4** | **Notificación** | Comunicación final con el cliente (Email/WA). | `notify_candidates` |
+| **Referencia** | **Caso 10** | **Onboarding de Empleados**: Flujo ramificado por rol (RBAC) y aprovisionamiento. | `classify_role` / `provision_tools` |
 
 ```mermaid
 graph TD

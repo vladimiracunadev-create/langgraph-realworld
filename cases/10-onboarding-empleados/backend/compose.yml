@@ -1,0 +1,9 @@
+services:
+  backend:
+    build: .
+    ports:
+      - "8010:8010"
+    volumes:
+      - ../../data:/app/../data:ro
+    environment:
+      - DATA_DIR=/app/../data
