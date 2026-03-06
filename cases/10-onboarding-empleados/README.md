@@ -63,7 +63,7 @@ Al igual que el Caso 09, este sistema detecta automáticamente la configuración
 ## 🛠️ Tech Stack
 
 -   **Core**: [LangGraph](https://github.com/langchain-ai/langgraph) (Orquestación con estado).
--   **API**: [FastAPI](https://fastapi.tiangolo.com/) (Streaming NDJSON para feedback vivo).
+-   **API**: [FastAPI](https://fastapi.tiangolo.com/) (Streaming NDJSON implementado con `stream_mode=\"values\"` para enviar deltas completos del estado a la UI).
 -   **Integraciones**: Google Admin SDK, Slack SDK, Boto3 (AWS), GitHub API.
 -   **UI**: Vanilla JS Premium (Glassmorphism + Dark Mode).
 
@@ -73,8 +73,11 @@ Al igual que el Caso 09, este sistema detecta automáticamente la configuración
 
 ### Ejecución Local
 
+> [!WARNING]
+> Algunas dependencias (como `ormsgpack`) fallan compilando sobre Python 3.14 u otros entornos sin compiladores C en Windows. Es altamente recomendado levantar el backend con **Docker** en su lugar.
+
 ```bash
-cd backend
+cd cases/10-onboarding-empleados/backend
 python -m venv .venv
 source .venv/bin/activate  # Windows: .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt

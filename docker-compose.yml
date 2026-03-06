@@ -1,19 +1,34 @@
 services:
-  site:
-    build:
-      context: .
-      dockerfile: Dockerfile.site
+  # El Portal central (index.html)
+  portal:
+    image: python:3.11-slim
+    working_dir: /app
+    volumes:
+      - .:/app
     ports:
-      - "8080:80"
+      - "8080:8080"
+    command: python -m http.server 8080
 
+  # Caso 09: RR.HH. Screening + Agenda
   case09:
-    build:
-      context: ./cases/09-rrhh-screening-agenda/backend
+    build: 
+      context: cases/09-rrhh-screening-agenda/backend
     ports:
       - "8009:8009"
-    environment:
-      - DATA_DIR=/app/data
-    # Persistencia de checkpoints (SQLite) fuera del contenedor
     volumes:
       - ./cases/09-rrhh-screening-agenda/data:/app/data:ro
-      - ./cases/09-rrhh-screening-agenda/backend/checkpoints.sqlite:/app/checkpoints.sqlite
+    environment:
+      - DATA_DIR=/app/data
+      # - OPENAI_API_KEY=${OPENAI_API_KEY}
+
+  # Caso 10: Onboarding de Empleados
+  case10:
+    build:
+      context: cases/10-onboarding-empleados/backend
+    ports:
+      - "8010:8010"
+    volumes:
+      - ./cases/10-onboarding-empleados/data:/app/data:ro
+    environment:
+      - DATA_DIR=/app/data
+      # - OPENAI_API_KEY=${OPENAI_API_KEY}

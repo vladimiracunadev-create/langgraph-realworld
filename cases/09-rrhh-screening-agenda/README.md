@@ -67,10 +67,11 @@ Este caso está diseñado para funcionar en dos modalidades, detectando automát
 ## 🛠️ Tech Stack
 
 - **Core**: [LangGraph](https://github.com/langchain-ai/langgraph) (Orquestación de agentes con estado).
-- **Backend API**: [FastAPI](https://fastapi.tiangolo.com/) (Streaming NDJSON).
+- **Backend API**: [FastAPI](https://fastapi.tiangolo.com/) (Streaming NDJSON real-time implementado mediante el parámetro `stream_mode=\"values\"` en LangGraph para iteración fluida en UI).
+- **File Uploads**: `python-multipart` para parseo de CVs y PDFs vía endpoints POST.
 - **Resilience**: [Tenacity](https://tenacity.readthedocs.io/) (Estrategias de reintento).
 - **Quality**: [Ruff](https://beta.ruff.rs/docs/) (Linting & Formatting).
-- **Container**: [Docker](https://www.docker.com/) (Entorno reproducible).
+- **Container**: [Docker](https://www.docker.com/) (Entorno reproducible recomendado frente a incompatibilidades locales de librerías como `httptools` o `tiktoken` en versiones modernas de python).
 
 ---
 
@@ -78,8 +79,11 @@ Este caso está diseñado para funcionar en dos modalidades, detectando automát
 
 ### Ejecución Local
 
+> [!WARNING]
+> Algunas dependencias pueden fallar al instalarse en entornos locales modernos (como Python 3.14 en Windows) debido a procesos de compilación en C. Para la experiencia ideal, utiliza Docker tal y como figura en el README principal.
+
 ```bash
-cd backend
+cd cases/09-rrhh-screening-agenda/backend
 python -m venv .venv
 source .venv/bin/activate  # Windows: .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt

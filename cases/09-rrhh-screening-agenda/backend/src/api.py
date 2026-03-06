@@ -148,7 +148,7 @@ def stream(thread_id: str = "rrhh-demo-1"):
 
     def gen():
         try:
-            for event in graph.stream({"events": []}, config=cfg):
+            for event in graph.stream({"events": []}, config=cfg, stream_mode="values"):
                 values = event if isinstance(event, dict) else {}
 
                 snapshot = {

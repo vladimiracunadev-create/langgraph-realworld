@@ -24,7 +24,7 @@ Para elevar el proyecto a un estándar profesional "Real-World", se han realizad
 
 ### 🛠️ Taxonomía de Implementación
 Para asegurar la transparencia técnica, cada caso se clasifica en uno de estos tres niveles:
-- **🛡️ Industrial (v3.2)**: Casos de referencia con FastAPI, Streaming, Pydantic y Observabilidad (Caso 09).
+- **🛡️ Industrial (v3.3)**: Casos de referencia con FastAPI, Streaming, Pydantic y Observabilidad (Casos 09 y 10).
 - **🏗️ Scaffold (v1.0)**: Estándar base con orquestación y Docker Ready (Caso 01).
 - **📜 Legacy**: Plantillas de arquitectura para futura expansión.
 
@@ -64,7 +64,27 @@ flowchart LR
 
 ---
 
-## 🚀 Operación del Hub (Orquestación)
+## 🚀 Ejecución Unificada (Ecosistema Completo)
+
+Para ver el **Caso 09** (RR.HH. Screening) y el **Caso 10** (Onboarding) funcionando juntos desde el portal central, utiliza Docker. Ambos casos están implementados sobre **FastAPI** y transmiten su progreso en tiempo real utilizando **Streaming NDJSON** (`stream_mode=\"values\"` en LangGraph) hacia sus dashboards web.
+
+> [!WARNING]
+> En entornos de desarrollo locales con versiones recientes de Python (ej. Windows con Python 3.14), existen dependencias específicas como `httptools`, `tiktoken` u `ormsgpack` que pueden fallar al no encontrar el compilador local. Por eso, **levantar el ecosistema con Docker es la vía oficial y garantizada**.
+
+### 🐳 Con Docker Compose (Recomendado)
+
+Desde la raíz del repositorio, ejecuta:
+
+```bash
+docker compose up --build
+```
+
+Esto levantará los tres servicios en paralelo:
+- **Portal Principal**: [http://localhost:8080](http://localhost:8080)
+- **Caso 09 Backend**: [http://localhost:8009](http://localhost:8009)
+- **Caso 10 Backend**: [http://localhost:8010](http://localhost:8010)
+
+## 🏗️ Operación del Hub (Orquestación)
 
 Gestiona los 25 casos de forma centralizada. El **Hub CLI** (`hub.py`) es una herramienta en Python que orquesta tanto la ejecución local como el lanzamiento de contenedores Docker.
 

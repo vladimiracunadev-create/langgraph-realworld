@@ -178,11 +178,12 @@
         <div class="wrap">
             <div class="h1">LangGraph – Casos del mundo real</div>
             <div class="sub">
-                Repo scaffold con 25 casos. Cada tarjeta abre un demo. El Caso <b>09</b> está implementado con
-                backend + streaming para ver en tiempo real el flujo de RR.HH.
+                Repo scaffold con 25 casos. Las tarjetas <b>09</b> y <b>10</b> están implementadas con
+                backend + streaming para ver en tiempo real flujos de RR.HH. y Onboarding.
             </div>
             <div class="pillrow">
-                <div class="pill">✅ Caso 09 implementado</div>
+                <div class="pill" style="border-color: #238636; background: rgba(35, 134, 54, 0.1); color: #3fb950;">✅
+                    Casos 09 y 10 Operativos</div>
                 <div class="pill">🧠 Flujos con estado (LangGraph)</div>
                 <div class="pill">🧾 Streaming NDJSON</div>
                 <div class="pill">💾 Memoria por <code>thread_id</code></div>
@@ -193,7 +194,8 @@
     <div class="wrap" style="margin-top:12px;">
         <div
             style="border-radius:12px; padding:12px; border:1px solid rgba(255,255,255,.06); background: rgba(255,255,255,.02);">
-            <strong style="color:#ffd89b;">⚠️ Estado del repositorio: solo el Caso <b>09</b> es operativo</strong>
+            <strong style="color:#ffd89b;">⚠️ Estado del repositorio: Casos <b>09</b> y <b>10</b> son
+                operativos</strong>
             <div style="margin-top:8px; opacity:.9; font-size:13px;">
                 Los demás casos son plantillas (scaffolds) y pueden requerir trabajo adicional para ejecutarse.
             </div>
@@ -220,10 +222,9 @@
                 style="margin-top:12px; padding:12px; border:1px solid rgba(47, 129, 247, 0.3); background: rgba(47, 129, 247, 0.05); border-radius: 8px;">
                 <strong style="color:var(--accent);">🧠 Cómo activar la IA Real (LLM):</strong>
                 <div style="font-size:12px; margin-top:5px; opacity:0.9;">
-                    Para pasar del modo demo al modo real, configura tu <code>OPENAI_API_KEY</code> en
-                    <code>cases/09-*/backend/.env</code> y levanta el servicio con <code>uvicorn</code>. <a
-                        href="docs/doc_viewer.html?file=cases/09-rrhh-screening-agenda/README.md"
-                        style="color:var(--accent); font-weight:800;">Ver guía de activación &rarr;</a>
+                    Configura tu <code>OPENAI_API_KEY</code> en los archivos <code>.env</code> de cada backend
+                    y levanta los servicios. <a href="docs/doc_viewer.html?file=cases/10-onboarding-empleados/README.md"
+                        style="color:var(--accent); font-weight:800;">Ver guía del Caso 10 &rarr;</a>
                 </div>
             </div>
         </div>
@@ -322,14 +323,14 @@
                 <div class="meta">Abrir Dashboard Real-Time →</div>
             </a>
 
-            <a class="card" href="cases/10-onboarding-empleados/demo/index.html">
+            <a class="card" href="http://localhost:8010/">
                 <div class="top">
                     <div class="num">10</div>
-                    <div class="badge">LEGACY</div>
+                    <div class="badge ok">INDUSTRIAL (V3.3)</div>
                 </div>
                 <div class="title">Onboarding de empleados</div>
-                <div class="desc">Cuentas, accesos, checklist y confirmación.</div>
-                <div class="meta">Abrir demo →</div>
+                <div class="desc">Provisioning de herramientas, cuentas corporativas y checklist dinámico.</div>
+                <div class="meta">Abrir Dashboard Real-Time →</div>
             </a>
 
             <a class="card" href="cases/11-educacion-tutor-adaptativo/demo/index.html">
@@ -486,8 +487,11 @@
     </main>
 
     <footer class="wrap">
-        Para ejecutar el Caso 09 localmente: <code>cases/09-rrhh-screening-agenda/backend</code> →
-        <code>uvicorn src.api:app --port 8009</code>.
+        <div>Ejecutar Caso 09: <code>cd cases/09-rrhh-screening-agenda/backend && uvicorn src.api:app --port 8009</code>
+        </div>
+        <div style="margin-top:5px;">Ejecutar Caso 10:
+            <code>cd cases/10-onboarding-empleados/backend && uvicorn src.api:app --port 8010</code>
+        </div>
     </footer>
 </body>
 

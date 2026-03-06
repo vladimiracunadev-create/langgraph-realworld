@@ -4,7 +4,6 @@ python-dotenv
 
 # LangGraph
 langgraph>=0.2.0
-langgraph-checkpoint-sqlite>=3.0.1
 
 # Calidad y pruebas (para hacerlo "real" con CI local)
 ruff

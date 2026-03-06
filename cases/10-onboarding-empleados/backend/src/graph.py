@@ -22,48 +22,33 @@ import time
 from pathlib import Path
 from typing import Annotated, Any, Dict, List
 
-from langgraph.checkpoint.sqlite import SqliteSaver
+from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import END, START, StateGraph
-from pydantic import BaseModel, Field
+from typing_extensions import TypedDict
 
-from .settings import checkpoint_db_path, data_dir, load_settings
+from .settings import data_dir, load_settings
 
 logger = logging.getLogger(__name__)
-
-_SQLITE_CONN: sqlite3.Connection | None = None
-
-
-def _get_sqlite_conn(db_path: str) -> sqlite3.Connection:
-    """Crea/reutiliza conexión SQLite (singleton)."""
-    global _SQLITE_CONN
-    if _SQLITE_CONN is not None:
-        return _SQLITE_CONN
-    if db_path != ":memory:":
-        Path(db_path).parent.mkdir(parents=True, exist_ok=True)
-    _SQLITE_CONN = sqlite3.connect(db_path, check_same_thread=False)
-    return _SQLITE_CONN
-
 
 # ---------------------------------------------------------------------------
 # Estado del Agente (Single Source of Truth)
 # ---------------------------------------------------------------------------
 
-class OnboardingState(BaseModel):
+class OnboardingState(TypedDict, total=False):
     """
     Estado centralizado del flujo de onboarding.
-    'events' usa Annotated + operator.add para acumulación incremental
-    (cada nodo puede emitir eventos sin sobrescribir los anteriores).
+    Cambiado a TypedDict para compatibilidad nativa con diccionarios.
     """
-    employee: Dict[str, Any] = Field(default_factory=dict)
-    roles_config: Dict[str, Any] = Field(default_factory=dict)
-    role_type: str = ""
-    tools_provisioned: List[Dict[str, Any]] = Field(default_factory=list)
-    accounts: List[Dict[str, Any]] = Field(default_factory=list)
-    permissions: List[Dict[str, Any]] = Field(default_factory=list)
-    checklist: List[str] = Field(default_factory=list)
-    notifications: List[Dict[str, Any]] = Field(default_factory=list)
-    events: Annotated[List[Dict[str, Any]], operator.add] = Field(default_factory=list)
-    done: bool = False
+    employee: Dict[str, Any]
+    roles_config: Dict[str, Any]
+    role_type: str
+    tools_provisioned: List[Dict[str, Any]]
+    accounts: List[Dict[str, Any]]
+    permissions: List[Dict[str, Any]]
+    checklist: List[str]
+    notifications: List[Dict[str, Any]]
+    events: Annotated[List[Dict[str, Any]], operator.add]
+    done: bool
 
 
 # ---------------------------------------------------------------------------
@@ -400,10 +385,4 @@ def compile_graph():
     g.add_edge("send_welcome_package", "confirm_onboarding")
     g.add_edge("confirm_onboarding", END)
 
-    db_path = checkpoint_db_path()
-    if not db_path or db_path.lower() in {"none", "false", "0"}:
-        return g.compile(checkpointer=None)
-
-    conn = _get_sqlite_conn(db_path)
-    checkpointer = SqliteSaver(conn)
-    return g.compile(checkpointer=checkpointer)
+    return g.compile(checkpointer=MemorySaver())

@@ -7,45 +7,28 @@ import time
 from pathlib import Path
 from typing import Annotated, Any, Dict, List, Literal
 
-from langgraph.checkpoint.sqlite import SqliteSaver
+from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import END, START, StateGraph
-from pydantic import BaseModel, Field
+from typing_extensions import TypedDict
 
-from .settings import checkpoint_db_path, data_dir, load_settings
+from .settings import data_dir, load_settings
 
 logger = logging.getLogger(__name__)
 
-_SQLITE_CONN: sqlite3.Connection | None = None
-
-
-def _get_sqlite_conn(db_path: str) -> sqlite3.Connection:
-    """Crea/reutiliza conexión SQLite (instancia real, no context-manager)."""
-    global _SQLITE_CONN
-    if _SQLITE_CONN is not None:
-        return _SQLITE_CONN
-
-    # Asegura carpeta (cuando no es :memory:)
-    if db_path != ":memory:":
-        Path(db_path).parent.mkdir(parents=True, exist_ok=True)
-
-    _SQLITE_CONN = sqlite3.connect(db_path, check_same_thread=False)
-    return _SQLITE_CONN
-
-
-class ScreeningState(BaseModel):
+class ScreeningState(TypedDict, total=False):
     """
     Estado centralizado del agente (Single Source of Truth).
-    Utiliza Pydantic para validación y Annotated para definir cómo 
-    se combinan los resultados de los nodos (operator.add permite acumulación).
+    Renovado a TypedDict para restaurar compatibilidad nativa con dict 
+    tras migrar de SqliteSaver a MemorySaver.
     """
-    job: Dict[str, Any] = Field(default_factory=dict)
-    candidates: List[Dict[str, Any]] = Field(default_factory=list)
-    cursor: int = 0
-    scored: Annotated[List[Dict[str, Any]], operator.add] = Field(default_factory=list)
-    shortlist: List[Dict[str, Any]] = Field(default_factory=list)
-    scheduled: List[Dict[str, Any]] = Field(default_factory=list)
-    events: Annotated[List[Dict[str, Any]], operator.add] = Field(default_factory=list)
-    done: bool = False
+    job: Dict[str, Any]
+    candidates: List[Dict[str, Any]]
+    cursor: int
+    scored: Annotated[List[Dict[str, Any]], operator.add]
+    shortlist: List[Dict[str, Any]]
+    scheduled: List[Dict[str, Any]]
+    events: Annotated[List[Dict[str, Any]], operator.add]
+    done: bool
 
 
 def _now_ms() -> int:
@@ -335,16 +318,4 @@ def compile_graph():
     g.add_edge("schedule_interviews", "notify_candidates")
     g.add_edge("notify_candidates", END)
 
-    db_path = checkpoint_db_path()
-
-    # Si alguien desactiva checkpoints con CHECKPOINT_DB=none/false, compila sin checkpointer
-    if not db_path or db_path.lower() in {"none", "false", "0"}:
-        return g.compile(checkpointer=None)
-
-    conn = _get_sqlite_conn(db_path)
-    checkpointer = SqliteSaver(conn)
-
-    # RECURSION_LIMIT: Guardrail básico de LangGraph
-    # En este caso, 1 (load) + 1 (shortlist) + 1 (schedule) + N (candidates)
-    # Ponemos un margen seguro.
-    return g.compile(checkpointer=checkpointer)
+    return g.compile(checkpointer=MemorySaver())
