@@ -24,7 +24,7 @@ Para elevar el proyecto a un estándar profesional "Real-World", se han realizad
 
 ### 🛠️ Taxonomía de Implementación
 Para asegurar la transparencia técnica, cada caso se clasifica en uno de estos tres niveles:
-- **🛡️ Industrial (v3.2)**: Casos de referencia con FastAPI, Streaming, Pydantic y Observabilidad (Caso 09).
+- **🛡️ Industrial (v3.2)**: Casos de referencia con FastAPI, Streaming, Pydantic y Observabilidad (Casos 09 y 10).
 - **🏗️ Scaffold (v1.0)**: Estándar base con orquestación y Docker Ready (Caso 01).
 - **📜 Legacy**: Plantillas de arquitectura para futura expansión.
 
@@ -83,7 +83,7 @@ Para habilitar el razonamiento avanzado en el Caso 09 (sustituyendo el modo demo
 
 1. **Localiza el Destino**: Entra en `cases/09-rrhh-screening-agenda/backend/`.
 2. **Crea el Archivo**: Crea un archivo llamado `.env` y pega tu `OPENAI_API_KEY`.
-3. **Inicia el Backend**: Ejecuta `uvicorn src.api:app --port 8009`.
+3. **Inicia el Backend**: Ejecuta `cd cases/09-rrhh-screening-agenda/backend && uvicorn src.api:app --port 8009`.
 
 **Mapa de Activación:**
 ```text

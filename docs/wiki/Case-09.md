@@ -83,7 +83,7 @@ cd backend
 python -m venv .venv
 source .venv/bin/activate  # Windows: .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
-uvicorn src.api:app --reload --port 8009
+cd cases/09-rrhh-screening-agenda/backend && uvicorn src.api:app --reload --port 8009
 ```
 Abre: `http://localhost:8009`
 
@@ -109,7 +109,7 @@ Para habilitar el cerebro de agentes LangGraph (OpenAI) en lugar de la demo:
    ```
 3. **Inicia el servidor real**:
    ```bash
-   uvicorn src.api:app --port 8009
+   cd cases/09-rrhh-screening-agenda/backend && uvicorn src.api:app --port 8009
    ```
 
 **Ubicación física en el disco:**

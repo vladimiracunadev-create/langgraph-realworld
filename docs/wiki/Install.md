@@ -69,7 +69,7 @@ pip install -r requirements.txt
 
 ### 2. Ejecutar el servidor
 ```bash
-uvicorn src.api:app --reload --port 8009
+cd cases/09-rrhh-screening-agenda/backend && uvicorn src.api:app --reload --port 8009
 ```
 
 ---

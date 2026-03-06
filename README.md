@@ -104,7 +104,7 @@ Para habilitar el razonamiento avanzado en el Caso 09 (sustituyendo el modo demo
 
 1. **Localiza el Destino**: Entra en `cases/09-rrhh-screening-agenda/backend/`.
 2. **Crea el Archivo**: Crea un archivo llamado `.env` y pega tu `OPENAI_API_KEY`.
-3. **Inicia el Backend**: Ejecuta `uvicorn src.api:app --port 8009`.
+3. **Inicia el Backend**: Ejecuta `cd cases/09-rrhh-screening-agenda/backend && uvicorn src.api:app --port 8009`.
 
 **Mapa de Activación:**
 ```text
