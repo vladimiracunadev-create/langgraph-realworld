@@ -45,7 +45,8 @@ Para asegurar la transparencia técnica, cada caso se clasifica en uno de estos 
 | Perfil | Ruta Recomendada | Objetivo |
 | :--- | :--- | :--- |
 | **💼 Reclutador / Manager** | [**Guía para Reclutadores**](RECRUITER.md) | Entender el valor de negocio y madurez técnica. |
-| **💻 Desarrollador / DevOps** | [**Caso 09 (RRHH Screening)**](cases/09-rrhh-screening-agenda/README.md) | Explorar código real: FastAPI, streaming, Pydantic y grafos. |\n| **💻 Desarrollador / DevOps** | [**Caso 10 (Onboarding)**](cases/10-onboarding-empleados/README.md) | Explorar integraciones reales: Multi-Node streaming, APIs externas y RBAC. |
+| **💻 Desarrollador / DevOps** | [**Caso 09 (RRHH Screening)**](cases/09-rrhh-screening-agenda/README.md) | Explorar código real: FastAPI, streaming, Pydantic y grafos. |
+| **💻 Desarrollador / DevOps** | [**Caso 10 (Onboarding)**](cases/10-onboarding-empleados/README.md) | Explorar integraciones reales: Multi-Node streaming, APIs externas y RBAC. |
 | **🔒 Experto en Seguridad** | [**SECURITY.md**](SECURITY.md) | Analizar protocolos de SAST y Hardening. |
 | **🐣 Principiante** | [**Guía para Principiantes**](docs/BEGINNERS_GUIDE.md) | Primeros pasos con el repo y el Hub. |
 
