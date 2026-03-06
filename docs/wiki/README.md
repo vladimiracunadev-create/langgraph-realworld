@@ -44,7 +44,7 @@ Para asegurar la transparencia técnica, cada caso se clasifica en uno de estos 
 | Perfil | Ruta Recomendada | Objetivo |
 | :--- | :--- | :--- |
 | **💼 Reclutador / Manager** | [**Guía para Reclutadores**](RECRUITER.md) | Entender el valor de negocio y madurez técnica. |
-| **💻 Desarrollador / DevOps** | [**Caso 09 (Reference Case - Industrial)**](cases/09-rrhh-screening-agenda/README.md) | Explorar código real: FastAPI, streaming, Pydantic y grafos. |
+| **💻 Desarrollador / DevOps** | [**Casos 09 y 10 (Reference Cases)**](cases/09-rrhh-screening-agenda/README.md) | Explorar código real: FastAPI, streaming, Pydantic y grafos. |
 | **🔒 Experto en Seguridad** | [**SECURITY.md**](SECURITY.md) | Analizar protocolos de SAST y Hardening. |
 | **🐣 Principiante** | [**Guía para Principiantes**](docs/BEGINNERS_GUIDE.md) | Primeros pasos con el repo y el Hub. |
 
@@ -75,11 +75,11 @@ python cases/09-*/backend/mock_api.py   # Backend 8009 (Modo Demo)
 # 2. Operación vía Hub (Nivel 2: Orquestación)
 python hub.py list      # Listar casos y su estado
 python hub.py doctor    # Verificar salud del entorno
-make case-up CASE=09    # Lanzar Caso 09 (Usa Docker si está disponible)
+make case-up CASE=09    # Lanzar Caso 09 o 10 (Usa Docker si está disponible)
 ```
 
 ### 🧠 Activación de la IA Real (OpenAI)
-Para habilitar el razonamiento avanzado en el Caso 09 (sustituyendo el modo demo):
+Para habilitar el razonamiento avanzado en los Casos 09 y 10 (sustituyendo el modo demo):
 
 1. **Localiza el Destino**: Entra en `cases/09-rrhh-screening-agenda/backend/`.
 2. **Crea el Archivo**: Crea un archivo llamado `.env` y pega tu `OPENAI_API_KEY`.
@@ -95,7 +95,7 @@ Para habilitar el razonamiento avanzado en el Caso 09 (sustituyendo el modo demo
 ```
 
 ### 🔍 Modo Demo vs. IA Real (Híbrido)
-El Caso 09 detecta automáticamente la presencia de una API Key y ajusta su "cerebro":
+Tanto el Caso 09 como el 10 detectan automáticamente la presencia de una API Key y ajusta su "cerebro":
 
 | Característica | 🧪 Modo Demo (Mock) | 🧠 Modo IA Real (OpenAI) |
 | :--- | :--- | :--- |
@@ -132,4 +132,4 @@ Este repositorio aplica un modelo de **Defensa en Profundidad**:
 
 ---
 > [!IMPORTANT]
-> **He diseñado este repositorio para que sea fácil de auditar.** El **Caso 09** es el punto de referencia para evaluar mi capacidad de integrar IA en flujos de trabajo empresariales complejos.
+> **He diseñado este repositorio para que sea fácil de auditar.** Los **Casos 09 y 10** son los puntos de referencia para evaluar mi capacidad de integrar IA en flujos de trabajo empresariales complejos.

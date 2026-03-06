@@ -2,12 +2,14 @@ import os
 import glob
 
 replacements = {
-    "uvicorn cases.09-rrhh-screening-agenda.backend.src.api:app --port 8009": "cd cases/09-rrhh-screening-agenda/backend && uvicorn src.api:app --port 8009",
-    "uvicorn cases.10-onboarding-empleados.backend.src.api:app --port 8010": "cd cases/10-onboarding-empleados/backend && uvicorn src.api:app --port 8010",
-    "uvicorn src.api:app --reload --port 8009": "cd cases/09-rrhh-screening-agenda/backend && uvicorn src.api:app --reload --port 8009",
-    "uvicorn src.api:app --port 8009": "cd cases/09-rrhh-screening-agenda/backend && uvicorn src.api:app --port 8009",
-    "(Caso 09).": "(Casos 09 y 10).",
-    "| **09** | [RRHH Screening Agenda](cases/09-rrhh-screening-agenda/README.md) | `COMPLETADO` | FastAPI + Sqlite + Pydantic + Resilience |\\n\\n": "| **09** | [RRHH Screening Agenda](cases/09-rrhh-screening-agenda/README.md) | `COMPLETADO` | FastAPI + Sqlite + Pydantic + Resilience |\\n| **10** | [Onboarding Empleados](cases/10-onboarding-empleados/README.md) | `COMPLETADO` | FastAPI + Streaming NDJSON |\\n\\n"
+    "| **💻 Desarrollador / DevOps** | [**Caso 09 (Reference Case - Industrial)**](cases/09-rrhh-screening-agenda/README.md)": "| **💻 Desarrollador / DevOps** | [**Casos 09 y 10 (Reference Cases)**](cases/09-rrhh-screening-agenda/README.md)",
+    "make case-up CASE=09    # Lanzar Caso 09 (Usa Docker": "make case-up CASE=09    # Lanzar Caso 09 o 10 (Usa Docker",
+    "Para habilitar el razonamiento avanzado en el Caso 09": "Para habilitar el razonamiento avanzado en los Casos 09 y 10",
+    "El Caso 09 detecta automáticamente": "Tanto el Caso 09 como el 10 detectan automáticamente",
+    "El **Caso 09** es el punto de referencia": "Los **Casos 09 y 10** son los puntos de referencia",
+    "El Caso 09 (RR.HH. Screening) y el Caso 10 (Onboarding)": "Los Casos 09 y 10",
+    "[**Caso 09 (Reference Case - Industrial)**](cases/09-rrhh-screening-agenda/README.md)": "[**Casos 09 y 10 (Reference Cases)**](cases/09-rrhh-screening-agenda/README.md)",
+    "El **Caso 09** es el punto de referencia": "Los **Casos 09 y 10** son los puntos de referencia"
 }
 
 def process_file(filepath):
