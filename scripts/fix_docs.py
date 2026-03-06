@@ -2,7 +2,7 @@ import os
 import glob
 
 replacements = {
-    "| **💻 Desarrollador / DevOps** | [**Casos 09 y 10 (Reference Cases)**](cases/09-rrhh-screening-agenda/README.md) | Explorar código real: FastAPI, streaming, Pydantic y grafos. |": "| **💻 Desarrollador / DevOps (Caso 09)** | [**RRHH Screening (Reference)**](cases/09-rrhh-screening-agenda/README.md) | Explorar código real: FastAPI, streaming, Pydantic y grafos. |\\n| **💻 Desarrollador / DevOps (Caso 10)** | [**Onboarding (Reference)**](cases/10-onboarding-empleados/README.md) | Explorar integraciones reales: Multi-Node streaming, APIs externas y RBAC. |"
+    "| **💻 Desarrollador / DevOps (Caso 09)** | [**RRHH Screening (Reference)**](cases/09-rrhh-screening-agenda/README.md) | Explorar código real: FastAPI, streaming, Pydantic y grafos. |\\n| **💻 Desarrollador / DevOps (Caso 10)** | [**Onboarding (Reference)**](cases/10-onboarding-empleados/README.md) | Explorar integraciones reales: Multi-Node streaming, APIs externas y RBAC. |": "| **💻 Desarrollador / DevOps** | [**Caso 09 (RRHH Screening)**](cases/09-rrhh-screening-agenda/README.md) | Explorar código real: FastAPI, streaming, Pydantic y grafos. |\\n| **💻 Desarrollador / DevOps** | [**Caso 10 (Onboarding)**](cases/10-onboarding-empleados/README.md) | Explorar integraciones reales: Multi-Node streaming, APIs externas y RBAC. |"
 }
 
 def process_file(filepath):
