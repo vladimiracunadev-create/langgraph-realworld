@@ -2,14 +2,7 @@ import os
 import glob
 
 replacements = {
-    "| **💻 Desarrollador / DevOps** | [**Caso 09 (Reference Case - Industrial)**](cases/09-rrhh-screening-agenda/README.md)": "| **💻 Desarrollador / DevOps** | [**Casos 09 y 10 (Reference Cases)**](cases/09-rrhh-screening-agenda/README.md)",
-    "make case-up CASE=09    # Lanzar Caso 09 (Usa Docker": "make case-up CASE=09    # Lanzar Caso 09 o 10 (Usa Docker",
-    "Para habilitar el razonamiento avanzado en el Caso 09": "Para habilitar el razonamiento avanzado en los Casos 09 y 10",
-    "El Caso 09 detecta automáticamente": "Tanto el Caso 09 como el 10 detectan automáticamente",
-    "El **Caso 09** es el punto de referencia": "Los **Casos 09 y 10** son los puntos de referencia",
-    "El Caso 09 (RR.HH. Screening) y el Caso 10 (Onboarding)": "Los Casos 09 y 10",
-    "[**Caso 09 (Reference Case - Industrial)**](cases/09-rrhh-screening-agenda/README.md)": "[**Casos 09 y 10 (Reference Cases)**](cases/09-rrhh-screening-agenda/README.md)",
-    "El **Caso 09** es el punto de referencia": "Los **Casos 09 y 10** son los puntos de referencia"
+    "| **💻 Desarrollador / DevOps** | [**Casos 09 y 10 (Reference Cases)**](cases/09-rrhh-screening-agenda/README.md) | Explorar código real: FastAPI, streaming, Pydantic y grafos. |": "| **💻 Desarrollador / DevOps (Caso 09)** | [**RRHH Screening (Reference)**](cases/09-rrhh-screening-agenda/README.md) | Explorar código real: FastAPI, streaming, Pydantic y grafos. |\\n| **💻 Desarrollador / DevOps (Caso 10)** | [**Onboarding (Reference)**](cases/10-onboarding-empleados/README.md) | Explorar integraciones reales: Multi-Node streaming, APIs externas y RBAC. |"
 }
 
 def process_file(filepath):
