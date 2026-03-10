@@ -16,7 +16,7 @@ Este documento define las especificaciones técnicas necesarias para ejecutar lo
 
 ### Recomendado (Desarrollo Activo / Producción)
 - **CPU**: 4 Cores+ (optimizado para múltiples hilos de LangGraph).
-- **RAM**: 8 GB - 16 GB (para levantar múltiples micro-servicios simultáneamente).
+- **RAM**: 8 GB - 16 GB (para levantar la **Tríada Industrial** simultáneamente).
 - **Almacenamiento**: 5 GB+ (para logs históricos, bases de datos SQLite y volúmenes Docker).
 
 ### Escala / Extreme (Cargas de Producción)
@@ -29,7 +29,7 @@ Este documento define las especificaciones técnicas necesarias para ejecutar lo
 ## 📡 Requisitos de Red y Conectividad
 
 - **Ancho de Banda**: Mínimo 2 Mbps de subida/bajada para streaming fluido de eventos.
-- **Puertos**: Debe tener libre el rango `8000-8025` para el hosting de los 25 casos.
+- **Puertos**: Debe tener libre el rango `8009`, `8010` y `8013` para la Tríada Industrial, y `8080` para el portal.
 - **Protocolos**: Soporte para HTTP/1.1 (Chunked Transfer Encoding) para streaming de NDJSON.
 
 ---

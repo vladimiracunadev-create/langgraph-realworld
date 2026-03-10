@@ -25,13 +25,13 @@ Este proyecto no es solo una colección de scripts; es un **Agentic Resilience H
 
 ---
 
-## 🏆 Caso de Éxito: Caso 09 (Screening + Agenda)
+## 🏆 Casos de Éxito Industriales (v3.4.0)
 
-Este es nuestro **modelo de referencia** que demuestra el stack completo:
-- **Frontend**: Dashboard Glassmorphism con streaming en tiempo real.
-- **Backend API**: FastAPI asíncrono.
-- **Motor AI**: LangGraph con 5+ nodos de razonamiento y herramientas.
-- **DevOps**: Docker + K8s + Smoke Testing automatizado.
+Este repositorio destaca tres implementaciones de nivel empresarial que demuestran versatilidad y robustez:
+
+1.  **Caso 09 (RRHH Screening + Agenda)**: El estándar de oro en resiliencia. Manejo de APIs inestables, persistencia de estado y streaming de alta fidelidad.
+2.  **Caso 10 (Onboarding Proactivo)**: Orquestación compleja con ramificaciones basadas en roles y sistema de notificaciones multicanal resiliente.
+3.  **Caso 13 (BI Data Analyst)**: Maestría en integración de datos relacionales, generación de SQL dinámico y visualización reactiva con dashboards premium.
 
 ---
 
@@ -61,7 +61,8 @@ Demuestra la capacidad de integrar agentes con sistemas de bases de datos relaci
 Si tiene poco tiempo, le recomiendo seguir este recorrido:
 1.  **Código Central**: Vea la definición del grafo en [`cases/09-rrhh-screening-agenda/backend/src/graph.py`](cases/09-rrhh-screening-agenda/backend/src/graph.py).
 2.  **Resiliencia**: Observe cómo manejamos las APIs externas en [`cases/09-rrhh-screening-agenda/backend/src/integrations.py`](cases/09-rrhh-screening-agenda/backend/src/integrations.py).
-3.  **Infraestructura**: Revise los manifiestos de K8s en [`k8s/cases/09-rrhh-screening-agenda/`](k8s/cases/09-rrhh-screening-agenda/).
+3.  **Análisis de Datos**: Vea la generación de SQL y visualización en [`cases/13-bi-analista-datos/backend/src/graph.py`](cases/13-bi-analista-datos/backend/src/graph.py).
+4.  **Infraestructura**: Revise los manifiestos de K8s en [`k8s/cases/09-rrhh-screening-agenda/`](k8s/cases/09-rrhh-screening-agenda/).
 
 ---
 

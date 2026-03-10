@@ -85,7 +85,7 @@ Para garantizar la robustez, cada agente debe cumplir con:
 
 ## 📅 Contrato de la Fase 3 (Acción y Agendamiento)
 
-Para que un caso sea considerado **Industrial (v3.2)**, la fase de acción debe cumplir:
+Para que un caso sea considerado **Industrial (v3.4)**, la fase de acción debe cumplir:
 
 - **Detección de Credenciales**: El sistema debe verificar la presencia de `GOOGLE_CALENDAR_ID` o secretos equivalentes.
 - **Hibridación Visual**: Si no hay credenciales, la UI debe mostrar los slots programados de forma simulada pero profesional.
@@ -103,7 +103,7 @@ Para garantizar una comunicación industrial, la fase de notificación debe cump
 
 ---
 
-## 🛡️ Patrones de Resiliencia Avanzada (v3.2.1)
+## 🛡️ Patrones de Resiliencia Avanzada (v3.4.0)
 
 El sistema implementa una arquitectura de "Misión Crítica" basada en:
 
@@ -133,6 +133,21 @@ Cada fase del grafo y cada elemento dentro de un bucle de procesamiento (ej: not
 - **CamelCase**: Para nombres de clases y componentes React/Frontend.
 - **snake_case**: Para variables, funciones y métodos en Python.
 - **Kebab-case**: Para nombres de carpetas y archivos estáticos.
+
+---
+
+## 📊 Matriz de Capacidades Industriales (v3.4)
+
+| Característica | Caso 09 (RRHH) | Caso 10 (Onboarding) | Caso 13 (BI Analyst) |
+| :--- | :---: | :---: | :---: |
+| **Persistencia (SQLite)** | ✅ Full | ✅ Full | ✅ Full |
+| **Validación Pydantic** | ✅ Estricta | ✅ Estricta | ✅ Estricta |
+| **Streaming NDJSON** | ✅ Real-time | ✅ Real-time | ✅ Real-time |
+| **Hibridación (Mock/Real)** | ✅ Dinámica | ✅ Dinámica | ✅ Dinámica |
+| **Visualización (Charts)** | ❌ N/A | ❌ N/A | ✅ Chart.js |
+| **Integración SQL** | ❌ N/A | ❌ N/A | ✅ Agente SQL |
+| **Multicanal (WA/Email)** | ✅ Simulado | ✅ Real/Sim | ❌ N/A |
+
 ---
 
 ## 🧭 Navegación

@@ -16,7 +16,7 @@ Para elevar el proyecto a un estándar profesional "Real-World", se han realizad
 2.  **Diseño Premium**: Implementación de tipografía **Inter** y efectos **Glassmorphism** avanzados.
 3.  **Resiliencia e Integridad**: Persistencia con `SqliteSaver` y validación de estado mediante **Pydantic**.
 4.  **Telemetría Ready**: Rastrabilidad de flujos con `trace_id` inyectado en logs JSON.
-5.  **Dual-Mode Execution**: Soporte para **Modo IA Real** (LLM) y **Modo Instant Demo** (Mock).
+5.  **Dual-Mode BI**: Caso 13 con generación SQL, visualización dinámica (Chart.js) y dashboard reactivo.
 6.  **Interconectividad**: Sincronización global de links y reconstrucción de la Wiki técnica.
 
 > [!TIP]
@@ -24,16 +24,16 @@ Para elevar el proyecto a un estándar profesional "Real-World", se han realizad
 
 ### 🛠️ Taxonomía de Implementación
 Para asegurar la transparencia técnica, cada caso se clasifica en uno de estos tres niveles:
-- **🛡️ Industrial (v3.2)**: Casos de referencia con FastAPI, Streaming, Pydantic y Observabilidad (Casos 09 y 10).
-- **🏗️ Scaffold (v1.0)**: Estándar base con orquestación y Docker Ready (Caso 01).
-- **📜 Legacy**: Plantillas de arquitectura para futura expansión.
+- **🛡️ Industrial (v3.4)**: Casos de referencia con FastAPI, Streaming, Pydantic, Observabilidad y Visualización dinámica (Casos 09, 10 y 13).
+- **🏗️ Legacy / Scaffold**: Plantillas de arquitectura y demos base para futura expansión (Ej: Caso 01).
 
 ### 📊 Estado de los Casos
 
 | Case ID | Nombre | Estado | Stack |
 | :--- | :--- | :--- | :--- |
-| **01** | [Simple Router](cases/01-simple-router/README.md) | `SCAFFOLD` | LangGraph Basics |
 | **09** | [RRHH Screening Agenda](cases/09-rrhh-screening-agenda/README.md) | `COMPLETADO` | FastAPI + Sqlite + Pydantic + Resilience |
+| **10** | [Onboarding Empleados](cases/10-onboarding-empleados/README.md) | `COMPLETADO` | Multi-node RBAC + LLM Checklist + Notifications |
+| **13** | [BI Data Analyst](cases/13-bi-analista-datos/README.md) | `COMPLETADO` | SQL Generation + Dynamic Charting + Demo Mode |
 
 ---
 
@@ -133,4 +133,4 @@ Este repositorio aplica un modelo de **Defensa en Profundidad**:
 
 ---
 > [!IMPORTANT]
-> **He diseñado este repositorio para que sea fácil de auditar.** Los **Casos 09 y 10** son los puntos de referencia para evaluar mi capacidad de integrar IA en flujos de trabajo empresariales complejos.
+> **He diseñado este repositorio para que sea fácil de auditar.** Los **Casos 09, 10 y 13** son los puntos de referencia para evaluar mi capacidad de integrar IA en flujos de trabajo empresariales complejos.

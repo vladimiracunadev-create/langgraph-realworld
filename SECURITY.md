@@ -1,7 +1,7 @@
 # 🛡️ Política de Seguridad
 
 > [!NOTE]
-> **Versión**: 3.2.0 | **Estado**: Industrial | **Audiencia**: Auditores, CISO, Desarrolladores
+> **Versión**: 3.4.0 | **Estado**: Industrial | **Audiencia**: Auditores, CISO, Desarrolladores
 
 La seguridad es el pilar fundamental de **LangGraph Realworld**. Este documento define nuestra postura oficial y protocolos de protección.
 

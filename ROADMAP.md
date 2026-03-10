@@ -1,7 +1,7 @@
 # 🛣️ Hoja de Ruta (Roadmap)
 
 > [!NOTE]
-> **Versión**: 3.2.0 | **Estado**: Industrial | **Audiencia**: Stakeholders, Colaboradores
+> **Versión**: 3.4.0 | **Estado**: Industrial | **Audiencia**: Stakeholders, Colaboradores
 
 Esta hoja de ruta presenta objetivos y prioridades generales para el desarrollo de **LangGraph Realworld**.
 
@@ -12,9 +12,9 @@ Crear un conjunto de demos y casos de uso reproducibles que sirvan como referenc
 - Documentación: mejorar guías de inicio rápido y ejemplos en `cases/*`.
 - Tests básicos y CI para asegurar que los demos arranquen en Docker.
 - Plantillas y linters para uniformidad (autorouter, ruff, etc.).
-- **Milestone 09**: Implementado estándar de resiliencia y observabilidad (Casos 09 y 10).
-- **Milestone 10**: Automatización de Onboarding Empresarial con RBAC (Caso 10).
-- **Milestone 13**: Analista de Datos BI con Generación SQL y Visualización Dinámica (Caso 13).
+- **Milestone 09**: Implementado estándar de resiliencia y observabilidad (Caso 09). ✅
+- **Milestone 10**: Automatización de Onboarding Empresarial con RBAC (Caso 10). ✅
+- **Milestone 13**: Analista de Datos BI con Generación SQL y Visualización Dinámica (Caso 13). ✅
 
 ## Prioridades a medio plazo (3–9 meses) 🔧
 - **Observabilidad Avanzada**: Integración nativa con **LangSmith** y **OpenTelemetry** para rastreo de trazas de agentes en producción.

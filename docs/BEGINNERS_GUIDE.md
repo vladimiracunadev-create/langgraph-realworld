@@ -16,7 +16,7 @@ Esta es la zona de trabajo principal. Aquí es donde están los 25 casos de uso 
   * `backend/`: El código Python (FastAPI + LangGraph) que hace la magia.
   * `demo/`: Una interfaz web sencilla para interactuar con el agente.
   * `README.md`: Las instrucciones específicas de ese caso.
-* **Para el novato**: Cada carpeta es un "miniproyecto" independiente que puedes ejecutar y modificar.
+* **Para el novato**: Cada carpeta es un "miniproyecto" independiente. Te recomendamos empezar por la **Tríada Industrial** (Casos 09, 10 y 13) para ver el máximo potencial del sistema.
 
 ---
 
@@ -62,9 +62,8 @@ Esta carpeta automatiza el trabajo sucio.
 
 ## 💡 Consejos para Empezar
 
-1.  **Explora el Caso 09**: Es el más completo para entender flujos de RRHH.
-2.  **Explora el Caso 13**: Ideal para ver cómo un agente interactúa con bases de datos y genera gráficos.
-3.  **Usa el Hub CLI**: Es mucho más fácil que navegar por carpetas manualmente.
+1.  **Explora la Tríada Industrial**: Los Casos 09, 10 y 13 son los más completos y te enseñarán resiliencia, flujos complejos y análisis de datos.
+2.  **Usa el Hub CLI**: Es mucho más fácil que navegar por carpetas manualmente.
 3.  **No tengas miedo a Docker**: Es la forma más fácil de que todo funcione a la primera.
 
 **¡Diviértete explorando el mundo de los agentes resilientes!** 🚀🤖

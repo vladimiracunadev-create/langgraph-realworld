@@ -125,13 +125,33 @@ sequenceDiagram
 
 ---
 
-## 🛡️ Estándares Industriales (v3.2)
+## 🛡️ Estándares Industriales (v3.4)
 
-A partir de la versión 3.2, el repositorio introduce el estándar **Industrial-Grade** para casos críticos:
+A partir de la versión 3.4, el repositorio consolida el estándar **Industrial-Grade** para los Casos 09, 10 y 13:
 
 1.  **Validación con Pydantic**: El estado del grafo ya no usa `TypedDict` genéricos, sino modelos de **Pydantic** que garantizan tipos y restricciones en runtime.
 2.  **Identificadores de Rastreo (Trace IDs)**: Cada ejecución genera un `trace_id` único inyectado en los logs estructurados, permitiendo el rastreo de errores en flujos asíncronos complejos.
 3.  **Observabilidad Distribuida**: Los logs están preparados para ser ingeridos por sistemas como **Datadog**, **ELK** o **OpenTelemetry**.
+
+---
+
+---
+
+## 💎 La Tríada Industrial (Casos de Referencia)
+
+Para una auditoría técnica profunda, se recomienda analizar los siguientes casos que componen el núcleo de "Misión Crítica" del repositorio:
+
+### 1. Caso 09: RRHH Screening & Agenda (Resiliencia Extrema)
+- **Desafío**: Manejo de hilos de larga duración y fallos en APIs de terceros.
+- **Solución**: Orquestación de 5+ nodos con **SqliteSaver** para persistencia y **Tenacity** para reintentos exponenciales. Implementa un motor híbrido que detecta la ausencia de API Keys y conmuta a un modo heurístico determinista sin romper el flujo.
+
+### 2. Caso 10: Onboarding de Empleados (Complejidad de Flujo)
+- **Desafío**: Procesos ramificados basados en roles (RBAC) y validación de checklists dinámicos.
+- **Solución**: Grafo cíclico con estados persistentes y sistema de notificaciones multicanal (Email/WhatsApp) con lógica de degradación graciosa (si falla un canal, el otro continúa).
+
+### 3. Caso 13: BI Data Analyst (Integración de Datos y UX)
+- **Desafío**: Conversión de lenguaje natural a SQL complejo y visualización reactiva.
+- **Solución**: Agente SQL con validación de esquemas en runtime, generación de gráficos dinámicos vía **Chart.js** y un dashboard premium con streaming NDJSON que minimiza la latencia percibida.
 
 ---
 

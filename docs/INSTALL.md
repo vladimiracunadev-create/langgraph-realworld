@@ -47,11 +47,11 @@ cp .env.example .env
 # Edita el archivo .env y añade tu OPENAI_API_KEY
 ```
 
-### 3. Levantar un caso específico (Ej: Caso 09)
+### 3. Levantar un caso específico (Ej: Caso 09, 10 o 13)
 ```bash
-make case-up CASE=09
+make case-up CASE=13
 ```
-*Esto descargará las imágenes, compilará el backend y levantará la UI en `http://localhost:8009`.*
+*Esto descargará las imágenes, compilará el backend y levantará la UI del Analista BI en `http://localhost:8013`.*
 
 ---
 
@@ -88,7 +88,7 @@ python serve_site.py
 ```
 
 #### **B. Configuración de IA (LLM vs Mock)**
-El Caso 09 permite dos modalidades de backend:
+La **Tríada Industrial** (09, 10, 13) permite dos modalidades de backend:
 
 | Modalidad | Script | Requisitos | Uso |
 | :--- | :--- | :--- | :--- |
@@ -143,7 +143,7 @@ docker compose -f cases/09-rrhh-screening-agenda/backend/compose.yml up
 
 ## 🔑 Integración de Servicios Externos (Real-World)
 
-Para habilitar las capacidades completas (Fase 2 y 3) en el Caso 09:
+Para habilitar las capacidades completas en la **Tríada Industrial**:
 
 ### 1. Inteligencia Artificial (Fase 2)
 - Requiere `OPENAI_API_KEY`.

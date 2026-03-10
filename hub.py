@@ -32,6 +32,8 @@ def cmd_list(args):
             # Status logic for coherence with V3.4 documentation
             if case_id in ["09", "10", "13"]:
                 status = "Industrial (v3.4)"
+            elif case_id == "01":
+                status = "Legacy / Scaffold"
             elif has_config:
                 status = "Scaffold (v1.0)"
             else:
