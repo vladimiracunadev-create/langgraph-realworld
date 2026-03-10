@@ -143,12 +143,24 @@ Este repositorio aplica un modelo de **Defensa en Profundidad**:
 
 ---
 
+## 🤖 Infraestructura de Agentes (Misión Crítica)
+
+Este repositorio es **Agent-Aware**. Incluye una capa de "Inteligencia Operativa" que permite a los asistentes de IA realizar tareas complejas siguiendo estándares industriales.
+
+| Agente | Skill Principal | Propósito |
+| :--- | :--- | :--- |
+| **Antigravity** | [**Crear Caso**](.agents/skills/crear_caso/SKILL.md) | Generación de nodos, API y Docker para nuevos casos. |
+| **Antigravity** | [**Actualizar Doc**](.agents/skills/actualizar_doc/SKILL.md) | Sincronización quirúrgica de versiones (v3.4.0). |
+
+👉 [**Explorar Guía Completa de Agentes y Skills**](docs/AGENTS_AND_SKILLS.md)
+
+---
+
 ## 📚 Documentación Técnica Completa
 
 - 🏗️ [**Arquitectura Detallada**](docs/ARCHITECTURE.md): Diagramas y motor de persistencia.
 - 🛠️ [**Especificaciones Técnicas**](docs/TECHNICAL_SPECS.md): Tech stack y contratos de API.
 - 📋 [**Requisitos del Sistema**](docs/REQUIREMENTS.md): Hardware y compatibilidad.
-- 🤖 [**Infraestructura de Agentes (Skills)**](docs/AGENTS_AND_SKILLS.md): Cómo la IA opera y automatiza este repo.
 - 🛣️ [**Roadmap**](ROADMAP.md): Hitos y visión a futuro.
 
 ---
