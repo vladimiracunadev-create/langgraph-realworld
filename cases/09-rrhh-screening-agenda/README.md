@@ -1,4 +1,7 @@
-# 🤖 Caso 09: RR.HH. Screening + Agenda (Standardized)
+# 🤖 Caso 09: RR.HH. Screening + Agenda (Industrial v3.4.0)
+
+> [!IMPORTANT]
+> **Estado**: Industrial | **Versión**: 3.4.0 | **Referencia**: Estándar de Oro en Resiliencia
 
 **Detección de talento y agendamiento automatizado** con una arquitectura de agentes altamente resiliente. Este caso sirve como el **estándar de oro** del repositorio para implementaciones de producción.
 

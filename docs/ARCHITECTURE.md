@@ -125,9 +125,9 @@ sequenceDiagram
 
 ---
 
-## 🛡️ Estándares Industriales (v3.4)
+## 🛡️ Estándares Industriales (v3.4.0)
 
-A partir de la versión 3.4, el repositorio consolida el estándar **Industrial-Grade** para los Casos 09, 10 y 13:
+A partir de la versión 3.4.0, el repositorio consolida el estándar **Industrial-Grade** para los Casos 09, 10 y 13:
 
 1.  **Validación con Pydantic**: El estado del grafo ya no usa `TypedDict` genéricos, sino modelos de **Pydantic** que garantizan tipos y restricciones en runtime.
 2.  **Identificadores de Rastreo (Trace IDs)**: Cada ejecución genera un `trace_id` único inyectado en los logs estructurados, permitiendo el rastreo de errores en flujos asíncronos complejos.

@@ -1,4 +1,4 @@
-# 🏗️ Caso 01: Soporte al cliente omnicanal (Scaffold v1.0)
+# 🏗️ Caso 01: Soporte al cliente (Legacy / Scaffold)
 
 **Detección de intención y ruteo omnicanal.** Este caso sirve como base orquestada para la expansión de capacidades de soporte.
 

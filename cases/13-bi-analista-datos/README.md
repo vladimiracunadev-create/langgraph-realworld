@@ -1,4 +1,7 @@
-# 📊 Caso 13: Analista de Datos BI (Industrial)
+# 📊 Caso 13: Analista de Datos BI (Industrial v3.4.0)
+
+> [!IMPORTANT]
+> **Estado**: Industrial | **Versión**: 3.4.0 | **Referencia**: Agentic SQL & Data Viz
 
 **LangGraph Powered SQL Agent** que transforma preguntas en lenguaje natural en consultas SQL precisas, las ejecuta y visualiza los resultados mediante gráficos dinámicos.
 

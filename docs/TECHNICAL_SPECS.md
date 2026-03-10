@@ -85,7 +85,7 @@ Para garantizar la robustez, cada agente debe cumplir con:
 
 ## 📅 Contrato de la Fase 3 (Acción y Agendamiento)
 
-Para que un caso sea considerado **Industrial (v3.4)**, la fase de acción debe cumplir:
+Para que un caso sea considerado **Industrial (v3.4.0)**, la fase de acción debe cumplir:
 
 - **Detección de Credenciales**: El sistema debe verificar la presencia de `GOOGLE_CALENDAR_ID` o secretos equivalentes.
 - **Hibridación Visual**: Si no hay credenciales, la UI debe mostrar los slots programados de forma simulada pero profesional.
@@ -136,7 +136,7 @@ Cada fase del grafo y cada elemento dentro de un bucle de procesamiento (ej: not
 
 ---
 
-## 📊 Matriz de Capacidades Industriales (v3.4)
+## 📊 Matriz de Capacidades Industriales (v3.4.0)
 
 | Característica | Caso 09 (RRHH) | Caso 10 (Onboarding) | Caso 13 (BI Analyst) |
 | :--- | :---: | :---: | :---: |

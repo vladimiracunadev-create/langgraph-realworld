@@ -24,8 +24,8 @@ Para elevar el proyecto a un estándar profesional "Real-World", se han realizad
 
 ### 🛠️ Taxonomía de Implementación
 Para asegurar la transparencia técnica, cada caso se clasifica en uno de estos tres niveles:
-- **🛡️ Industrial (v3.4)**: Casos de referencia con FastAPI, Streaming, Pydantic, Observabilidad y Visualización dinámica (Casos 09, 10 y 13).
-- **🏗️ Legacy / Scaffold**: Plantillas de arquitectura y demos base para futura expansión.
+- **🛡️ Industrial (v3.4.0)**: Casos de referencia con FastAPI, Streaming, Pydantic, Observabilidad y Visualización dinámica (Casos 09, 10 y 13).
+- **🏗️ Legacy / Scaffold**: Plantillas de arquitectura y demos base para futura expansión (Ej: Caso 01).
 
 ### 📊 Estado de los Casos
 

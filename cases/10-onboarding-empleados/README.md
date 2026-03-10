@@ -1,4 +1,7 @@
-# 🚀 Caso 10: Onboarding de Empleados (Industrial)
+# 🚀 Caso 10: Onboarding de Empleados (Industrial v3.4.0)
+
+> [!IMPORTANT]
+> **Estado**: Industrial | **Versión**: 3.4.0 | **Referencia**: Orquestación de Flujos Complejos
 
 **Automatización de la incorporación de talento** con una arquitectura de agentes orientada a eventos y aprovisionamiento dinámico. Este caso demuestra cómo manejar flujos ramificados y herramientas externas con resiliencia empresarial.
 
