@@ -1,7 +1,7 @@
 # 🚀 Guía de Instalación y Despliegue
 
 > [!NOTE]
-> **Versión**: 3.2.0 | **Estado**: Estable | **Audiencia**: Desarrolladores, DevOps
+> **Versión**: 3.4.0 | **Estado**: Estable | **Audiencia**: Desarrolladores, DevOps
 
 Este documento proporciona las instrucciones paso a paso para poner en marcha los agentes de **LangGraph Realworld** en diferentes entornos.
 

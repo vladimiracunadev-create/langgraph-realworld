@@ -24,7 +24,7 @@ Para elevar el proyecto a un estándar profesional "Real-World", se han realizad
 
 ### 🛠️ Taxonomía de Implementación
 Para asegurar la transparencia técnica, cada caso se clasifica en uno de estos tres niveles:
-- **🛡️ Industrial (v3.3)**: Casos de referencia con FastAPI, Streaming, Pydantic y Observabilidad (Casos 09 y 10).
+- **🛡️ Industrial (v3.4)**: Casos de referencia con FastAPI, Streaming, Pydantic, Observabilidad y Visualización dinámica (Casos 09, 10 y 13).
 - **🏗️ Scaffold (v1.0)**: Estándar base con orquestación y Docker Ready (Caso 01).
 - **📜 Legacy**: Plantillas de arquitectura para futura expansión.
 
@@ -35,6 +35,7 @@ Para asegurar la transparencia técnica, cada caso se clasifica en uno de estos 
 | **01** | [Simple Router](cases/01-simple-router/README.md) | `SCAFFOLD` | LangGraph Basics |
 | **09** | [RRHH Screening Agenda](cases/09-rrhh-screening-agenda/README.md) | `COMPLETADO` | FastAPI + Sqlite + Pydantic + Resilience |
 | **10** | [Onboarding Empleados](cases/10-onboarding-empleados/README.md) | `COMPLETADO` | Multi-node RBAC + LLM Checklist + Notifications |
+| **13** | [BI Data Analyst](cases/13-bi-analista-datos/README.md) | `COMPLETADO` | SQL Generation + Dynamic Charting + Demo Mode |
 
 ---
 
@@ -84,6 +85,7 @@ Esto levantará los tres servicios en paralelo:
 - **Portal Principal**: [http://localhost:8080](http://localhost:8080)
 - **Caso 09 Backend**: [http://localhost:8009](http://localhost:8009)
 - **Caso 10 Backend**: [http://localhost:8010](http://localhost:8010)
+- **Caso 13 Backend**: [http://localhost:8013](http://localhost:8013)
 
 ## 🏗️ Operación del Hub (Orquestación)
 

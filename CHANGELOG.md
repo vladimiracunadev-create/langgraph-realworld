@@ -5,13 +5,13 @@ Todas las novedades y cambios notables de este proyecto se documentarán en este
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/),
 y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
-## [3.3.0] - 2026-03-06
+## [3.4.0] - 2026-03-10
 
 ### Añadido
-- **Caso 10: Onboarding Empleados (Industrial)**: Implementación completa de un flujo de 8 nodos con ramificación condicional por rol.
-- **Provisionamiento Híbrido**: Motor en `integrations.py` que detecta dinámicamente credenciales para Google Workspace, Slack, GitHub y AWS.
-- **Checklist Dinámico con IA**: El agente genera tareas personalizadas para el nuevo empleado usando GPT-4o-mini (con fallback a plantilla estática).
-- **Premium Dashboard**: Interfaz de usuario dedicada con streaming NDJSON y visualización de progreso en tiempo real.
+- **Caso 13: BI Data Analyst Dashboard (Industrial/UX)**: Implementación de un dashboard de analítica con generación SQL y visualización dinámica.
+- **Visualización con Chart.js**: Integración de gráficos de pastel y barras automáticos basados en resultados de consultas SQL.
+- **Modo Demo Extendido**: Motor de reglas mejorado con más de 10 escenarios de negocio predefinidos y sistema de fallback amigable.
+- **Enriquecimiento del Esquema**: Reconstrucción de la base de datos relacional para soportar análisis complejo de ventas/clientes.
 
 ## [3.2.0] - 2026-02-13
 

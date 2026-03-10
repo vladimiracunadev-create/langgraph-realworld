@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BI Data Analyst - Caso 13</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 BI Data Analyst</h1>
+            <p>Pregunta lo que quieras sobre tus datos de ventas</p>
+        </header>
+
+        <section id="suggestions">
+            <div class="suggest-card" onclick="fillInput('¿Cuál es el producto más caro?')">💎 Producto más caro</div>
+            <div class="suggest-card" onclick="fillInput('Ventas por ciudad')">📍 Ventas por ciudad</div>
+            <div class="suggest-card" onclick="fillInput('Mejores clientes')">🏆 Mejores clientes</div>
+            <div class="suggest-card" onclick="fillInput('Recaudación total')">💰 Recaudación total</div>
+        </section>
+
+        <main>
+            <div id="chat-container" class="glass">
+                <div id="messages">
+                    <div class="message system">
+                        ¡Hola! Soy tu analista BI. ¿En qué puedo ayudarte hoy? 
+                        <br><small>Ejemplo: "¿Cuál es el producto más vendido?" o "¿Quiénes son mis clientes en New York?"</small>
+                    </div>
+                </div>
+                <div class="input-area">
+                    <input type="text" id="user-input" placeholder="Escribe tu pregunta aquí..." autocomplete="off">
+                    <button id="send-btn">Consultar</button>
+                </div>
+            </div>
+
+            <div id="debug-panel" class="glass">
+                <div class="panel-header">
+                    <h3>📊 Dashboard Business Intelligence</h3>
+                    <div class="status-badge" id="mode-badge">DEMO</div>
+                </div>
+                
+                <div id="viz-container">
+                    <canvas id="businessChart"></canvas>
+                </div>
+
+                <div id="steps">
+                    <div class="step" id="step-sql"><strong>Generación SQL:</strong> <span>Esperando...</span></div>
+                    <div class="step" id="step-exec"><strong>Resultados:</strong> <span>Esperando...</span></div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <a href="http://localhost:8080" class="back-link">← Volver al Portal</a>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

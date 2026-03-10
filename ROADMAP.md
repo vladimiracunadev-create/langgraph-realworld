@@ -14,6 +14,7 @@ Crear un conjunto de demos y casos de uso reproducibles que sirvan como referenc
 - Plantillas y linters para uniformidad (autorouter, ruff, etc.).
 - **Milestone 09**: Implementado estándar de resiliencia y observabilidad (Casos 09 y 10).
 - **Milestone 10**: Automatización de Onboarding Empresarial con RBAC (Caso 10).
+- **Milestone 13**: Analista de Datos BI con Generación SQL y Visualización Dinámica (Caso 13).
 
 ## Prioridades a medio plazo (3–9 meses) 🔧
 - **Observabilidad Avanzada**: Integración nativa con **LangSmith** y **OpenTelemetry** para rastreo de trazas de agentes en producción.

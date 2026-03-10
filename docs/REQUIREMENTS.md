@@ -1,7 +1,7 @@
 # 📋 Requisitos del Sistema
 
 > [!NOTE]
-> **Versión**: 3.2.0 | **Estado**: Estable | **Audiencia**: Infraestructura, DevOps, Reclutadores
+> **Versión**: 3.4.0 | **Estado**: Estable | **Audiencia**: Infraestructura, DevOps, Reclutadores
 
 Este documento define las especificaciones técnicas necesarias para ejecutar los casos de uso de **LangGraph Realworld** de manera óptima.
 

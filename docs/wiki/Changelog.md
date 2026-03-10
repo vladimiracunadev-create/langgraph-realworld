@@ -5,6 +5,14 @@ Todas las novedades y cambios notables de este proyecto se documentarán en este
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/),
 y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [3.4.0] - 2026-03-10
+
+### Añadido
+- **Caso 13: BI Data Analyst Dashboard (Industrial/UX)**: Implementación de un dashboard de analítica con generación SQL y visualización dinámica.
+- **Visualización con Chart.js**: Integración de gráficos de pastel y barras automáticos basados en resultados de consultas SQL.
+- **Modo Demo Extendido**: Motor de reglas mejorado con más de 10 escenarios de negocio predefinidos y sistema de fallback amigable.
+- **Enriquecimiento del Esquema**: Reconstrucción de la base de datos relacional para soportar análisis complejo de ventas/clientes.
+
 ## [3.2.0] - 2026-02-13
 
 ### Añadido

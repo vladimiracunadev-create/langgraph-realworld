@@ -1,6 +1,6 @@
 # 👔 Guía Estratégica para Reclutadores (RECRUITER)
 
-> **Versión**: 3.2.0 | **Estado**: Industrial | **Audiencia**: Reclutadores, Hiring Managers
+> **Versión**: 3.4.0 | **Estado**: Industrial | **Audiencia**: Reclutadores, Hiring Managers
 >
 > **Executive Summary**: Este repositorio demuestra maestría técnica en el orquestación de Agentes LLM con estado, DevOps avanzado y diseño de sistemas resilientes preparados para producción.
 
@@ -32,6 +32,15 @@ Este es nuestro **modelo de referencia** que demuestra el stack completo:
 - **Backend API**: FastAPI asíncrono.
 - **Motor AI**: LangGraph con 5+ nodos de razonamiento y herramientas.
 - **DevOps**: Docker + K8s + Smoke Testing automatizado.
+
+---
+
+## 📊 Caso de Éxito: Caso 13 (BI Data Analyst)
+
+Demuestra la capacidad de integrar agentes con sistemas de bases de datos relacionales:
+- **Agente SQL**: Generación precisa de queries complejas (Joins, Aggregations).
+- **Visualización**: Dashboard con gráficos dinámicos (**Chart.js**) que responden en tiempo real.
+- **Modo Dual**: Funciona offline (Demo) o con LLM avanzado, optimizando costos de nube.
 
 ---
 

@@ -178,12 +178,12 @@
         <div class="wrap">
             <div class="h1">LangGraph – Casos del mundo real</div>
             <div class="sub">
-                Repo scaffold con 25 casos. Las tarjetas <b>09</b> y <b>10</b> están implementadas con
-                backend + streaming para ver en tiempo real flujos de RR.HH. y Onboarding.
+                Repo scaffold con 25 casos. Las tarjetas <b>09</b>, <b>10</b> y <b>13</b> están implementadas con
+                backend + streaming para ver en tiempo real flujos de RR.HH., Onboarding y Analítica BI.
             </div>
             <div class="pillrow">
                 <div class="pill" style="border-color: #238636; background: rgba(35, 134, 54, 0.1); color: #3fb950;">✅
-                    Casos 09 y 10 Operativos</div>
+                    Casos 09, 10 y 13 Operativos</div>
                 <div class="pill">🧠 Flujos con estado (LangGraph)</div>
                 <div class="pill">🧾 Streaming NDJSON</div>
                 <div class="pill">💾 Memoria por <code>thread_id</code></div>
@@ -194,7 +194,7 @@
     <div class="wrap" style="margin-top:12px;">
         <div
             style="border-radius:12px; padding:12px; border:1px solid rgba(255,255,255,.06); background: rgba(255,255,255,.02);">
-            <strong style="color:#ffd89b;">⚠️ Estado del repositorio: Casos <b>09</b> y <b>10</b> son
+            <strong style="color:#ffd89b;">⚠️ Estado del repositorio: Casos <b>09</b>, <b>10</b> y <b>13</b> son
                 operativos</strong>
             <div style="margin-top:8px; opacity:.9; font-size:13px;">
                 Los demás casos son plantillas (scaffolds) y pueden requerir trabajo adicional para ejecutarse.
@@ -353,14 +353,14 @@
                 <div class="meta">Abrir demo →</div>
             </a>
 
-            <a class="card" href="cases/13-bi-analista-datos/demo/index.html">
+            <a class="card" href="http://localhost:8013/web/">
                 <div class="top">
                     <div class="num">13</div>
-                    <div class="badge">LEGACY</div>
+                    <div class="badge ok">INDUSTRIAL (V1.1)</div>
                 </div>
-                <div class="title">Analista de datos (BI)</div>
-                <div class="desc">Genera SQL, ejecuta y narra resultados.</div>
-                <div class="meta">Abrir demo →</div>
+                <div class="title">BI Data Analyst Dashboard</div>
+                <div class="desc">Agentic SQL con visualización dinámica de datos y analítica en tiempo real.</div>
+                <div class="meta">Abrir Dashboard BI →</div>
             </a>
 
             <a class="card" href="cases/14-finanzas-conciliacion/demo/index.html">
@@ -491,6 +491,9 @@
         </div>
         <div style="margin-top:5px;">Ejecutar Caso 10:
             <code>cd cases/10-onboarding-empleados/backend && uvicorn src.api:app --port 8010</code>
+        </div>
+        <div style="margin-top:5px;">Ejecutar Caso 13:
+            <code>cd cases/13-bi-analista-datos/backend && uvicorn src.api:app --port 8013</code>
         </div>
     </footer>
 </body>

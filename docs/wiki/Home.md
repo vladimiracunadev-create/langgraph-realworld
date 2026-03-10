@@ -34,6 +34,8 @@ Para asegurar la transparencia técnica, cada caso se clasifica en uno de estos 
 | :--- | :--- | :--- | :--- |
 | **01** | [Simple Router](cases/01-simple-router/README.md) | `SCAFFOLD` | LangGraph Basics |
 | **09** | [RRHH Screening Agenda](cases/09-rrhh-screening-agenda/README.md) | `COMPLETADO` | FastAPI + Sqlite + Pydantic + Resilience |
+| **10** | [Onboarding Empleados](cases/10-onboarding-empleados/README.md) | `COMPLETADO` | Multi-node RBAC + LLM Checklist + Notifications |
+| **13** | [BI Data Analyst](cases/13-bi-analista-datos/README.md) | `COMPLETADO` | SQL Generation + Dynamic Charting + Demo Mode |
 
 ---
 

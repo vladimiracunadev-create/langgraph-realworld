@@ -1,7 +1,7 @@
 # 🛠️ Especificaciones Técnicas
 
 > [!NOTE]
-> **Versión**: 3.2.0 | **Estado**: Industrial | **Audiencia**: Seniors, DevOps
+> **Versión**: 3.4.0 | **Estado**: Industrial | **Audiencia**: Seniors, DevOps
 
 Este documento detalla el stack tecnológico, los estándares de código y los contratos de observabilidad para asegurar la excelencia operativa del proyecto.
 
@@ -21,6 +21,7 @@ Este documento detalla el stack tecnológico, los estándares de código y los c
 
 - **Vanilla JavaScript (ES6+)**: Consumo de streams SSE/NDJSON y renderizado dinámico.
 - **Tailwind CSS / Glassmorphism**: Estilizado moderno para dashboards de alta fidelidad.
+- **Chart.js**: Visualización de datos dinámica y dashboards de BI.
 - **Mermaid.js**: Visualización dinámica de la arquitectura del grafo en tiempo de ejecución.
 
 ---

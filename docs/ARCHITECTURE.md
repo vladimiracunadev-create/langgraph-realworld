@@ -1,7 +1,7 @@
 # 🏗️ Arquitectura del Sistema
 
 > [!NOTE]
-> **Versión**: 3.2.0 | **Estado**: Industrial | **Audiencia**: Arquitectos, DevOps, Seniors
+> **Versión**: 3.4.0 | **Estado**: Industrial | **Audiencia**: Arquitectos, DevOps, Seniors
 
 Este documento describe la estructura técnica de **LangGraph Realworld**, centrándose en la orquestación de agentes con estado y el motor de resiliencia del Caso 09.
 
@@ -20,11 +20,12 @@ El proyecto está diseñado como un **Monorepo de Casos de Uso**, donde cada "ca
 | **Fase 3** | **Acción** | Ejecución de tareas de infraestructura (Agenda). | `schedule_interviews` |
 | **Fase 4** | **Notificación** | Comunicación final con el cliente (Email/WA). | `notify_candidates` |
 | **Referencia** | **Caso 10** | **Onboarding de Empleados**: Flujo ramificado por rol (RBAC) y aprovisionamiento. | `classify_role` / `provision_tools` |
+| **Referencia** | **Caso 13** | **Analista BI**: SQL Agent con visualización dinámica y dashboard reactivo. | `sql_generator` / `sql_executor` |
 
 ```mermaid
 graph TD
   subgraph "Capa de Presentación"
-    UI[Dashboards Premium - Glassmorphism]
+    UI[Dashboards Premium - Glassmorphism + Charts]
     CLI[Hub CLI - python hub.py]
   end
 

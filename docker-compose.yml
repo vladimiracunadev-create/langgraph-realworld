@@ -19,7 +19,7 @@ services:
       - ./cases/09-rrhh-screening-agenda/data:/app/data:ro
     environment:
       - DATA_DIR=/app/data
-      # - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
 
   # Caso 10: Onboarding de Empleados
   case10:
@@ -31,4 +31,17 @@ services:
       - ./cases/10-onboarding-empleados/data:/app/data:ro
     environment:
       - DATA_DIR=/app/data
-      # - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+
+  # Caso 13: BI Analista de Datos
+  case13:
+    build:
+      context: cases/13-bi-analista-datos/backend
+    ports:
+      - "8013:8013"
+    volumes:
+      - ./cases/13-bi-analista-datos/data:/app/data:ro
+      - ./cases/13-bi-analista-datos/web:/app/web:ro
+    environment:
+      - DATA_DIR=/app/data
+      - OPENAI_API_KEY=${OPENAI_API_KEY}

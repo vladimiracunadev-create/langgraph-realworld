@@ -62,8 +62,9 @@ Esta carpeta automatiza el trabajo sucio.
 
 ## 💡 Consejos para Empezar
 
-1.  **Explora el Caso 09**: Es el más completo y el mejor ejemplo de lo que puedes lograr.
-2.  **Usa el Hub CLI**: Es mucho más fácil que navegar por carpetas manualmente.
+1.  **Explora el Caso 09**: Es el más completo para entender flujos de RRHH.
+2.  **Explora el Caso 13**: Ideal para ver cómo un agente interactúa con bases de datos y genera gráficos.
+3.  **Usa el Hub CLI**: Es mucho más fácil que navegar por carpetas manualmente.
 3.  **No tengas miedo a Docker**: Es la forma más fácil de que todo funcione a la primera.
 
 **¡Diviértete explorando el mundo de los agentes resilientes!** 🚀🤖
