@@ -10,7 +10,7 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 ### Añadido
 - **Caso 13: BI Data Analyst Dashboard (Industrial/UX)**: Implementación de un dashboard de analítica con generación SQL y visualización dinámica.
 - **Visualización con Chart.js**: Integración de gráficos de pastel y barras automáticos basados en resultados de consultas SQL.
-- **Auditoría Exhaustiva de Documentación (v3.4)**: Sincronización industrial de todos los `.md` (README, ARCHITECTURE, TECHNICAL_SPECS, RECRUITER, etc.) centrada en la **Tríada Industrial** (09, 10, 13).
+- **Auditoría Exhaustiva de Documentación (v3.4.0)**: Sincronización industrial de todos los `.md` (README, ARCHITECTURE, TECHNICAL_SPECS, RECRUITER, etc.) centrada en la **Tríada Industrial** (09, 10, 13).
 - **Modo Demo Extendido**: Motor de reglas mejorado con más de 10 escenarios de negocio predefinidos y sistema de fallback amigable.
 - **Enriquecimiento del Esquema**: Reconstrucción de la base de datos relacional para soportar análisis complejo de ventas/clientes.
 
