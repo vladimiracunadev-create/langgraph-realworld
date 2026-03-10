@@ -148,6 +148,7 @@ Este repositorio aplica un modelo de **Defensa en Profundidad**:
 - 🏗️ [**Arquitectura Detallada**](docs/ARCHITECTURE.md): Diagramas y motor de persistencia.
 - 🛠️ [**Especificaciones Técnicas**](docs/TECHNICAL_SPECS.md): Tech stack y contratos de API.
 - 📋 [**Requisitos del Sistema**](docs/REQUIREMENTS.md): Hardware y compatibilidad.
+- 🤖 [**Infraestructura de Agentes (Skills)**](docs/AGENTS_AND_SKILLS.md): Cómo la IA opera y automatiza este repo.
 - 🛣️ [**Roadmap**](ROADMAP.md): Hitos y visión a futuro.
 
 ---
