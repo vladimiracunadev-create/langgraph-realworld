@@ -8,7 +8,7 @@
 
 ---
 
-## �️ Implementación Industrial (v3.2.0)
+## �️ Implementación Industrial (v3.4.0)
 
 Para elevar el proyecto a un estándar profesional "Real-World", se han realizado las siguientes modificaciones:
 
