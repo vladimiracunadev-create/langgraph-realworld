@@ -1,5 +1,4 @@
 services:
-  # El Portal central (index.html)
   portal:
     image: python:3.11-slim
     working_dir: /app
@@ -9,9 +8,23 @@ services:
       - "8080:8080"
     command: python -m http.server 8080
 
-  # Caso 09: RR.HH. Screening + Agenda
+  case01:
+    build:
+      context: cases/01-soporte-cliente-omnicanal/backend
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./cases/01-soporte-cliente-omnicanal/data:/app/data:ro
+      - ./cases/01-soporte-cliente-omnicanal/backend/web:/app/web:ro
+    environment:
+      - DATA_DIR=/app/data
+      - WEB_DIR=/app/web
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      - USE_LLM=${USE_LLM:-true}
+
   case09:
-    build: 
+    build:
       context: cases/09-rrhh-screening-agenda/backend
     ports:
       - "8009:8009"
@@ -21,7 +34,6 @@ services:
       - DATA_DIR=/app/data
       - OPENAI_API_KEY=${OPENAI_API_KEY}
 
-  # Caso 10: Onboarding de Empleados
   case10:
     build:
       context: cases/10-onboarding-empleados/backend
@@ -33,7 +45,6 @@ services:
       - DATA_DIR=/app/data
       - OPENAI_API_KEY=${OPENAI_API_KEY}
 
-  # Caso 13: BI Analista de Datos
   case13:
     build:
       context: cases/13-bi-analista-datos/backend

@@ -1,7 +1,7 @@
-# 📋 Requisitos del Sistema
+﻿# Requisitos del Sistema
 
 > [!NOTE]
-> **Versión**: 3.4.0 | **Estado**: Estable | **Audiencia**: Infraestructura, DevOps, Reclutadores
+> **Versión**: 3.5.0 | **Estado**: Estable | **Audiencia**: Infraestructura, DevOps, Reclutadores
 
 Especificaciones mínimas y recomendadas para ejecutar el portafolio de manera razonable.
 
@@ -36,6 +36,7 @@ Especificaciones mínimas y recomendadas para ejecutar el portafolio de manera r
 ## Puertos Usados
 
 - `8080`: portal principal
+- `8001`: caso 01
 - `8009`: caso 09
 - `8010`: caso 10
 - `8013`: caso 13
@@ -55,7 +56,7 @@ Especificaciones mínimas y recomendadas para ejecutar el portafolio de manera r
 
 ## Entornos Soportados
 
-| Entorno | Portal | Casos industriales | Hub |
+| Entorno | Portal | Casos operativos | Hub |
 | :--- | :---: | :---: | :---: |
 | Local con Python | ✅ | ✅ | ✅ |
 | Docker | ✅ | ✅ | ✅ |

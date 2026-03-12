@@ -183,7 +183,7 @@
             </div>
             <div class="pillrow">
                 <div class="pill" style="border-color: #238636; background: rgba(35, 134, 54, 0.1); color: #3fb950;">✅
-                    Casos 09, 10 y 13 Operativos</div>
+                    Casos 01, 09, 10 y 13 Operativos</div>
                 <div class="pill">🧠 Flujos con estado (LangGraph)</div>
                 <div class="pill">🧾 Streaming NDJSON</div>
                 <div class="pill">💾 Memoria por <code>thread_id</code></div>
@@ -194,11 +194,8 @@
     <div class="wrap" style="margin-top:12px;">
         <div
             style="border-radius:12px; padding:12px; border:1px solid rgba(255,255,255,.06); background: rgba(255,255,255,.02);">
-            <strong style="color:#ffd89b;">⚠️ Estado del repositorio: Casos <b>09</b>, <b>10</b> y <b>13</b> son
-                operativos</strong>
-            <div style="margin-top:8px; opacity:.9; font-size:13px;">
-                Los demás casos son plantillas (scaffolds) y pueden requerir trabajo adicional para ejecutarse.
-            </div>
+            <strong style="color:#ffd89b;">Estado del repositorio: Casos <b>01</b>, <b>09</b>, <b>10</b> y <b>13</b> son operativos</strong>
+            <div style="margin-top:8px; opacity:.9; font-size:13px;">Los demas casos siguen en scaffold o legado y pueden requerir trabajo adicional para ejecutarse.</div>
             <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
                 <a href="docs/doc_viewer.html?file=SECURITY.md"
                     style="color:inherit; text-decoration:none; border-radius:8px; padding:6px 8px; border:1px solid rgba(255,255,255,.06); background: rgba(255,255,255,.01);">🔒
@@ -233,14 +230,14 @@
     <main class="wrap">
         <div class="grid">
 
-            <a class="card" href="cases/01-soporte-cliente-omnicanal/demo/index.html">
+            <a class="card" href="http://localhost:8001/web/">
                 <div class="top">
                     <div class="num">01</div>
-                    <div class="badge">LEGACY / SCAFFOLD</div>
+                    <div class="badge ok">OPERATIONAL</div>
                 </div>
                 <div class="title">Soporte al cliente omnicanal</div>
-                <div class="desc">Clasificación, KB, escalamiento a humano.</div>
-                <div class="meta">Abrir demo →</div>
+                <div class="desc">Triage omnicanal, routing por prioridad y fallback DEMO/LIVE.</div>
+                <div class="meta">Abrir caso 01 -></div>
             </a>
 
             <a class="card" href="cases/02-mesa-ayuda-ti-runbooks/demo/index.html">
@@ -487,15 +484,13 @@
     </main>
 
     <footer class="wrap">
-        <div>Ejecutar Caso 09: <code>cd cases/09-rrhh-screening-agenda/backend && uvicorn src.api:app --port 8009</code>
-        </div>
-        <div style="margin-top:5px;">Ejecutar Caso 10:
-            <code>cd cases/10-onboarding-empleados/backend && uvicorn src.api:app --port 8010</code>
-        </div>
-        <div style="margin-top:5px;">Ejecutar Caso 13:
-            <code>cd cases/13-bi-analista-datos/backend && uvicorn src.api:app --port 8013</code>
-        </div>
+        <div>Ejecutar Caso 01: <code>cd cases/01-soporte-cliente-omnicanal/backend && uvicorn src.api:app --port 8001</code></div>
+        <div style="margin-top:5px;">Ejecutar Caso 09: <code>cd cases/09-rrhh-screening-agenda/backend && uvicorn src.api:app --port 8009</code></div>
+        <div style="margin-top:5px;">Ejecutar Caso 10: <code>cd cases/10-onboarding-empleados/backend && uvicorn src.api:app --port 8010</code></div>
+        <div style="margin-top:5px;">Ejecutar Caso 13: <code>cd cases/13-bi-analista-datos/backend && uvicorn src.api:app --port 8013</code></div>
     </footer>
 </body>
 
 </html>
+
+

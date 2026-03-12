@@ -1,6 +1,6 @@
-entrypoint: echo "Case 01 placeholder"
-serve: docker compose -f demo/compose.yml up
+entrypoint: uvicorn src.api:app --host 0.0.0.0 --port 8001
+serve: docker compose -f backend/compose.yml up --build
 ports:
-  - 8081
-dockerfile: demo/Dockerfile
-compose: demo/compose.yml
+  - 8001
+compose: backend/compose.yml
+dockerfile: backend/Dockerfile

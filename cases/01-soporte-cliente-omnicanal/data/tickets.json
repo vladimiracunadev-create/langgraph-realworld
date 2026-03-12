@@ -1,0 +1,55 @@
+{
+  "tickets": [
+    {
+      "ticket_id": "T-001",
+      "channel": "chat",
+      "customer": {
+        "customer_id": "CUST-100",
+        "name": "Acme Retail",
+        "tier": "vip",
+        "email": "ops@acmeretail.com"
+      },
+      "subject": "No puedo emitir facturas",
+      "message": "Desde esta manana nadie puede entrar al panel para emitir facturas. Tenemos clientes esperando y esto es urgente.",
+      "language": "es",
+      "metadata": {
+        "region": "CL",
+        "account_age_days": 420
+      }
+    },
+    {
+      "ticket_id": "T-002",
+      "channel": "email",
+      "customer": {
+        "customer_id": "CUST-101",
+        "name": "Laura Perez",
+        "tier": "standard",
+        "email": "laura@example.com"
+      },
+      "subject": "Cobro duplicado",
+      "message": "Me cobraron dos veces el plan anual y necesito la devolucion o una explicacion.",
+      "language": "es",
+      "metadata": {
+        "region": "MX",
+        "account_age_days": 35
+      }
+    },
+    {
+      "ticket_id": "T-003",
+      "channel": "web",
+      "customer": {
+        "customer_id": "CUST-102",
+        "name": "Martin Diaz",
+        "tier": "standard",
+        "email": "martin@example.com"
+      },
+      "subject": "Donde va mi pedido",
+      "message": "Hola, quiero saber donde va mi pedido 88921 porque no actualiza el tracking desde ayer.",
+      "language": "es",
+      "metadata": {
+        "region": "AR",
+        "account_age_days": 180
+      }
+    }
+  ]
+}

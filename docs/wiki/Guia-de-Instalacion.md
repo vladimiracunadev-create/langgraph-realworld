@@ -1,9 +1,9 @@
-# 🚀 Guía de Instalación y Despliegue
+﻿# Guía de Instalación y Despliegue
 
 > [!NOTE]
-> **Versión**: 3.4.0 | **Estado**: Estable | **Audiencia**: Desarrolladores, DevOps
+> **Versión**: 3.5.0 | **Estado**: Estable | **Audiencia**: Desarrolladores, DevOps
 
-Esta guía explica cómo levantar el repositorio completo y cómo ejecutar por separado los casos industriales 09, 10 y 13.
+Esta guía explica cómo levantar el repositorio completo y cómo ejecutar por separado los casos operativos 01, 09, 10 y 13.
 
 ---
 
@@ -28,6 +28,7 @@ docker compose up --build
 
 Servicios principales:
 - Portal: `http://localhost:8080`
+- Caso 01: `http://localhost:8001`
 - Caso 09: `http://localhost:8009`
 - Caso 10: `http://localhost:8010`
 - Caso 13: `http://localhost:8013`
@@ -39,10 +40,11 @@ Servicios principales:
 ```bash
 pip install -r requirements.txt
 python hub.py list
-python hub.py serve 13
+python hub.py serve 01
 ```
 
 Casos hoy estandarizados para el Hub:
+- 01
 - 09
 - 10
 - 13
@@ -50,6 +52,18 @@ Casos hoy estandarizados para el Hub:
 ---
 
 ## Opción 3: Ejecución local por caso
+
+### Caso 01
+
+```bash
+cd cases/01-soporte-cliente-omnicanal/backend
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+uvicorn src.api:app --reload --port 8001
+```
+
+UI del caso 01: `http://localhost:8001/web/`
 
 ### Caso 09
 
@@ -88,8 +102,9 @@ UI del caso 13: `http://localhost:8013/web/`
 
 ## Variables de Entorno
 
-Cada caso industrial incluye o acepta configuración por `.env`:
+Cada caso operativo incluye o acepta configuración por `.env`:
 
+- caso 01: `cases/01-soporte-cliente-omnicanal/backend/.env`
 - caso 09: `cases/09-rrhh-screening-agenda/backend/.env`
 - caso 10: `cases/10-onboarding-empleados/backend/.env`
 - caso 13: `cases/13-bi-analista-datos/backend/.env`
@@ -100,12 +115,19 @@ La mayoría de las integraciones reales son opcionales; si no existen credencial
 
 ## Validación Rápida
 
+### Caso 01
+
+```bash
+python -m compileall cases/01-soporte-cliente-omnicanal/backend/src -q
+python -m pytest -q cases/01-soporte-cliente-omnicanal/backend/tests
+```
+
 ### Caso 13
 
 ```bash
 python cases/13-bi-analista-datos/data/init_db.py
 python -m compileall cases/13-bi-analista-datos/backend/src -q
-pytest -q cases/13-bi-analista-datos/backend/tests
+python -m pytest -q cases/13-bi-analista-datos/backend/tests
 ```
 
 ### Hub

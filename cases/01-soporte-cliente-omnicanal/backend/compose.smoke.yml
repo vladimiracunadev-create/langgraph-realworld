@@ -1,0 +1,13 @@
+services:
+  case01-smoke:
+    build:
+      context: .
+    ports:
+      - "18001:8001"
+    volumes:
+      - ../data:/app/data:ro
+      - ./web:/app/web:ro
+    environment:
+      - DATA_DIR=/app/data
+      - WEB_DIR=/app/web
+      - USE_LLM=false

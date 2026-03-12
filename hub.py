@@ -1,4 +1,4 @@
-﻿import os
+import os
 import sys
 import subprocess
 import argparse
@@ -8,7 +8,6 @@ CASES_DIR = Path("cases")
 
 
 def get_case_path(case_id):
-    # Support both "09" and "09-rrhh-screening-agenda"
     for d in CASES_DIR.iterdir():
         if d.is_dir() and d.name.startswith(case_id):
             return d
@@ -39,7 +38,7 @@ def cmd_list(args):
             if case_id in ["09", "10", "13"]:
                 status = "Industrial (v3.4.0)"
             elif case_id == "01":
-                status = "Legacy / Scaffold"
+                status = "Operational (v3.5.0)"
             elif has_config:
                 status = "Scaffold (v1.0)"
             else:

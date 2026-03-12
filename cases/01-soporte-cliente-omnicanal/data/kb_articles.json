@@ -1,0 +1,68 @@
+{
+  "articles": {
+    "billing": [
+      {
+        "id": "KB-BILL-01",
+        "title": "Reclamos por cobro duplicado",
+        "summary": "Validar transaccion, emitir reembolso o nota de credito y confirmar por email.",
+        "steps": [
+          "Verificar el cargo en la cuenta del cliente",
+          "Comparar monto, fecha y referencia",
+          "Solicitar reembolso si aplica",
+          "Enviar confirmacion con plazo"
+        ]
+      }
+    ],
+    "technical": [
+      {
+        "id": "KB-TECH-01",
+        "title": "Falla de acceso a plataforma",
+        "summary": "Confirmar alcance, revisar estado del servicio y escalar si afecta operacion critica.",
+        "steps": [
+          "Confirmar si el fallo es individual o general",
+          "Revisar status page o incidente activo",
+          "Solicitar logs basicos o captura",
+          "Escalar a soporte tecnico si hay impacto productivo"
+        ]
+      }
+    ],
+    "shipping": [
+      {
+        "id": "KB-SHIP-01",
+        "title": "Seguimiento de pedido",
+        "summary": "Revisar tracking, validar ultima milla y comunicar ETA actualizado.",
+        "steps": [
+          "Buscar pedido o tracking",
+          "Revisar ultimo evento logistico",
+          "Confirmar ETA aproximado",
+          "Escalar a carrier si no hay movimiento"
+        ]
+      }
+    ],
+    "account": [
+      {
+        "id": "KB-ACC-01",
+        "title": "Problemas de cuenta y acceso",
+        "summary": "Validar identidad y ofrecer recuperacion segura de acceso.",
+        "steps": [
+          "Validar identidad minima",
+          "Revisar bloqueo o reset pendiente",
+          "Enviar enlace seguro de recuperacion",
+          "Escalar si el acceso sigue fallando"
+        ]
+      }
+    ],
+    "general": [
+      {
+        "id": "KB-GEN-01",
+        "title": "Consulta general",
+        "summary": "Responder con informacion base y ofrecer siguiente paso claro.",
+        "steps": [
+          "Confirmar contexto de la consulta",
+          "Responder con informacion util",
+          "Ofrecer ayuda adicional"
+        ]
+      }
+    ]
+  }
+}

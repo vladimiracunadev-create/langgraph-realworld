@@ -1,89 +1,85 @@
-# 🛠️ Especificaciones Técnicas
+﻿# Especificaciones Técnicas
 
 > [!NOTE]
-> **Versión**: 3.4.0 | **Estado**: Industrial | **Audiencia**: Seniors, DevOps
+> **Versión**: 3.5.0 | **Estado**: Industrial | **Audiencia**: Seniors, DevOps
 
-Este documento resume el stack real del repositorio y delimita qué significa hoy “industrial” dentro de este portafolio.
+Resumen técnico del stack y de los contratos que hoy sostienen los casos operativos del repositorio.
 
 ---
 
-## Stack Principal
-
-### Backend
+## Stack Base
 
 - Python 3.11+
-- FastAPI
-- LangGraph
-- `tenacity` en casos que modelan integraciones con reintentos
-- SQLite para datos de dominio y casos demo
-
-### Frontend
-
-- HTML, CSS y JavaScript vanilla
-- Chart.js en el caso 13
-- Mermaid en documentación técnica
-
-### Calidad
-
-- Ruff para lint y formato
-- Pytest donde el caso ya tiene cobertura mínima
-- GitHub Actions para CI y scanning de seguridad
+- FastAPI para APIs HTTP
+- LangGraph para orquestación de estados
+- Uvicorn para ejecución local
+- Docker Compose para levantamiento rápido
+- Pytest cuando el caso ya tiene cobertura mínima
 
 ---
 
-## Contrato de Salud
+## Patrones de Implementación
 
-Los casos industriales deben exponer o aspirar a exponer:
+### Estado
+
+- `TypedDict` para contratos de estado en LangGraph.
+- acumulación de eventos cuando la UI necesita trazabilidad.
+- `MemorySaver` en los casos 01, 09 y 10.
+- SQLite en el caso 13 como base de datos del dominio BI.
+
+### APIs
+
+Los casos industriales u operativos deben exponer o aspirar a exponer:
 
 - `GET /health`
 - `GET /ready`
-- un flujo de arranque documentado
-- una vía reproducible para demo local o Docker
+- endpoint principal de ejecución
+- streaming cuando aporta valor de UX
+
+### Modo DEMO/LIVE
+
+- DEMO por defecto si faltan credenciales o configuración usable.
+- LIVE solo cuando la integración real está disponible.
+- Nunca romper la experiencia completa solo porque falte una API key.
 
 ---
 
-## Contrato de Estado
+## Casos Operativos
 
-El repositorio usa hoy:
+### Caso 01
 
-- `TypedDict` para contratos de estado en LangGraph.
-- `MemorySaver` en los casos 09 y 10.
-- SQLite en el caso 13 como base de datos del dominio BI.
+- soporte omnicanal
+- clasificación de intención
+- cálculo de prioridad
+- ruteo y acciones sugeridas
+- respuesta final con fallback DEMO/LIVE
 
-No se documenta como realidad actual el uso generalizado de Pydantic ni de `SqliteSaver` para todos los casos industriales.
+### Caso 09
+
+- scoring y shortlist de candidatos
+- agenda y notificaciones
+- resiliencia por integración
+
+### Caso 10
+
+- onboarding empresarial
+- RBAC e integraciones híbridas
+- checklist y notificaciones
+
+### Caso 13
+
+- lenguaje natural a SQL seguro
+- ejecución validada
+- visualización con Chart.js
 
 ---
 
-## Contrato de Resiliencia
+## Criterios de Madurez
 
 Para considerar un caso “industrial” dentro de este repositorio, buscamos:
 
-1. manejo explícito de errores;
-2. rutas demo y live claras;
-3. validación operativa por health/readiness, tests o compile checks;
-4. documentación suficiente para reproducir el caso.
-
----
-
-## Matriz de Capacidades
-
-| Capacidad | Caso 09 | Caso 10 | Caso 13 |
-| :--- | :---: | :---: | :---: |
-| FastAPI real | ✅ | ✅ | ✅ |
-| Streaming | ✅ | ✅ | ✅ |
-| Estado tipado | ✅ | ✅ | ✅ |
-| Checkpointer en memoria | ✅ | ✅ | ❌ |
-| Base SQLite de dominio | ❌ | ❌ | ✅ |
-| UI con gráficos | ❌ | ❌ | ✅ |
-| Docker backend | ✅ | ✅ | ✅ |
-| README operativo | ✅ | ✅ | ✅ |
-| Tests mínimos | ✅ | ✅ | ✅ |
-
----
-
-## Navegación
-
-- [README.md](../README.md)
-- [ARCHITECTURE.md](ARCHITECTURE.md)
-- [INSTALL.md](INSTALL.md)
-- [REQUIREMENTS.md](REQUIREMENTS.md)
+1. backend real;
+2. estado explícito;
+3. arranque reproducible;
+4. documentación suficiente para reproducir el caso;
+5. validación mínima ejecutable.

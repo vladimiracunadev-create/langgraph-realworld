@@ -1,0 +1,15 @@
+services:
+  case01:
+    build:
+      context: .
+    ports:
+      - "8001:8001"
+    volumes:
+      - ../data:/app/data:ro
+      - ./web:/app/web:ro
+    environment:
+      - DATA_DIR=/app/data
+      - WEB_DIR=/app/web
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      - USE_LLM=${USE_LLM:-true}

@@ -1,89 +1,191 @@
 ---
 name: Crear Caso LangGraph
-description: Crear un nuevo caso de uso LangGraph desde cero y levantarlo, instalando dependencias, puertos aislados y reiniciando docker.
+description: Crear o elevar un caso de uso LangGraph dentro de este repositorio siguiendo el estandar industrial local. Usar cuando el usuario pida crear un caso nuevo, convertir un scaffold en un caso real, agregar backend FastAPI con LangGraph, preparar modo DEMO/LIVE, integrar Docker, tests, portal y documentacion, o cuando haya que mejorar un caso existente sin romper los demas.
 ---
 
-# Skill: Creación de Nuevo Caso LangGraph
+# Skill: Crear Caso LangGraph
 
-Este skill automatiza y te guía en el proceso para crear un nuevo caso de LangGraph en el repositorio, de manera aislada y sin romper los casos anteriores, da indicaciones claras y precisas al usuario, siempre en español. 
-
-Sigue estos pasos estrictamente cuando el usuario invoque el skill:
+Usar este skill para crear o mejorar casos LangGraph en este monorepo. Escribir siempre en espanol. Priorizar evidencia, aislamiento por caso y compatibilidad con el estandar del repo.
 
 ## Principios obligatorios
 
-1. **No romper casos existentes.** Nunca modificar la lógica interna de casos ya resueltos, salvo que el usuario pida explícitamente una corrección puntual.
-2. **Los Casos 09 y 10 son plantillas vivas.** Úsalos como referencia arquitectónica, no como texto de marketing.
-3. **La evidencia manda.** Antes de afirmar que un caso está “completado”, “industrial” o “real-world”, verifica estructura, endpoints, streaming, Docker, tests y metadata del caso.
-4. **Sincronización total.** No basta con crear el caso: hay que alinear `case.yml`, `docker-compose.yml`, `hub.py`, `index.html`, README y docs asociadas.
-5. **Modo híbrido obligatorio.** Todo caso nuevo debe poder funcionar en modo demo local y quedar preparado para integraciones reales mediante variables de entorno.
-6. **Aislamiento por caso.** Cada caso debe tener puerto, datos, backend, web, tests y compose propios.
+1. No romper casos existentes. No modificar la logica interna de otros casos salvo que el usuario lo pida.
+2. Usar los casos 09, 10 y 13 como referencia tecnica viva. Tomar patrones de arquitectura, no marketing.
+3. La evidencia manda. No declarar un caso como completo o industrial sin verificar estructura, endpoints, streaming, Docker, tests y documentacion.
+4. Sincronizacion total. Si el caso cambia, alinear `case.yml`, `docker-compose.yml`, `hub.py`, `index.html`, README y docs relacionadas cuando corresponda.
+5. Modo hibrido obligatorio. Todo caso debe funcionar en DEMO sin dependencias externas y mejorar a LIVE cuando exista configuracion real utilizable.
+6. Aislamiento por caso. Cada caso debe tener puerto, backend, web, data, tests y compose propios.
+7. LangGraph vive en el backend Python. La UI solo consume la API; no presentar HTML o Docker como si fueran LangGraph.
+8. Hacer supuestos razonables y avanzar. Preguntar solo cuando una decision tenga impacto no obvio o riesgo real.
 
-## Paso 1: Analizar el Caso
-1. Lee y analiza el caso solicitado por el usuario. 
-2. Identifica el rol de los agentes, la arquitectura de LangGraph (lineal, router, loops, state_schema) y las herramientas (tools) o integraciones necesarias.
-3. Identifica el siguiente número de caso disponible revisando la carpeta `cases/` (ej: si el último es `10-onboarding-empleados`, el nuevo o siguientes deberían ser `11-...`).
+## Contrato tecnico minimo de un caso real
 
-## Paso 2: Proponer Flujo y Esperar Aprobación (¡CRÍTICO!)
-1. Crea un artefacto `implementation_plan.md` con el flujo detallado propuesto: nodos, dependencias y estructura de archivos a crear bajo la nueva carpeta del caso.
-2. Usa la herramienta `notify_user` pasando el artefacto en `PathsToReview` y marcando `BlockedOnUser: true`. 
-3. Pide explícitamente al usuario que apruebe el flujo propuesto. 
-4. **Si el usuario rechaza**: Modifica el plan siguiendo sus indicaciones y vuelve a pedir aprobación. **NO SIGAS al Paso 3 hasta tener aprobación.**
+Un caso real en este repo debe incluir, como minimo:
 
-## Paso 3: Crear el Código Genuino y Estructura Aislada
-Una vez aprobado el plan, crea la estructura de directorios y archivos. Respeta el patrón de arquitectura ya existente en el proyecto:
-- Crea las carpetas `cases/XX-nombre-del-caso/backend/src`, `web`, `data`, etc.
-- Escribe el código en Python (`graph.py`, `api.py` FastAPI con `stream_mode="values"`, `settings.py`).
-- Crea los archivos estáticos HTML/JS necesarios.
-- Crea el `requirements.txt` específico de ese caso bajo `backend/`.
-- No toques el código interno de las carpetas de los casos anteriores `01` a `XX-1`.
+- `backend/src/graph.py` con un `StateGraph` o equivalente de LangGraph
+- `backend/src/api.py` con FastAPI
+- `backend/src/settings.py`
+- `backend/src/integrations.py` si hay tools, LLM o adaptadores externos
+- `backend/web/index.html` o UI equivalente
+- `backend/tests/` con pruebas de flujo y API
+- `backend/requirements.txt`
+- `backend/Dockerfile`
+- `backend/compose.yml`
+- `case.yml` si el caso se integra al Hub
+- `GET /health`
+- `GET /ready`
+- endpoint de ejecucion, por ejemplo `POST /api/run`
+- endpoint de streaming cuando la UX lo amerite, preferentemente `GET /api/stream` con `stream_mode="values"`
 
-## Paso 4: Instalar y Verificar Dependencias
-1. En la carpeta `backend` del nuevo caso, asegúrate de que exista un entorno virtual (o créalo si corresponde) y corre la instalación de dependencias `pip install -r requirements.txt`.
-2. Verifica que las instalaciones hayan sido exitosas revisando los logs. Si faltan paquetes (ej. `uvicorn`, `fastapi`, `langgraph`), agrégalos e instálalos.
+## Contrato DEMO y LIVE
 
-## Paso 5: Asignar un Puerto Localhost Propio
-1. Busca un puerto que no esté en uso. Por convención en este proyecto, los puertos inician en 8000+XX. (Ej. el caso 10 usa 8010. El caso 11 usará `8011`).
-2. Configura tu `api.py` / entorno para usar este puerto dedicado, asegurando aislamiento total durante el desarrollo.
-3. Opcional: Si el repositorio tiene un archivo de gestión global como `docker-compose.yml` o `launch_all.py`, modifícalo para exponer y levantar también el contenedor/proceso de este nuevo puerto.
+Siempre implementar este comportamiento:
 
-## Paso 6: Bajar y Subir los Servicios Docker
-1. Detén los entornos existentes usando `docker compose down` (en la raíz o donde aplique, según estructurado).
-2. Integra el nuevo servicio en `docker-compose.yml` (e.g., servicio `caseXX` en el puerto `80XX:80XX`).
-3. Levanta los contenedores y reconstruye la imagen para incluir el nuevo componente: `docker compose up -d --build`.
+- Si no existe configuracion usable para LLM o integraciones reales, el caso corre en `DEMO`.
+- Si existe configuracion minima valida para LLM o integraciones reales, el caso corre en `LIVE`.
+- El grafo debe seguir funcionando en ambos modos; solo cambian algunos nodos o helpers.
+- Exponer el modo actual en respuestas de API o metadata visible para la UI.
+- Nunca fallar todo el caso solo porque falta una API key; degradar a DEMO.
 
-## Paso 7: Revisión Manual del Usuario
-Notifica al usuario mediante `notify_user` que el caso está levantado e infórmale el puerto exacto (e.g. `http://localhost:8011`). Indícale que puede revisar el caso funcionando, e indícale que estás a la espera para realizar correcciones sobre él.
+Regla recomendada:
 
-## Paso 8: Actualizar el `index.html` principal
+- `settings.py` detecta si hay credenciales y flags validos.
+- `integrations.py` encapsula cliente real y fallback demo.
+- `graph.py` consume helpers agnosticos al modo.
+- `api.py` informa `mode=DEMO|LIVE`.
 
-Siempre que un caso se cree o mejore:
+## Flujo de trabajo
 
-- agregar o actualizar su enlace en la portada;
-- mostrar nombre y descripción breve;
-- verificar que la ruta funcione;
-- evitar enlaces rotos o error 404;
-- mantener el estilo visual existente.
+### Paso 1: Entender el caso
 
-## Paso 9: Verificar consistencia final
+1. Leer el README del caso objetivo y revisar si ya existe scaffold, demo o backend parcial.
+2. Identificar objetivo de negocio, actores, entrada, salida y valor de la automatizacion.
+3. Definir donde aporta LangGraph: estado, nodos, routers, loops, tools, checkpoints, streaming.
+4. Revisar referencias en casos 09, 10 y 13 para copiar solo patrones utiles.
 
-Antes de cerrar:
+### Paso 2: Proponer el flujo antes de implementar
 
-- confirmar que el caso quedó visible;
-- confirmar que el `index.html` principal quedó actualizado;
-- confirmar que la documentación coincide con el estado real;
-- confirmar que no se tocaron los Casos 09 y 10;
-- confirmar que no se rompió el repositorio.
+Antes de tocar codigo, crear `implementation_plan.md` en la raiz del repo o en la carpeta del caso con:
+
+- objetivo del caso
+- flujo LangGraph propuesto
+- estado tipado sugerido
+- nodos y routers
+- archivos a crear o modificar
+- puertos y endpoints
+- modo DEMO/LIVE
+- plan de verificacion
+
+Luego resumir ese plan al usuario y pedir aprobacion explicita. No avanzar a implementacion hasta tener esa aprobacion.
+
+Si el usuario ya aprobo el enfoque en la conversacion, continuar sin volver a pedir permiso.
+
+### Paso 3: Implementar la estructura aislada del caso
+
+Respetar esta estructura cuando aplique:
+
+- `cases/XX-slug/README.md`
+- `cases/XX-slug/case.yml`
+- `cases/XX-slug/data/`
+- `cases/XX-slug/backend/.env.example`
+- `cases/XX-slug/backend/requirements.txt`
+- `cases/XX-slug/backend/Dockerfile`
+- `cases/XX-slug/backend/compose.yml`
+- `cases/XX-slug/backend/compose.smoke.yml`
+- `cases/XX-slug/backend/src/__init__.py`
+- `cases/XX-slug/backend/src/settings.py`
+- `cases/XX-slug/backend/src/integrations.py`
+- `cases/XX-slug/backend/src/graph.py`
+- `cases/XX-slug/backend/src/api.py`
+- `cases/XX-slug/backend/tests/`
+- `cases/XX-slug/backend/web/index.html`
+
+No crear archivos innecesarios. Mantener el caso autocontenido.
+
+### Paso 4: Implementar LangGraph de forma explicita
+
+El grafo debe quedar claramente visible en `graph.py`.
+
+Buenas practicas esperadas:
+
+- usar `TypedDict` o esquema equivalente para el estado
+- separar nodos puros de integraciones externas
+- usar eventos o snapshots si la UI necesita trazabilidad
+- usar checkpointer apropiado al nivel del caso, por ejemplo `MemorySaver` si favorece portabilidad
+- si existe streaming, usar `graph.stream(..., stream_mode="values")` o equivalente adecuado
+
+Evitar:
+
+- esconder toda la logica del caso dentro de `api.py`
+- mezclar UI con el grafo
+- acoplar el caso a una LLM obligatoria
+
+### Paso 5: Puerto y ejecucion
+
+Convencion del repo:
+
+- usar `8000 + case_id` para el backend del caso
+- mantener `8080` para el portal raiz cuando se use el sitio principal
+
+Actualizar compose raiz o herramientas globales solo si realmente integran el caso. No tocar mas de lo necesario.
+
+### Paso 6: Docker y entorno local
+
+Preparar dos caminos de ejecucion cuando sea razonable:
+
+- compose aislado del caso
+- ejecucion local directa del backend
+
+No limpiar imagenes, volumenes o contenedores de forma destructiva salvo pedido expreso del usuario.
+No bajar servicios ajenos innecesariamente. Verificar primero antes de intervenir puertos.
+
+### Paso 7: Verificacion real
+
+Antes de cerrar, comprobar en la medida de lo posible:
+
+- imports y compilacion Python
+- tests del caso
+- health y ready
+- endpoint principal de ejecucion
+- streaming si aplica
+- rutas de web
+- consistencia de `case.yml`
+- visibilidad del caso en `hub.py` y en el portal si fue integrado
+
+Si algo no pudo verificarse, decirlo explicitamente.
+
+### Paso 8: Sincronizacion de documentacion
+
+Actualizar solo la documentacion afectada por el cambio real:
+
+- README del caso
+- `README.md` raiz si cambia el estado general del portfolio
+- `docs/INSTALL.md` si cambia la forma de ejecutar
+- `docs/ARCHITECTURE.md` o `docs/TECHNICAL_SPECS.md` si el caso altera el estandar observable
+- `index.html` si el caso debe quedar visible desde la portada
+
+No prometer en docs algo que el codigo aun no cumple.
+
+## Criterios para declarar un caso listo
+
+Decir que un caso quedo resuelto solo si existe evidencia de:
+
+- LangGraph implementado en backend
+- API funcional
+- modo DEMO operativo
+- fallback correcto cuando no hay LLM
+- LIVE preparado cuando hay configuracion real
+- arranque reproducible
+- documentacion alineada
+- validacion minima ejecutada o limitaciones explicadas
 
 ## Resultado esperado
 
 Este skill debe dejar:
 
-- un caso creado o mejorado;
-- los Casos 09 y 10 intactos;
-- la documentación actualizada;
-- el `index.html` principal actualizado;
-- el caso visible desde la portada;
-- el repositorio consistente y sin roturas;
-- debes levantar tambien si vas a subir el `index.html`, el localhost:8080;
--revisa si el 8080 si esta en uso, bajalo o mejor limpia todo el docker activo (imagenes,volumenes,contenedores) y que el 8080, funcione con este repositorio exclusivamente.
-- recuerda el sistema debe funcionar en modo demo local y quedar preparado para integraciones reales mediante variables de entorno.
+- un caso nuevo o mejorado
+- un flujo LangGraph claro y visible en backend
+- modo DEMO automatico y modo LIVE cuando exista LLM utilizable
+- integracion razonable con compose, hub y portal si corresponde
+- documentacion consistente con el estado real
+- el repositorio sin roturas innecesarias
