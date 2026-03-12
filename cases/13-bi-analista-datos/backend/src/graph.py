@@ -60,25 +60,59 @@ def normalize_question(value: str) -> str:
 def demo_query_for(question: str) -> str | None:
     q = normalize_question(question)
     if "reciente" in q or "ultimas ventas" in q:
-        return "SELECT s.sale_date, p.name, c.city, s.total_amount FROM sales s JOIN products p ON s.product_id = p.id JOIN customers c ON s.customer_id = c.id ORDER BY s.sale_date DESC LIMIT 5"
+        return (
+            "SELECT s.sale_date, p.name, c.city, s.total_amount "
+            "FROM sales s "
+            "JOIN products p ON s.product_id = p.id "
+            "JOIN customers c ON s.customer_id = c.id "
+            "ORDER BY s.sale_date DESC LIMIT 5"
+        )
     if "caro" in q or "mayor precio" in q:
         return "SELECT name, price FROM products ORDER BY price DESC LIMIT 1"
     if "barato" in q or "menor precio" in q:
         return "SELECT name, price FROM products ORDER BY price ASC LIMIT 1"
     if "vendido" in q or "mas ventas" in q or "mayor venta" in q:
-        return "SELECT p.name, SUM(s.quantity) AS total FROM sales s JOIN products p ON s.product_id = p.id GROUP BY p.id, p.name ORDER BY total DESC LIMIT 5"
+        return (
+            "SELECT p.name, SUM(s.quantity) AS total "
+            "FROM sales s "
+            "JOIN products p ON s.product_id = p.id "
+            "GROUP BY p.id, p.name "
+            "ORDER BY total DESC LIMIT 5"
+        )
     if "menos vendido" in q or "peor producto" in q:
-        return "SELECT p.name, SUM(s.quantity) AS total FROM sales s JOIN products p ON s.product_id = p.id GROUP BY p.id, p.name ORDER BY total ASC LIMIT 5"
+        return (
+            "SELECT p.name, SUM(s.quantity) AS total "
+            "FROM sales s "
+            "JOIN products p ON s.product_id = p.id "
+            "GROUP BY p.id, p.name "
+            "ORDER BY total ASC LIMIT 5"
+        )
     if "ciudad" in q or "por ciudad" in q:
-        return "SELECT c.city, SUM(s.total_amount) AS total FROM sales s JOIN customers c ON s.customer_id = c.id GROUP BY c.city ORDER BY total DESC"
+        return (
+            "SELECT c.city, SUM(s.total_amount) AS total "
+            "FROM sales s "
+            "JOIN customers c ON s.customer_id = c.id "
+            "GROUP BY c.city ORDER BY total DESC"
+        )
     if "recaudacion" in q or "ingreso" in q or "ventas totales" in q or "monto total" in q:
         return "SELECT SUM(total_amount) AS gran_total FROM sales"
     if "promedio" in q:
         return "SELECT AVG(total_amount) AS promedio FROM sales"
     if "categoria" in q or "mejor categoria" in q:
-        return "SELECT p.category, SUM(s.total_amount) AS total FROM sales s JOIN products p ON s.product_id = p.id GROUP BY p.category ORDER BY total DESC"
+        return (
+            "SELECT p.category, SUM(s.total_amount) AS total "
+            "FROM sales s "
+            "JOIN products p ON s.product_id = p.id "
+            "GROUP BY p.category ORDER BY total DESC"
+        )
     if "mejores clientes" in q or ("cliente" in q and "gasto" in q) or "quien gasto mas" in q:
-        return "SELECT c.name, SUM(s.total_amount) AS total FROM sales s JOIN customers c ON s.customer_id = c.id GROUP BY c.id, c.name ORDER BY total DESC LIMIT 5"
+        return (
+            "SELECT c.name, SUM(s.total_amount) AS total "
+            "FROM sales s "
+            "JOIN customers c ON s.customer_id = c.id "
+            "GROUP BY c.id, c.name "
+            "ORDER BY total DESC LIMIT 5"
+        )
     if "cliente" in q:
         return "SELECT name, city, email FROM customers LIMIT 10"
     if "producto" in q:
@@ -174,19 +208,23 @@ def sql_generator(state: State):
         if not query:
             return {
                 "sql_query": "NONE",
-                "error": "No tengo una respuesta predefinida para esa pregunta en modo demo. Prueba con ventas por ciudad, mejores clientes o recaudacion total.",
+                "error": (
+                    "No tengo una respuesta predefinida para esa pregunta en modo demo. "
+                    "Prueba con ventas por ciudad, mejores clientes o recaudacion total."
+                ),
                 "mode": "DEMO",
             }
         return {"sql_query": query, "mode": "DEMO"}
 
-    prompt = f"""You are a SQL expert. Based on the following schema, generate a SQLite query to answer the user's question.
+    prompt = f"""
+You are a SQL expert. Based on the following schema, generate a SQLite query to answer the user's question.
 Schema:
 {DB_SCHEMA}
 
 User Question: {question}
 
 Return ONLY the SQL query. Use a single safe SELECT statement.
-"""
+""".strip()
     response = llm.invoke([HumanMessage(content=prompt)])
     return {"sql_query": response.content.strip(), "mode": "LIVE"}
 
@@ -266,15 +304,15 @@ def narrator(state: State):
             f"However, there was an error: {state['error']}. Explain this politely to the user."
         )
     else:
-        prompt = f"""You are a BI Analyst. Based on the user's question and the results from the database, provide a clear and insightful answer.
-
-Question: {state.get('question', '')}
-SQL Query: {state.get('sql_query', '')}
-Results:
-{state.get('execution_results', '')}
-
-Provide a concise friendly narration of the data.
-"""
+        prompt = (
+            "You are a BI Analyst. Based on the user's question and the results "
+            "from the database, provide a clear and insightful answer.\n\n"
+            f"Question: {state.get('question', '')}\n"
+            f"SQL Query: {state.get('sql_query', '')}\n"
+            "Results:\n"
+            f"{state.get('execution_results', '')}\n\n"
+            "Provide a concise friendly narration of the data."
+        )
     response = llm.invoke([HumanMessage(content=prompt)])
     return {"final_answer": response.content}
 
