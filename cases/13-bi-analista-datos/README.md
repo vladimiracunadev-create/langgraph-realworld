@@ -1,35 +1,49 @@
 # 📊 Caso 13: Analista de Datos BI (Industrial v3.4.0)
 
 > [!IMPORTANT]
-> **Estado**: Industrial | **Versión**: 3.4.0 | **Referencia**: Agentic SQL & Data Viz
+> **Estado**: Industrial | **Versión**: 3.4.0 | **Referencia**: SQL seguro + Data Viz
 
-**LangGraph Powered SQL Agent** que transforma preguntas en lenguaje natural en consultas SQL precisas, las ejecuta y visualiza los resultados mediante gráficos dinámicos.
+Caso de referencia para analítica conversacional con LangGraph, FastAPI, SQLite y visualización dinámica.
 
-## 🚀 Capacidades Industriales
+## Qué demuestra
 
-- **Generación SQL Robusta**: Capacidad de realizar Joins entre tablas de Ventas, Productos y Clientes.
-- **Visualización Dinámica**: Integración con **Chart.js** para generar gráficos de pastel y barras automáticamente.
-- **Modo Dual (Demo/LLM)**: Funciona 100% offline mediante un motor de reglas de negocio o con el cerebro de **GPT-4o** para análisis profundo.
-- **Dashboard Premium**: Interfaz glassmorphism con sistema de sugerencias reactivo.
+- traducción de preguntas a SQL en modo demo o live;
+- ejecución segura de consultas `SELECT`;
+- base demo regenerable con `data/init_db.py`;
+- gráficos dinámicos en la UI web;
+- operación por Docker, Hub o modo local.
 
-## 🏗️ Arquitectura del Grafo
+## Endpoints principales
 
-```mermaid
-graph TD
-    A[Pregunta Usuario] --> B[sql_generator]
-    B --> C[sql_executor]
-    C --> D[narrator]
-    D --> E[Salida + Datos Estructurados]
-```
+- `/health`
+- `/ready`
+- `/examples`
+- `/chat`
+- `/web/`
 
-## 🛠️ Ejecución
+## Ejecución rápida
 
-### Vía Docker (Recomendado)
+### Docker
+
 ```bash
 docker compose up -d --build case13
 ```
-Acceso: [http://localhost:8013](http://localhost:8013)
 
-### Vía Local (Desarrollo)
-1. Instalar dependencias: `pip install -r backend/requirements.txt`
-2. Lanzar API: `uvicorn src.api:app --port 8013`
+### Hub
+
+```bash
+python hub.py serve 13
+```
+
+### Local
+
+```bash
+python data/init_db.py
+cd cases/13-bi-analista-datos/backend
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+uvicorn src.api:app --port 8013
+```
+
+UI: [http://localhost:8013/web/](http://localhost:8013/web/)

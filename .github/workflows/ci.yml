@@ -1,4 +1,4 @@
-name: CI
+﻿name: CI
 
 on:
   push:
@@ -17,7 +17,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install ruff pytest pydantic tenacity
-          # Install dependencies with binary preference to avoid compiling Rust extensions
           pip install -r cases/09-rrhh-screening-agenda/backend/requirements.txt --only-binary=:all: || pip install -r cases/09-rrhh-screening-agenda/backend/requirements.txt
       - name: Debug Environment
         run: |
@@ -34,6 +33,31 @@ jobs:
         run: |
           pytest -q cases/09-rrhh-screening-agenda/backend/tests
 
+  python_case13:
+    name: "Python checks (case 13)"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install ruff pytest
+          pip install -r cases/13-bi-analista-datos/backend/requirements.txt --only-binary=:all: || pip install -r cases/13-bi-analista-datos/backend/requirements.txt
+      - name: Seed demo database
+        run: |
+          python cases/13-bi-analista-datos/data/init_db.py
+      - name: Lint (ruff)
+        run: |
+          ruff check cases/13-bi-analista-datos/backend/src
+      - name: Compile (syntax check)
+        run: |
+          python -m compileall cases/13-bi-analista-datos/backend/src -q
+      - name: Tests (pytest)
+        run: |
+          pytest -q cases/13-bi-analista-datos/backend/tests
 
   docker_build_all_cases:
     name: "Docker build (all cases)"

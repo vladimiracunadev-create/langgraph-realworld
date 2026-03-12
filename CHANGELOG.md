@@ -1,50 +1,49 @@
 # Changelog
 
-Todas las novedades y cambios notables de este proyecto se documentarán en este archivo.
+Todas las novedades y cambios notables de este proyecto se documentan en este archivo.
 
-El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/),
-y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
+El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y el versionado del repositorio continúa alineado con [Semantic Versioning](https://semver.org/lang/es/).
+
+## [Unreleased]
+
+### Documentación
+- Sincronización de README, docs, wiki local y READMEs de casos para reflejar el estado real de los casos 09, 10 y 13.
+- Corrección de claims antiguos sobre `Pydantic` y `SqliteSaver` como si aplicaran uniformemente a toda la tríada industrial.
+- Estandarización de la narrativa operativa del caso 13 en Docker, Hub y modo local.
+
+### Caso 13
+- Endpoints `/health`, `/ready` y `/examples` documentados y operativos.
+- Base demo regenerable con esquema consistente entre `sales`, `customers` y `products`.
+- Tests mínimos para helpers SQL y seeding de datos.
 
 ## [3.4.0] - 2026-03-10
 
 ### Añadido
-- **Caso 13: BI Data Analyst Dashboard (Industrial/UX)**: Implementación de un dashboard de analítica con generación SQL y visualización dinámica.
-- **Visualización con Chart.js**: Integración de gráficos de pastel y barras automáticos basados en resultados de consultas SQL.
-- **Auditoría Exhaustiva de Documentación (v3.4.0)**: Sincronización industrial de todos los `.md` (README, ARCHITECTURE, TECHNICAL_SPECS, RECRUITER, etc.) centrada en la **Tríada Industrial** (09, 10, 13).
-- **Modo Demo Extendido**: Motor de reglas mejorado con más de 10 escenarios de negocio predefinidos y sistema de fallback amigable.
-- **Enriquecimiento del Esquema**: Reconstrucción de la base de datos relacional para soportar análisis complejo de ventas/clientes.
+- Dashboard BI inicial para el caso 13.
+- Tríada industrial consolidada alrededor de los casos 09, 10 y 13.
+- Reestructuración del portal y actualización visual del portafolio.
 
 ## [3.2.0] - 2026-02-13
 
 ### Añadido
-- **Estándar Industrial (v3.2)**: Elevación del Caso 09 a estándares industriales con validación estricta y telemetría.
-- **Validación con Pydantic**: Refactorización del estado del grafo de `TypedDict` a modelos de **Pydantic** para integridad de datos en runtime.
-- **Telemetría (Trace IDs)**: Implementación de rastreo de solicitudes mediante `trace_id` único inyectado en logs JSON estructurados.
-- **UI de Diagnóstico**: Visualización del Trace ID en el dashboard del Caso 09 para facilitar el debugging técnico.
+- Endurecimiento operativo del caso 09.
+- Telemetría con `trace_id` en la capa API del caso 09.
+- Primer salto fuerte de documentación técnica y narrativa industrial.
 
 ## [3.1.0] - 2026-02-13
 
 ### Añadido
-- **Modo AI vs Mock**: Implementación de `mock_api.py` para demos instantáneas sin LLM y `api.py` para ejecución real con LangGraph.
-- **Resiliencia de Estado**: Integración de `SqliteSaver` en el Caso 09 para persistencia de hilos (`thread_id`).
-- **Portal Local**: Script `serve_site.py` para levantar el portal principal en el puerto 8080 sin requerir Docker.
-- **Dashboard Premium**: Interfaz premium para el Caso 09 con soporte de streaming NDJSON en tiempo real.
-
-### Cambiado
-- **Punto de Entrada Único**: Se consolidó el portal de `indexado.html` a `index.html` para simplificar el despliegue y la URL de acceso.
-- **Estética Visual**: Actualización a la tipografía **Inter** y aplicación de efectos **Glassmorphism** en todo el portafolio.
-- **Navegación Unificada**: Actualización masiva de links de retorno para asegurar la bidireccionalidad entre el portal y las demos.
-
-### Corregido
-- **Fallo de Conexión (Puerto 8009)**: Solución de conflictos de puerto mediante la opción de reutilización de dirección en servidores Python.
-- **Broken Links**: Reparación de enlaces rotos en la Wiki y en el retorno del Caso 09.
+- Portal local con `serve_site.py`.
+- Demos premium y primeros flujos NDJSON en tiempo real.
 
 ## [3.0.0] - 2026-02-11
+
 ### Añadido
-- Milestone de Observabilidad completado.
-- Actualización global de todas las referencias de versión de v2.3.0 a v3.0.0.
+- Primer milestone de observabilidad.
+- Actualización global de referencias de versión de la línea 2.x a 3.0.
 
 ## [2.3.0] - Anterior
+
 ### Añadido
-- Implementación base de los 25 casos de uso (scaffolds).
-- Dockerización inicial de la plataforma.
+- Base inicial de los 25 casos.
+- Dockerización temprana de la plataforma.

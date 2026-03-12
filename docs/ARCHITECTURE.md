@@ -3,160 +3,129 @@
 > [!NOTE]
 > **Versión**: 3.4.0 | **Estado**: Industrial | **Audiencia**: Arquitectos, DevOps, Seniors
 
-Este documento describe la estructura técnica de **LangGraph Realworld**, centrándose en la orquestación de agentes con estado y el motor de resiliencia del Caso 09.
+Este documento describe la arquitectura vigente de **LangGraph Realworld** y explica qué partes del repositorio son referencia real y cuáles siguen siendo scaffolds o demos simples.
 
 ---
 
-## 🛰️ Visión General
+## Visión General
 
-El proyecto está diseñado como un **Monorepo de Casos de Uso**, donde cada "caso" es un ecosistema autocontenido que sigue un ciclo de vida de cuatro etapas: **Lectura, Análisis, Acción y Notificación**.
+El proyecto está organizado como un monorepo de casos de uso. Cada carpeta en `cases/` representa un escenario independiente, pero solo una parte del catálogo tiene hoy backend productizable.
 
-### 🔄 El Ciclo de Vida del Agente (4 Fases)
+### Casos de referencia
 
-| Fase | Nombre | Responsabilidad Técnica | Nodo LangGraph |
-| :--- | :--- | :--- | :--- |
-| **Fase 1** | **Lectura** | Ingesta de datos (CVs/Jobs) y normalización. | `load_inputs` |
-| **Fase 2** | **Análisis** | Evaluación cognitiva y filtrado (Scoring). | `score_one` / `build_shortlist` |
-| **Fase 3** | **Acción** | Ejecución de tareas de infraestructura (Agenda). | `schedule_interviews` |
-| **Fase 4** | **Notificación** | Comunicación final con el cliente (Email/WA). | `notify_candidates` |
-| **Referencia** | **Caso 10** | **Onboarding de Empleados**: Flujo ramificado por rol (RBAC) y aprovisionamiento. | `classify_role` / `provision_tools` |
-| **Referencia** | **Caso 13** | **Analista BI**: SQL Agent con visualización dinámica y dashboard reactivo. | `sql_generator` / `sql_executor` |
+- **Caso 09**: screening, shortlist, agenda y notificaciones con foco en resiliencia.
+- **Caso 10**: onboarding empresarial con RBAC, checklist e integraciones híbridas.
+- **Caso 13**: analítica conversacional con SQL seguro, base demo reproducible y visualización dinámica.
+
+---
+
+## Capas del Sistema
 
 ```mermaid
 graph TD
-  subgraph "Capa de Presentación"
-    UI[Dashboards Premium - Glassmorphism + Charts]
-    CLI[Hub CLI - python hub.py]
+  subgraph Presentacion
+    Portal[Portal raíz]
+    Dash[Dashboards por caso]
   end
 
-  subgraph "Capa de Aplicación (FastAPI)"
-    API[Backend API - Entorno Docker]
-    Stream[Streaming NDJSON / events]
+  subgraph Aplicacion
+    API[FastAPI]
+    Stream[NDJSON o SSE]
   end
 
-  subgraph "Motor de Agentes (LangGraph)"
-    LG[StateGraph / Nodes]
-    Check[SqliteSaver - Checkpoints]
-    Tools[Tools / Integrations]
+  subgraph Agentes
+    Graph[LangGraph / StateGraph]
+    Check[Checkpointer]
+    Tools[Integraciones y helpers]
   end
 
-  subgraph Resilience ["Capa de Resiliencia"]
-    Ten[Tenacity - Exponential Backoff]
-    Deg[Graceful Degradation Logic]
-    Guard[Guardrails / Step Limits]
+  subgraph Datos
+    Files[JSON / SQLite]
+    External[APIs externas]
   end
 
-  UI --> API
-  CLI --> API
-  API --> LG
-  LG --> Check
-  LG --> Tools
-  Tools --> Resilience
-  Resilience --> Integrations[External APIs / Stubs]
+  Portal --> Dash
+  Dash --> API
+  API --> Stream
+  API --> Graph
+  Graph --> Check
+  Graph --> Tools
+  Tools --> Files
+  Tools --> External
 ```
 
 ---
 
-## 🛡️ Resiliencia y Persistencia de Estado (Residencia)
+## Estado y Persistencia
 
-Uno de los pilares de este entorno es su capacidad para resolver problemas de **residencia** (persistencia de larga duración) y recuperación ante fallos.
+La implementación actual usa dos enfoques distintos:
 
-### 1. Persistencia con LangGraph Checkpoints
-Utilizamos `SqliteSaver` para registrar el estado completo del grafo tras la ejecución de cada nodo. 
-- **Recuperación**: Si el servidor se apaga o el contenedor se reinicia, el agente puede retomar la tarea exactamente donde la dejó usando su `thread_id`.
-- **Auditoría**: Cada cambio de estado queda registrado, permitiendo un "viaje en el tiempo" por las decisiones del agente.
+- **Casos 09 y 10**: compilan con `MemorySaver` para priorizar portabilidad local, demos repetibles y tests sencillos.
+- **Caso 13**: usa SQLite como base de datos del dominio BI, no como checkpointer de LangGraph.
 
-### 2. Estrategia de Reintento con Tenacity
-Todas las integraciones externas (APIs de OpenAI, Google Calendar, etc.) están protegidas por políticas de reintento:
-- **Exponential Backoff**: Los reintentos se espacian matemáticamente para evitar saturar servicios externos.
-- **Circuit Breaker**: Si un servicio falla repetidamente, el agente entra en un estado de degradación graciosa en lugar de colapsar.
-
-- **Circuit Breaker**: Si un servicio falla repetidamente, el agente entra en un estado de degradación graciosa en lugar de colapsar.
+La arquitectura mantiene el contrato abierto para evolucionar a checkpointers durables cuando el caso lo requiera.
 
 ---
 
-## 🧠 Arquitectura Híbrida (Hybrid AI Aware)
+## Observabilidad
 
-A diferencia de prototipos estáticos, esta arquitectura es "consciente" de su entorno de ejecución:
+El estándar actual exige:
 
-1. **Detección Dinámica**: El sistema escanea la presencia de `OPENAI_API_KEY` en el entorno local (`.env`).
-2. **Switch de Lógica**:
-   - **Modo Demo (Determinista)**: Si no hay llave, los nodos de integración inyectan datos simulados pero estructuralmente válidos para pruebas SRE y de flujo.
-   - **Modo Real (Cognitivo)**: Si hay llave, se activa el motor de razonamiento LLM, permitiendo juicios semánticos y generación de contenido personalizado.
-3. **Puntos de Decisión**: Toda la lógica híbrida reside en `backend/src/integrations.py`, manteniendo el grafo (`graph.py`) puro e independiente del proveedor.
+- `/health` para liveness.
+- `/ready` para readiness funcional.
+- logs estructurados cuando el caso ya tiene capa de trazabilidad.
+- streaming cuando la UX se beneficia de feedback incremental.
 
----
-
-## 🏗️ Compatibilidad: Docker vs Python
-
-Este sistema está diseñado bajo una arquitectura de **"Contenedor Primero"**, pero mantiene una alta flexibilidad para el desarrollo local.
-
-- **Modo Docker (Producción/Staging)**: Es el estándar oficial. Garantiza que el software y hardware (residencia de estado en volúmenes, aislamiento de red) funcionen de forma idéntica en cualquier servidor. El fallo de Docker en demostraciones controladas suele deberse a la ausencia del daemon local, no a una limitación del código.
-- **Modo Python (Desarrollo/Debug)**: Es una vía rápida para probar la lógica de LangGraph. Permite ejecutar el backend directamente (`uvicorn`) para una iteración más ágil sin el ciclo de build de imágenes.
+Hoy esto se cumple con más madurez en los casos 09, 10 y 13.
 
 ---
 
-## 🛠️ Estándares de Implementación
+## Arquitectura Híbrida
 
-- **LangGraph**: Uso estricto de `StateGraph` con `Annotated` para reducers de estado (ej: `operator.add` para logs de eventos).
-- **FastAPI**: Endpoints asíncronos con soporte para `StreamingResponse` para feedback en tiempo real.
-- **Docker**: Orquestación multietapa para separar el build de la ejecución, minimizando el tamaño de la imagen.
-- **Observabilidad**: Logs en formato JSON estructurado listos para ser ingeridos por pilas ELK o CloudWatch.
+Los casos industriales pueden operar en dos modos:
 
----
+1. **Demo / offline**: datos de ejemplo y lógica deterministicamente reproducible.
+2. **Live / real**: activación vía `.env` o variables de entorno para usar APIs o LLMs.
 
-## ⚙️ Integración Continua (CI/CD)
-
-```mermaid
-sequenceDiagram
-    participant Dev as Desarrollador
-    participant GH as GitHub Repo
-    participant GA as GitHub Actions
-    participant Docker as Container Registry
-
-    Dev->>GH: git push origin main
-    GH->>GA: Trigger: ci.yml
-    GA->>GA: Linting (Ruff/Markdown)
-    GA->>GA: Seguridad (Secret Scanning)
-    GA->>GA: Build Multi-arch Image
-    GA->>GA: Smoke Test (compose.smoke.yml)
-    GA-->>Dev: Notificación de Salud del Repo
-```
+Este patrón permite demostrar UX y flujo sin depender siempre de credenciales externas.
 
 ---
 
-## 🛡️ Estándares Industriales (v3.4.0)
+## Estándares Industriales (v3.4.0)
 
-A partir de la versión 3.4.0, el repositorio consolida el estándar **Industrial-Grade** para los Casos 09, 10 y 13:
+A día de hoy, el estándar del repositorio significa:
 
-1.  **Validación con Pydantic**: El estado del grafo ya no usa `TypedDict` genéricos, sino modelos de **Pydantic** que garantizan tipos y restricciones en runtime.
-2.  **Identificadores de Rastreo (Trace IDs)**: Cada ejecución genera un `trace_id` único inyectado en los logs estructurados, permitiendo el rastreo de errores en flujos asíncronos complejos.
-3.  **Observabilidad Distribuida**: Los logs están preparados para ser ingeridos por sistemas como **Datadog**, **ELK** o **OpenTelemetry**.
-
----
-
----
-
-## 💎 La Tríada Industrial (Casos de Referencia)
-
-Para una auditoría técnica profunda, se recomienda analizar los siguientes casos que componen el núcleo de "Misión Crítica" del repositorio:
-
-### 1. Caso 09: RRHH Screening & Agenda (Resiliencia Extrema)
-- **Desafío**: Manejo de hilos de larga duración y fallos en APIs de terceros.
-- **Solución**: Orquestación de 5+ nodos con **SqliteSaver** para persistencia y **Tenacity** para reintentos exponenciales. Implementa un motor híbrido que detecta la ausencia de API Keys y conmuta a un modo heurístico determinista sin romper el flujo.
-
-### 2. Caso 10: Onboarding de Empleados (Complejidad de Flujo)
-- **Desafío**: Procesos ramificados basados en roles (RBAC) y validación de checklists dinámicos.
-- **Solución**: Grafo cíclico con estados persistentes y sistema de notificaciones multicanal (Email/WhatsApp) con lógica de degradación graciosa (si falla un canal, el otro continúa).
-
-### 3. Caso 13: BI Data Analyst (Integración de Datos y UX)
-- **Desafío**: Conversión de lenguaje natural a SQL complejo y visualización reactiva.
-- **Solución**: Agente SQL con validación de esquemas en runtime, generación de gráficos dinámicos vía **Chart.js** y un dashboard premium con streaming NDJSON que minimiza la latencia percibida.
+1. **Backend real** con FastAPI y contrato operativo claro.
+2. **Estado tipado** con `TypedDict` o esquema equivalente explícito.
+3. **Documentación de ejecución** por Docker, Hub y modo local.
+4. **Pruebas o validaciones mínimas** para la parte crítica del caso.
+5. **Separación razonable** entre API, lógica del grafo, configuración y datos.
 
 ---
 
-## 🧭 Navegación
-- [⬅️ Volver al README](../README.md)
-- [📋 Requisitos](REQUIREMENTS.md)
-- [🛠️ Especificaciones Técnicas](TECHNICAL_SPECS.md)
-- [🛡️ Seguridad](../SECURITY.md)
+## La Tríada Industrial
+
+### Caso 09
+
+- Orquesta carga de datos, scoring, shortlist, agenda y notificación.
+- Su fortaleza principal es la resiliencia del flujo y la observabilidad.
+
+### Caso 10
+
+- Modela onboarding empresarial con ramas por rol y degradación controlada por integración.
+- Su fortaleza principal es la complejidad de negocio y el aprovisionamiento híbrido.
+
+### Caso 13
+
+- Traduce lenguaje natural a SQL, ejecuta consultas seguras y grafica resultados.
+- Su fortaleza principal es la experiencia BI completa: datos, backend, validación y UI.
+
+---
+
+## Navegación
+
+- [README.md](../README.md)
+- [TECHNICAL_SPECS.md](TECHNICAL_SPECS.md)
+- [INSTALL.md](INSTALL.md)
+- [REQUIREMENTS.md](REQUIREMENTS.md)
+- [SECURITY.md](../SECURITY.md)

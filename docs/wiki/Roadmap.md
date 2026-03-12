@@ -1,35 +1,33 @@
-# 🛣️ Hoja de Ruta (Roadmap)
+# 🛣️ Hoja de Ruta
 
 > [!NOTE]
-> **Versión**: 3.2.0 | **Estado**: Industrial | **Audiencia**: Stakeholders, Colaboradores
+> **Versión**: 3.4.0 | **Estado**: Industrial | **Audiencia**: Stakeholders, Colaboradores
 
-Esta hoja de ruta presenta objetivos y prioridades generales para el desarrollo de **LangGraph Realworld**.
+Resumen de prioridades del repositorio después de consolidar los casos 09, 10 y 13.
 
-## Visión
-Crear un conjunto de demos y casos de uso reproducibles que sirvan como referencia para proyectos que integran LangGraph y arquitecturas de agentes conversacionales.
+## Estado actual
 
-## Prioridades a corto plazo (0–3 meses) ✅
-- Documentación: mejorar guías de inicio rápido y ejemplos en `cases/*`.
-- Tests básicos y CI para asegurar que los demos arranquen en Docker.
-- Plantillas y linters para uniformidad (autorouter, ruff, etc.).
-- **Milestone 09**: Implementado estándar de resiliencia y observabilidad (Casos 09 y 10).
+- Caso 09 listo como referencia de resiliencia.
+- Caso 10 listo como referencia de flujo empresarial.
+- Caso 13 listo como referencia de analítica conversacional.
+- Hub CLI y documentación sincronizados como capa de operación del monorepo.
 
-## Prioridades a medio plazo (3–9 meses) 🔧
-- **Observabilidad Avanzada**: Integración nativa con **LangSmith** y **OpenTelemetry** para rastreo de trazas de agentes en producción.
-- **Capa de Seguridad Empresarial**: Implementación de **OIDC/JWT** para proteger los endpoints de ejecución de los agentes.
-- **Multi-Agent Orchestration**: Casos de uso complejos con múltiples grafos colaborando entre sí.
-- **Frontend Pro**: Migración de las demos Vanilla JS a un framework moderno (Next.js/React) para mayor escalabilidad.
+## Próximos focos
 
-## Prioridades a largo plazo (9–18 meses) 🚀
-- **Agentes Auto-Mejorables**: Implementación de bucles de feedback de aprendizaje por refuerzo (RLHF) para optimizar prompts automáticamente.
-- **Infraestructura como Código (IaC)**: Módulos de **Terraform/Pulumi** para desplegar el Hub completo en AWS EKS de forma automatizada.
-- **Marketplace de Casos**: Sistema de plugins para que terceros puedan inyectar sus propios grafos de LangGraph de forma dinámica.
+### Corto plazo
 
-## Cómo contribuir
-- Abre Issues para discutir nuevas ideas o cambios de prioridad.
-- Envía PRs para pequeñas mejoras: documentación, tests, correcciones.
-- Para cambios grandes (nuevos casos o arquitectura), crea un Issue con propuesta y plan.
+- ampliar cobertura de tests en la tríada industrial;
+- limpiar divergencias restantes entre docs raíz y wiki;
+- estandarizar más casos con `case.yml` y arranque reproducible.
 
----
+### Medio plazo
 
-*Esta hoja de ruta es orientativa y puede ajustarse según la contribución de la comunidad y requisitos del proyecto.*
+- observabilidad más profunda con LangSmith u OpenTelemetry;
+- autenticación para endpoints expuestos públicamente;
+- más casos con backend real, no solo demo estática.
+
+### Largo plazo
+
+- despliegues más maduros en Kubernetes;
+- IaC para entornos reproducibles;
+- catálogo de casos con criterios más explícitos de madurez.

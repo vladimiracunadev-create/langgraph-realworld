@@ -1,28 +1,41 @@
-# LangGraph Real-World Cases - Developer shortcuts
+﻿# LangGraph Real-World Cases - Developer shortcuts
 # Usage: make lint | make test-case09 | make up | make down
 
-.PHONY: help lint format test-case09 up down hub-list hub-run case-up case-down k8s-apply
+.PHONY: help lint format test-case09 test-case10 test-case13 compile-case13 up down hub-list hub-doctor hub-run case-up case-down k8s-apply
 
 help:
 	@echo "Targets:"
-	@echo "  make lint           - ruff check (Case 09 backend src)"
-	@echo "  make format         - ruff format (Case 09 backend src)"
+	@echo "  make lint           - ruff check (Case 09/10/13 backend src)"
+	@echo "  make format         - ruff format (Case 09/10/13 backend src)"
 	@echo "  make test-case09    - pytest (Case 09 backend)"
-	@echo "  make up             - docker compose up (site + case09)"
+	@echo "  make test-case10    - pytest (Case 10 backend)"
+	@echo "  make test-case13    - pytest (Case 13 backend)"
+	@echo "  make compile-case13 - syntax check (Case 13 backend src)"
+	@echo "  make up             - docker compose up (site + case09 + case10 + case13)"
 	@echo "  make down           - docker compose down"
 	@echo "  make hub-list       - List all cases via Hub CLI"
+	@echo "  make hub-doctor     - Check Hub CLI environment"
 	@echo "  make hub-run CASE=xx - Run a case via Hub CLI"
 	@echo "  make case-up CASE=xx - Stand up a case via its compose"
 	@echo "  make k8s-apply CASE=xx - Apply K8s manifests for a case"
 
 lint:
-	ruff check cases/09-rrhh-screening-agenda/backend/src
+	ruff check cases/09-rrhh-screening-agenda/backend/src cases/10-onboarding-empleados/backend/src cases/13-bi-analista-datos/backend/src
 
 format:
-	ruff format cases/09-rrhh-screening-agenda/backend/src
+	ruff format cases/09-rrhh-screening-agenda/backend/src cases/10-onboarding-empleados/backend/src cases/13-bi-analista-datos/backend/src
 
 test-case09:
 	pytest -q cases/09-rrhh-screening-agenda/backend/tests
+
+test-case10:
+	pytest -q cases/10-onboarding-empleados/backend/tests
+
+test-case13:
+	pytest -q cases/13-bi-analista-datos/backend/tests
+
+compile-case13:
+	python -m compileall cases/13-bi-analista-datos/backend/src -q
 
 up:
 	docker compose up --build
@@ -49,4 +62,3 @@ case-down:
 k8s-apply:
 	@if [ -z "$(CASE)" ]; then echo "Error: CASE is required"; exit 1; fi
 	kubectl apply -k k8s/cases/$(CASE)-*
-

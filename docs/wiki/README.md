@@ -1,136 +1,118 @@
-# 🚀 LangGraph – Agentic Resilience Hub
+# 🚀 LangGraph Realworld
 
 [![CI](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml)
 [![Security Scan](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml/badge.svg?branch=main)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**Portafolio de arquitectura de agentes con estado, flujos cíclicos y capas de resiliencia empresarial.** Este repositorio demuestra cómo llevar LangGraph a producción con un enfoque en seguridad, observabilidad y recuperación ante fallos.
+Portafolio de casos de uso con LangGraph, FastAPI y demos empresariales. El repositorio combina una capa de documentación fuerte con tres casos de referencia realmente operables: 09, 10 y 13.
 
 ---
 
-## �️ Implementación Industrial (v3.4.0)
+## Implementación Industrial (v3.4.0)
 
-Para elevar el proyecto a un estándar profesional "Real-World", se han realizado las siguientes modificaciones:
+El estándar actual del repositorio se apoya en estos pilares:
 
-1.  **Punto de Entrada Unificado**: Consolidación del portal premium en **`index.html`** (eliminando `indexado.html`).
-2.  **Diseño Premium**: Implementación de tipografía **Inter** y efectos **Glassmorphism** avanzados.
-3.  **Resiliencia e Integridad**: Persistencia con `SqliteSaver` y validación de estado mediante **Pydantic**.
-4.  **Telemetría Ready**: Rastrabilidad de flujos con `trace_id` inyectado en logs JSON.
-5.  **Dual-Mode BI**: Caso 13 con generación SQL, visualización dinámica (Chart.js) y dashboard reactivo.
-6.  **Interconectividad**: Sincronización global de links y reconstrucción de la Wiki técnica.
+1. **Portal unificado**: `index.html` como entrada principal para navegar el portafolio.
+2. **Casos de referencia reales**: backends FastAPI y UIs activas en los casos 09, 10 y 13.
+3. **Estado tipado**: contratos explícitos de estado con `TypedDict` y flujos compatibles con LangGraph.
+4. **Observabilidad**: endpoints `/health` y `/ready`, además de trazabilidad con `trace_id` en los casos 09 y 10.
+5. **Modo dual**: demos offline y ruta clara para activar integraciones reales mediante variables de entorno.
+6. **Operación portable**: ejecución por Docker, Hub CLI o entorno local según el caso.
 
 > [!TIP]
-> Consulta el historial técnico detallado en el [CHANGELOG.md](CHANGELOG.md).
+> Consulta el detalle técnico en [CHANGELOG.md](CHANGELOG.md), [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) y [docs/TECHNICAL_SPECS.md](docs/TECHNICAL_SPECS.md).
 
-### 🛠️ Taxonomía de Implementación
-Para asegurar la transparencia técnica, cada caso se clasifica en uno de estos tres niveles:
-- **🛡️ Industrial (v3.4.0)**: Casos de referencia con FastAPI, Streaming, Pydantic, Observabilidad y Visualización dinámica (Casos 09, 10 y 13).
-- **🏗️ Legacy / Scaffold**: Plantillas de arquitectura y demos base para futura expansión (Ej: Caso 01).
+### Taxonomía de Implementación
 
-### 📊 Estado de los Casos
+- **Industrial (v3.4.0)**: casos con backend real, streaming, estado tipado, observabilidad y documentación operativa.
+- **Legacy / Scaffold**: demos o plantillas listas para evolucionar sin pretender hoy el mismo nivel operativo.
 
-| Case ID | Nombre | Estado | Stack |
+### Estado de los Casos Clave
+
+| Case ID | Nombre | Estado | Stack principal |
 | :--- | :--- | :--- | :--- |
-| **09** | [RRHH Screening Agenda](cases/09-rrhh-screening-agenda/README.md) | `COMPLETADO` | FastAPI + Sqlite + Pydantic + Resilience |
-| **10** | [Onboarding Empleados](cases/10-onboarding-empleados/README.md) | `COMPLETADO` | Multi-node RBAC + LLM Checklist + Notifications |
-| **13** | [BI Data Analyst](cases/13-bi-analista-datos/README.md) | `COMPLETADO` | SQL Generation + Dynamic Charting + Demo Mode |
+| **09** | [RRHH Screening Agenda](cases/09-rrhh-screening-agenda/README.md) | `COMPLETADO` | FastAPI + LangGraph + MemorySaver + Resilience |
+| **10** | [Onboarding Empleados](cases/10-onboarding-empleados/README.md) | `COMPLETADO` | FastAPI + RBAC + Integrations + MemorySaver |
+| **13** | [BI Data Analyst](cases/13-bi-analista-datos/README.md) | `COMPLETADO` | FastAPI + SQL Agent + Chart.js + Demo/LLM |
 
 ---
 
----
+## ¿Por dónde empezar?
 
-## 🧭 ¿Por dónde empezar? (Rutas Personalizadas)
-
-| Perfil | Ruta Recomendada | Objetivo |
+| Perfil | Ruta recomendada | Qué mirar |
 | :--- | :--- | :--- |
-| **💼 Reclutador / Manager** | [**Guía para Reclutadores**](RECRUITER.md) | Entender el valor de negocio y madurez técnica. |
-| **💻 Desarrollador / DevOps** | [**Caso 09 (RRHH Screening)**](cases/09-rrhh-screening-agenda/README.md) | Explorar código real: FastAPI, streaming, Pydantic y grafos. |
-| **💻 Desarrollador / DevOps** | [**Caso 10 (Onboarding)**](cases/10-onboarding-empleados/README.md) | Explorar integraciones reales: Multi-Node streaming, APIs externas y RBAC. |
-| **🔒 Experto en Seguridad** | [**SECURITY.md**](SECURITY.md) | Analizar protocolos de SAST y Hardening. |
-| **🐣 Principiante** | [**Guía para Principiantes**](docs/BEGINNERS_GUIDE.md) | Primeros pasos con el repo y el Hub. |
+| Reclutador / Manager | [RECRUITER.md](RECRUITER.md) | Valor de negocio y madurez técnica |
+| Dev / DevOps | [Caso 09](cases/09-rrhh-screening-agenda/README.md) | Resiliencia, streaming y observabilidad |
+| Dev / DevOps | [Caso 10](cases/10-onboarding-empleados/README.md) | Flujo empresarial, RBAC e integraciones |
+| Analista / BI | [Caso 13](cases/13-bi-analista-datos/README.md) | SQL seguro, visualización y UX de datos |
+| Principiante | [docs/BEGINNERS_GUIDE.md](docs/BEGINNERS_GUIDE.md) | Mapa del repositorio |
+| Seguridad | [SECURITY.md](SECURITY.md) | Postura de hardening y manejo de secretos |
 
 ---
 
-## 🏗️ Arquitectura de Alto Nivel
+## Arquitectura de Alto Nivel
 
 ```mermaid
 flowchart LR
-  UI[Dashboards Premium] -->|streaming| API[FastAPI Server]
-  API --> LG[LangGraph Engine]
-  LG --> CK[(SQLite Checkpoints)]
-  LG --> TL[Resilient Tools Layer]
-  TL --> EXT[External Systems]
+  UI[Portal y dashboards] --> API[FastAPI]
+  API --> LG[LangGraph]
+  LG --> CK[Checkpointer]
+  LG --> TL[Integraciones y tools]
+  TL --> EXT[Sistemas externos o modo demo]
 ```
 
 ---
 
-## 🚀 Operación del Hub (Orquestación)
+## Ejecución Rápida
 
-Gestiona los 25 casos de forma centralizada. El **Hub CLI** (`hub.py`) es una herramienta en Python que orquesta tanto la ejecución local como el lanzamiento de contenedores Docker.
+### Docker Compose
 
 ```bash
-# 1. Operación Directa (Nivel 1: Laboratorio)
-python serve_site.py             # Portal 8080
-python cases/09-*/backend/mock_api.py   # Backend 8009 (Modo Demo)
-
-# 2. Operación vía Hub (Nivel 2: Orquestación)
-python hub.py list      # Listar casos y su estado
-python hub.py doctor    # Verificar salud del entorno
-make case-up CASE=09    # Lanzar Caso 09 o 10 (Usa Docker si está disponible)
+docker compose up --build
 ```
 
-### 🧠 Activación de la IA Real (OpenAI)
-Para habilitar el razonamiento avanzado en los Casos 09 y 10 (sustituyendo el modo demo):
+Servicios principales:
+- Portal: [http://localhost:8080](http://localhost:8080)
+- Caso 09: [http://localhost:8009](http://localhost:8009)
+- Caso 10: [http://localhost:8010](http://localhost:8010)
+- Caso 13: [http://localhost:8013](http://localhost:8013)
 
-1. **Localiza el Destino**: Entra en `cases/09-rrhh-screening-agenda/backend/`.
-2. **Crea el Archivo**: Crea un archivo llamado `.env` y pega tu `OPENAI_API_KEY`.
-3. **Inicia el Backend**: Ejecuta `cd cases/09-rrhh-screening-agenda/backend && uvicorn src.api:app --port 8009`.
+### Hub CLI
 
-**Mapa de Activación:**
-```text
-[Raíz del Repo]
-└── cases/
-    └── 09-rrhh-screening-agenda/
-        └── backend/
-            └── .env  <-- Crear este archivo aquí
+```bash
+python hub.py list
+python hub.py doctor
+python hub.py serve 13
 ```
 
-### 🔍 Modo Demo vs. IA Real (Híbrido)
-Tanto el Caso 09 como el 10 detectan automáticamente la presencia de una API Key y ajusta su "cerebro":
+### Local directo
 
-| Característica | 🧪 Modo Demo (Mock) | 🧠 Modo IA Real (OpenAI) |
+```bash
+python serve_site.py
+cd cases/13-bi-analista-datos/backend
+uvicorn src.api:app --port 8013
+```
+
+---
+
+## Infraestructura de Agentes
+
+El repositorio es `agent-aware` y expone habilidades locales para automatizar tareas de alto valor.
+
+| Skill | Ruta | Uso principal |
 | :--- | :--- | :--- |
-| **Lógica de Scoring** | Basada en reglas fijas (strings/num) | Análisis semántico y contextual |
-| **Preguntas Entrevista** | Fallback estático (idéntico) | Generación dinámica y personalizada |
-| **Costo** | $0 (Laboratorio local) | Consumo de tokens (Producción) |
-| **Resiliencia** | Probada localmente | Usa `tenacity` para reintentar fallos |
+| Actualizar Documentación | [.agents/skills/actualizar_doc/SKILL.md](.agents/skills/actualizar_doc/SKILL.md) | Sincronizar README, docs y wiki local |
+| Crear Caso LangGraph | [.agents/skills/crear_caso/SKILL.md](.agents/skills/crear_caso/SKILL.md) | Estandarizar nuevos casos |
 
-> [!NOTE]
-> Para una guía completa de despliegue (Docker, K8s, Local), consulta la [**Guía de Instalación**](docs/INSTALL.md).
+Más detalle en [docs/AGENTS_AND_SKILLS.md](docs/AGENTS_AND_SKILLS.md).
 
 ---
 
-## 🛡️ Seguridad y Gobernanza
+## Documentación Técnica
 
-Este repositorio aplica un modelo de **Defensa en Profundidad**:
-
-- 🔍 **Secret Scanning**: Auditoría constante con `detect-secrets`.
-- 📦 **Non-Root Containers**: Aislamiento de privilegios en todas las imágenes.
-- 🔄 **Exponential Backoff**: Resiliencia ante fallos de APIs externas mediante `tenacity`.
-- 📜 **Killed.md**: Documentación de antipatrones prohibidos en el desarrollo.
-
----
-
-## 📚 Documentación Técnica Completa
-
-- 🏗️ [**Arquitectura Detallada**](docs/ARCHITECTURE.md): Diagramas y motor de persistencia.
-- 🛠️ [**Especificaciones Técnicas**](docs/TECHNICAL_SPECS.md): Tech stack y contratos de API.
-- 📋 [**Requisitos del Sistema**](docs/REQUIREMENTS.md): Hardware y compatibilidad.
-- 🛣️ [**Roadmap**](ROADMAP.md): Hitos y visión a futuro.
-
----
-
-
----
-> [!IMPORTANT]
-> **He diseñado este repositorio para que sea fácil de auditar.** Los **Casos 09, 10 y 13** son los puntos de referencia para evaluar mi capacidad de integrar IA en flujos de trabajo empresariales complejos.
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+- [docs/TECHNICAL_SPECS.md](docs/TECHNICAL_SPECS.md)
+- [docs/INSTALL.md](docs/INSTALL.md)
+- [docs/REQUIREMENTS.md](docs/REQUIREMENTS.md)
+- [ROADMAP.md](ROADMAP.md)
+- [CHANGELOG.md](CHANGELOG.md)

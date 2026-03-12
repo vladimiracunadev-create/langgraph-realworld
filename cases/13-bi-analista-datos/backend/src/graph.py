@@ -1,28 +1,49 @@
-from typing import TypedDict, List, Annotated
-from langgraph.graph import StateGraph, END
-from langchain_openai import ChatOpenAI
-from langchain_core.messages import BaseMessage, HumanMessage, AIMessage
+﻿import re
 import sqlite3
+import unicodedata
+from typing import Any, TypedDict
+
+from langchain_core.messages import HumanMessage
+from langchain_openai import ChatOpenAI
+from langgraph.graph import END, StateGraph
+
 from .settings import settings
 
-# Define the state
-class State(TypedDict):
+DEFAULT_LIMIT = 100
+FORBIDDEN_SQL = re.compile(
+    r"\b(insert|update|delete|drop|alter|attach|detach|pragma|replace|create|truncate)\b",
+    re.IGNORECASE,
+)
+SELECT_SQL = re.compile(r"^\s*(select|with)\b", re.IGNORECASE)
+
+EXAMPLE_QUESTIONS = [
+    "Cual es el producto mas caro?",
+    "Ventas por ciudad",
+    "Mejores clientes",
+    "Recaudacion total",
+    "Ultimas ventas",
+]
+
+
+class State(TypedDict, total=False):
     question: str
     sql_query: str
     execution_results: str
-    chart_data: dict  # New field for structured data
+    chart_data: dict[str, Any]
     final_answer: str
     error: str
+    row_count: int
+    columns: list[str]
+    mode: str
 
-# Database schema for the LLM
+
 DB_SCHEMA = """
 Tables:
 1. products (id, name, category, price)
-2. sales (id, product_id, quantity, sale_date, total_amount)
-3. customers (id, name, city, email)
+2. customers (id, name, city, email)
+3. sales (id, product_id, customer_id, quantity, sale_date, total_amount)
 """
 
-# Determine if we are in Demo Mode
 IS_DEMO_MODE = not settings.OPENAI_API_KEY
 
 if not IS_DEMO_MODE:
@@ -30,124 +51,238 @@ if not IS_DEMO_MODE:
 else:
     llm = None
 
+
+def normalize_question(value: str) -> str:
+    normalized = unicodedata.normalize("NFKD", value.lower())
+    return "".join(ch for ch in normalized if not unicodedata.combining(ch))
+
+
+def demo_query_for(question: str) -> str | None:
+    q = normalize_question(question)
+    if "reciente" in q or "ultimas ventas" in q:
+        return "SELECT s.sale_date, p.name, c.city, s.total_amount FROM sales s JOIN products p ON s.product_id = p.id JOIN customers c ON s.customer_id = c.id ORDER BY s.sale_date DESC LIMIT 5"
+    if "caro" in q or "mayor precio" in q:
+        return "SELECT name, price FROM products ORDER BY price DESC LIMIT 1"
+    if "barato" in q or "menor precio" in q:
+        return "SELECT name, price FROM products ORDER BY price ASC LIMIT 1"
+    if "vendido" in q or "mas ventas" in q or "mayor venta" in q:
+        return "SELECT p.name, SUM(s.quantity) AS total FROM sales s JOIN products p ON s.product_id = p.id GROUP BY p.id, p.name ORDER BY total DESC LIMIT 5"
+    if "menos vendido" in q or "peor producto" in q:
+        return "SELECT p.name, SUM(s.quantity) AS total FROM sales s JOIN products p ON s.product_id = p.id GROUP BY p.id, p.name ORDER BY total ASC LIMIT 5"
+    if "ciudad" in q or "por ciudad" in q:
+        return "SELECT c.city, SUM(s.total_amount) AS total FROM sales s JOIN customers c ON s.customer_id = c.id GROUP BY c.city ORDER BY total DESC"
+    if "recaudacion" in q or "ingreso" in q or "ventas totales" in q or "monto total" in q:
+        return "SELECT SUM(total_amount) AS gran_total FROM sales"
+    if "promedio" in q:
+        return "SELECT AVG(total_amount) AS promedio FROM sales"
+    if "categoria" in q or "mejor categoria" in q:
+        return "SELECT p.category, SUM(s.total_amount) AS total FROM sales s JOIN products p ON s.product_id = p.id GROUP BY p.category ORDER BY total DESC"
+    if "mejores clientes" in q or ("cliente" in q and "gasto" in q) or "quien gasto mas" in q:
+        return "SELECT c.name, SUM(s.total_amount) AS total FROM sales s JOIN customers c ON s.customer_id = c.id GROUP BY c.id, c.name ORDER BY total DESC LIMIT 5"
+    if "cliente" in q:
+        return "SELECT name, city, email FROM customers LIMIT 10"
+    if "producto" in q:
+        return "SELECT name, category, price FROM products LIMIT 10"
+    return None
+
+
+def sanitize_sql(query: str) -> str:
+    clean = query.strip().replace("```sql", "").replace("```", "").strip()
+    clean = clean[:-1] if clean.endswith(";") else clean
+
+    if not SELECT_SQL.match(clean):
+        raise ValueError("Only SELECT/CTE queries are allowed in Case 13.")
+    if FORBIDDEN_SQL.search(clean):
+        raise ValueError("Unsafe SQL detected.")
+    if ";" in clean:
+        raise ValueError("Multiple SQL statements are not allowed.")
+    if " limit " not in clean.lower() and re.match(r"^\s*select\b", clean, re.IGNORECASE):
+        clean = f"{clean} LIMIT {DEFAULT_LIMIT}"
+    return clean
+
+
+def choose_chart_type(labels: list[str], dataset_count: int) -> str:
+    if dataset_count > 1:
+        return "bar"
+    if len(labels) <= 5:
+        return "doughnut"
+    if len(labels) <= 12:
+        return "bar"
+    return "line"
+
+
+def build_chart_data(rows: list[sqlite3.Row], columns: list[str]) -> dict[str, Any]:
+    if not rows or len(columns) < 2:
+        return {}
+
+    sample_row = dict(rows[0])
+    numeric_columns = [
+        col for col in columns[1:] if isinstance(sample_row.get(col), (int, float))
+    ]
+    if not numeric_columns:
+        return {}
+
+    labels = [str(dict(row).get(columns[0], "")) for row in rows]
+    datasets = []
+    palette = [
+        "#f97316",
+        "#facc15",
+        "#38bdf8",
+        "#34d399",
+    ]
+    for index, col in enumerate(numeric_columns[:3]):
+        datasets.append(
+            {
+                "label": col.replace("_", " ").title(),
+                "data": [float(dict(row).get(col, 0) or 0) for row in rows],
+                "backgroundColor": palette[index % len(palette)],
+                "borderColor": palette[index % len(palette)],
+                "borderWidth": 2,
+            }
+        )
+
+    return {
+        "type": choose_chart_type(labels, len(datasets)),
+        "labels": labels,
+        "datasets": datasets,
+    }
+
+
+def format_results(rows: list[sqlite3.Row], columns: list[str]) -> str:
+    header = " | ".join(columns)
+    divider = "-" * min(80, max(20, len(header)))
+    rendered_rows = [" | ".join(str(dict(row).get(col, "")) for col in columns) for row in rows]
+    return "\n".join([header, divider, *rendered_rows])
+
+
+def summarize_rows(question: str, rows: list[sqlite3.Row], columns: list[str]) -> str:
+    if not rows:
+        return f"No se encontraron resultados para: {question}"
+    preview_bits = []
+    first_row = dict(rows[0])
+    for column in columns[:2]:
+        if column in first_row:
+            preview_bits.append(f"{column}={first_row[column]}")
+    preview = ", ".join(preview_bits)
+    return f"Se encontraron {len(rows)} fila(s). Primer resultado: {preview}."
+
+
 def sql_generator(state: State):
+    question = state.get("question", "")
     if IS_DEMO_MODE:
-        q = state['question'].lower()
-        # Remove accents for easier matching
-        q = q.replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u")
-        
-        if "reciente" in q or "ultimas ventas" in q:
-            query = "SELECT s.sale_date, p.name, s.total_amount FROM sales s JOIN products p ON s.product_id = p.id ORDER BY s.sale_date DESC LIMIT 5;"
-        elif "caro" in q or "mayor precio" in q:
-            query = "SELECT name, price FROM products ORDER BY price DESC LIMIT 1;"
-        elif "barato" in q or "menor precio" in q:
-            query = "SELECT name, price FROM products ORDER BY price ASC LIMIT 1;"
-        elif "vendido" in q or "mas ventas" in q or "mayor venta" in q:
-            query = "SELECT p.name, SUM(s.quantity) as total FROM sales s JOIN products p ON s.product_id = p.id GROUP BY p.id ORDER BY total DESC LIMIT 1;"
-        elif "menos vendido" in q or "peor producto" in q:
-            query = "SELECT p.name, SUM(s.quantity) as total FROM sales s JOIN products p ON s.product_id = p.id GROUP BY p.id ORDER BY total ASC LIMIT 1;"
-        elif "ciudad" in q or "por ciudad" in q:
-            query = "SELECT c.city, SUM(s.total_amount) as total FROM sales s JOIN customers c ON s.customer_id = c.id GROUP BY c.city ORDER BY total DESC;"
-        elif "recaudacion" in q or "ingreso" in q or "ventas totales" in q or "monto total" in q:
-            query = "SELECT SUM(total_amount) as gran_total FROM sales;"
-        elif "promedio" in q:
-            query = "SELECT AVG(total_amount) as promedio FROM sales;"
-        elif "categoria" in q or "mejor categoria" in q:
-            query = "SELECT p.category, SUM(s.total_amount) as total FROM sales s JOIN products p ON s.product_id = p.id GROUP BY p.category ORDER BY total DESC;"
-        elif "mejores clientes" in q or ("cliente" in q and "gasto" in q) or "quien gasto mas" in q:
-            query = "SELECT c.name, SUM(s.total_amount) as total FROM sales s JOIN customers c ON s.customer_id = c.id GROUP BY c.id ORDER BY total DESC LIMIT 3;"
-        elif "cliente" in q:
-            query = "SELECT name, city FROM customers LIMIT 5;"
-        elif "producto" in q:
-            query = "SELECT name, category, price FROM products LIMIT 5;"
-        else:
-            return {"sql_query": "NONE", "error": "No tengo una respuesta predefinida para esta pregunta en Modo Demo. Prueba con 'ventas por ciudad', 'mejores clientes' o 'recaudación total'."}
-        return {"sql_query": query}
-    
+        query = demo_query_for(question)
+        if not query:
+            return {
+                "sql_query": "NONE",
+                "error": "No tengo una respuesta predefinida para esa pregunta en modo demo. Prueba con ventas por ciudad, mejores clientes o recaudacion total.",
+                "mode": "DEMO",
+            }
+        return {"sql_query": query, "mode": "DEMO"}
+
     prompt = f"""You are a SQL expert. Based on the following schema, generate a SQLite query to answer the user's question.
-    Schema:
-    {DB_SCHEMA}
-    
-    User Question: {state['question']}
-    
-    Return ONLY the SQL query, no markdown, no explanations.
-    """
+Schema:
+{DB_SCHEMA}
+
+User Question: {question}
+
+Return ONLY the SQL query. Use a single safe SELECT statement.
+"""
     response = llm.invoke([HumanMessage(content=prompt)])
-    query = response.content.strip().replace("```sql", "").replace("```", "")
-    return {"sql_query": query}
+    return {"sql_query": response.content.strip(), "mode": "LIVE"}
+
 
 def sql_executor(state: State):
-    query = state['sql_query']
+    query = state.get("sql_query", "")
     if query == "NONE":
-        return {"execution_results": "N/A", "chart_data": {}, "error": state.get("error", "Consulta no válida")}
-    
+        return {
+            "execution_results": "N/A",
+            "chart_data": {},
+            "error": state.get("error", "Consulta no valida"),
+            "row_count": 0,
+            "columns": [],
+        }
+
     try:
-        # Use absolute path inside docker
-        conn = sqlite3.connect("/app/data/bi_database.sqlite")
-        conn.row_factory = sqlite3.Row # To get column names easily
-        cursor = conn.cursor()
-        cursor.execute(query)
-        rows = cursor.fetchall()
-        
-        if not rows:
-            conn.close()
-            return {"execution_results": "No se encontraron resultados.", "chart_data": {}, "error": ""}
-            
-        columns = rows[0].keys()
+        safe_query = sanitize_sql(query)
+        if not settings.database_path.exists():
+            raise FileNotFoundError(f"Database not found: {settings.database_path}")
+
+        conn = sqlite3.connect(settings.database_path)
+        conn.row_factory = sqlite3.Row
+        rows = conn.execute(safe_query).fetchall()
         conn.close()
-        
-        # Format results as a simple string table
-        res_str = " | ".join(columns) + "\n" + "-" * 20 + "\n"
-        chart_data = {"labels": [], "datasets": [{"label": "Valor", "data": []}]}
-        
-        for row in rows:
-            res_str += " | ".join(map(str, row)) + "\n"
-            # Logic to extract chart labels and data
-            # Typically first column is label, second/all others are values
-            row_list = list(row)
-            if len(row_list) >= 2:
-                chart_data["labels"].append(str(row_list[0]))
-                try:
-                    # Try to get the numeric value from the last column
-                    chart_data["datasets"][0]["data"].append(float(row_list[-1]))
-                except:
-                    chart_data["datasets"][0]["data"].append(0)
-        
-        return {"execution_results": res_str, "chart_data": chart_data, "error": ""}
-    except Exception as e:
-        return {"error": str(e), "execution_results": f"Error: {str(e)}", "chart_data": {}}
+
+        if not rows:
+            return {
+                "sql_query": safe_query,
+                "execution_results": "No se encontraron resultados.",
+                "chart_data": {},
+                "error": "",
+                "row_count": 0,
+                "columns": [],
+            }
+
+        columns = list(rows[0].keys())
+        return {
+            "sql_query": safe_query,
+            "execution_results": format_results(rows, columns),
+            "chart_data": build_chart_data(rows, columns),
+            "error": "",
+            "row_count": len(rows),
+            "columns": columns,
+            "summary": summarize_rows(state.get("question", ""), rows, columns),
+        }
+    except Exception as exc:
+        return {
+            "error": str(exc),
+            "execution_results": f"Error: {exc}",
+            "chart_data": {},
+            "row_count": 0,
+            "columns": [],
+        }
+
 
 def narrator(state: State):
     if IS_DEMO_MODE:
         if state.get("error"):
-            return {"final_answer": f"[DEMO MODE] Hubo un problema técnico: {state['error']}. Por favor verifica la consulta SQL."}
-        
-        res = state['execution_results']
-        ans = f"[DEMO MODE] Analizando los datos obtenidos:\n\n{res}\nBasado en la base de datos, he encontrado la información solicitada arriba. (Activa tu API Key para análisis avanzado)."
-        return {"final_answer": ans}
+            return {
+                "final_answer": (
+                    "[DEMO MODE] Hubo un problema tecnico: "
+                    f"{state['error']}. Revisa la consulta o intenta una sugerencia del dashboard."
+                )
+            }
+        summary = state.get("summary") or "Consulta completada correctamente."
+        return {
+            "final_answer": (
+                "[DEMO MODE] Analisis completado.\n\n"
+                f"{summary}\n\n"
+                "La tabla y la visualizacion muestran los datos crudos para que puedas auditarlos rapidamente."
+            )
+        }
 
     if state.get("error"):
-         prompt = f"The user asked: {state['question']}. The SQL query was: {state['sql_query']}. However, there was an error: {state['error']}. Explain this politely to the user."
+        prompt = (
+            f"The user asked: {state.get('question', '')}. The SQL query was: {state.get('sql_query', '')}. "
+            f"However, there was an error: {state['error']}. Explain this politely to the user."
+        )
     else:
         prompt = f"""You are a BI Analyst. Based on the user's question and the results from the database, provide a clear and insightful answer.
-        
-        Question: {state['question']}
-        SQL Query: {state['sql_query']}
-        Results:
-        {state['execution_results']}
-        
-        Provide a friendly narration of the data.
-        """
+
+Question: {state.get('question', '')}
+SQL Query: {state.get('sql_query', '')}
+Results:
+{state.get('execution_results', '')}
+
+Provide a concise friendly narration of the data.
+"""
     response = llm.invoke([HumanMessage(content=prompt)])
     return {"final_answer": response.content}
 
-# Build the graph
-workflow = StateGraph(State)
 
+workflow = StateGraph(State)
 workflow.add_node("sql_generator", sql_generator)
 workflow.add_node("sql_executor", sql_executor)
 workflow.add_node("narrator", narrator)
-
 workflow.set_entry_point("sql_generator")
 workflow.add_edge("sql_generator", "sql_executor")
 workflow.add_edge("sql_executor", "narrator")
