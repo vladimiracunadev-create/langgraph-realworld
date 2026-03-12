@@ -1,8 +1,7 @@
 services:
   case01-smoke:
     build:
-      context: ..
-      dockerfile: backend/Dockerfile
+      context: .
     ports:
       - "18001:8001"
     volumes:
