@@ -106,6 +106,7 @@ El repositorio es `agent-aware` y expone habilidades locales para automatizar ta
 | :--- | :--- | :--- |
 | Actualizar Documentación | [.agents/skills/actualizar_doc/SKILL.md](.agents/skills/actualizar_doc/SKILL.md) | Sincronizar README, docs y wiki local |
 | Crear Caso LangGraph | [.agents/skills/crear_caso/SKILL.md](.agents/skills/crear_caso/SKILL.md) | Estandarizar nuevos casos |
+| Validar Caso LangGraph | [.agents/skills/validar_caso/SKILL.md](.agents/skills/validar_caso/SKILL.md) | Validar casos existentes y detectar fallas de CI, Docker y docs |
 
 Más detalle en [docs/AGENTS_AND_SKILLS.md](docs/AGENTS_AND_SKILLS.md).
 
