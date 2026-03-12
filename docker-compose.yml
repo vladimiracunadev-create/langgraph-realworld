@@ -10,7 +10,8 @@ services:
 
   case01:
     build:
-      context: cases/01-soporte-cliente-omnicanal/backend
+      context: cases/01-soporte-cliente-omnicanal
+      dockerfile: backend/Dockerfile
     ports:
       - "8001:8001"
     volumes:
