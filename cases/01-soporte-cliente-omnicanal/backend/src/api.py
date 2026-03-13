@@ -19,6 +19,9 @@ app = FastAPI(title="Caso 01 - Soporte cliente omnicanal")
 WEB_DIR = web_dir()
 if WEB_DIR.exists():
     app.mount("/web", StaticFiles(directory=str(WEB_DIR), html=True), name="web")
+SHARED_ASSETS_DIR = Path(__file__).resolve().parents[4] / "assets"
+if SHARED_ASSETS_DIR.exists():
+    app.mount("/shared-assets", StaticFiles(directory=str(SHARED_ASSETS_DIR)), name="shared-assets")
 
 
 class RunIn(BaseModel):
@@ -66,7 +69,18 @@ def index():
     index_path = WEB_DIR / "index.html"
     if not index_path.exists():
         return HTMLResponse("<h1>UI no disponible</h1>", status_code=404)
-    return index_path.read_text(encoding="utf-8")
+    html = index_path.read_text(encoding="utf-8")
+    html = html.replace(
+        "<body>",
+        "<body data-api-config-cases=\"01\" data-api-config-title=\"APIs del Caso 01\">",
+        1,
+    )
+    html = html.replace(
+        "</body>",
+        "  <script src=\"/shared-assets/api-config.js\"></script>\n</body>",
+        1,
+    )
+    return html
 
 
 @app.post("/api/run")

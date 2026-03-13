@@ -34,9 +34,12 @@ app = FastAPI(title="Caso 10 – Onboarding de Empleados")
 
 BACKEND_ROOT = Path(__file__).resolve().parents[1]
 WEB_DIR = BACKEND_ROOT / "web"
+SHARED_ASSETS_DIR = BACKEND_ROOT.parents[2] / "assets"
 
 if WEB_DIR.exists():
     app.mount("/static", StaticFiles(directory=str(WEB_DIR)), name="static")
+if SHARED_ASSETS_DIR.exists():
+    app.mount("/shared-assets", StaticFiles(directory=str(SHARED_ASSETS_DIR)), name="shared-assets")
 
 
 @app.middleware("http")
@@ -84,7 +87,18 @@ def index():
             "<h1>UI no disponible</h1><p>Falta backend/web/index.html</p>",
             status_code=404,
         )
-    return index_path.read_text(encoding="utf-8")
+    html = index_path.read_text(encoding="utf-8")
+    html = html.replace(
+        "<body>",
+        "<body data-api-config-cases=\"10\" data-api-config-title=\"APIs del Caso 10\">",
+        1,
+    )
+    html = html.replace(
+        "</body>",
+        "  <script src=\"/shared-assets/api-config.js\"></script>\n</body>",
+        1,
+    )
+    return html
 
 
 class RunIn(BaseModel):

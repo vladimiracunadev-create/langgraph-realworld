@@ -1,7 +1,7 @@
-﻿# Guía de Instalación y Despliegue
+# Guía de Instalación y Despliegue
 
 > [!NOTE]
-> **Versión**: 3.5.0 | **Estado**: Estable | **Audiencia**: Desarrolladores, DevOps
+> **Versión**: 3.6.0 | **Estado**: Estable | **Audiencia**: Desarrolladores, DevOps
 
 Esta guía explica cómo levantar el repositorio completo y cómo ejecutar por separado los casos operativos 01, 09, 10 y 13.
 

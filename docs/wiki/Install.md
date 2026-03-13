@@ -1,7 +1,7 @@
-﻿# Guía de Instalación y Despliegue
+# Guía de Instalación y Despliegue
 
 > [!NOTE]
-> **Versión**: 3.5.0 | **Estado**: Estable | **Audiencia**: Desarrolladores, DevOps
+> **Versión**: 3.6.0 | **Estado**: Estable | **Audiencia**: Desarrolladores, DevOps
 
 Esta guía explica cómo levantar el repositorio completo y cómo ejecutar por separado los casos operativos 01, 09, 10 y 13.
 
@@ -25,6 +25,16 @@ git clone https://github.com/vladimiracunadev-create/langgraph-realworld.git
 cd langgraph-realworld
 docker compose up --build
 ```
+
+Antes o después del primer arranque puedes preparar las variables opcionales:
+
+```bash
+copy cases\\09-rrhh-screening-agenda\\backend\\.env.example cases\\09-rrhh-screening-agenda\\backend\\.env
+copy cases\\10-onboarding-empleados\\backend\\.env.example cases\\10-onboarding-empleados\\backend\\.env
+copy cases\\13-bi-analista-datos\\backend\\.env.example cases\\13-bi-analista-datos\\backend\\.env
+```
+
+También puedes abrir el portal y usar el botón `Configurar APIs del portfolio` para completar credenciales opcionales y exportar el `.env` de cada caso operativo.
 
 Servicios principales:
 - Portal: `http://localhost:8080`
@@ -109,7 +119,21 @@ Cada caso operativo incluye o acepta configuración por `.env`:
 - caso 10: `cases/10-onboarding-empleados/backend/.env`
 - caso 13: `cases/13-bi-analista-datos/backend/.env`
 
+Flujo recomendado profesional:
+
+1. Copiar `backend/.env.example` a `backend/.env` en cada caso que quieras activar en LIVE.
+2. Completar solo las variables que realmente usarás.
+3. Si prefieres no tocarlas al instalar, abrir el portal raíz y usar `Configurar APIs del portfolio`.
+4. Guardar, copiar o descargar el contenido `.env` generado y llevarlo al caso correspondiente.
+
 La mayoría de las integraciones reales son opcionales; si no existen credenciales, el repositorio cae a modo demo.
+
+El formulario del portal muestra para cada variable:
+
+- nombre exacto de la variable;
+- caso al que está vinculada;
+- enlace oficial para obtener la API o credencial;
+- guardado local en navegador para no volver a escribirla.
 
 ---
 
@@ -143,3 +167,4 @@ python hub.py doctor
 - `ModuleNotFoundError`: faltan dependencias del caso o del Hub.
 - `Docker not in PATH`: el daemon no está activo o Docker Desktop no está iniciado.
 - `OPENAI_API_KEY` ausente: el caso sigue funcionando en demo si soporta modo offline.
+- No quieres completar APIs durante instalación: usa el portal raíz, abre `Configurar APIs del portfolio` y exporta el `.env` más tarde.

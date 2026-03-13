@@ -20,6 +20,9 @@ app.add_middleware(
 
 if settings.web_dir.exists():
     app.mount("/web", StaticFiles(directory=str(settings.web_dir), html=True), name="web")
+shared_assets_dir = settings.web_dir.parents[2] / "assets"
+if shared_assets_dir.exists():
+    app.mount("/shared-assets", StaticFiles(directory=str(shared_assets_dir)), name="shared-assets")
 
 
 def app_metadata() -> dict[str, Any]:

@@ -1,7 +1,7 @@
-﻿# Hoja de Ruta
+# Hoja de Ruta
 
 > [!NOTE]
-> **Versión**: 3.5.0 | **Estado**: Industrial | **Audiencia**: Stakeholders, Colaboradores
+> **Versión**: 3.6.0 | **Estado**: Industrial | **Audiencia**: Stakeholders, Colaboradores
 
 Resumen de prioridades del repositorio después de consolidar los casos 01, 09, 10 y 13 como referencias operativas del portafolio.
 

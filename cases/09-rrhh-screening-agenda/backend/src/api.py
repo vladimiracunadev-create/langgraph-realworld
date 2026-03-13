@@ -40,10 +40,13 @@ app = FastAPI(title="Caso 09 – RR.HH. Screening + Agenda")
 # backend/src/api.py -> parents[1] = backend/
 BACKEND_ROOT = Path(__file__).resolve().parents[1]
 WEB_DIR = BACKEND_ROOT / "web"
+SHARED_ASSETS_DIR = BACKEND_ROOT.parents[2] / "assets"
 
 # Solo montar estáticos si existe el directorio
 if WEB_DIR.exists():
     app.mount("/static", StaticFiles(directory=str(WEB_DIR)), name="static")
+if SHARED_ASSETS_DIR.exists():
+    app.mount("/shared-assets", StaticFiles(directory=str(SHARED_ASSETS_DIR)), name="shared-assets")
 
 @app.middleware("http")
 async def add_trace_id_middleware(request, call_next):
@@ -101,7 +104,18 @@ def index():
             "<h1>UI no disponible</h1><p>Falta backend/web/index.html</p>",
             status_code=404,
         )
-    return index_path.read_text(encoding="utf-8")
+    html = index_path.read_text(encoding="utf-8")
+    html = html.replace(
+        "<body>",
+        "<body data-api-config-cases=\"09\" data-api-config-title=\"APIs del Caso 09\">",
+        1,
+    )
+    html = html.replace(
+        "</body>",
+        "  <script src=\"/shared-assets/api-config.js\"></script>\n</body>",
+        1,
+    )
+    return html
 
 
 class RunIn(BaseModel):

@@ -1,10 +1,5 @@
-# Recruiter Guide
+# Guía para Recruiters y Hiring Managers
 
-La guía principal para recruiters e hiring managers ahora vive en [docs/RECRUITER.md](../RECRUITER.md).
+> **Versión**: 3.6.0 | **Estado**: Industrial | **Audiencia**: Recruiters, Hiring Managers, líderes técnicos y evaluadores de portafolio
 
-Usa ese documento como fuente oficial para:
-
-- resumen ejecutivo del repositorio;
-- señales verificables de seniority;
-- ruta de evaluación por perfil;
-- casos clave para revisar primero.
+Este portafolio documenta casos reales y además deja clara la ruta para activar integraciones opcionales desde `.env.example` o desde la UI del portal.
