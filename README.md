@@ -47,6 +47,7 @@ El estándar actual del repositorio se apoya en estos pilares:
 | Dev / DevOps | [Caso 09](cases/09-rrhh-screening-agenda/README.md) | Resiliencia, streaming y observabilidad |
 | Dev / DevOps | [Caso 10](cases/10-onboarding-empleados/README.md) | Flujo empresarial, RBAC e integraciones |
 | Analista / BI | [Caso 13](cases/13-bi-analista-datos/README.md) | SQL seguro, visualización y UX de datos |
+| Recruiter / Hiring Manager | [docs/RECRUITER.md](docs/RECRUITER.md) | Resumen ejecutivo, señales de seniority y ruta de evaluación |
 | Principiante | [docs/BEGINNERS_GUIDE.md](docs/BEGINNERS_GUIDE.md) | Mapa del repositorio |
 | Seguridad | [SECURITY.md](SECURITY.md) | Postura de hardening y manejo de secretos |
 
@@ -118,5 +119,6 @@ Más detalle en [docs/AGENTS_AND_SKILLS.md](docs/AGENTS_AND_SKILLS.md).
 - [docs/TECHNICAL_SPECS.md](docs/TECHNICAL_SPECS.md)
 - [docs/INSTALL.md](docs/INSTALL.md)
 - [docs/REQUIREMENTS.md](docs/REQUIREMENTS.md)
+- [docs/RECRUITER.md](docs/RECRUITER.md)
 - [ROADMAP.md](ROADMAP.md)
 - [CHANGELOG.md](CHANGELOG.md)

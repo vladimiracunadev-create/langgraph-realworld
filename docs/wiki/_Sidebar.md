@@ -6,6 +6,7 @@
 
 ### 🐣 Empezando
 - **[🐣 Guía Principiantes](Guia-para-Principiantes)**
+- **[🧭 Recruiter Guide](Recruiter)**
 - **[📋 Requisitos](Requisitos-del-Sistema)**
 - **[🕹️ Hub CLI](Hub-CLI)**
 
