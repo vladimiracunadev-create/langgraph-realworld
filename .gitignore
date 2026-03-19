@@ -57,3 +57,6 @@ htmlcov/
 
 # Temporary planning files
 implementation_plan.md
+
+# Claude Code local config and memory
+.claude/
