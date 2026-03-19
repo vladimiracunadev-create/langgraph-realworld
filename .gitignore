@@ -50,3 +50,10 @@ Desktop.ini
 .pytest_cache/
 .coverage
 htmlcov/
+
+# Local dependency caches (pip install --target)
+.deps/
+*/.deps/
+
+# Temporary planning files
+implementation_plan.md
