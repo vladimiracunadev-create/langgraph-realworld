@@ -3,11 +3,12 @@
 > [!NOTE]
 > **Versión**: 3.6.0 | **Estado**: Industrial | **Audiencia**: Stakeholders, Colaboradores
 
-Resumen de prioridades del repositorio después de consolidar los casos 01, 09, 10 y 13 como referencias operativas del portafolio.
+Resumen de prioridades del repositorio después de consolidar los casos 01, 02, 09, 10 y 13 como referencias operativas del portafolio.
 
 ## Estado actual
 
 - Caso 01 listo como referencia operativa de soporte omnicanal y fallback DEMO/LIVE.
+- Caso 02 listo como referencia operativa SRE Agentic (HITL, bypass de excepciones y simulación de consolas).
 - Caso 09 listo como referencia de resiliencia.
 - Caso 10 listo como referencia de flujo empresarial.
 - Caso 13 listo como referencia de analítica conversacional.

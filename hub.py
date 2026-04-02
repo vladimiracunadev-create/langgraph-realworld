@@ -37,8 +37,8 @@ def cmd_list(args):
             has_config = (d / "case.yml").exists()
             if case_id in ["09", "10", "13"]:
                 status = "Industrial (v3.6.0)"
-            elif case_id == "01":
-                status = "Operational (v3.6.0)"
+            elif case_id in ["01", "02"]:
+                status = "Operational (v3.7.0)"
             elif has_config:
                 status = "Scaffold (v1.0)"
             else:

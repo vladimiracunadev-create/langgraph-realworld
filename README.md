@@ -4,7 +4,7 @@
 [![Security Scan](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml/badge.svg?branch=main)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Portafolio de casos de uso con LangGraph, FastAPI y demos empresariales. El repositorio combina una capa documental fuerte con cuatro casos operables: 01, 09, 10 y 13.
+Portafolio de casos de uso con LangGraph, FastAPI y demos empresariales. El repositorio combina una capa documental fuerte con cinco casos operables: 01, 02, 09, 10 y 13.
 
 ---
 
@@ -13,7 +13,7 @@ Portafolio de casos de uso con LangGraph, FastAPI y demos empresariales. El repo
 El estándar actual del repositorio se apoya en estos pilares:
 
 1. **Portal unificado**: `index.html` como entrada principal para navegar el portafolio.
-2. **Casos de referencia reales**: backends FastAPI y UIs activas en los casos 01, 09, 10 y 13.
+2. **Casos de referencia reales**: backends FastAPI y UIs activas en los casos 01, 02, 09, 10 y 13.
 3. **Estado tipado**: contratos explícitos de estado con `TypedDict` y flujos compatibles con LangGraph.
 4. **Observabilidad**: endpoints `/health` y `/ready`, además de trazabilidad por eventos o `trace_id` según el caso.
 5. **Modo dual**: demos offline y ruta clara para activar integraciones reales mediante `.env.example`, `.env` y variables de entorno.
@@ -34,6 +34,7 @@ El estándar actual del repositorio se apoya en estos pilares:
 | Case ID | Nombre | Estado | Stack principal |
 | :--- | :--- | :--- | :--- |
 | **01** | [Soporte Cliente Omnicanal](cases/01-soporte-cliente-omnicanal/README.md) | `OPERATIVO` | FastAPI + LangGraph + Routing + DEMO/LIVE |
+| **02** | [Mesa de Ayuda TI](cases/02-mesa-ayuda-ti-runbooks/README.md) | `OPERATIVO` | FastAPI + CMDB + LangGraph + HITL |
 | **09** | [RRHH Screening Agenda](cases/09-rrhh-screening-agenda/README.md) | `INDUSTRIAL` | FastAPI + LangGraph + MemorySaver + Resilience |
 | **10** | [Onboarding Empleados](cases/10-onboarding-empleados/README.md) | `INDUSTRIAL` | FastAPI + RBAC + Integrations + MemorySaver |
 | **13** | [BI Data Analyst](cases/13-bi-analista-datos/README.md) | `INDUSTRIAL` | FastAPI + SQL Agent + Chart.js + DEMO/LLM |
@@ -45,6 +46,7 @@ El estándar actual del repositorio se apoya en estos pilares:
 | Perfil | Ruta recomendada | Qué mirar |
 | :--- | :--- | :--- |
 | Dev / DevOps | [Caso 01](cases/01-soporte-cliente-omnicanal/README.md) | Triage omnicanal, routing y fallback DEMO/LIVE |
+| IT Admin / SRE | [Caso 02](cases/02-mesa-ayuda-ti-runbooks/README.md) | Enriquecimiento de perfil, HITL (aprobaciones), control de excepciones, UI de Terminal dinámica |
 | Dev / DevOps | [Caso 09](cases/09-rrhh-screening-agenda/README.md) | Resiliencia, streaming y activación opcional de integraciones |
 | Dev / DevOps | [Caso 10](cases/10-onboarding-empleados/README.md) | Flujo empresarial, RBAC e integraciones |
 | Analista / BI | [Caso 13](cases/13-bi-analista-datos/README.md) | SQL seguro, visualización y activación opcional de LLM |
