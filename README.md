@@ -8,7 +8,7 @@ Portafolio de casos de uso con LangGraph, FastAPI y demos empresariales. El repo
 
 ---
 
-## Implementación Industrial (v3.6.0)
+## 🏭 Implementación Industrial (v3.7.0)
 
 El estándar actual del repositorio se apoya en estos pilares:
 
@@ -21,15 +21,15 @@ El estándar actual del repositorio se apoya en estos pilares:
 7. **Activación profesional de APIs**: portal y UIs con formulario para capturar credenciales opcionales, enlazar su origen y exportar el `.env` por caso.
 
 > [!TIP]
-> Consulta el detalle técnico en [CHANGELOG.md](CHANGELOG.md), [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [docs/TECHNICAL_SPECS.md](docs/TECHNICAL_SPECS.md) y [docs/INSTALL.md](docs/INSTALL.md).
+> 📚 Consulta el detalle técnico en [CHANGELOG.md](CHANGELOG.md), [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [docs/TECHNICAL_SPECS.md](docs/TECHNICAL_SPECS.md) y [docs/INSTALL.md](docs/INSTALL.md).
 
-### Taxonomía de Implementación
+### 📖 Taxonomía de Implementación
 
-- **Operational (v3.6.0)**: caso 01 con backend real, ruteo omnicanal, modo DEMO/LIVE, UI operativa y configuración opcional desde interfaz.
-- **Industrial (v3.6.0)**: casos con backend real, streaming, estado tipado, observabilidad, documentación operativa y activación guiada de APIs.
-- **Legacy / Scaffold**: demos o plantillas listas para evolucionar sin pretender hoy el mismo nivel operativo.
+- 🔴 **Operational (v3.7.0)**: caso 01 y 02 con backends reales, lógicas condicionales robustas, modo DEMO/LIVE, UIs operativas e interactivas.
+- 🟢 **Industrial (v3.6.0)**: casos con backend real, streaming, estado tipado, observabilidad, documentación operativa y activación guiada de APIs.
+- ⚪ **Legacy / Scaffold**: demos o plantillas listas para evolucionar sin pretender hoy el mismo nivel operativo.
 
-### Estado de los Casos Clave
+### 📋 Estado de los Casos Clave
 
 | Case ID | Nombre | Estado | Stack principal |
 | :--- | :--- | :--- | :--- |
@@ -41,7 +41,7 @@ El estándar actual del repositorio se apoya en estos pilares:
 
 ---
 
-## ¿Por dónde empezar?
+## 🧭 ¿Por dónde empezar?
 
 | Perfil | Ruta recomendada | Qué mirar |
 | :--- | :--- | :--- |
@@ -56,7 +56,7 @@ El estándar actual del repositorio se apoya en estos pilares:
 
 ---
 
-## Activar APIs opcionales
+## 🔑 Activar APIs opcionales
 
 - Copia `backend/.env.example` a `backend/.env` en el caso que quieras llevar a LIVE.
 - O abre el portal raíz y usa `Configurar APIs del portfolio` para completar credenciales, ver dónde obtenerlas y exportar el `.env` por caso.

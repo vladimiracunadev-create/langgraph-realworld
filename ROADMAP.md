@@ -7,12 +7,12 @@ Resumen de prioridades del repositorio después de consolidar los casos 01, 02, 
 
 ## Estado actual
 
-- Caso 01 listo como referencia operativa de soporte omnicanal y fallback DEMO/LIVE.
-- Caso 02 listo como referencia operativa SRE Agentic (HITL, bypass de excepciones y simulación de consolas).
-- Caso 09 listo como referencia de resiliencia.
-- Caso 10 listo como referencia de flujo empresarial.
-- Caso 13 listo como referencia de analítica conversacional.
-- Hub CLI y documentación sincronizados como capa de operación del monorepo.
+- ✅ **Caso 01** listo como referencia operativa de soporte omnicanal y fallback DEMO/LIVE.
+- ✅ **Caso 02** listo como referencia operativa SRE Agentic (HITL, bypass de excepciones y simulación de consolas).
+- ✅ **Caso 09** listo como referencia de resiliencia.
+- ✅ **Caso 10** listo como referencia de flujo empresarial.
+- ✅ **Caso 13** listo como referencia de analítica conversacional.
+- 🛠️ Hub CLI y documentación sincronizados como capa de operación del monorepo.
 
 ## Próximos focos
 
