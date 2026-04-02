@@ -1,7 +1,7 @@
 import logging
 import operator
 import time
-from typing import Annotated, Any, Dict, List
+from typing import Annotated, Any, Dict, List, Literal
 
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import END, START, StateGraph
@@ -9,7 +9,9 @@ from typing_extensions import TypedDict
 
 from .integrations import (
     _is_live,
+    check_approval_requirement,
     draft_response_llm,
+    enrich_ticket_data,
     get_runbooks,
     llm_classify_issue,
     simulate_runbook_execution,
@@ -20,8 +22,10 @@ logger = logging.getLogger(__name__)
 
 class HelpdeskState(TypedDict, total=False):
     ticket: str
+    user_info: Dict[str, Any]
     category: str
     runbook: Dict[str, Any]
+    approval_status: str
     execution_log: List[str]
     resolution_status: str
     response: str
@@ -40,9 +44,17 @@ def receive_ticket(state: HelpdeskState) -> Dict[str, Any]:
     out.update(_push_event("received", {"ticket": state.get("ticket"), "mode": mode}))
     return out
 
+def enrich_ticket(state: HelpdeskState) -> Dict[str, Any]:
+    ticket = state.get("ticket", "")
+    info = enrich_ticket_data(ticket)
+    out = {"user_info": info}
+    out.update(_push_event("enriched", {"user": info.get("user"), "equipment": info.get("equipment")}))
+    return out
+
 def classify_issue(state: HelpdeskState) -> Dict[str, Any]:
     ticket = state.get("ticket", "")
-    category = llm_classify_issue(ticket)
+    user_info = state.get("user_info", {})
+    category = llm_classify_issue(ticket, user_info)
     out = {"category": category}
     out.update(_push_event("classified", {"category": category}))
     return out
@@ -50,16 +62,25 @@ def classify_issue(state: HelpdeskState) -> Dict[str, Any]:
 def select_runbook(state: HelpdeskState) -> Dict[str, Any]:
     cat = state.get("category", "red")
     rbs = get_runbooks()
-    # Find first runbook that matches category
     rb = next((r for r in rbs if r.get("category") == cat), None)
-    
     if not rb:
-        # Fallback to first if none matches
         rb = rbs[0]
         
     out = {"runbook": rb}
     out.update(_push_event("runbook_selected", {"runbook_id": rb["id"], "name": rb["name"]}))
     return out
+
+def request_approval(state: HelpdeskState) -> Dict[str, Any]:
+    rb = state.get("runbook", {})
+    status = check_approval_requirement(rb)
+    out = {"approval_status": status}
+    out.update(_push_event("approval_checked", {"status": status}))
+    return out
+
+def route_after_approval(state: HelpdeskState) -> Literal["execute_runbook", "draft_response"]:
+    if state.get("approval_status") == "REJECTED":
+        return "draft_response"
+    return "execute_runbook"
 
 def execute_runbook(state: HelpdeskState) -> Dict[str, Any]:
     rb = state.get("runbook", {})
@@ -80,7 +101,8 @@ def draft_response(state: HelpdeskState) -> Dict[str, Any]:
     ticket = state.get("ticket", "")
     status = state.get("resolution_status", "RESOLVED")
     rb = state.get("runbook", {})
-    resp = draft_response_llm(ticket, status, rb)
+    appr = state.get("approval_status", "")
+    resp = draft_response_llm(ticket, status, rb, appr)
     out = {"response": resp}
     out.update(_push_event("responded", {"response_length": len(resp)}))
     return out
@@ -88,16 +110,23 @@ def draft_response(state: HelpdeskState) -> Dict[str, Any]:
 def compile_graph():
     g = StateGraph(HelpdeskState)
     g.add_node("receive_ticket", receive_ticket)
+    g.add_node("enrich_ticket", enrich_ticket)
     g.add_node("classify_issue", classify_issue)
     g.add_node("select_runbook", select_runbook)
+    g.add_node("request_approval", request_approval)
     g.add_node("execute_runbook", execute_runbook)
     g.add_node("validate_resolution", validate_resolution)
     g.add_node("draft_response", draft_response)
 
     g.add_edge(START, "receive_ticket")
-    g.add_edge("receive_ticket", "classify_issue")
+    g.add_edge("receive_ticket", "enrich_ticket")
+    g.add_edge("enrich_ticket", "classify_issue")
     g.add_edge("classify_issue", "select_runbook")
-    g.add_edge("select_runbook", "execute_runbook")
+    g.add_edge("select_runbook", "request_approval")
+    
+    # Conditional edge after approval
+    g.add_conditional_edges("request_approval", route_after_approval)
+    
     g.add_edge("execute_runbook", "validate_resolution")
     g.add_edge("validate_resolution", "draft_response")
     g.add_edge("draft_response", END)

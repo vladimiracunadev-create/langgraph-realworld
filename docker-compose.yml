@@ -23,6 +23,18 @@ services:
       - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
       - USE_LLM=${USE_LLM:-true}
 
+  case02:
+    build:
+      context: cases/02-mesa-ayuda-ti-runbooks/backend
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./cases/02-mesa-ayuda-ti-runbooks/data:/app/data:ro
+      - ./cases/02-mesa-ayuda-ti-runbooks/backend/web:/app/web:ro
+    environment:
+      - DATA_DIR=/app/data
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+
   case09:
     build:
       context: cases/09-rrhh-screening-agenda/backend

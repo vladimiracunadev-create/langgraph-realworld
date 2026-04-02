@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Terminal SRE | Caso 02</title>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <title>Agentic SRE Helpdesk | Caso 02</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #090B0D;
@@ -12,6 +12,7 @@
       --border: rgba(47, 255, 172, 0.15);
       --accent: #2FFFAC;
       --error: #FF4E4E;
+      --warn: #F5A623;
       --text: #c0c6d0;
       color-scheme: dark;
     }
@@ -19,87 +20,156 @@
       margin: 0; background: var(--bg); color: var(--text);
       font-family: 'Inter', sans-serif;
     }
+    
+    /* Hero Header */
     header {
-      padding: 20px 30px; border-bottom: 1px solid var(--border);
-      display: flex; justify-content: space-between; align-items: center;
-      background: var(--card-bg);
+      padding: 50px 30px; text-align: center;
+      background: linear-gradient(180deg, rgba(47, 255, 172, 0.05) 0%, var(--bg) 100%);
+      border-bottom: 1px solid rgba(47, 255, 172, 0.05);
     }
     .badge {
-      padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: bold; font-family: 'JetBrains Mono';
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 12px; border-radius: 100px; font-size: 11px; font-weight: bold; font-family: 'JetBrains Mono';
       border: 1px solid var(--border); color: var(--accent); background: rgba(47, 255, 172, 0.05);
+      margin-bottom: 20px;
     }
+    h1 { font-size: 36px; font-weight: 800; margin: 0 0 10px 0; color: #fff; }
+    h1 span { color: var(--accent); }
+    .subtitle {
+      max-width: 600px; margin: 0 auto; line-height: 1.6; color: rgba(255,255,255,0.6);
+      font-size: 15px;
+    }
+    .nav-back { margin-top: 20px; font-family:'JetBrains Mono'; font-size:12px; }
+    .nav-back a { color: var(--accent); text-decoration: none; opacity: 0.7;}
+    .nav-back a:hover { opacity: 1; }
+
+    /* Layout */
     main {
-      padding: 30px; max-width: 1000px; margin: 0 auto;
-      display: grid; grid-template-columns: 300px 1fr; gap: 20px;
+      padding: 40px 30px; max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: 350px 1fr; gap: 30px;
     }
     .panel {
-      background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px;
-      padding: 20px;
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+      padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
     h2 { font-family: 'JetBrains Mono'; font-size: 14px; text-transform: uppercase; margin: 0 0 15px 0; color: var(--accent); letter-spacing: 1px;}
-    textarea {
-      width: 100%; height: 100px; background: rgba(0,0,0,0.3); border: 1px solid var(--border);
-      color: #fff; font-family: 'Inter'; padding: 10px; border-radius: 4px; resize: none; margin-bottom: 10px;
-      box-sizing: border-box;
-    }
-    button {
-      width: 100%; padding: 12px; background: rgba(47, 255, 172, 0.1); border: 1px solid var(--accent);
-      color: var(--accent); font-family: 'JetBrains Mono'; cursor: pointer; transition: 0.2s;
-    }
-    button:hover { background: var(--accent); color: #000; }
     
-    .terminal {
-      background: #000; padding: 20px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 13px;
-      height: 400px; overflow-y: auto; border: 1px solid #1a2026; color: #a5b4c1;
+    /* Inputs */
+    textarea {
+      width: 100%; height: 90px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
+      color: #fff; font-family: 'Inter'; padding: 12px; border-radius: 8px; resize: none; margin-bottom: 15px;
+      box-sizing: border-box; font-size: 14px;
     }
-    .log-line { margin-bottom: 6px; }
-    .log-sys { color: var(--accent); }
+    textarea:focus { outline: none; border-color: var(--accent); }
+    button {
+      width: 100%; padding: 14px; background: rgba(47, 255, 172, 0.1); border: 1px solid var(--accent);
+      color: var(--accent); font-family: 'JetBrains Mono'; cursor: pointer; transition: 0.2s;
+      border-radius: 8px; font-weight: bold; font-size: 13px;
+    }
+    button:hover { background: var(--accent); color: #000; box-shadow: 0 0 20px rgba(47, 255, 172, 0.3); }
+
+    /* Meta / Context */
+    .user-context {
+      margin-top: 25px; padding: 15px; background: rgba(255,255,255,0.02);
+      border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);
+      display: none;
+    }
+    .user-context p { margin: 5px 0; font-size: 13px; display: flex; justify-content: space-between; }
+    .user-context span { color: #fff; font-family: 'JetBrains Mono'; }
+
+    /* Process Tracker */
+    .tracker { margin-top: 30px; }
+    .step {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
+      padding: 10px; border-radius: 6px; border: 1px solid transparent;
+      opacity: 0.4; transition: 0.3s;
+    }
+    .step.active { opacity: 1; border-color: var(--accent); background: rgba(47, 255, 172, 0.05); }
+    .step.done { opacity: 0.8; border-color: rgba(255,255,255,0.1); }
+    .step-icon { font-size: 16px; }
+    .step-text { font-size: 13px; font-weight: 600; }
+
+    /* Terminal */
+    .terminal-wrapper { position: relative; }
+    .terminal {
+      background: #050709; padding: 20px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 13px;
+      height: 480px; overflow-y: auto; border: 1px solid rgba(255,255,255,0.05); color: #a5b4c1;
+    }
+    .log-line { margin-bottom: 8px; line-height: 1.4; }
+    .log-sys { color: var(--accent); text-shadow: 0 0 5px rgba(47, 255, 172, 0.5); }
     .log-err { color: var(--error); }
+    .log-warn { color: var(--warn); }
     .typing::after { content: '█'; animation: blink 1s step-start infinite; }
     @keyframes blink { 50% { opacity: 0; } }
-
-    .meta-box { margin-top: 15px; font-size: 12px; opacity: 0.8; }
-    .meta-row { display: flex; justify-content: space-between; margin-bottom: 5px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; }
   </style>
 </head>
 <body>
+
   <header>
-    <div style="display:flex; align-items:center; gap:15px;">
-      <h1 style="margin:0; font-family:'JetBrains Mono'; font-size:18px;">[ SRE // HELPDESK ]</h1>
-      <span class="badge" id="mode-badge">CARGANDO...</span>
-    </div>
-    <a href="../../../index.html" style="color:var(--text); text-decoration:none; font-family:'JetBrains Mono'; font-size:12px;">← EXIT</a>
+    <div class="badge" id="mode-badge">⚡ ONLINE</div>
+    <h1>Agentic SRE <span>Helpdesk</span></h1>
+    <p class="subtitle">
+      Asistente TI autónomo. Enriquecimiento de perfil mediante CMDB, clasificación LLM,
+      solicitud de aprobaciones HITL y ejecución de runbooks simulados en SRE.
+    </p>
+    <div class="nav-back"><a href="../../../index.html">← VOLVER AL HUB</a></div>
   </header>
+
   <main>
+    <!-- Columna Izquierda: Input y Tracking -->
     <div class="panel">
       <h2>Ingreso de Ticket</h2>
-      <textarea id="ticketInput" placeholder="Ej: No me puedo conectar a la red corporativa, dice error de VPN..."></textarea>
-      <button onclick="runGraph()">EJECUTAR_TICKET()</button>
+      <textarea id="ticketInput" placeholder="Ej: Hola, el VPN me da error de autenticación (msmith)"></textarea>
+      <button id="runBtn" onclick="runGraph()">LANZAR_PIPELINE()</button>
       
-      <div class="meta-box" style="margin-top:30px;">
-        <h2>Estado de Nodos</h2>
-        <div class="meta-row"><span>Category:</span> <span id="s-cat">-</span></div>
-        <div class="meta-row"><span>Runbook:</span> <span id="s-rbk">-</span></div>
-        <div class="meta-row"><span>Status:</span> <span id="s-stat">-</span></div>
+      <div class="user-context" id="u-ctx">
+        <h2>Contexto Usuario</h2>
+        <p>User: <span id="u-name">-</span></p>
+        <p>Equipo: <span id="u-eq">-</span></p>
+        <p>Status: <span id="u-stat">-</span></p>
+        <p>VPN Group: <span id="u-vpn">-</span></p>
+      </div>
+
+      <div class="tracker">
+        <!-- Steps -->
+        <div class="step" id="st-enrich"><div class="step-icon">🔍</div><div class="step-text">Lectura Inventario (CMDB)</div></div>
+        <div class="step" id="st-classify"><div class="step-icon">🧠</div><div class="step-text">Clasificación LLM & Runbook</div></div>
+        <div class="step" id="st-approval"><div class="step-icon">🛡️</div><div class="step-text">Aprobación (Manager/Lead)</div></div>
+        <div class="step" id="st-exec"><div class="step-icon">⚙️</div><div class="step-text">Ejecución Runbook (SRE)</div></div>
+        <div class="step" id="st-val"><div class="step-icon">⚖️</div><div class="step-text">Validación Resolución</div></div>
+        <div class="step" id="st-resp"><div class="step-icon">✉️</div><div class="step-text">Respuesta Cliente</div></div>
       </div>
     </div>
     
-    <div class="panel">
-      <h2>Terminal Output</h2>
+    <!-- Columna Derecha: Consola SRE -->
+    <div class="panel terminal-wrapper">
+      <h2>Terminal SRE / Execution SDO</h2>
       <div class="terminal" id="terminal">
-        <div class="log-line">> WAITING FOR INPUT...<span class="typing"></span></div>
+        <div class="log-line">> WAITING FOR INGRESS REQUEST...<span class="typing"></span></div>
       </div>
     </div>
   </main>
 
   <script>
+    const steps = ['enrich', 'classify', 'approval', 'exec', 'val', 'resp'];
+    function setStep(id) {
+      steps.forEach(s => {
+        const el = document.getElementById('st-'+s);
+        if(el.classList.contains('active')) {
+            el.classList.remove('active');
+            el.classList.add('done');
+        }
+      });
+      if(id) document.getElementById('st-'+id).classList.add('active');
+    }
+
     async function checkHealth() {
       try {
         const r = await fetch('/health');
         const d = await r.json();
-        document.getElementById('mode-badge').innerText = d.mode.toUpperCase();
+        document.getElementById('mode-badge').innerText = `⚡ ${d.mode.toUpperCase()}`;
       } catch(e) {
-        document.getElementById('mode-badge').innerText = "OFFLINE";
+        document.getElementById('mode-badge').innerText = "❌ OFFLINE";
       }
     }
     
@@ -109,7 +179,8 @@
       let cls = "log-line";
       if(type==="sys") cls += " log-sys";
       if(type==="err") cls += " log-err";
-      t.innerHTML += `<div class="${cls}">[${new Date().toLocaleTimeString()}] ${msg}</div>`;
+      if(type==="warn") cls += " log-warn";
+      t.innerHTML += `<div class="${cls}">[${new Date().toISOString().split('T')[1].slice(0,8)}] ${msg}</div>`;
       t.innerHTML += `<span class="typing"></span>`;
       t.scrollTop = t.scrollHeight;
     }
@@ -117,8 +188,16 @@
     async function runGraph() {
       const ticket = document.getElementById('ticketInput').value.trim();
       if(!ticket) return;
+      document.getElementById('runBtn').disabled = true;
+      document.getElementById('runBtn').innerText = "EJECUTANDO...";
       document.getElementById('terminal').innerHTML = "";
-      log(`INICIANDO DIAGNÓSTICO: "${ticket}"`, "sys");
+      document.getElementById('u-ctx').style.display = 'none';
+      
+      // Reset steps
+      steps.forEach(s => document.getElementById('st-'+s).className = 'step');
+
+      log(`[NEW TICKET RECEIVED] "${ticket}"`, "sys");
+      setStep('enrich');
       
       try {
         const url = `/api/stream?ticket=${encodeURIComponent(ticket)}`;
@@ -143,39 +222,64 @@
             try {
               let st = JSON.parse(p);
               if(st.error) { log(st.error, "err"); continue; }
-              
-              if(st.category) {
-                  document.getElementById('s-cat').innerText = st.category.toUpperCase();
-                  log(`> Categoría detectada: ${st.category.toUpperCase()}`);
+              const events = st.events || [];
+              const lastEvent = events[events.length-1];
+              if(!lastEvent) continue;
+
+              const evType = lastEvent.type;
+
+              if(evType === "enriched") {
+                  document.getElementById('u-ctx').style.display = 'block';
+                  document.getElementById('u-name').innerText = st.user_info.user;
+                  document.getElementById('u-eq').innerText = st.user_info.equipment;
+                  document.getElementById('u-stat').innerText = st.user_info.status.toUpperCase();
+                  document.getElementById('u-vpn').innerText = st.user_info.vpn_group;
+                  log(`> User matched in CMDB: ${st.user_info.user} (${st.user_info.status})`, "sys");
+                  setStep('classify');
               }
-              if(st.runbook) {
-                  document.getElementById('s-rbk').innerText = st.runbook.id;
-                  log(`> Seleccionando runbook: ${st.runbook.name}`, "sys");
+              else if(evType === "classified") {
+                  log(`> Clasificación IA: [${st.category.toUpperCase()}]`);
               }
-              if(st.execution_log && st.execution_log.length > 0) {
-                  const evt = st.events && st.events[st.events.length-1];
-                  // Solo print si el último request mutó execution_logs
-                  if(evt && evt.type === "executed") {
+              else if(evType === "runbook_selected") {
+                  log(`> Runbook seleccionado: ${st.runbook.name} (${st.runbook.id})`);
+                  setStep('approval');
+              }
+              else if(evType === "approval_checked") {
+                  if(st.approval_status === "BYPASSED") {
+                      log(`> Aprobación HITL no requerida para cateogría [${st.category.toUpperCase()}]`);
+                      setStep('exec');
+                  } else if (st.approval_status === "APPROVED") {
+                      log(`> [HITL] Manager APPROVES execution of runbook.`, "sys");
+                      setStep('exec');
+                  } else {
+                      log(`> [HITL] Manager REJECTS execution. Escalating...`, "warn");
+                      setStep('resp');
+                  }
+              }
+              else if(evType === "executed") {
+                  if(st.execution_log && st.execution_log.length > 0) {
                       st.execution_log.forEach(l => log(`  | ${l}`));
                   }
+                  setStep('val');
               }
-              if(st.resolution_status) {
-                  document.getElementById('s-stat').innerText = st.resolution_status;
-                  log(`> Evaluación final: ${st.resolution_status}`, st.resolution_status==="RESOLVED"?"sys":"err");
+              else if(evType === "validated") {
+                  log(`> Evaluación del incidente post-ejecución: ${st.resolution_status}`, st.resolution_status==="RESOLVED"?"sys":"warn");
+                  setStep('resp');
               }
-              if(st.response) {
-                  const evt = st.events && st.events[st.events.length-1];
-                  if(evt && evt.type === "responded") {
-                      log(`> ENVIANDO A CLIENTE:`);
-                      log(`"${st.response}"`, "sys");
-                  }
+              else if(evType === "responded") {
+                  log(`> RESPUESTA REDACTADA Y ENVIADA:`);
+                  log(`"${st.response}"`, "sys");
+                  setStep(); // Finishes all
               }
-
             } catch(e) { }
           }
         }
       } catch(e) {
-        log(`CRITICAL ERROR: ${e}`, "err");
+        log(`CRITICAL HTTP ERROR: ${e}`, "err");
+      } finally {
+        document.getElementById('runBtn').disabled = false;
+        document.getElementById('runBtn').innerText = "LANZAR_PIPELINE()";
+        log("> CONNECTION CLOSED.", "normal");
       }
     }
     
