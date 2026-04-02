@@ -173,7 +173,7 @@
     </style>
 </head>
 
-<body data-api-config-cases="01,09,10,13" data-api-config-title="Centro de APIs del portfolio">
+<body data-api-config-cases="01,02,09,10,13" data-api-config-title="Centro de APIs del portfolio">
     <header>
         <div class="wrap">
             <div class="h1">LangGraph – Casos del mundo real</div>
@@ -183,7 +183,7 @@
             </div>
             <div class="pillrow">
                 <div class="pill" style="border-color: #238636; background: rgba(35, 134, 54, 0.1); color: #3fb950;">✅
-                    Casos 01, 09, 10 y 13 Operativos</div>
+                    Casos 01, 02, 09, 10 y 13 Operativos</div>
                 <div class="pill">🧠 Flujos con estado (LangGraph)</div>
                 <div class="pill">🧾 Streaming NDJSON</div>
                 <div class="pill">💾 Memoria por <code>thread_id</code></div>
@@ -194,7 +194,7 @@
     <div class="wrap" style="margin-top:12px;">
         <div
             style="border-radius:12px; padding:12px; border:1px solid rgba(255,255,255,.06); background: rgba(255,255,255,.02);">
-            <strong style="color:#ffd89b;">Estado del repositorio: Casos <b>01</b>, <b>09</b>, <b>10</b> y <b>13</b> son operativos</strong>
+            <strong style="color:#ffd89b;">Estado del repositorio: Casos <b>01</b>, <b>02</b>, <b>09</b>, <b>10</b> y <b>13</b> son operativos</strong>
             <div style="margin-top:8px; opacity:.9; font-size:13px;">Los demas casos siguen en scaffold o legado y pueden requerir trabajo adicional para ejecutarse.</div>
             <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
                 <a href="docs/doc_viewer.html?file=SECURITY.md"
@@ -240,14 +240,14 @@
                 <div class="meta">Abrir caso 01 -></div>
             </a>
 
-            <a class="card" href="cases/02-mesa-ayuda-ti-runbooks/demo/index.html">
+            <a class="card" href="http://localhost:8002/web/">
                 <div class="top">
                     <div class="num">02</div>
-                    <div class="badge">LEGACY</div>
+                    <div class="badge ok">INDUSTRIAL (V3.6.0)</div>
                 </div>
                 <div class="title">Mesa de ayuda TI / Runbooks</div>
-                <div class="desc">Diagnóstico y ejecución de runbooks con verificación.</div>
-                <div class="meta">Abrir demo →</div>
+                <div class="desc">Agentic Helpdesk con ejecución simulada de runbooks en tiempo real.</div>
+                <div class="meta">Abrir SRE Terminal →</div>
             </a>
 
             <a class="card" href="cases/03-incident-response-sre/demo/index.html">
@@ -485,6 +485,7 @@
 
     <footer class="wrap">
         <div>Ejecutar Caso 01: <code>cd cases/01-soporte-cliente-omnicanal/backend && uvicorn src.api:app --port 8001</code></div>
+        <div style="margin-top:5px;">Ejecutar Caso 02: <code>cd cases/02-mesa-ayuda-ti-runbooks/backend && uvicorn src.api:app --port 8002</code></div>
         <div style="margin-top:5px;">Ejecutar Caso 09: <code>cd cases/09-rrhh-screening-agenda/backend && uvicorn src.api:app --port 8009</code></div>
         <div style="margin-top:5px;">Ejecutar Caso 10: <code>cd cases/10-onboarding-empleados/backend && uvicorn src.api:app --port 8010</code></div>
         <div style="margin-top:5px;">Ejecutar Caso 13: <code>cd cases/13-bi-analista-datos/backend && uvicorn src.api:app --port 8013</code></div>

@@ -1,0 +1,10 @@
+id: "02"
+slug: "02-mesa-ayuda-ti-runbooks"
+name: "Mesa de Ayuda TI / Runbooks"
+description: "Diagnóstico y ejecución de runbooks automatizados con verificación. Modo DEMO/LIVE."
+ports:
+  - 8002
+dependencies: []
+status: "industrial"
+version: "3.6.0"
+entrypoint: "cd backend && uvicorn src.api:app --host 0.0.0.0 --port 8002"

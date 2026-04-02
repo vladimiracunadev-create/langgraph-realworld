@@ -1,0 +1,14 @@
+[
+  {
+    "user": "jrodriguez",
+    "equipment": "MacBook Pro M1",
+    "vpn_group": "Developers",
+    "status": "active"
+  },
+  {
+    "user": "msmith",
+    "equipment": "Thinkpad T14",
+    "vpn_group": "Sales",
+    "status": "locked"
+  }
+]

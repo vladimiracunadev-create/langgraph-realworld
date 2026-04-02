@@ -1,0 +1,43 @@
+[
+  {
+    "id": "rbk_vpn_reset",
+    "category": "red",
+    "name": "Reinicio de Servicio VPN",
+    "steps": [
+      "Verificar estado de cuenta en Active Directory",
+      "Terminar sesiones activas en Gateway VPN",
+      "Restablecer token MFA temporario"
+    ]
+  },
+  {
+    "id": "rbk_unlock_account",
+    "category": "accesos",
+    "name": "Desbloqueo de Cuenta corporativa",
+    "steps": [
+      "Verificar identidad del usuario",
+      "Consultar logs de intentos fallidos",
+      "Desbloquear cuenta en IAM",
+      "Forzar cambio de contraseña en próximo login"
+    ]
+  },
+  {
+    "id": "rbk_clear_cache_qa",
+    "category": "infra",
+    "name": "Limpiar Caché Entorno QA",
+    "steps": [
+      "Conectar a cluster Kubernetes QA",
+      "Ejecutar rollout restart en pod de Redis",
+      "Verificar status de servicio 200 OK"
+    ]
+  },
+  {
+    "id": "rbk_hardware_diag",
+    "category": "hardware",
+    "name": "Diagnóstico de Hardware",
+    "steps": [
+      "Probar ping al equipo remoto",
+      "Recolectar dump de batería/discos si está accesible",
+      "Generar ticket para reemplazo físico"
+    ]
+  }
+]

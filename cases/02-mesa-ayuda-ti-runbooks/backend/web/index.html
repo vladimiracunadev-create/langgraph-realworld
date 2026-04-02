@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Terminal SRE | Caso 02</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090B0D;
+      --card-bg: #12151A;
+      --border: rgba(47, 255, 172, 0.15);
+      --accent: #2FFFAC;
+      --error: #FF4E4E;
+      --text: #c0c6d0;
+      color-scheme: dark;
+    }
+    body {
+      margin: 0; background: var(--bg); color: var(--text);
+      font-family: 'Inter', sans-serif;
+    }
+    header {
+      padding: 20px 30px; border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      background: var(--card-bg);
+    }
+    .badge {
+      padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: bold; font-family: 'JetBrains Mono';
+      border: 1px solid var(--border); color: var(--accent); background: rgba(47, 255, 172, 0.05);
+    }
+    main {
+      padding: 30px; max-width: 1000px; margin: 0 auto;
+      display: grid; grid-template-columns: 300px 1fr; gap: 20px;
+    }
+    .panel {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px;
+      padding: 20px;
+    }
+    h2 { font-family: 'JetBrains Mono'; font-size: 14px; text-transform: uppercase; margin: 0 0 15px 0; color: var(--accent); letter-spacing: 1px;}
+    textarea {
+      width: 100%; height: 100px; background: rgba(0,0,0,0.3); border: 1px solid var(--border);
+      color: #fff; font-family: 'Inter'; padding: 10px; border-radius: 4px; resize: none; margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%; padding: 12px; background: rgba(47, 255, 172, 0.1); border: 1px solid var(--accent);
+      color: var(--accent); font-family: 'JetBrains Mono'; cursor: pointer; transition: 0.2s;
+    }
+    button:hover { background: var(--accent); color: #000; }
+    
+    .terminal {
+      background: #000; padding: 20px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 13px;
+      height: 400px; overflow-y: auto; border: 1px solid #1a2026; color: #a5b4c1;
+    }
+    .log-line { margin-bottom: 6px; }
+    .log-sys { color: var(--accent); }
+    .log-err { color: var(--error); }
+    .typing::after { content: '█'; animation: blink 1s step-start infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .meta-box { margin-top: 15px; font-size: 12px; opacity: 0.8; }
+    .meta-row { display: flex; justify-content: space-between; margin-bottom: 5px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 5px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div style="display:flex; align-items:center; gap:15px;">
+      <h1 style="margin:0; font-family:'JetBrains Mono'; font-size:18px;">[ SRE // HELPDESK ]</h1>
+      <span class="badge" id="mode-badge">CARGANDO...</span>
+    </div>
+    <a href="../../../index.html" style="color:var(--text); text-decoration:none; font-family:'JetBrains Mono'; font-size:12px;">← EXIT</a>
+  </header>
+  <main>
+    <div class="panel">
+      <h2>Ingreso de Ticket</h2>
+      <textarea id="ticketInput" placeholder="Ej: No me puedo conectar a la red corporativa, dice error de VPN..."></textarea>
+      <button onclick="runGraph()">EJECUTAR_TICKET()</button>
+      
+      <div class="meta-box" style="margin-top:30px;">
+        <h2>Estado de Nodos</h2>
+        <div class="meta-row"><span>Category:</span> <span id="s-cat">-</span></div>
+        <div class="meta-row"><span>Runbook:</span> <span id="s-rbk">-</span></div>
+        <div class="meta-row"><span>Status:</span> <span id="s-stat">-</span></div>
+      </div>
+    </div>
+    
+    <div class="panel">
+      <h2>Terminal Output</h2>
+      <div class="terminal" id="terminal">
+        <div class="log-line">> WAITING FOR INPUT...<span class="typing"></span></div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    async function checkHealth() {
+      try {
+        const r = await fetch('/health');
+        const d = await r.json();
+        document.getElementById('mode-badge').innerText = d.mode.toUpperCase();
+      } catch(e) {
+        document.getElementById('mode-badge').innerText = "OFFLINE";
+      }
+    }
+    
+    function log(msg, type="normal") {
+      const t = document.getElementById('terminal');
+      t.innerHTML = t.innerHTML.replace('<span class="typing"></span>', '');
+      let cls = "log-line";
+      if(type==="sys") cls += " log-sys";
+      if(type==="err") cls += " log-err";
+      t.innerHTML += `<div class="${cls}">[${new Date().toLocaleTimeString()}] ${msg}</div>`;
+      t.innerHTML += `<span class="typing"></span>`;
+      t.scrollTop = t.scrollHeight;
+    }
+
+    async function runGraph() {
+      const ticket = document.getElementById('ticketInput').value.trim();
+      if(!ticket) return;
+      document.getElementById('terminal').innerHTML = "";
+      log(`INICIANDO DIAGNÓSTICO: "${ticket}"`, "sys");
+      
+      try {
+        const url = `/api/stream?ticket=${encodeURIComponent(ticket)}`;
+        const response = await fetch(url);
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder("utf-8");
+        
+        let done = false;
+        let buffer = "";
+        
+        while (!done) {
+          const { value, done: readerDone } = await reader.read();
+          done = readerDone;
+          if (value) buffer += decoder.decode(value, { stream: true });
+          
+          let parts = buffer.split('\\n');
+          buffer = parts.pop();
+          
+          for (let p of parts) {
+            p = p.trim();
+            if (!p) continue;
+            try {
+              let st = JSON.parse(p);
+              if(st.error) { log(st.error, "err"); continue; }
+              
+              if(st.category) {
+                  document.getElementById('s-cat').innerText = st.category.toUpperCase();
+                  log(`> Categoría detectada: ${st.category.toUpperCase()}`);
+              }
+              if(st.runbook) {
+                  document.getElementById('s-rbk').innerText = st.runbook.id;
+                  log(`> Seleccionando runbook: ${st.runbook.name}`, "sys");
+              }
+              if(st.execution_log && st.execution_log.length > 0) {
+                  const evt = st.events && st.events[st.events.length-1];
+                  // Solo print si el último request mutó execution_logs
+                  if(evt && evt.type === "executed") {
+                      st.execution_log.forEach(l => log(`  | ${l}`));
+                  }
+              }
+              if(st.resolution_status) {
+                  document.getElementById('s-stat').innerText = st.resolution_status;
+                  log(`> Evaluación final: ${st.resolution_status}`, st.resolution_status==="RESOLVED"?"sys":"err");
+              }
+              if(st.response) {
+                  const evt = st.events && st.events[st.events.length-1];
+                  if(evt && evt.type === "responded") {
+                      log(`> ENVIANDO A CLIENTE:`);
+                      log(`"${st.response}"`, "sys");
+                  }
+              }
+
+            } catch(e) { }
+          }
+        }
+      } catch(e) {
+        log(`CRITICAL ERROR: ${e}`, "err");
+      }
+    }
+    
+    checkHealth();
+  </script>
+</body>
+</html>
