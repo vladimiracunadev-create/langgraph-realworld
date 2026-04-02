@@ -68,6 +68,15 @@
     }
     button:hover { background: var(--accent); color: #000; box-shadow: 0 0 20px rgba(47, 255, 172, 0.3); }
 
+    /* Pills Suggestions */
+    .suggest-box { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+    .s-btn {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.7); font-size: 11px; padding: 6px 10px; border-radius: 99px;
+      cursor: pointer; transition: 0.2s; font-family: 'Inter'; text-align: left; width: auto;
+    }
+    .s-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
+
     /* Meta / Context */
     .user-context {
       margin-top: 25px; padding: 15px; background: rgba(255,255,255,0.02);
@@ -112,7 +121,7 @@
       Asistente TI autónomo. Enriquecimiento de perfil mediante CMDB, clasificación LLM,
       solicitud de aprobaciones HITL y ejecución de runbooks simulados en SRE.
     </p>
-    <div class="nav-back"><a href="../../../index.html">← VOLVER AL HUB</a></div>
+    <div class="nav-back"><a href="http://localhost:8080/">← VOLVER AL HUB</a></div>
   </header>
 
   <main>
@@ -120,6 +129,14 @@
     <div class="panel">
       <h2>Ingreso de Ticket</h2>
       <textarea id="ticketInput" placeholder="Ej: Hola, el VPN me da error de autenticación (msmith)"></textarea>
+      
+      <div class="suggest-box">
+        <button class="s-btn" onclick="document.getElementById('ticketInput').value='msmith no se puede conectar a la VPN hace 2 horas';">🔴 Probar Falla Red (VPN)</button>
+        <button class="s-btn" onclick="document.getElementById('ticketInput').value='jrodriguez tiene la cuenta bloqueada tras 3 intentos';">🟠 Probar Acceso (Bloqueo)</button>
+        <button class="s-btn" onclick="document.getElementById('ticketInput').value='La base de datos de QA se cayó y da error 500';">⚙️ Probar Infra (HITL)</button>
+        <button class="s-btn" onclick="document.getElementById('ticketInput').value='Hola, buenos días. Neceisto ayuda con algo.';">👋 Probar Saludo (Bypass)</button>
+      </div>
+
       <button id="runBtn" onclick="runGraph()">LANZAR_PIPELINE()</button>
       
       <div class="user-context" id="u-ctx">
@@ -143,7 +160,7 @@
     
     <!-- Columna Derecha: Consola SRE -->
     <div class="panel terminal-wrapper">
-      <h2>Terminal SRE / Execution SDO</h2>
+      <h2 id="term-title">Terminal SRE / Execution SDO</h2>
       <div class="terminal" id="terminal">
         <div class="log-line">> WAITING FOR INGRESS REQUEST...<span class="typing"></span></div>
       </div>
@@ -191,6 +208,7 @@
       document.getElementById('runBtn').disabled = true;
       document.getElementById('runBtn').innerText = "EJECUTANDO...";
       document.getElementById('terminal').innerHTML = "";
+      document.getElementById('term-title').innerText = "Terminal SRE / Preparando...";
       document.getElementById('u-ctx').style.display = 'none';
       
       // Reset steps
@@ -238,11 +256,21 @@
                   setStep('classify');
               }
               else if(evType === "classified") {
-                  log(`> Clasificación IA: [${st.category.toUpperCase()}]`);
+                  if(st.category === "unsupported") {
+                      log(`> Clasificación: [UNSUPPORTED] Flujo principal detenido.`);
+                  } else {
+                      log(`> Clasificación IA: [${st.category.toUpperCase()}]`);
+                  }
               }
               else if(evType === "runbook_selected") {
-                  log(`> Runbook seleccionado: ${st.runbook.name} (${st.runbook.id})`);
-                  setStep('approval');
+                  if(!st.runbook) {
+                      log(`> Operación cancelada. El Agente redactará respuesta genérica.`);
+                      setStep('resp');
+                  } else {
+                      log(`> Runbook seleccionado: ${st.runbook.name} (${st.runbook.id})`);
+                      document.getElementById('term-title').innerText = `Terminal SRE [Tarea: ${st.runbook.name}]`;
+                      setStep('approval');
+                  }
               }
               else if(evType === "approval_checked") {
                   if(st.approval_status === "BYPASSED") {

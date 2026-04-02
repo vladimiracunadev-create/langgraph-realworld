@@ -72,10 +72,17 @@ def select_runbook(state: HelpdeskState) -> Dict[str, Any]:
 
 def request_approval(state: HelpdeskState) -> Dict[str, Any]:
     rb = state.get("runbook", {})
+    if not rb:
+        return {"approval_status": "BYPASSED"}
     status = check_approval_requirement(rb)
     out = {"approval_status": status}
     out.update(_push_event("approval_checked", {"status": status}))
     return out
+
+def route_after_classify(state: HelpdeskState) -> Literal["select_runbook", "draft_response"]:
+    if state.get("category") == "unsupported":
+        return "draft_response"
+    return "select_runbook"
 
 def route_after_approval(state: HelpdeskState) -> Literal["execute_runbook", "draft_response"]:
     if state.get("approval_status") == "REJECTED":
@@ -99,7 +106,7 @@ def validate_resolution(state: HelpdeskState) -> Dict[str, Any]:
 
 def draft_response(state: HelpdeskState) -> Dict[str, Any]:
     ticket = state.get("ticket", "")
-    status = state.get("resolution_status", "RESOLVED")
+    status = state.get("resolution_status", "PENDING" if state.get("category") == "unsupported" else "RESOLVED")
     rb = state.get("runbook", {})
     appr = state.get("approval_status", "")
     resp = draft_response_llm(ticket, status, rb, appr)
@@ -121,7 +128,10 @@ def compile_graph():
     g.add_edge(START, "receive_ticket")
     g.add_edge("receive_ticket", "enrich_ticket")
     g.add_edge("enrich_ticket", "classify_issue")
-    g.add_edge("classify_issue", "select_runbook")
+    
+    # Conditional edge after classify
+    g.add_conditional_edges("classify_issue", route_after_classify)
+    
     g.add_edge("select_runbook", "request_approval")
     
     # Conditional edge after approval

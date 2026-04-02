@@ -43,6 +43,8 @@ def llm_classify_issue(ticket: str, user_info: Dict[str, Any]) -> str:
     """Clasifica considerando ticket y contexto del usuario."""
     if not _is_live():
         tk = ticket.lower()
+        if "hola" in tk or "buenos dia" in tk or "saludo" in tk:
+            return "unsupported"
         if "vpn" in tk or "red" in tk or "internet" in tk:
             return "red"
         elif "bloque" in tk or "pass" in tk or "acceso" in tk or "locked" in user_info.get("status", ""):
@@ -54,13 +56,13 @@ def llm_classify_issue(ticket: str, user_info: Dict[str, Any]) -> str:
             
     llm = ChatOpenAI(temperature=0.0, model=LLM_MODEL)
     prompt = (
-        f"Clasifica el ticket en: red, accesos, infra, hardware.\n"
+        f"Clasifica el ticket en: red, accesos, infra, hardware, o unsupported (si es un saludo o no tiene sentido TI).\n"
         f"Contexto User: {user_info}\nTicket: {ticket}\nResponde SOLO con la categoría."
     )
     resp = llm.invoke([HumanMessage(content=prompt)])
     cat = str(resp.content).strip().lower()
-    if cat not in ["red", "accesos", "infra", "hardware"]:
-        return "red"
+    if cat not in ["red", "accesos", "infra", "hardware", "unsupported"]:
+        return "unsupported"
     return cat
 
 def check_approval_requirement(runbook: Dict[str, Any]) -> str:
@@ -103,8 +105,13 @@ def validate_execution_llm(ticket: str, logs: List[str]) -> str:
     return val if val in ["RESOLVED", "ESCALATED"] else "RESOLVED"
 
 def draft_response_llm(ticket: str, status: str, runbook: Dict[str, Any], approval: str) -> str:
+    category = runbook.get("category", "") if runbook else ""
+    if not runbook and status != "RESOLVED": 
+        # Es unsupported
+        return "¡Hola! Soy tu SRE Assistant. Por favor, indícame cuál es tu problema tecnológico (ej: fallos de red, accesos o sistemas) para poder ejecutar un diagnóstico."
+        
     if approval == "REJECTED":
-        return f"El procedimiento '{runbook['name']}' requería autorización pero fue RECHAZADO por el manager. Ticket enviado al Nivel 2."
+        return f"El procedimiento '{runbook['name']}' requería autorización pero fue RECHAZADO por L2. Mantenemos el ticket en revisión manual."
         
     if not _is_live():
         if status == "RESOLVED":
