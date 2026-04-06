@@ -1,7 +1,7 @@
 ﻿# Seguridad
 
 > [!NOTE]
-> **Version**: 3.8.0 | **Estado**: Endurecido para demo/local y exposicion externa controlada | **Audiencia**: Auditores, CISO, Desarrolladores
+> **Version**: 3.9.0 | **Estado**: Endurecido para demo/local y exposicion externa controlada | **Audiencia**: Auditores, CISO, Desarrolladores
 
 Este repositorio esta pensado para exploracion tecnica, demos y validacion local de patrones LangGraph. La seguridad implementada busca reducir riesgos reales sin romper quickstart, `index.html`, Hub CLI ni los casos operativos 01, 02, 09, 10 y 13.
 

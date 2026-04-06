@@ -1,6 +1,6 @@
 ﻿# Changelog
 
-## v3.8.0 - 2026-04-06
+## v3.9.0 - 2026-04-06
 
 ### Added
 
@@ -10,9 +10,9 @@
 
 ### Changed
 
-- README, docs, wiki local, casos clave y Hub CLI sincronizados a `v3.8.0`.
+- README, docs, wiki local, casos clave y Hub CLI sincronizados a `v3.9.0`.
 - Documentacion reescrita en ASCII para reducir drift y problemas de codificacion.
-- `hub.py` y la documentacion del Hub alineados con la taxonomia `Operational/Industrial (v3.8.0)`.
+- `hub.py` y la documentacion del Hub alineados con la taxonomia `Operational/Industrial (v3.9.0)`.
 
 ### Security
 

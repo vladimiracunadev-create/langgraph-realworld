@@ -8,7 +8,7 @@ Portafolio de casos de uso con LangGraph, FastAPI y demos empresariales. El repo
 
 ---
 
-## Implementacion Industrial (v3.8.0)
+## Implementacion Industrial (v3.9.0)
 
 El estandar actual del repositorio se apoya en estos pilares:
 
@@ -26,8 +26,8 @@ El estandar actual del repositorio se apoya en estos pilares:
 
 ### Taxonomia de Implementacion
 
-- **Operational (v3.8.0)**: casos 01 y 02 con backends reales, logicas condicionales robustas, modo DEMO/LIVE, UIs operativas e interactivas.
-- **Industrial (v3.8.0)**: casos con backend real, streaming, estado tipado, observabilidad, documentacion operativa y activacion guiada de APIs.
+- **Operational (v3.9.0)**: casos 01 y 02 con backends reales, logicas condicionales robustas, modo DEMO/LIVE, UIs operativas e interactivas.
+- **Industrial (v3.9.0)**: casos con backend real, streaming, estado tipado, observabilidad, documentacion operativa y activacion guiada de APIs.
 - **Legacy / Scaffold**: demos o plantillas listas para evolucionar sin pretender hoy el mismo nivel operativo.
 
 ### Estado de los Casos Clave

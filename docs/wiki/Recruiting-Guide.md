@@ -1,7 +1,7 @@
 ﻿# Guia para Recruiters, Hiring Managers y Tech Leads
 
 > [!NOTE]
-> **Version**: 3.8.0 | **Estado**: Industrial | **Audiencia**: Recruiters, Lideres de Ingenieria y Evaluadores de Talento
+> **Version**: 3.9.0 | **Estado**: Industrial | **Audiencia**: Recruiters, Lideres de Ingenieria y Evaluadores de Talento
 
 Este repositorio no es solo una coleccion de prompts o demos triviales. Muestra como construir casos de IA aplicada con arquitectura clara, flujos LangGraph, APIs reales, operacion portable y una postura de seguridad compatible con el uso local y la revision tecnica seria.
 

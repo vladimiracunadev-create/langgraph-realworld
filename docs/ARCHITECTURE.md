@@ -1,7 +1,7 @@
 ﻿# Arquitectura del Sistema
 
 > [!NOTE]
-> **Version**: 3.8.0 | **Estado**: Industrial | **Audiencia**: Arquitectos Cloud, System Designers, DevOps
+> **Version**: 3.9.0 | **Estado**: Industrial | **Audiencia**: Arquitectos Cloud, System Designers, DevOps
 
 ## Vision General
 

@@ -1,7 +1,7 @@
 ﻿# Guia de Instalacion y Despliegue
 
 > [!NOTE]
-> **Version**: 3.8.0 | **Estado**: Estable | **Audiencia**: Desarrolladores, DevOps
+> **Version**: 3.9.0 | **Estado**: Estable | **Audiencia**: Desarrolladores, DevOps
 
 Esta guia explica como levantar el repositorio completo y como ejecutar por separado los casos operativos 01, 02, 09, 10 y 13.
 
@@ -39,6 +39,7 @@ copy cases\13-bi-analista-datos\backend\.env.example cases\13-bi-analista-datos\
 Tambien puedes abrir el portal y usar el boton `Configurar APIs del portfolio` para completar credenciales opcionales y exportar el `.env` de cada caso operativo.
 
 Servicios principales:
+
 - Portal: `http://localhost:8080`
 - Caso 01: `http://localhost:8001`
 - Caso 02: `http://localhost:8002`
@@ -57,6 +58,7 @@ python hub.py serve 01
 ```
 
 Casos hoy estandarizados para el Hub:
+
 - 01
 - 02
 - 09

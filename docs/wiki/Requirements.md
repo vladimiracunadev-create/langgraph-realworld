@@ -1,7 +1,7 @@
 ﻿# Requisitos del Sistema
 
 > [!NOTE]
-> **Version**: 3.8.0 | **Estado**: Estable | **Audiencia**: Infraestructura, DevOps, Reclutadores
+> **Version**: 3.9.0 | **Estado**: Estable | **Audiencia**: Infraestructura, DevOps, Reclutadores
 
 ## Requisitos minimos
 
