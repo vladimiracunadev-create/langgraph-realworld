@@ -1,22 +1,88 @@
-﻿# Seguridad
+# Seguridad
 
 > [!NOTE]
-> **Version**: 3.8.0 | **Estado**: Endurecido para demo/local y exposicion externa controlada | **Audiencia**: Auditores, CISO, Desarrolladores
+> **Version**: 3.9.0 | **Estado**: Auditado y endurecido | **Audiencia**: Auditores, CISO, Desarrolladores
 
 Este repositorio esta pensado para exploracion tecnica, demos y validacion local de patrones LangGraph. La seguridad implementada busca reducir riesgos reales sin romper quickstart, `index.html`, Hub CLI ni los casos operativos 01, 02, 09, 10 y 13.
 
 ---
 
-## Modelo operativo real
+## Resultado de la auditoria de seguridad (v3.9.0)
 
-- Los casos estan disenados para correr en modo DEMO cuando faltan credenciales reales.
-- El portal raiz ayuda a generar `.env`, pero no reemplaza un secret manager empresarial.
-- El repositorio no debe exponerse a Internet como plataforma multi-tenant sin una capa adicional de proxy, observabilidad y gobierno.
-- Fase 2 agrega un perfil opcional de exposicion externa con token y rate limiting para los backends operativos.
+### Capa 1 — Contenedor y proceso
+
+| Control | Estado |
+|---|---|
+| Proceso no-root en backends 01, 02 | **RESUELTO** — `groupadd/useradd appuser` + `USER appuser` agregados |
+| Proceso no-root en backends 09, 10, 13 | OK — ya tenia `USER appuser` |
+| Proceso no-root en demos nginx (25 casos) | **RESUELTO** — `USER nginx` + chown de directorios en todos los demos |
+| Imagen Python pineada a version exacta | **RESUELTO** — `python:3.11.10-slim` en backends 01, 02, 13 (09 ya tenia 3.11.10) |
+| Imagen nginx pineada a version exacta | **RESUELTO** — `nginx:1.27.3-alpine` en los 25 demos |
+| Healthcheck con herramienta disponible | **RESUELTO** — demos usan `wget --spider` (BusyBox, incluido en Alpine); backends usan `curl` (instalado explicitamente) |
+| Directorios de log/PID accesibles por usuario no-root | OK — `chown` antes de `USER` en todos los Dockerfiles |
+
+### Capa 2 — Red y exposicion de puertos
+
+| Control | Estado |
+|---|---|
+| Puertos de docker-compose vinculados a 127.0.0.1 | **RESUELTO** — todos los puertos usan `127.0.0.1:XXXX:XXXX` |
+
+### Capa 3 — Credenciales y variables de entorno
+
+| Control | Estado |
+|---|---|
+| Variables criticas sin fallback hardcodeado | OK — `OPENAI_API_KEY` sin fallback; si no esta definida la llamada a la API falla con error claro |
+| `.env` en `.gitignore` | OK |
+| `.env.example` commiteado y fuera de `.gitignore` | OK |
+| Lock files para aplicaciones | PENDIENTE — ver seccion de riesgos aceptados |
+
+### Capa 4 — Servidor web
+
+| Control | Estado |
+|---|---|
+| HTTP security headers en los 25 demos nginx | **RESUELTO** — `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Content-Security-Policy`, `Permissions-Policy` en todos los nginx.conf |
+| Listado de directorios | OK — nginx no lista directorios por defecto |
+| `display_errors` PHP | N/A — el stack no usa PHP |
+
+### Capa 5 — Herramientas con acceso a datos sensibles
+
+| Control | Estado |
+|---|---|
+| SQL solo lectura (caso 13) | OK — SELECT/CTE unicamente, conexion SQLite read-only, limite de filas |
+| Hub CLI sin shell injection | OK — sin `shell=True`, allowlist de ejecutables, bloqueo de metacaracteres |
+| CSRF | OK — APIs JSON con CORS allowlist; CSRF clasico no aplica a APIs REST sin cookies de sesion |
+| Rate limiting | OK — opt-in via `RATE_LIMIT_RPM` |
+| Whitelist de destinos | OK — CORS allowlist + validacion de parametros de entrada |
+
+### Capa 6 — Autenticacion
+
+| Control | Estado |
+|---|---|
+| Capa de autenticacion | RIESGO ACEPTADO — opt-in via `DEMO_AUTH_TOKEN`. Ver recomendaciones operativas. |
+
+### Capa 7 — Pipeline CI/CD
+
+| Control | Estado |
+|---|---|
+| Escaneo de secretos | OK — `detect-secrets` con baseline versionada |
+| Auditoria de dependencias | OK — `pip-audit` sobre todos los `requirements.txt` |
+| Escaneo de imagenes Docker | **RESUELTO** — `grype` (Anchore) para los 5 backends con imagen. Se eligio grype sobre Trivy por el incidente de supply chain que afecto a Trivy; la action esta pineada a SHA de commit. |
+| Dependabot | **RESUELTO** — `.github/dependabot.yml` con cobertura de GitHub Actions, pip (raiz + 5 backends) y Docker |
+| Actions pineadas por SHA | OK — todos los `uses:` con commit SHA |
+| Permisos minimos por job | OK — `contents: read` por defecto |
+| CodeQL | OK — Python, `security-extended` + `security-and-quality` |
+
+### Capa 8 — Cadena de suministro
+
+| Control | Estado |
+|---|---|
+| Line endings LF en shell scripts | OK — `.gitattributes` con `*.sh text eol=lf` y `Dockerfile* text eol=lf` |
+| Deteccion de Unicode bidi (CVE-2021-42574) | **RESUELTO** — job `supply_chain` en `security.yml` detecta caracteres de control bidi |
+| Deteccion de patrones de ofuscacion | **RESUELTO** — job `supply_chain` detecta `exec+base64`, `eval()` dinamico, `os.system` con concatenacion |
 
 ---
 
-## Controles implementados
+## Controles implementados (historico v3.8.0)
 
 ### GitHub Actions y CI/CD
 
@@ -32,8 +98,6 @@ Este repositorio esta pensado para exploracion tecnica, demos y validacion local
 
 - `.env.example` mas explicitos sobre DEMO vs LIVE y sobre no commitear credenciales reales.
 - El portal ya no persiste valores implicitamente al copiar o descargar; solo guarda si pulsas `Guardar localmente`.
-- El portal incorpora borrado explicito de almacenamiento local.
-- Se documenta que `localStorage` guarda en texto claro y solo debe usarse en equipos confiables.
 - Los casos con CORS configurable usan allowlists locales por defecto, no `*` abierto para navegadores externos.
 
 ### Exposicion externa opcional
@@ -41,52 +105,50 @@ Este repositorio esta pensado para exploracion tecnica, demos y validacion local
 - Los casos 01, 02, 09, 10 y 13 aceptan `DEMO_AUTH_TOKEN` para exigir el header `X-Demo-Token` en sus endpoints operativos.
 - Los mismos casos aceptan `RATE_LIMIT_RPM` para aplicar rate limiting en memoria por cliente.
 - `TRUST_PROXY_HEADERS=false` por defecto evita confiar en `X-Forwarded-For` salvo despliegue detras de un proxy controlado.
-- Estos controles son opt-in para no romper la experiencia local ni los ejemplos pedagogicos.
 
 ### Agentes, tools y LLMs
 
-- `hub.py` ya no usa `shell=True` para ejecutar `case.yml`.
+- `hub.py` no usa `shell=True` para ejecutar `case.yml`.
 - `hub.py` restringe ejecutables permitidos (`python`, `uvicorn`, `docker compose`) y bloquea metacaracteres de shell, `python -c` y rutas fuera del caso.
-- Caso 13 endurecido como SQL read-only:
-  - solo `SELECT/CTE`;
-  - sin comentarios SQL ni objetos internos `sqlite_*`;
-  - sin multiples sentencias;
-  - limite maximo de filas;
-  - conexion SQLite en modo solo lectura.
-- Endpoints de casos operativos con validacion adicional de `thread_id`, `ticket_id`, `employee_id` o `question` para evitar abuso trivial o payloads descontrolados.
-- Endpoints de salud dejan de exponer rutas locales innecesarias donde no aportaban valor operativo.
+- Caso 13 endurecido como SQL read-only.
+- Endpoints con validacion adicional de `thread_id`, `ticket_id`, `employee_id` o `question`.
+
+---
+
+## Riesgos aceptados y pendientes
+
+| Riesgo | Decision | Solucion propuesta si se necesita |
+|---|---|---|
+| Sin lock files de dependencias Python | Aceptado para demo — `requirements.txt` sin pinning exacto | Adoptar `pip-compile` (pip-tools) o Poetry y commitear el lock file |
+| Autenticacion opt-in | Aceptado para demo local | Activar `DEMO_AUTH_TOKEN` + TLS + proxy antes de exponer en red compartida |
+| Rate limiting en memoria | Aceptado para demo | Reemplazar con rate limiting en proxy/API gateway para Internet abierta |
+| Prompt injection completa | Parcialmente mitigado | Sandbox de agentes y validacion de contenido de usuario |
 
 ---
 
 ## Amenazas mitigadas
 
-- ejecucion arbitraria sencilla desde `case.yml` o Hub CLI;
-- filtrado accidental de secretos nuevos en archivos versionados;
-- dependencia ciega de tags mutables en GitHub Actions;
-- abuso basico de endpoints demo cuando se habilita el perfil de exposicion externa;
-- exfiltracion de mayor volumen via SQL en el caso 13;
-- sobreexposicion de CORS y de metadata interna en APIs de demo;
-- persistencia accidental de secretos en el navegador solo por exportar `.env`.
-
----
-
-## Amenazas fuera de alcance o parcialmente mitigadas
-
-- prompt injection completa: el repo demuestra patrones de agentes, pero no implementa una sandbox universal contra instrucciones maliciosas en todo contenido posible;
-- un mantenedor malicioso con permisos de merge puede cambiar codigo, workflows o `case.yml`;
-- un equipo o navegador comprometido sigue pudiendo exfiltrar secretos locales;
-- credenciales reales con privilegios excesivos siguen siendo riesgosas aunque el repo funcione en DEMO;
-- el rate limiting actual es en memoria y best-effort; para Internet abierta sigue haciendo falta un reverse proxy o API gateway con controles duros.
+- Acceso desde otras maquinas de la red local a puertos de backend/portal
+- Clickjacking y MIME sniffing en demos (security headers)
+- Proceso con privilegios root en todos los contenedores
+- Contenedores con imagen base no reproducible (tags flotantes)
+- Healthcheck con binario ausente que fallaba silenciosamente
+- Dependencias con CVE conocidos sin notificacion automatica (Dependabot + pip-audit)
+- Supply chain via Trojan Source (bidi detection en CI)
+- Ofuscacion base64/eval en commits
+- Imagenes Docker con vulnerabilidades criticas (grype scan en CI)
+- Ejecucion arbitraria desde `case.yml` o Hub CLI
+- Filtracion de secretos en archivos versionados
 
 ---
 
 ## Recomendaciones operativas
 
 - Usa secretos de menor privilegio posible y rotalos despues de demos externas.
-- Prefiere rutas a archivos inyectados por runtime para credenciales JSON sensibles.
-- Manten `ALLOWED_ORIGINS` acotado a los hosts realmente usados.
 - Si necesitas exponer un caso fuera de localhost, activa `DEMO_AUTH_TOKEN`, `RATE_LIMIT_RPM`, TLS y un proxy seguro antes de abrirlo.
 - Revisa los findings de `pip-audit` antes de promover cambios a `main`.
+- Revisa los findings de `grype` en PRs — `fail-build: false` en modo suave, escalar a `true` antes de produccion real.
+- Manten `ALLOWED_ORIGINS` acotado a los hosts realmente usados.
 
 ---
 
