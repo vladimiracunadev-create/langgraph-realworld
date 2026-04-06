@@ -73,18 +73,19 @@ jobs:
       - name: Detect obfuscation patterns (base64 exec, eval injection)
         run: |
           status=0
+          # Exclude .github/ — workflow files legitimately contain these strings as detection rules.
           # base64-decoded execution: exec(base64.b64decode(...))
-          if git ls-files -z | xargs -0 grep -Pl 'exec\s*\(\s*base64' 2>/dev/null; then
+          if git ls-files -z | grep -z -v '\.github/' | xargs -0 grep -Pl 'exec\s*\(\s*base64' 2>/dev/null; then
             echo "::warning::base64+exec pattern detected. Review manually."
             status=1
           fi
           # eval() with non-literal argument in Python
-          if git ls-files -z | xargs -0 grep -Pl 'eval\s*\([^")'"'"']' 2>/dev/null; then
+          if git ls-files -z | grep -z -v '\.github/' | xargs -0 grep -Pl 'eval\s*\([^")'"'"']' 2>/dev/null; then
             echo "::warning::Dynamic eval() detected. Review manually."
             status=1
           fi
           # subprocess/os.system with user-controlled concat
-          if git ls-files -z | xargs -0 grep -Pl 'os\.system\s*\(.*\+' 2>/dev/null; then
+          if git ls-files -z | grep -z -v '\.github/' | xargs -0 grep -Pl 'os\.system\s*\(.*\+' 2>/dev/null; then
             echo "::warning::os.system with string concatenation detected. Review manually."
             status=1
           fi
