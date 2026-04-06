@@ -24,6 +24,7 @@ MANIFEST
 # Virtual Environment
 venv/
 .venv/
+.venv-validation/
 env/
 .env/
 

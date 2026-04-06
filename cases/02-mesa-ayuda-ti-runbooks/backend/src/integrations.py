@@ -56,7 +56,8 @@ def llm_classify_issue(ticket: str, user_info: Dict[str, Any]) -> str:
             
     llm = ChatOpenAI(temperature=0.0, model=LLM_MODEL)
     prompt = (
-        f"Clasifica el ticket en: red, accesos, infra, hardware, o unsupported (si es un saludo o no tiene sentido TI).\n"
+        "Clasifica el ticket en: red, accesos, infra, hardware, o unsupported "
+        "(si es un saludo o no tiene sentido TI).\n"
         f"Contexto User: {user_info}\nTicket: {ticket}\nResponde SOLO con la categoría."
     )
     resp = llm.invoke([HumanMessage(content=prompt)])
@@ -82,7 +83,7 @@ def simulate_runbook_execution(runbook: Dict[str, Any]) -> List[str]:
     
     for step in runbook.get("steps", []):
         logs.append(f"> Ejecutando: {step}...")
-        logs.append(f"  [OK] Paso completado.")
+        logs.append("  [OK] Paso completado.")
         
     logs.append("> Runbook finalizado. Status: SUCCESS")
     return logs
@@ -105,17 +106,25 @@ def validate_execution_llm(ticket: str, logs: List[str]) -> str:
     return val if val in ["RESOLVED", "ESCALATED"] else "RESOLVED"
 
 def draft_response_llm(ticket: str, status: str, runbook: Dict[str, Any], approval: str) -> str:
-    category = runbook.get("category", "") if runbook else ""
     if not runbook and status != "RESOLVED": 
         # Es unsupported
-        return "¡Hola! Soy tu SRE Assistant. Por favor, indícame cuál es tu problema tecnológico (ej: fallos de red, accesos o sistemas) para poder ejecutar un diagnóstico."
+        return (
+            "¡Hola! Soy tu SRE Assistant. Por favor, indícame cuál es tu problema tecnológico "
+            "(ej: fallos de red, accesos o sistemas) para poder ejecutar un diagnóstico."
+        )
         
     if approval == "REJECTED":
-        return f"El procedimiento '{runbook['name']}' requería autorización pero fue RECHAZADO por L2. Mantenemos el ticket en revisión manual."
+        return (
+            f"El procedimiento '{runbook['name']}' requería autorización pero fue RECHAZADO por L2. "
+            "Mantenemos el ticket en revisión manual."
+        )
         
     if not _is_live():
         if status == "RESOLVED":
-            return f"Ejecutamos con éxito '{runbook['name']}'. Por favor confirma si el servicio volvió a la normalidad."
+            return (
+                f"Ejecutamos con éxito '{runbook['name']}'. "
+                "Por favor confirma si el servicio volvió a la normalidad."
+            )
         else:
             return f"Hubo fallos menores. Tu caso ha sido escalado #TI-{random.randint(1000, 9999)}."
 
