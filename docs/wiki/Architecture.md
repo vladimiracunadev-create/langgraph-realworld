@@ -1,8 +1,42 @@
-# Arquitectura del Sistema
+﻿# Arquitectura del Sistema
 
 > [!NOTE]
-> **Versión**: 3.6.0 | **Estado**: Industrial | **Audiencia**: Arquitectos, DevOps, Seniors
+> **Version**: 3.8.0 | **Estado**: Industrial | **Audiencia**: Arquitectos Cloud, System Designers, DevOps
 
-## Visión General
+## Vision General
 
-El proyecto está organizado como un monorepo de casos de uso con un portal raíz, casos operativos y un centro de APIs para activar credenciales opcionales sin bloquear la experiencia DEMO.
+**LangGraph Realworld** usa un patron de monorepo con microservicios encapsulados por caso. Cada caso operativo implementado reside en su propio subdirectorio con backend FastAPI, UI ligera, configuracion local y `case.yml` para orquestacion reproducible.
+
+## Capas Principales
+
+- **Portal raiz**: `index.html` como punto de entrada, navegacion y ayuda para configuracion opcional de APIs.
+- **Backends operativos**: casos 01, 02, 09, 10 y 13 con endpoints reales, modo DEMO/LIVE y contratos de estado.
+- **Orquestacion agentica**: LangGraph con `TypedDict`, edges condicionales, checkpoints y herramientas acotadas por dominio.
+- **Operacion local**: Docker Compose, Hub CLI y arranque directo por `uvicorn`.
+- **Seguridad automatizada**: GitHub Actions con pinning, CodeQL, `detect-secrets`, `pip-audit` y validacion dedicada del caso 02.
+
+## Modelo de seguridad integrado
+
+La arquitectura es local-first y pedagogica, pero ya incorpora limites operativos reales:
+
+- CORS con allowlists donde hay consumo cross-origin.
+- `hub.py` sin `shell=True` y con allowlist de comandos.
+- Validacion de inputs en endpoints operativos.
+- SQL read-only y sanitizacion adicional en el caso 13.
+- Perfil opcional de exposicion externa con `DEMO_AUTH_TOKEN`, `RATE_LIMIT_RPM` y `TRUST_PROXY_HEADERS`.
+
+## Dual Mode
+
+Los casos operativos no dependen de una API real para ser explorados:
+
+1. Si faltan credenciales, caen a DEMO de forma explicita.
+2. Si hay configuracion valida, pueden activar integraciones reales por caso.
+3. La documentacion y el portal distinguen claramente entre demo, pruebas locales y uso con secretos reales.
+
+## Implicancia practica
+
+El repositorio no intenta ser una plataforma multi-tenant lista para Internet abierta. La arquitectura prioriza tres cosas a la vez:
+
+- exploracion local sin friccion;
+- ejemplos de agentes y automatizacion con valor real;
+- hardening suficiente para no normalizar malas practicas de CI/CD, secretos o ejecucion.

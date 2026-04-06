@@ -11,10 +11,13 @@ from .settings import settings
 
 DEFAULT_LIMIT = 100
 FORBIDDEN_SQL = re.compile(
-    r"\b(insert|update|delete|drop|alter|attach|detach|pragma|replace|create|truncate)\b",
+    r"\b(insert|update|delete|drop|alter|attach|detach|pragma|replace|create|truncate|vacuum|analyze|reindex|load_extension)\b",
     re.IGNORECASE,
 )
 SELECT_SQL = re.compile(r"^\s*(select|with)\b", re.IGNORECASE)
+COMMENT_SQL = re.compile(r"(--|/\*|\*/)")
+INTERNAL_SQLITE_OBJECTS = re.compile(r"\bsqlite_[A-Za-z0-9_]+\b", re.IGNORECASE)
+LIMIT_SQL = re.compile(r"\blimit\s+(\d+)\b", re.IGNORECASE)
 
 EXAMPLE_QUESTIONS = [
     "Cual es el producto mas caro?",
@@ -128,11 +131,27 @@ def sanitize_sql(query: str) -> str:
         raise ValueError("Only SELECT/CTE queries are allowed in Case 13.")
     if FORBIDDEN_SQL.search(clean):
         raise ValueError("Unsafe SQL detected.")
+    if COMMENT_SQL.search(clean):
+        raise ValueError("SQL comments are not allowed in Case 13.")
+    if INTERNAL_SQLITE_OBJECTS.search(clean):
+        raise ValueError("SQLite internal objects are not accessible in Case 13.")
     if ";" in clean:
         raise ValueError("Multiple SQL statements are not allowed.")
+    limit_match = LIMIT_SQL.search(clean)
+    if limit_match and int(limit_match.group(1)) > DEFAULT_LIMIT:
+        raise ValueError(f"LIMIT cannot exceed {DEFAULT_LIMIT} rows in Case 13.")
     if " limit " not in clean.lower() and re.match(r"^\s*select\b", clean, re.IGNORECASE):
         clean = f"{clean} LIMIT {DEFAULT_LIMIT}"
     return clean
+
+
+def open_read_only_connection() -> sqlite3.Connection:
+    if not settings.database_path.exists():
+        raise FileNotFoundError(f"Database not found: {settings.database_path}")
+    uri = f"file:{settings.database_path.resolve().as_posix()}?mode=ro"
+    connection = sqlite3.connect(uri, uri=True)
+    connection.row_factory = sqlite3.Row
+    return connection
 
 
 def choose_chart_type(labels: list[str], dataset_count: int) -> str:
@@ -242,13 +261,8 @@ def sql_executor(state: State):
 
     try:
         safe_query = sanitize_sql(query)
-        if not settings.database_path.exists():
-            raise FileNotFoundError(f"Database not found: {settings.database_path}")
-
-        conn = sqlite3.connect(settings.database_path)
-        conn.row_factory = sqlite3.Row
-        rows = conn.execute(safe_query).fetchall()
-        conn.close()
+        with open_read_only_connection() as conn:
+            rows = conn.execute(safe_query).fetchall()
 
         if not rows:
             return {

@@ -7,7 +7,7 @@ select = ["E", "F", "I"]
 
 [project]
 name = "langgraph-realworld"
-version = "3.4.0"
+version = "3.8.0"
 dependencies = [
     "PyYAML>=6.0.1",
 ]

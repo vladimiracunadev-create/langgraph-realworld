@@ -1,7 +1,8 @@
-# Caso 13: Analista de Datos BI (Industrial v3.6.0)
+﻿# Caso 13: Analista de Datos BI (Industrial v3.8.0)
 
 > [!IMPORTANT]
-> **Estado**: Industrial | **Versión**: 3.6.0 | **Referencia**: SQL seguro + Data Viz
+> **Estado**: Industrial | **Version**: 3.8.0 | **Referencia**: SQL seguro + Data Viz
 
-- Activación opcional de OpenAI sin bloquear la demo.
-- Formulario de APIs accesible desde la UI para exportar el `.env` del caso.
+- Activacion opcional de OpenAI sin bloquear la demo.
+- SQL endurecido: solo lectura, comentarios bloqueados y limite de filas.
+- Puede exigir `X-Demo-Token` y aplicar rate limiting si el backend sale de `localhost`.

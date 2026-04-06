@@ -1,8 +1,9 @@
-﻿entrypoint: python backend/src/api.py
-serve: uvicorn backend.src.api:app --host 0.0.0.0 --port 8013
+working_dir: backend
+entrypoint: python -m uvicorn src.api:app --host 0.0.0.0 --port 8013
+serve: python -m uvicorn src.api:app --host 0.0.0.0 --port 8013
 env:
-  DATA_DIR: ./data
-  WEB_DIR: ./web
+  DATA_DIR: ../data
+  WEB_DIR: ../web
 ports:
   - 8013
 dockerfile: backend/Dockerfile

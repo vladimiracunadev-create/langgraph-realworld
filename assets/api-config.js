@@ -6,6 +6,10 @@
       label: 'Caso 01 · Soporte Omnicanal',
       envPath: 'cases/01-soporte-cliente-omnicanal/backend/.env',
     },
+    '02': {
+      label: 'Caso 02 · Mesa de Ayuda TI',
+      envPath: 'cases/02-mesa-ayuda-ti-runbooks/backend/.env',
+    },
     '09': {
       label: 'Caso 09 · RRHH Screening Agenda',
       envPath: 'cases/09-rrhh-screening-agenda/backend/.env',
@@ -26,8 +30,8 @@
       label: 'OpenAI API Key',
       placeholder: 'sk-...',
       link: 'https://platform.openai.com/api-keys',
-      help: 'Activa el modo LIVE con LLM en los casos 01, 09, 10 y 13.',
-      cases: ['01', '09', '10', '13'],
+      help: 'Activa el modo LIVE con LLM en los casos 01, 02, 09, 10 y 13.',
+      cases: ['01', '02', '09', '10', '13'],
     },
     {
       key: 'OPENAI_MODEL',
@@ -487,7 +491,7 @@
       return `
         <div class="api-config-field">
           <label for="cfg-${field.key}">${field.label}</label>
-          <input id="cfg-${field.key}" name="${field.key}" type="${type}" value="${value}" placeholder="${field.placeholder || ''}" />
+          <input id="cfg-${field.key}" name="${field.key}" type="${type}" value="${value}" placeholder="${field.placeholder || ''}" autocomplete="off" spellcheck="false" />
           <small><strong>Variable:</strong> ${field.key}</small>
           <small><strong>Casos vinculados:</strong> ${cases}</small>
           <small><strong>Uso:</strong> ${field.help}</small>
@@ -508,7 +512,7 @@
         <div class="api-config-header">
           <div>
             <h2>${pageTitle}</h2>
-            <p>Completa solo las APIs que realmente usarás. Todo queda guardado en tu navegador y puedes exportar el archivo <code>.env</code> del caso cuando quieras.</p>
+            <p>Completa solo las APIs que realmente usarás. Puedes exportar el archivo <code>.env</code> del caso cuando quieras y solo se guardara en el navegador si tu lo decides.</p>
           </div>
           <button type="button" class="api-config-close" aria-label="Cerrar">×</button>
         </div>
@@ -525,17 +529,22 @@
             <strong>Comportamiento</strong>
             <div>Las credenciales no son obligatorias. Sin ellas, el backend sigue funcionando en modo demo.</div>
           </div>
+          <div class="api-config-box">
+            <strong>Seguridad local</strong>
+            <div>Solo se guarda en <code>localStorage</code> si pulsas guardar. Ese almacenamiento no esta cifrado: usalo solo en un equipo confiable.</div>
+          </div>
         </div>
         <form class="api-config-form">${fieldMarkup}</form>
         <div class="api-config-actions">
-          <button type="button" class="primary" data-action="save">Guardar en navegador</button>
+          <button type="button" class="primary" data-action="save">Guardar localmente</button>
           <button type="button" data-action="copy">Copiar .env</button>
           <button type="button" data-action="download">Descargar .env</button>
+          <button type="button" data-action="clear">Borrar guardado local</button>
           <select data-role="case-select">${caseOptions}</select>
           <div class="api-config-status" data-role="status"></div>
         </div>
         <div class="api-config-note">
-          El guardado de esta ventana no modifica automáticamente archivos del backend. Después de guardar, usa <strong>Copiar</strong> o <strong>Descargar</strong> y lleva ese contenido al archivo indicado del caso. Esto permite instalar sin bloquear el arranque y activar LIVE más tarde.
+          Esta ventana no modifica automáticamente archivos del backend. <strong>Copiar</strong> y <strong>Descargar</strong> exportan el contenido actual del formulario sin persistirlo. Solo <strong>Guardar localmente</strong> deja valores en este navegador, en texto claro dentro de <code>localStorage</code>.
         </div>
       </div>
     `;
@@ -548,13 +557,16 @@
       backdrop.classList.remove('is-open');
     }
 
-    function collectValues() {
+    function collectValues(options = {}) {
+      const persist = options.persist === true;
       const next = getStore();
       fields.forEach((field) => {
         const input = backdrop.querySelector(`[name="${field.key}"]`);
         next[field.key] = input ? input.value.trim() : '';
       });
-      saveStore(next);
+      if (persist) {
+        saveStore(next);
+      }
       return next;
     }
 
@@ -578,8 +590,8 @@
     });
 
     backdrop.querySelector('[data-action="save"]').addEventListener('click', () => {
-      collectValues();
-      setStatus('Valores guardados en este navegador.');
+      collectValues({ persist: true });
+      setStatus('Valores guardados localmente en este navegador.');
     });
 
     backdrop.querySelector('[data-action="copy"]').addEventListener('click', async () => {
@@ -602,6 +614,15 @@
       setStatus(`Archivo .env descargado para ${CASES[caseId]?.label || caseId}.`);
     });
 
+    backdrop.querySelector('[data-action="clear"]').addEventListener('click', () => {
+      localStorage.removeItem(STORAGE_KEY);
+      fields.forEach((field) => {
+        const input = backdrop.querySelector(`[name="${field.key}"]`);
+        if (input) input.value = field.defaultValue || '';
+      });
+      setStatus('Valores borrados del almacenamiento local del navegador.');
+    });
+
     document.body.appendChild(fab);
     document.body.appendChild(backdrop);
   }
@@ -612,3 +633,4 @@
     mount();
   }
 })();
+

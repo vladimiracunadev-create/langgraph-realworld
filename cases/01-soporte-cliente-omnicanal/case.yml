@@ -1,4 +1,5 @@
-entrypoint: uvicorn src.api:app --host 0.0.0.0 --port 8001
+working_dir: backend
+entrypoint: python -m uvicorn src.api:app --host 0.0.0.0 --port 8001
 serve: docker compose -f backend/compose.yml up --build
 ports:
   - 8001

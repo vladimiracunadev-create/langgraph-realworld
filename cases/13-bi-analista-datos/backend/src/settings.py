@@ -6,6 +6,13 @@ from pydantic_settings import BaseSettings
 
 load_dotenv()
 
+DEFAULT_ALLOWED_ORIGINS = (
+    "http://localhost:8080",
+    "http://127.0.0.1:8080",
+    "http://localhost:8013",
+    "http://127.0.0.1:8013",
+)
+
 
 def backend_root() -> Path:
     return Path(__file__).resolve().parents[1]
@@ -45,6 +52,13 @@ class Settings(BaseSettings):
         if env:
             return Path(env)
         return case_root() / "web"
+
+    @property
+    def cors_allowed_origins(self) -> list[str]:
+        raw = os.getenv("ALLOWED_ORIGINS", "")
+        if raw.strip():
+            return [origin.strip() for origin in raw.split(",") if origin.strip()]
+        return list(DEFAULT_ALLOWED_ORIGINS)
 
 
 settings = Settings()

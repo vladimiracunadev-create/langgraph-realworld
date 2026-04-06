@@ -5,6 +5,15 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
+
+DEFAULT_ALLOWED_ORIGINS = (
+    "http://localhost:8080",
+    "http://127.0.0.1:8080",
+    "http://localhost:8002",
+    "http://127.0.0.1:8002",
+)
+
+
 def load_settings() -> None:
     """Carga variables desde .env si existe."""
     load_dotenv()
@@ -35,3 +44,10 @@ def checkpoint_db_path() -> str:
     if env:
         return env
     return str(backend_root() / "checkpoints.sqlite")
+
+
+def cors_allowed_origins() -> list[str]:
+    raw = os.getenv("ALLOWED_ORIGINS", "")
+    if raw.strip():
+        return [origin.strip() for origin in raw.split(",") if origin.strip()]
+    return list(DEFAULT_ALLOWED_ORIGINS)

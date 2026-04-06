@@ -1,34 +1,36 @@
-# Hoja de Ruta
+﻿# Hoja de Ruta
 
 > [!NOTE]
-> **Versión**: 3.6.0 | **Estado**: Industrial | **Audiencia**: Stakeholders, Colaboradores
+> **Version**: 3.8.0 | **Estado**: Industrial | **Audiencia**: Stakeholders, Colaboradores
 
-Resumen de prioridades del repositorio después de consolidar los casos 01, 09, 10 y 13 como referencias operativas del portafolio.
+Resumen de prioridades del repositorio despues de consolidar los casos 01, 02, 09, 10 y 13 como referencias operativas del portafolio.
 
 ## Estado actual
 
 - Caso 01 listo como referencia operativa de soporte omnicanal y fallback DEMO/LIVE.
+- Caso 02 listo como referencia operativa SRE Agentic, con suite propia y job dedicado en CI.
 - Caso 09 listo como referencia de resiliencia.
 - Caso 10 listo como referencia de flujo empresarial.
-- Caso 13 listo como referencia de analítica conversacional.
-- Hub CLI y documentación sincronizados como capa de operación del monorepo.
+- Caso 13 listo como referencia de analitica conversacional con SQL endurecido.
+- Hub CLI y documentacion sincronizados como capa de operacion del monorepo.
+- Fase 2 aplicada para exposicion externa opcional y documentacion completa alineada.
 
-## Próximos focos
+## Proximos focos
 
 ### Corto plazo
 
-- ampliar cobertura de tests en los casos operativos;
-- corregir mojibake o divergencias restantes entre raíz, docs y wiki;
-- estandarizar más casos con `case.yml` y arranque reproducible.
+- agregar un perfil de reverse proxy/TLS mas opinionado para demos publicas;
+- mejorar lockfiles o constraints por caso para auditoria mas determinista;
+- explorar escaneo historico de secretos en modo manual/schedule.
 
 ### Medio plazo
 
-- observabilidad más profunda con LangSmith u OpenTelemetry;
-- autenticación para endpoints expuestos públicamente;
-- más casos con backend real, no solo demo estática.
+- observabilidad mas profunda con LangSmith u OpenTelemetry;
+- auth mas robusta si algunos casos se exponen de forma persistente;
+- mas casos con backend real, no solo demo estatica.
 
 ### Largo plazo
 
-- despliegues más maduros en Kubernetes;
+- despliegues mas maduros en Kubernetes;
 - IaC para entornos reproducibles;
-- catálogo de casos con criterios más explícitos de madurez.
+- catalogo de casos con criterios mas explicitos de madurez y seguridad.

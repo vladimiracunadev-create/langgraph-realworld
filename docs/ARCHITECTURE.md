@@ -1,72 +1,42 @@
-# 🏗️ Arquitectura del Sistema
+﻿# Arquitectura del Sistema
 
 > [!NOTE]
-> **Versión**: 3.7.0 | **Estado**: Industrial | **Audiencia**: Arquitectos Cloud, System Designers, DevOps
+> **Version**: 3.8.0 | **Estado**: Industrial | **Audiencia**: Arquitectos Cloud, System Designers, DevOps
 
-## 👁️ Visión General
+## Vision General
 
-**LangGraph Realworld** utiliza un patrón de diseño Monorepo enfocado en la encapsulación de microservicios. A diferencia de los repositorios monolíticos con la lógica empotrada en rutas, cada caso de uso industrial implementado reside en su propio subdirectorio aislado con su propio backend FastAPI, servidor web Vanilla JS y Dockerfile.
+**LangGraph Realworld** usa un patron de monorepo con microservicios encapsulados por caso. Cada caso operativo implementado reside en su propio subdirectorio con backend FastAPI, UI ligera, configuracion local y `case.yml` para orquestacion reproducible.
 
-## 🕸️ Topología de Componentes
+## Capas Principales
 
-```mermaid
-graph TD
-    subgraph UI ["🌐 Capa de Interacción (Frontend)"]
-        A[Portal Raíz HTML/JS \n port: 8080]
-        B1[Dashboard Caso 01]
-        B2[Terminal SRE Caso 02]
-        B3(...)
-        
-        A -->|Navegación| B1
-        A -->|Navegación| B2
-        A -->|Navegación| B3
-    end
+- **Portal raiz**: `index.html` como punto de entrada, navegacion y ayuda para configuracion opcional de APIs.
+- **Backends operativos**: casos 01, 02, 09, 10 y 13 con endpoints reales, modo DEMO/LIVE y contratos de estado.
+- **Orquestacion agentica**: LangGraph con `TypedDict`, edges condicionales, checkpoints y herramientas acotadas por dominio.
+- **Operacion local**: Docker Compose, Hub CLI y arranque directo por `uvicorn`.
+- **Seguridad automatizada**: GitHub Actions con pinning, CodeQL, `detect-secrets`, `pip-audit` y validacion dedicada del caso 02.
 
-    subgraph BE ["⚙️ Capa de Microservicios (Docker - FastAPI)"]
-        API1((API Caso 01 \n port: 8001))
-        API2((API Caso 02 \n port: 8002))
-        API3((API ... \n port: ...))
-    end
-    
-    subgraph IA ["🧠 Capa de Agentes (LangGraph)"]
-        LG1[StateGraph / MemorySaver]
-        LG2[Mocks Falback]
-    end
+## Modelo de seguridad integrado
 
-    subgraph EXT ["☁️ Integraciones"]
-        OpenAI[(OpenAI/LLM)]
-        DB[(Local BBDD / JSON DB)]
-    end
+La arquitectura es local-first y pedagogica, pero ya incorpora limites operativos reales:
 
-    B1 <-->|HTTP / NDJSON Stream| API1
-    B2 <-->|HTTP / NDJSON Stream| API2
-    B3 <-->|HTTP / NDJSON Stream| API3
+- CORS con allowlists donde hay consumo cross-origin.
+- `hub.py` sin `shell=True` y con allowlist de comandos.
+- Validacion de inputs en endpoints operativos.
+- SQL read-only y sanitizacion adicional en el caso 13.
+- Perfil opcional de exposicion externa con `DEMO_AUTH_TOKEN`, `RATE_LIMIT_RPM` y `TRUST_PROXY_HEADERS`.
 
-    API1 <--> LG1
-    API2 <--> LG1
-    API1 <--> LG2
+## Dual Mode
 
-    LG1 <-->|REST| OpenAI
-    LG1 <-->|I/O| DB
-    LG2 <-->|I/O| DB
-```
+Los casos operativos no dependen de una API real para ser explorados:
 
-## 🧠 Flujo Agentic (El Rol de LangGraph)
+1. Si faltan credenciales, caen a DEMO de forma explicita.
+2. Si hay configuracion valida, pueden activar integraciones reales por caso.
+3. La documentacion y el portal distinguen claramente entre demo, pruebas locales y uso con secretos reales.
 
-El sistema NO trata al LLM (Modelo de Lenguaje Grande) como un asistente conversacional genérico. Lo trata como un **Router Lógico**.
-1. **Definición de Estado:** Se usa `TypedDict` para mantener la memoria y variables de la solicitud actual intactas y limpias a través de los nodos lógicos.
-2. **Ciclos Controlados:** La información viaja entre funciones de Python clásicas (Tools, Consultas SQL, Consultas MongoDB) de las cuales los LLMs evalúan outputs condicionales y deciden qué camino seguir en la gráfica vectorial. 
+## Implicancia practica
 
-## 🛡️ Diseño Resiliente "Dual-Mode"
+El repositorio no intenta ser una plataforma multi-tenant lista para Internet abierta. La arquitectura prioriza tres cosas a la vez:
 
-Para garantizar que el portafolio pueda ser desplegado y evaluado por terceros (Stakeholders, Jefes de Proyecto) sin costo alguno ni configuraciones estresantes de API, la arquitectura emplea un patrón **Modo Dual**:
-
-```mermaid
-graph LR
-    Req[Request] --> Check{¿Configurado OPENAI_API_KEY?}
-    Check -->|SÍ| NodeLLM[Invocación LangChain a OpenAI]
-    Check -->|NO| NodeMock[Ejecución de Lógica Reglar Estática]
-    NodeLLM --> Out[JSON Response Final]
-    NodeMock --> Out
-```
-El `index.html` central también actúa como *Configurator* para sobreescribir las settings, permitiendo escalar de una prueba MOCK a una prueba completa en Segundos.
+- exploracion local sin friccion;
+- ejemplos de agentes y automatizacion con valor real;
+- hardening suficiente para no normalizar malas practicas de CI/CD, secretos o ejecucion.
