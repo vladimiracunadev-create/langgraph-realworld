@@ -1,36 +1,61 @@
-﻿# Hoja de Ruta
+# Hoja de Ruta
 
 > [!NOTE]
-> **Version**: 3.8.0 | **Estado**: Industrial | **Audiencia**: Stakeholders, Colaboradores
+> **Versión**: 3.9.0 | **Estado**: Industrial | **Audiencia**: Stakeholders, Colaboradores
 
-Resumen de prioridades del repositorio despues de consolidar los casos 01, 02, 09, 10 y 13 como referencias operativas del portafolio.
+Resumen de prioridades del repositorio tras consolidar los casos 01, 02, 09, 10 y 13 como referencias operativas
+y completar la auditoría de seguridad por 8 capas (v3.9.0).
+
+---
 
 ## Estado actual
 
-- Caso 01 listo como referencia operativa de soporte omnicanal y fallback DEMO/LIVE.
-- Caso 02 listo como referencia operativa SRE Agentic, con suite propia y job dedicado en CI.
-- Caso 09 listo como referencia de resiliencia.
-- Caso 10 listo como referencia de flujo empresarial.
-- Caso 13 listo como referencia de analitica conversacional con SQL endurecido.
-- Hub CLI y documentacion sincronizados como capa de operacion del monorepo.
-- Fase 2 aplicada para exposicion externa opcional y documentacion completa alineada.
+| Área | Estado |
+|:---|:---|
+| Casos operativos (01, 02, 09, 10, 13) | Completos con backend real, DEMO/LIVE y CI |
+| Auditoría de seguridad por 8 capas | Completada en v3.9.0 |
+| HTTP security headers (25 demos) | Implementados |
+| Puertos ligados a `127.0.0.1` | Implementado |
+| Imágenes Docker pineadas | Implementado |
+| Grype scan en CI | Implementado |
+| Dependabot | Configurado |
+| Detección Trojan Source (bidi) | Implementado en CI |
+| Hub CLI y documentación | Sincronizados |
+| READMEs scaffold (20 casos) | Actualizados con Mermaid y stack técnico |
 
-## Proximos focos
+---
+
+## Próximos focos
 
 ### Corto plazo
 
-- agregar un perfil de reverse proxy/TLS mas opinionado para demos publicas;
-- mejorar lockfiles o constraints por caso para auditoria mas determinista;
-- explorar escaneo historico de secretos en modo manual/schedule.
+- Perfil de reverse proxy/TLS opinionado para demos públicas (nginx + Let's Encrypt).
+- Adoptar `pip-compile` (pip-tools) o Poetry para lock files deterministas por caso.
+- Activar escaneo histórico de secretos con `detect-secrets --scan` en modo schedule.
+- Extender `grype` a modo `fail-build: true` cuando se detecten CVEs críticos en producción.
 
-### Medio plazo
+### Mediano plazo
 
-- observabilidad mas profunda con LangSmith u OpenTelemetry;
-- auth mas robusta si algunos casos se exponen de forma persistente;
-- mas casos con backend real, no solo demo estatica.
+- Observabilidad más profunda con LangSmith u OpenTelemetry para trazas distribuidas.
+- Autenticación más robusta (OAuth2 / OIDC) para casos expuestos de forma persistente.
+- Más casos con backend real: candidatos prioritarios son 03 (SRE), 19 (DevEx) y 25 (Multi-agente).
+- Dashboards de métricas por caso (latencia, errores, modo DEMO/LIVE).
 
 ### Largo plazo
 
-- despliegues mas maduros en Kubernetes;
-- IaC para entornos reproducibles;
-- catalogo de casos con criterios mas explicitos de madurez y seguridad.
+- Despliegues maduros en Kubernetes con `NetworkPolicy` y `SecurityContext` completos.
+- IaC (Terraform / Pulumi) para entornos reproducibles en cloud.
+- Catálogo de casos con criterios explícitos de madurez, seguridad y valor de negocio.
+- Integración con un secret manager externo (Vault, AWS Secrets Manager) para demos persistentes.
+
+---
+
+## Criterios de madurez por nivel
+
+```text
+SCAFFOLD → demo estática + README con Mermaid
+       ↓
+OPERATIVO → backend real + DEMO/LIVE + Docker + tests básicos + docs
+       ↓
+INDUSTRIAL → streaming + observabilidad + hardening + docs operativas completas
+```
