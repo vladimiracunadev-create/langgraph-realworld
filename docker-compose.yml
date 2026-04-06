@@ -5,14 +5,14 @@ services:
     volumes:
       - .:/app
     ports:
-      - "8080:8080"
+      - "127.0.0.1:8080:8080"
     command: python -m http.server 8080
 
   case01:
     build:
       context: cases/01-soporte-cliente-omnicanal/backend
     ports:
-      - "8001:8001"
+      - "127.0.0.1:8001:8001"
     volumes:
       - ./cases/01-soporte-cliente-omnicanal/data:/app/data:ro
       - ./cases/01-soporte-cliente-omnicanal/backend/web:/app/web:ro
@@ -27,7 +27,7 @@ services:
     build:
       context: cases/02-mesa-ayuda-ti-runbooks/backend
     ports:
-      - "8002:8002"
+      - "127.0.0.1:8002:8002"
     volumes:
       - ./cases/02-mesa-ayuda-ti-runbooks/data:/app/data:ro
       - ./cases/02-mesa-ayuda-ti-runbooks/backend/web:/app/web:ro
@@ -39,7 +39,7 @@ services:
     build:
       context: cases/09-rrhh-screening-agenda/backend
     ports:
-      - "8009:8009"
+      - "127.0.0.1:8009:8009"
     volumes:
       - ./cases/09-rrhh-screening-agenda/data:/app/data:ro
     environment:
@@ -50,7 +50,7 @@ services:
     build:
       context: cases/10-onboarding-empleados/backend
     ports:
-      - "8010:8010"
+      - "127.0.0.1:8010:8010"
     volumes:
       - ./cases/10-onboarding-empleados/data:/app/data:ro
     environment:
@@ -61,7 +61,7 @@ services:
     build:
       context: cases/13-bi-analista-datos/backend
     ports:
-      - "8013:8013"
+      - "127.0.0.1:8013:8013"
     volumes:
       - ./cases/13-bi-analista-datos/data:/app/data:ro
       - ./cases/13-bi-analista-datos/web:/app/web:ro
