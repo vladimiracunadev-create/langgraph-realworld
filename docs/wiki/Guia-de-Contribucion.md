@@ -1,51 +1,114 @@
-# Guía de Contribución (CONTRIBUTING)
+# Guía de Contribución
 
 > [!NOTE]
-> **Versión**: 1.1.0 | **Estado**: Activo | **Audiencia**: Colaboradores, Desarrolladores Open Source
+> **Versión**: 1.2.0 | **Estado**: Activo | **Audiencia**: Colaboradores, Desarrolladores Open Source
 
-Bienvenido al ecosistema de **LangGraph Realwork**. Este es un repositorio diseñado bajo una arquitectura de **Monorepo Modular** (25 casos de uso). Para mantener la excelencia técnica y la portabilidad, seguimos reglas estrictas de contribución.
+Bienvenido al ecosistema de **LangGraph Realworld** — un monorepo modular con 25 casos de uso empresariales construidos con LangGraph y FastAPI.
+Para mantener la calidad técnica y la portabilidad, seguimos reglas estrictas de contribución.
 
 ---
 
-## 🏗️ Estructura de Contribución
+## Estructura de un caso
 
 Cada caso de uso debe ser **autocontenido** y seguir el patrón de "Agente con Estado".
 
-- **Ubicación**: Todo nuevo caso o mejora debe vivir en `cases/NN-slug/`.
-- **Estructura Requerida**:
-  - `backend/Dockerfile`: Para garantizar la residencia y repetibilidad.
-  - `backend/requirements.txt`: Gestión de dependencias aislada.
-  - `backend/src/`: Código fuente siguiendo patrones 12-factor.
-  - `demo/index.html`: Una interfaz de demostración funcional (preferiblemente con Glassmorphism).
+```text
+cases/NN-slug/
+├── README.md              # Descripción, flujo Mermaid, stack y estado
+├── case.yml               # Configuración para Hub CLI
+├── data/                  # Datos de muestra (readonly en Docker)
+├── backend/
+│   ├── .env.example       # Plantilla de variables (sin secretos reales)
+│   ├── requirements.txt   # Dependencias aisladas por caso
+│   ├── Dockerfile         # Imagen con usuario non-root y versión pineada
+│   ├── compose.yml        # Compose aislado del caso
+│   └── src/
+│       ├── graph.py       # StateGraph de LangGraph (lógica principal)
+│       ├── api.py         # FastAPI — /health, /ready, /api/run
+│       ├── settings.py    # Detección DEMO/LIVE y configuración
+│       └── integrations.py# Clientes reales y fallbacks DEMO
+└── demo/
+    ├── Dockerfile         # nginx:1.27.3-alpine con USER nginx
+    ├── nginx.conf         # Con HTTP security headers
+    └── index.html         # UI de demostración
+```
 
 ---
 
-## 🛠️ Estándares de Código
+## Estándares de código
 
-Para asegurar la calidad, el pipeline de CI rechazará cualquier cambio que no cumpla con:
+El pipeline de CI rechazará cualquier cambio que no cumpla con:
 
-1.  **Python**:
-    - Linter & Formatter: **Ruff**. Ejecuta `ruff check .` antes de subir.
-    - Estilo: Adhesión estricta a tipos mediante `typing` y `Annotated`.
-2.  **Documentación**:
-    - Cada caso debe tener su propio `README.md` explicando el flujo del grafo.
-    - Los diagramas Mermaid son obligatorios para visualizar el `StateGraph`.
+### Python
+
+- **Linter y formatter**: [Ruff](https://docs.astral.sh/ruff/). Ejecuta `ruff check .` antes de subir.
+- **Tipado**: adhesión estricta con `typing` y `Annotated`.
+- **Tests**: cada caso operativo debe incluir pruebas de API y flujo LangGraph.
+
+### Docker
+
+- Imágenes base pineadas a versión exacta (ej: `python:3.11.10-slim`, `nginx:1.27.3-alpine`).
+- Usuario non-root obligatorio (`USER appuser` o `USER nginx`).
+- Healthcheck funcional con binario disponible en la imagen.
+
+### Documentación
+
+- Cada caso debe tener su propio `README.md` con un diagrama Mermaid del `StateGraph`.
+- El README debe ser honesto sobre el estado actual: `SCAFFOLD`, `OPERATIVO` o `INDUSTRIAL`.
+
+---
+
+## Flujo de trabajo
+
+1. **Fork & Branch** — crea una rama descriptiva:
+
+   ```text
+   feature/case-26-legal-advisor
+   fix/case-09-healthcheck
+   docs/update-security-audit
+   ```
+
+2. **Docker First** — asegúrate de que tu caso construye y arranca:
+
+   ```bash
+   docker build -t mi-caso:test cases/NN-slug/backend
+   docker build -t mi-caso-demo:test cases/NN-slug/demo
+   ```
+
+3. **Tests** — agrega o actualiza los tests del caso:
+
+   ```bash
+   pytest -q cases/NN-slug/backend/tests
+   ```
+
+4. **Pull Request** — describe en el PR:
+   - el valor de negocio del caso,
+   - el patrón de LangGraph utilizado,
+   - cómo probaste DEMO y LIVE.
 
 ---
 
-## 🚀 Flujo de Trabajo (Workflow)
+## Modo DEMO / LIVE
 
-1.  **Fork & Branch**: Crea una rama descriptiva (ej: `feature/case-26-legal-advisor`).
-2.  **Docker First**: Asegúrate de que tu caso corra perfectamente con `docker build`.
-3.  **Smoke Tests**: Agrega un archivo `compose.smoke.yml` si el caso está "Implementado".
-4.  **Pull Request**: Describe el valor de negocio y el patrón de LangGraph utilizado.
+Todo caso debe funcionar **en DEMO sin credenciales externas**.
+El modo LIVE se activa automáticamente cuando existen credenciales válidas.
+
+```python
+# En settings.py
+USE_LLM = bool(os.getenv("OPENAI_API_KEY"))
+MODE = "LIVE" if USE_LLM else "DEMO"
+```
+
+---
+
+## Seguridad
+
+- **Nunca incluyas secretos** en commits. El hook de `detect-secrets` bloqueará cualquier intento de subir claves.
+- Usa `.env.example` con valores vacíos o placeholders.
+- Los puertos en `docker-compose.yml` deben usar `127.0.0.1:PORT:PORT`.
+- Si encuentras una vulnerabilidad, consulta [SECURITY.md](https://github.com/vladimiracunadev-create/langgraph-realworld/blob/main/SECURITY.md).
 
 ---
 
-## 🛡️ Seguridad
-
-Nunca incluyas secretos. El pre-commit hook de `detect-secrets` bloqueará cualquier intento de subir claves de APIs. Si encuentras una vulnerabilidad, consulta nuestro [SECURITY.md](SECURITY.md).
-
----
 > [!IMPORTANT]
-> **Buscamos Calidad sobre Cantidad.** Preferimos casos con grafos bien definidos, manejo de errores robusto y dashboards pulidos.
+> **Calidad sobre cantidad.** Preferimos casos con grafos bien definidos, manejo de errores robusto, modo DEMO funcional y documentación honesta sobre el estado real.
