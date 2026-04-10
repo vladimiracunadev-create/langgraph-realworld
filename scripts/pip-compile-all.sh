@@ -27,7 +27,11 @@ CASES=(
   "cases/25-supervisor-workers/backend"
 )
 
-if ! command -v pip-compile &> /dev/null; then
+if command -v pip-compile &> /dev/null; then
+  PIP_COMPILE="pip-compile"
+elif python -m piptools compile --version &> /dev/null 2>&1; then
+  PIP_COMPILE="python -m piptools compile"
+else
   echo "pip-compile not found. Install with: pip install pip-tools"
   exit 1
 fi
@@ -45,7 +49,7 @@ for case_dir in "${CASES[@]}"; do
 
   if [[ "$CHECK_MODE" == true ]]; then
     echo "CHECK $req_in ..."
-    if pip-compile "$req_in" --output-file "$req_out" --check --quiet 2>&1; then
+    if $PIP_COMPILE "$req_in" --output-file "$req_out" --check --quiet 2>&1; then
       echo "  OK  $req_out is up to date"
     else
       echo "  DRIFT detected in $req_out — run: bash scripts/pip-compile-all.sh"
@@ -53,7 +57,7 @@ for case_dir in "${CASES[@]}"; do
     fi
   else
     echo "COMPILE $req_in -> $req_out ..."
-    pip-compile "$req_in" \
+    $PIP_COMPILE "$req_in" \
       --output-file "$req_out" \
       --strip-extras \
       --quiet
