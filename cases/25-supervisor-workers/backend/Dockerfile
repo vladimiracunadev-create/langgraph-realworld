@@ -1,4 +1,4 @@
-FROM python:3.11.10-slim
+FROM python:3.11-slim
 
 # Security Hardening: don't run as root
 RUN groupadd -r appuser && useradd -r -g appuser appuser
@@ -6,7 +6,7 @@ RUN groupadd -r appuser && useradd -r -g appuser appuser
 WORKDIR /app
 
 # System deps (minimal)
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
         curl \
       && rm -rf /var/lib/apt/lists/*
 

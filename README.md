@@ -7,8 +7,9 @@
 [![Python](https://img.shields.io/badge/python-3.11-informational.svg)](https://www.python.org/)
 [![LangGraph](https://img.shields.io/badge/LangGraph-latest-green.svg)](https://github.com/langchain-ai/langgraph)
 
-> Portafolio de **25 casos de uso empresariales** construidos con **LangGraph**, **FastAPI** y demos interactivas.
-> **Ocho casos completamente operativos** (01, 02, 03, 09, 10, 13, 19 y 25); los restantes son scaffolds documentados y listos para ser elevados.
+> Portafolio de **25 casos de uso empresariales** construidos con **LangGraph** y **FastAPI**:
+> **8 backends completamente operativos** (casos 01, 02, 03, 09, 10, 13, 19 y 25) con streaming, OAuth2/OIDC opt-in, observabilidad LangSmith, `/metrics` por servicio, logging JSON estructurado y reverse proxy nginx + TLS.
+> Los 17 casos restantes son scaffolds documentados listos para elevar al siguiente nivel.
 
 ---
 
