@@ -152,7 +152,7 @@ jobs:
             exit 0
           fi
       - name: Scan with grype (pinned SHA)
-        uses: anchore/scan-action@2c901ab7378897c01b8efaa2d0c9bf519cc64b9e
+        uses: anchore/scan-action@e1165082ffb1fe366ebaf02d8526e7c4989ea9d2
         with:
           image: "scan-target:ci"
           fail-build: true
