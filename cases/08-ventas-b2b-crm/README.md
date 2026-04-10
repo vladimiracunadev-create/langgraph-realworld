@@ -1,7 +1,7 @@
 # Caso 08: Ventas B2B y CRM
 
 > [!NOTE]
-> **Estado**: `SCAFFOLD` | **Versión repo**: 3.9.0 | **Tipo**: Agente con estado y memoria conversacional
+> **Estado**: `SCAFFOLD` | **Versión repo**: 4.0.0 | **Tipo**: Agente con estado y memoria conversacional
 
 Automatiza el ciclo de prospección y seguimiento B2B identificando leads cualificados, personalizando el outreach en función del perfil de cada cuenta, registrando cada interacción en el CRM y proponiendo los siguientes pasos de seguimiento. Permite que los equipos comerciales multipliquen su capacidad de pipeline sin aumentar headcount, manteniendo la personalización que exige la venta consultiva.
 

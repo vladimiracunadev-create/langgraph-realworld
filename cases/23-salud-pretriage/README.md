@@ -1,7 +1,7 @@
 # Caso 23: Salud — Pre-triage Administrativo
 
 > [!NOTE]
-> **Estado**: `SCAFFOLD` | **Versión repo**: 3.9.0 | **Tipo**: Agente conversacional con derivación estructurada
+> **Estado**: `SCAFFOLD` | **Versión repo**: 4.0.0 | **Tipo**: Agente conversacional con derivación estructurada
 
 Automatiza el pre-triage administrativo de pacientes recopilando motivo de consulta, síntomas referidos y datos relevantes mediante una conversación guiada, y derivando al servicio, especialidad o nivel de urgencia adecuado sin emitir diagnóstico médico. Reduce las esperas en recepción, optimiza la asignación de turnos y mejora la experiencia del paciente en clínicas, hospitales y servicios de salud digital.
 

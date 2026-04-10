@@ -1,3 +1,8 @@
+id: "25"
+slug: "25-supervisor-workers"
+name: "Supervisor + Workers"
+status: "operational"
+version: "4.0.0"
 working_dir: backend
 entrypoint: python -m uvicorn src.api:app --host 0.0.0.0 --port 8025
 serve: python -m uvicorn src.api:app --host 0.0.0.0 --port 8025

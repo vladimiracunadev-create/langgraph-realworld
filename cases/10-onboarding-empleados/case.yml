@@ -1,3 +1,8 @@
+id: "10"
+slug: "10-onboarding-empleados"
+name: "Onboarding de Empleados"
+status: "industrial"
+version: "4.0.0"
 working_dir: backend
 entrypoint: python -m uvicorn src.api:app --host 0.0.0.0 --port 8010
 serve: python -m uvicorn src.api:app --host 0.0.0.0 --port 8010

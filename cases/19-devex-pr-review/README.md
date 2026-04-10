@@ -1,7 +1,11 @@
 # Caso 19: DevEx — Revisión de Pull Requests
 
 > [!NOTE]
-> **Estado**: `SCAFFOLD` | **Versión repo**: 3.9.0 | **Tipo**: Agente con estado y análisis de código
+> **Estado**: `OPERATIVO` | **Versión repo**: 4.0.0 | **Tipo**: Agente con estado y análisis de código
+>
+> **Modo DEMO**: Funciona sin credenciales usando `data/sample_pr.json` como entrada.
+> **Modo LIVE**: Requiere `GITHUB_TOKEN` para consultar la GitHub API real (integración GitHub API pendiente — v4.1.0).
+> Sin `GITHUB_TOKEN`, el sistema opera siempre en modo DEMO.
 
 Automatiza la revisión de Pull Requests analizando el diff de código para detectar riesgos de seguridad, regresiones de rendimiento, violaciones de estándares y deuda técnica, generando comentarios contextualizados en cada línea relevante y produciendo automáticamente el changelog a partir de los commits. Acelera el ciclo de revisión y libera tiempo de los engineers senior para revisiones de diseño y arquitectura.
 

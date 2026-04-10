@@ -47,6 +47,12 @@ Resumen de prioridades del repositorio tras completar la hoja de ruta de corto y
 - ~~Más casos con backend real: 03 (SRE), 19 (DevEx), 25 (Multi-agente).~~ ✅
 - ~~Endpoint `/metrics` por caso con latencia, errores y modo DEMO/LIVE.~~ ✅
 
+### v4.1.0 — Integraciones reales pendientes
+
+- **Caso 19 (DevEx PR Review)**: Implementar integración GitHub API real para modo LIVE con `GITHUB_TOKEN`. Actualmente el modo DEMO usa `data/sample_pr.json`.
+- **Caso 10 (Onboarding)**: Implementar las 4 integraciones reales marcadas como `TODO REAL` en `integrations.py`: HRIS, IAM, Slack y correo electrónico.
+- Actualizar tests de ambos casos para cubrir el modo LIVE.
+
 ### Largo plazo
 
 - Despliegues maduros en Kubernetes con `NetworkPolicy` y `SecurityContext` completos.

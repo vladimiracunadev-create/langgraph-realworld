@@ -1,7 +1,7 @@
 # Caso 24: Asistente de Product Manager
 
 > [!NOTE]
-> **Estado**: `SCAFFOLD` | **Versión repo**: 3.9.0 | **Tipo**: Agente con estado y memoria de proyecto
+> **Estado**: `SCAFFOLD` | **Versión repo**: 4.0.0 | **Tipo**: Agente con estado y memoria de proyecto
 
 Automatiza el ciclo de gestión de producto desde la captura de ideas hasta el seguimiento de entregables: transforma ideas y requerimientos en épicas estructuradas, descompone épicas en historias de usuario y tareas técnicas, las registra en el sistema de gestión y hace seguimiento del progreso reportando impedimentos y riesgos. Permite que los PMs gestionen carteras de producto más grandes con mayor visibilidad y menor overhead administrativo.
 

@@ -66,11 +66,9 @@ El estándar actual del repositorio se apoya en estos pilares:
 | 17 | [⚖️ Legal Intake](cases/17-legal-intake/README.md) | Legal |
 | 18 | [📣 Marketing con QA](cases/18-marketing-contenido-qa/README.md) | Marketing |
 | 20 | [🏛️ Migración Legacy](cases/20-migracion-legacy/README.md) | Arquitectura |
-| 20 | [🏛️ Migración Legacy](cases/20-migracion-legacy/README.md) | Arquitectura |
 | 21 | [📝 Documentación Automática](cases/21-docs-auto/README.md) | DevOps |
 | 22 | [🏢 Backoffice: Automatización](cases/22-backoffice-automatizacion/README.md) | Operaciones |
 | 23 | [🏥 Salud: Pre-triage](cases/23-salud-pretriage/README.md) | Salud |
-| 24 | [📋 Asistente PM](cases/24-pm-assistant/README.md) | Gestión de proyectos |
 | 24 | [📋 Asistente PM](cases/24-pm-assistant/README.md) | Gestión de proyectos |
 
 ---
@@ -148,7 +146,7 @@ TRUST_PROXY_HEADERS=false
 
 ## 🛡️ Seguridad
 
-Este repositorio ha sido auditado por **8 capas de seguridad** (v3.9.0):
+Este repositorio ha sido auditado por **8 capas de seguridad** (v4.0.0):
 
 | Capa | Control | Estado |
 |:---|:---|:---:|

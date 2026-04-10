@@ -1,10 +1,10 @@
 ﻿# Hub CLI
 
-## Estado actual
+## Estado actual (v4.0.0)
 
-- casos 01 y 02: `Operational (v3.9.0)`
-- casos 09, 10 y 13: `Industrial (v3.9.0)`
-- resto del catalogo: `Legacy` o `Scaffold`
+- casos 01, 02, 03, 19 y 25: `Operational (v4.0.0)`
+- casos 09, 10 y 13: `Industrial (v4.0.0)`
+- casos 04–08, 11–12, 14–18, 20–24: `Scaffold`
 
 ## Guardrails de seguridad
 

@@ -1,7 +1,7 @@
 # Caso 04: SOC Triage de Alertas
 
 > [!NOTE]
-> **Estado**: `SCAFFOLD` | **Versión repo**: 3.9.0 | **Tipo**: Agente reactivo con enriquecimiento de contexto
+> **Estado**: `SCAFFOLD` | **Versión repo**: 4.0.0 | **Tipo**: Agente reactivo con enriquecimiento de contexto
 
 Automatiza el primer nivel de análisis en un Centro de Operaciones de Seguridad (SOC) correlacionando alertas de múltiples fuentes, enriqueciéndolas con inteligencia de amenazas y clasificando su prioridad real para reducir la fatiga de alertas y el tiempo de detección (MTTD). Permite que los analistas de seguridad senior se enfoquen únicamente en los incidentes que requieren intervención humana.
 

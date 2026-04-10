@@ -1,7 +1,7 @@
 # Caso 12: Psicometría y Evaluaciones
 
 > [!NOTE]
-> **Estado**: `SCAFFOLD` | **Versión repo**: 3.9.0 | **Tipo**: Agente con estado y validación experta
+> **Estado**: `SCAFFOLD` | **Versión repo**: 4.0.0 | **Tipo**: Agente con estado y validación experta
 
 Automatiza la generación, validación psicométrica y aplicación de instrumentos de evaluación (tests, cuestionarios, baterías de selección) produciendo ítems calibrados, análisis de resultados con métricas de confiabilidad y validez, e informes individuales y grupales. Permite a los equipos de recursos humanos, psicólogos educativos e investigadores escalar la producción de evaluaciones de alta calidad técnica.
 

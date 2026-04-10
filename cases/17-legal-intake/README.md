@@ -1,7 +1,7 @@
 # Caso 17: Legal Intake
 
 > [!NOTE]
-> **Estado**: `SCAFFOLD` | **Versión repo**: 3.9.0 | **Tipo**: Agente conversacional con aprobación humana
+> **Estado**: `SCAFFOLD` | **Versión repo**: 4.0.0 | **Tipo**: Agente conversacional con aprobación humana
 
 Automatiza el proceso de admisión de casos legales mediante una entrevista estructurada que recopila los hechos relevantes, clasifica el tipo de asunto, genera borradores de documentos iniciales (demanda, contrato, poder notarial) y los somete a revisión del abogado antes de su envío. Permite que los despachos jurídicos atiendan más clientes reduciendo el tiempo de intake de horas a minutos.
 

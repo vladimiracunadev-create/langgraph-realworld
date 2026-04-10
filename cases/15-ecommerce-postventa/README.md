@@ -1,7 +1,7 @@
 # Caso 15: E-commerce Postventa
 
 > [!NOTE]
-> **Estado**: `SCAFFOLD` | **Versión repo**: 3.9.0 | **Tipo**: Agente reactivo con estado
+> **Estado**: `SCAFFOLD` | **Versión repo**: 4.0.0 | **Tipo**: Agente reactivo con estado
 
 Agente de gestión postventa para e-commerce que maneja solicitudes de seguimiento de pedidos,
 devoluciones, cambios y generación de etiquetas de envío. Automatiza el flujo desde la

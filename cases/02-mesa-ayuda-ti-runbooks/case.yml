@@ -6,7 +6,7 @@ ports:
   - 8002
 dependencies: []
 status: "operational"
-version: "3.8.0"
+version: "4.0.0"
 working_dir: "backend"
 entrypoint: "python -m uvicorn src.api:app --host 0.0.0.0 --port 8002"
 

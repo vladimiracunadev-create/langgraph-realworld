@@ -1,7 +1,7 @@
 # Caso 22: Backoffice — Automatización de Solicitudes
 
 > [!NOTE]
-> **Estado**: `SCAFFOLD` | **Versión repo**: 3.9.0 | **Tipo**: Agente con estado y trazabilidad de operaciones
+> **Estado**: `SCAFFOLD` | **Versión repo**: 4.0.0 | **Tipo**: Agente con estado y trazabilidad de operaciones
 
 Automatiza el ciclo completo de solicitudes de backoffice (altas, bajas, modificaciones, reportes) desde la recepción hasta la ejecución y el registro: verifica identidad y permisos, ejecuta la operación en los sistemas internos y deja un log de auditoría inmutable de cada acción. Reduce tiempos de respuesta de días a minutos y elimina errores de procesamiento manual en operaciones de alto volumen.
 

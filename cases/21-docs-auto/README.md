@@ -1,7 +1,7 @@
 # Caso 21: Documentación Automática
 
 > [!NOTE]
-> **Estado**: `SCAFFOLD` | **Versión repo**: 3.9.0 | **Tipo**: Agente con estado y pipeline de escritura
+> **Estado**: `SCAFFOLD` | **Versión repo**: 4.0.0 | **Tipo**: Agente con estado y pipeline de escritura
 
 Automatiza la generación y mantenimiento de documentación técnica escaneando el repositorio, generando el outline estructurado, redactando cada sección con contexto del código real y aplicando un ciclo de QA para verificar precisión, completitud y legibilidad antes de publicar. Elimina la documentación desactualizada y reduce el costo de mantener docs al día a medida que el código evoluciona.
 

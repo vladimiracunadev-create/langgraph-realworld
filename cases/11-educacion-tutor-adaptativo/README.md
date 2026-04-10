@@ -1,7 +1,7 @@
 # Caso 11: Tutor Adaptativo
 
 > [!NOTE]
-> **Estado**: `SCAFFOLD` | **Versión repo**: 3.9.0 | **Tipo**: Agente con estado y memoria de aprendizaje
+> **Estado**: `SCAFFOLD` | **Versión repo**: 4.0.0 | **Tipo**: Agente con estado y memoria de aprendizaje
 
 Automatiza la experiencia de tutoría personalizada diagnosticando el nivel inicial del estudiante, seleccionando contenidos y ejercicios adaptados a su desempeño, ajustando la dificultad en tiempo real y generando reportes de progreso para docentes e instituciones. Democratiza el acceso a tutoría de calidad individual en plataformas educativas con miles de usuarios simultáneos.
 

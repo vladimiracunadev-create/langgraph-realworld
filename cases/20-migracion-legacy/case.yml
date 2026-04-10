@@ -1,0 +1,10 @@
+id: "20"
+slug: "20-migracion-legacy"
+name: "Migracion Legacy"
+status: "scaffold"
+version: "4.0.0"
+working_dir: demo
+ports:
+  - 9020
+compose: demo/compose.yml
+dockerfile: demo/Dockerfile

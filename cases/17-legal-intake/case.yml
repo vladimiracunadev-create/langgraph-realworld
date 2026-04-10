@@ -1,0 +1,10 @@
+id: "17"
+slug: "17-legal-intake"
+name: "Legal Intake"
+status: "scaffold"
+version: "4.0.0"
+working_dir: demo
+ports:
+  - 9017
+compose: demo/compose.yml
+dockerfile: demo/Dockerfile

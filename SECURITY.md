@@ -1,22 +1,22 @@
 # Seguridad
 
 > [!NOTE]
-> **Version**: 3.9.0 | **Estado**: Auditado y endurecido | **Audiencia**: Auditores, CISO, Desarrolladores
+> **Version**: 4.0.0 | **Estado**: Auditado y endurecido | **Audiencia**: Auditores, CISO, Desarrolladores
 
-Este repositorio esta pensado para exploracion tecnica, demos y validacion local de patrones LangGraph. La seguridad implementada busca reducir riesgos reales sin romper quickstart, `index.html`, Hub CLI ni los casos operativos 01, 02, 09, 10 y 13.
+Este repositorio esta pensado para exploracion tecnica, demos y validacion local de patrones LangGraph. La seguridad implementada busca reducir riesgos reales sin romper quickstart, `index.html`, Hub CLI ni los casos operativos 01, 02, 03, 09, 10, 13, 19 y 25.
 
 ---
 
-## Resultado de la auditoria de seguridad (v3.9.0)
+## Resultado de la auditoria de seguridad (v4.0.0)
 
 ### Capa 1 — Contenedor y proceso
 
 | Control | Estado |
 |---|---|
-| Proceso no-root en backends 01, 02 | **RESUELTO** — `groupadd/useradd appuser` + `USER appuser` agregados |
-| Proceso no-root en backends 09, 10, 13 | OK — ya tenia `USER appuser` |
+| Proceso no-root en backends 01, 02, 03 | **RESUELTO** — `groupadd/useradd appuser` + `USER appuser` agregados |
+| Proceso no-root en backends 09, 10, 13, 19, 25 | OK — ya tenia `USER appuser` |
 | Proceso no-root en demos nginx (25 casos) | **RESUELTO** — `USER nginx` + chown de directorios en todos los demos |
-| Imagen Python pineada a version exacta | **RESUELTO** — `python:3.11.10-slim` en backends 01, 02, 13 (09 ya tenia 3.11.10) |
+| Imagen Python pineada a version exacta | **RESUELTO** — `python:3.11.10-slim` en backends 01, 02, 03, 13, 19, 25 (09 ya tenia 3.11.10) |
 | Imagen nginx pineada a version exacta | **RESUELTO** — `nginx:1.27.3-alpine` en los 25 demos |
 | Healthcheck con herramienta disponible | **RESUELTO** — demos usan `wget --spider` (BusyBox, incluido en Alpine); backends usan `curl` (instalado explicitamente) |
 | Directorios de log/PID accesibles por usuario no-root | OK — `chown` antes de `USER` en todos los Dockerfiles |
@@ -82,9 +82,20 @@ Este repositorio esta pensado para exploracion tecnica, demos y validacion local
 
 ---
 
-## Controles implementados (historico v3.8.0)
+## Controles implementados (historico)
 
-### GitHub Actions y CI/CD
+### Nuevos controles en v4.0.0
+
+- Tres nuevos backends operativos elevados: casos 03 (Incident Response SRE), 19 (DevEx PR Review) y 25 (Supervisor + Workers).
+- OAuth2/OIDC opt-in via `USE_OAUTH2=true` en todos los backends operativos.
+- Observabilidad extendida: `/metrics` por servicio con latencia, errores y modo DEMO/LIVE; logging JSON estructurado con `trace_id`.
+- LangSmith opt-in para trazabilidad de agentes en produccion.
+- Reverse proxy nginx + TLS para exposicion segura con rate limiting y security headers.
+- Jobs CI dedicados para los casos 03, 19 y 25 (Python checks + pytest).
+- pip-compile lock files deterministas para todos los backends operativos.
+- grype con `fail-build: true` para 8 backends.
+
+### GitHub Actions y CI/CD (v3.8.0+)
 
 - Actions pinneadas por commit SHA en `ci.yml`, `security.yml` y `wiki-sync.yml`.
 - Permisos minimos por workflow/job (`contents: read` por defecto; `security-events: write` solo para CodeQL; `contents: write` solo para wiki sync).
@@ -92,7 +103,7 @@ Este repositorio esta pensado para exploracion tecnica, demos y validacion local
 - Escaneo de secretos en CI con `detect-secrets` y baseline versionada.
 - Escaneo de dependencias Python con `pip-audit` sobre `requirements.txt` raiz y de los casos.
 - Modo gradual para dependencias: `soft` en PR, `hard` en `main`, `schedule` y `workflow_dispatch`.
-- El caso 02 ya tiene suite propia y job dedicado en CI.
+- Los casos 02, 03, 09, 13, 19 y 25 tienen suite propia y job dedicado en CI.
 
 ### Secretos y configuracion
 
@@ -102,7 +113,7 @@ Este repositorio esta pensado para exploracion tecnica, demos y validacion local
 
 ### Exposicion externa opcional
 
-- Los casos 01, 02, 09, 10 y 13 aceptan `DEMO_AUTH_TOKEN` para exigir el header `X-Demo-Token` en sus endpoints operativos.
+- Los casos 01, 02, 03, 09, 10, 13, 19 y 25 aceptan `DEMO_AUTH_TOKEN` para exigir el header `X-Demo-Token` en sus endpoints operativos.
 - Los mismos casos aceptan `RATE_LIMIT_RPM` para aplicar rate limiting en memoria por cliente.
 - `TRUST_PROXY_HEADERS=false` por defecto evita confiar en `X-Forwarded-For` salvo despliegue detras de un proxy controlado.
 
