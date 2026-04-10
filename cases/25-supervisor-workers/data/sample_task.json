@@ -1,0 +1,9 @@
+{
+  "task_id": "DDL-2026-001",
+  "title": "Due Diligence: Adquisición TechStartup S.A.",
+  "description": "Evaluar la viabilidad de adquirir TechStartup S.A. por USD 5M. Analizar aspectos financieros, legales, operacionales y reputacionales.",
+  "company": "TechStartup S.A.",
+  "budget_usd": 5000000,
+  "deadline": "2026-04-30",
+  "priority": "high"
+}

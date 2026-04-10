@@ -1,0 +1,9 @@
+services:
+  case03:
+    build: .
+    ports:
+      - "8003:8003"
+    environment:
+      - DATA_DIR=/app/data
+    volumes:
+      - ../data:/app/data:ro

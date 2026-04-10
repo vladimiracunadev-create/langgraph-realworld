@@ -1,0 +1,64 @@
+# docker-compose.tls.yml — TLS override for public demo exposure
+#
+# Adds an nginx reverse proxy with TLS termination in front of all backends.
+# Backends are moved to internal Docker network (no direct host port binding).
+#
+# Usage (dev — self-signed cert):
+#   bash nginx/scripts/gen-certs.sh
+#   docker compose -f docker-compose.yml -f docker-compose.tls.yml up --build
+#
+# Usage (prod — real cert in nginx/certs/):
+#   docker compose -f docker-compose.yml -f docker-compose.tls.yml up --build
+#
+# Access: https://localhost  (accept self-signed warning in dev)
+
+services:
+  # Remove host port bindings from backends — only accessible via nginx
+  portal:
+    ports: !reset []
+
+  case01:
+    ports: !reset []
+
+  case02:
+    ports: !reset []
+
+  case09:
+    ports: !reset []
+
+  case10:
+    ports: !reset []
+
+  case13:
+    ports: !reset []
+
+  case03:
+    ports: !reset []
+
+  case19:
+    ports: !reset []
+
+  case25:
+    ports: !reset []
+
+  # nginx reverse proxy with TLS termination
+  nginx:
+    build:
+      context: nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/certs:/etc/nginx/certs:ro
+    depends_on:
+      - portal
+      - case01
+      - case02
+      - case03
+      - case09
+      - case10
+      - case13
+      - case19
+      - case25
+    restart: unless-stopped

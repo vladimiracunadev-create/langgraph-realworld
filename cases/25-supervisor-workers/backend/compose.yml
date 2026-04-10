@@ -1,0 +1,10 @@
+services:
+  case25:
+    build: .
+    ports:
+      - "8025:8025"
+    environment:
+      - DATA_DIR=/app/data
+    volumes:
+      - ../data:/app/data:ro
+      - ./checkpoints.sqlite:/app/checkpoints.sqlite

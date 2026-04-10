@@ -1,0 +1,16 @@
+# Grype configuration — langgraph-realworld
+# https://github.com/anchore/grype#configuration
+#
+# fail-build: true is set in the GitHub Actions workflow (security.yml).
+# This file controls which CVEs to ignore (accepted risks documented here).
+
+fail-on-severity: critical
+
+# Only fail on CVEs that have a fix available.
+# This avoids blocking CI on vulnerabilities with no remediation path.
+only-fixed: true
+
+ignore:
+  # Add accepted CVEs here with justification, e.g.:
+  # - vulnerability: CVE-XXXX-XXXXX
+  #   reason: "No fix available upstream; mitigated by network isolation."

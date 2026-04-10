@@ -3,10 +3,8 @@ import logging
 import os
 import time
 import uuid
-from collections import deque
 from contextvars import ContextVar
 from functools import lru_cache
-from hmac import compare_digest
 from pathlib import Path
 from time import monotonic
 
@@ -15,6 +13,7 @@ from fastapi.responses import HTMLResponse, JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
+from .auth import auth_middleware, protected_path
 from .graph import compile_graph
 
 trace_id_var: ContextVar[str] = ContextVar("trace_id", default="system")
@@ -38,6 +37,8 @@ root_logger = logging.getLogger()
 root_logger.addFilter(TraceIdFilter())
 logger = logging.getLogger("api")
 
+_metrics: dict = {"requests": 0, "errors": 0, "latency_sum": 0.0, "start_time": time.time()}
+
 app = FastAPI(title="Caso 09 - RR.HH. Screening + Agenda")
 app.state.rate_limit_buckets = {}
 
@@ -51,79 +52,24 @@ if SHARED_ASSETS_DIR.exists():
     app.mount("/shared-assets", StaticFiles(directory=str(SHARED_ASSETS_DIR)), name="shared-assets")
 
 
-def demo_auth_token() -> str:
-    return os.getenv("DEMO_AUTH_TOKEN", "").strip()
-
-
-def rate_limit_rpm() -> int:
-    raw = os.getenv("RATE_LIMIT_RPM", "0").strip()
-    try:
-        return max(int(raw), 0)
-    except ValueError:
-        logger.warning("RATE_LIMIT_RPM invalido: %s", raw)
-        return 0
-
-
-def trust_proxy_headers() -> bool:
-    return os.getenv("TRUST_PROXY_HEADERS", "false").strip().lower() in {"1", "true", "yes", "on"}
-
-
-def protected_path(path: str) -> bool:
-    return path.startswith("/api/")
-
-
-def client_identity(request: Request) -> str:
-    if trust_proxy_headers():
-        forwarded_for = request.headers.get("x-forwarded-for", "")
-        if forwarded_for.strip():
-            return forwarded_for.split(",")[0].strip()
-    if request.client and request.client.host:
-        return request.client.host
-    return "unknown"
-
 
 @app.middleware("http")
-async def add_trace_id_middleware(request: Request, call_next):
-    """
-    Middleware de nivel industrial para observabilidad y guardrails opcionales:
-    1. Genera un UUID unico (Trace ID).
-    2. Lo inyecta en el ContextVar para que los logs lo capturen automaticamente.
-    3. Si el backend se expone fuera de localhost, puede exigir token y rate limiting.
-    4. Anade X-Trace-ID y cabeceras de rate limit a la respuesta.
-    """
+async def observability_and_guards(request: Request, call_next):
     request_id = str(uuid.uuid4())
     ctx_token = trace_id_var.set(request_id)
-    limit = rate_limit_rpm()
-
+    t0 = monotonic()
     try:
+        response = await auth_middleware(
+            request, call_next,
+            rate_limit_buckets=app.state.rate_limit_buckets,
+            trace_id=request_id,
+        )
         if protected_path(request.url.path):
-            expected_token = demo_auth_token()
-            if expected_token:
-                provided = request.headers.get("x-demo-token", "").strip()
-                if not compare_digest(provided, expected_token):
-                    response = JSONResponse(status_code=401, content={"detail": "Missing or invalid X-Demo-Token"})
-                    response.headers["X-Trace-ID"] = request_id
-                    return response
-
-            if limit > 0:
-                now = monotonic()
-                bucket = app.state.rate_limit_buckets.setdefault(client_identity(request), deque())
-                while bucket and now - bucket[0] >= 60:
-                    bucket.popleft()
-                if len(bucket) >= limit:
-                    response = JSONResponse(status_code=429, content={"detail": "Rate limit exceeded"})
-                    response.headers["X-Trace-ID"] = request_id
-                    response.headers["X-RateLimit-Limit"] = str(limit)
-                    response.headers["X-RateLimit-Remaining"] = "0"
-                    return response
-                bucket.append(now)
-
-        response = await call_next(request)
+            _metrics["requests"] += 1
+            if response.status_code >= 500:
+                _metrics["errors"] += 1
+            _metrics["latency_sum"] += monotonic() - t0
         response.headers["X-Trace-ID"] = request_id
-        if limit > 0 and protected_path(request.url.path):
-            bucket = app.state.rate_limit_buckets.get(client_identity(request), deque())
-            response.headers["X-RateLimit-Limit"] = str(limit)
-            response.headers["X-RateLimit-Remaining"] = str(max(limit - len(bucket), 0))
         return response
     finally:
         trace_id_var.reset(ctx_token)
@@ -139,6 +85,21 @@ def get_graph():
 def health():
     """Liveness check."""
     return {"status": "ok", "ts": int(time.time())}
+
+
+@app.get("/metrics")
+def metrics():
+    uptime = time.time() - _metrics["start_time"]
+    reqs = _metrics["requests"]
+    return {
+        "uptime_s": round(uptime, 1),
+        "requests_total": reqs,
+        "errors_total": _metrics["errors"],
+        "avg_latency_ms": round(_metrics["latency_sum"] / max(reqs, 1) * 1000, 1),
+        "mode": "LIVE" if os.getenv("OPENAI_API_KEY", "").strip() else "DEMO",
+        "langsmith_enabled": bool(os.getenv("LANGCHAIN_TRACING_V2", "")),
+        "oauth2_enabled": os.getenv("USE_OAUTH2", "false").lower() in {"1", "true", "yes"},
+    }
 
 
 @app.get("/ready")

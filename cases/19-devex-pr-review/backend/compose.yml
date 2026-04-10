@@ -1,0 +1,10 @@
+services:
+  case19:
+    build: .
+    ports:
+      - "8019:8019"
+    environment:
+      - PR_DATA_PATH=/app/data/sample_pr.json
+    volumes:
+      - ../data:/app/data:ro
+      - ./checkpoints.sqlite:/app/checkpoints.sqlite

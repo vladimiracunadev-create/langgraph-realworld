@@ -1,0 +1,40 @@
+{
+  "P1": {
+    "steps": [
+      "Abrir puente de incidente en Slack (#incidents-p1) y convocar al on-call engineer.",
+      "Activar modo mantenimiento en el load balancer para reducir tráfico entrante al 20 %.",
+      "Aumentar réplicas del servicio afectado a 5 instancias (kubectl scale / ECS desired-count).",
+      "Verificar timeouts de conexión en el API Gateway y reducirlos a 3 s para liberar hilos bloqueados.",
+      "Revisar trazas de APM (Datadog/Jaeger) para identificar el cuello de botella exacto.",
+      "Si el problema persiste > 10 min, ejecutar rollback al deployment anterior (helm rollback / ecs-deploy).",
+      "Notificar a stakeholders (CTO, Product) con estimación de tiempo de resolución.",
+      "Confirmar recuperación: latencia p99 < 500 ms durante 5 minutos consecutivos.",
+      "Restaurar tráfico completo y desactivar modo mantenimiento.",
+      "Programar postmortem en las próximas 24 h."
+    ],
+    "escalation_contact": "on-call-sre@empresa.com | PagerDuty: equipo-infraestructura | Slack: @sre-lead"
+  },
+  "P2": {
+    "steps": [
+      "Crear incidente en el sistema de tickets (Jira/Linear) y asignar al equipo responsable.",
+      "Analizar logs de las últimas 2 horas para identificar el origen del problema.",
+      "Verificar si el problema es reproducible en staging antes de actuar en producción.",
+      "Aplicar parche de configuración o ajuste de recursos según diagnóstico.",
+      "Aumentar recursos (CPU/memoria/instancias) si es necesario para aliviar la carga.",
+      "Confirmar recuperación: métricas dentro de umbrales normales durante 15 minutos.",
+      "Documentar causa raíz y solución aplicada en el ticket."
+    ],
+    "escalation_contact": "team-lead@empresa.com | Slack: #incidents-p2"
+  },
+  "P3": {
+    "steps": [
+      "Registrar el incidente en el sistema de tickets y etiquetar como P3.",
+      "Revisar métricas de los últimos 30 minutos para confirmar la tendencia.",
+      "Escalar recursos del servicio si la causa es de capacidad (auto-scaling / manual).",
+      "Aplicar fix o workaround documentado en la wiki del equipo.",
+      "Programar revisión en el próximo ciclo de trabajo (dentro de las 8 h hábiles).",
+      "Documentar causa y acción tomada para el historial de incidentes."
+    ],
+    "escalation_contact": "equipo-dev@empresa.com | Slack: #incidents-p3"
+  }
+}

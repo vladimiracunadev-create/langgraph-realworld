@@ -1,0 +1,47 @@
+[
+  {
+    "id": "INC-001",
+    "title": "API Gateway alta latencia — timeout en pagos",
+    "severity": "P1",
+    "service": "payments-api",
+    "description": "El API Gateway de pagos supera los 10 s de latencia p99. Las transacciones se cancelan con timeout. Impacto directo en ingresos.",
+    "metrics": {
+      "latency_p99_ms": 12400,
+      "error_rate_pct": 34.2,
+      "rps": 1850,
+      "cpu_pct": 91,
+      "memory_pct": 78
+    },
+    "timestamp": "2026-04-09T02:15:00Z"
+  },
+  {
+    "id": "INC-002",
+    "title": "Base de datos de inventario — réplica de lectura detrás",
+    "severity": "P2",
+    "service": "inventory-db",
+    "description": "La réplica de lectura de PostgreSQL lleva 45 minutos de retraso respecto al primario. Las consultas de stock muestran datos obsoletos.",
+    "metrics": {
+      "replication_lag_s": 2700,
+      "query_time_avg_ms": 3800,
+      "connections_active": 142,
+      "disk_io_pct": 88,
+      "memory_pct": 62
+    },
+    "timestamp": "2026-04-09T06:40:00Z"
+  },
+  {
+    "id": "INC-003",
+    "title": "Servicio de notificaciones — cola de mensajes acumulada",
+    "severity": "P3",
+    "service": "notifications-worker",
+    "description": "La cola SQS del worker de notificaciones acumula 85 000 mensajes sin procesar. Los correos de confirmación se retrasan más de 2 horas.",
+    "metrics": {
+      "queue_depth": 85000,
+      "processing_rate_per_s": 12,
+      "worker_instances": 2,
+      "cpu_pct": 45,
+      "memory_pct": 38
+    },
+    "timestamp": "2026-04-09T08:05:00Z"
+  }
+]

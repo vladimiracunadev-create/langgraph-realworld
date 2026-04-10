@@ -1,0 +1,10 @@
+working_dir: backend
+entrypoint: python -m uvicorn src.api:app --host 0.0.0.0 --port 8025
+serve: python -m uvicorn src.api:app --host 0.0.0.0 --port 8025
+env:
+  DATA_DIR: ../data
+  CHECKPOINT_DB: ./checkpoints.sqlite
+ports:
+  - 8025
+dockerfile: backend/Dockerfile
+compose: backend/compose.yml

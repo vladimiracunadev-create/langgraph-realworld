@@ -3,30 +3,30 @@
 [![CI](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml)
 [![Security Scan](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml/badge.svg?branch=main)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-3.9.0-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-4.0.0-blue.svg)](CHANGELOG.md)
 [![Python](https://img.shields.io/badge/python-3.11-informational.svg)](https://www.python.org/)
 [![LangGraph](https://img.shields.io/badge/LangGraph-latest-green.svg)](https://github.com/langchain-ai/langgraph)
 
 > Portafolio de **25 casos de uso empresariales** construidos con **LangGraph**, **FastAPI** y demos interactivas.
-> Cinco casos completamente operativos (01, 02, 09, 10 y 13); los restantes son scaffolds documentados y listos para ser elevados.
+> **Ocho casos completamente operativos** (01, 02, 03, 09, 10, 13, 19 y 25); los restantes son scaffolds documentados y listos para ser elevados.
 
 ---
 
-## 🏗️ Implementación Industrial — v3.9.0
+## 🏗️ Implementación Industrial — v4.0.0
 
 El estándar actual del repositorio se apoya en estos pilares:
 
 | # | Pilar | Descripción |
 |:-:|:---|:---|
 | 1 | 🌐 **Portal unificado** | `index.html` como entrada principal para navegar el portafolio |
-| 2 | ⚙️ **Casos de referencia reales** | Backends FastAPI y UIs activas en los casos 01, 02, 09, 10 y 13 |
+| 2 | ⚙️ **Casos de referencia reales** | Backends FastAPI y UIs activas en los casos 01, 02, 03, 09, 10, 13, 19 y 25 |
 | 3 | 📐 **Estado tipado** | Contratos explícitos con `TypedDict` y flujos compatibles con LangGraph |
-| 4 | 🔭 **Observabilidad** | Endpoints `/health` y `/ready`, trazabilidad por eventos o `trace_id` |
+| 4 | 🔭 **Observabilidad** | `/health`, `/ready`, `/metrics` con latencia, errores y modo; LangSmith opt-in |
 | 5 | 🔀 **Modo dual** | Demos offline + ruta clara para activar integraciones reales |
-| 6 | 🐳 **Operación portable** | Docker, Hub CLI o entorno local según el caso |
-| 7 | 🛡️ **Hardening integrado** | Workflows pinneados, baseline de secretos y auditoría de dependencias |
-| 8 | 🔑 **Exposición externa opcional** | `X-Demo-Token` y `RATE_LIMIT_RPM` sin romper el quickstart |
-| 9 | 🔒 **Auditoría de seguridad 8 capas** | Non-root, `127.0.0.1`, HTTP headers, grype, Dependabot, Trojan Source |
+| 6 | 🐳 **Operación portable** | Docker, nginx+TLS, Hub CLI o entorno local según el caso |
+| 7 | 🛡️ **Hardening integrado** | grype `fail-build:true`, detect-secrets history, pip-compile, Dependabot |
+| 8 | 🔑 **Auth multicapa** | `X-Demo-Token` (opt-in) + OAuth2/OIDC JWT (opt-in via `USE_OAUTH2=true`) |
+| 9 | 🔒 **Auditoría de seguridad 8 capas** | Non-root, `127.0.0.1`, HTTP headers, grype, Trojan Source, nginx TLS |
 
 > [!TIP]
 > Consulta el detalle técnico en [CHANGELOG.md](CHANGELOG.md), [SECURITY.md](SECURITY.md) y los docs en [`docs/`](docs/).
@@ -39,17 +39,19 @@ El estándar actual del repositorio se apoya en estos pilares:
 
 | ID | Nombre | Estado | Stack principal |
 |:---:|:---|:---:|:---|
-| **01** | [🎧 Soporte Cliente Omnicanal](cases/01-soporte-cliente-omnicanal/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · Routing · DEMO/LIVE |
+| **01** | [🎧 Soporte Cliente Omnicanal](cases/01-soporte-cliente-omnicanal/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · Routing · OAuth2 opt-in |
 | **02** | [🖥️ Mesa de Ayuda TI / SRE](cases/02-mesa-ayuda-ti-runbooks/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · CMDB · HITL |
+| **03** | [🚨 Incident Response SRE](cases/03-incident-response-sre/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · HITL · Runbooks P1/P2/P3 |
 | **09** | [👥 RRHH Screening & Agenda](cases/09-rrhh-screening-agenda/README.md) | `🏭 INDUSTRIAL` | FastAPI · LangGraph · MemorySaver · Resilience |
 | **10** | [🚀 Onboarding de Empleados](cases/10-onboarding-empleados/README.md) | `🏭 INDUSTRIAL` | FastAPI · LangGraph · RBAC · Integrations |
 | **13** | [📊 Analista de Datos BI](cases/13-bi-analista-datos/README.md) | `🏭 INDUSTRIAL` | FastAPI · SQL Agent · Chart.js · DEMO/LLM |
+| **19** | [🔍 DevEx: PR Review](cases/19-devex-pr-review/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · Security Analysis · Changelog |
+| **25** | [🤝 Supervisor + Workers](cases/25-supervisor-workers/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · Multi-agente · Due Diligence |
 
 ### 🔧 Casos scaffold — listos para elevar
 
 | ID | Nombre | Dominio |
 |:---:|:---|:---|
-| 03 | [🚨 Incident Response SRE](cases/03-incident-response-sre/README.md) | SRE / Infraestructura |
 | 04 | [🔐 SOC: Triage de Alertas](cases/04-soc-triage-alertas/README.md) | Seguridad / SOC |
 | 05 | [📄 Analista de Documentos](cases/05-analista-documentos/README.md) | Legal / Contratos |
 | 06 | [⚖️ Compliance & Auditorías](cases/06-compliance-auditorias/README.md) | Gobernanza |
@@ -62,13 +64,13 @@ El estándar actual del repositorio se apoya en estos pilares:
 | 16 | [✈️ Planificador de Viajes](cases/16-viajes-planificador/README.md) | Travel |
 | 17 | [⚖️ Legal Intake](cases/17-legal-intake/README.md) | Legal |
 | 18 | [📣 Marketing con QA](cases/18-marketing-contenido-qa/README.md) | Marketing |
-| 19 | [🔍 DevEx: PR Review](cases/19-devex-pr-review/README.md) | Ingeniería |
+| 20 | [🏛️ Migración Legacy](cases/20-migracion-legacy/README.md) | Arquitectura |
 | 20 | [🏛️ Migración Legacy](cases/20-migracion-legacy/README.md) | Arquitectura |
 | 21 | [📝 Documentación Automática](cases/21-docs-auto/README.md) | DevOps |
 | 22 | [🏢 Backoffice: Automatización](cases/22-backoffice-automatizacion/README.md) | Operaciones |
 | 23 | [🏥 Salud: Pre-triage](cases/23-salud-pretriage/README.md) | Salud |
 | 24 | [📋 Asistente PM](cases/24-pm-assistant/README.md) | Gestión de proyectos |
-| 25 | [🤝 Supervisor + Workers](cases/25-supervisor-workers/README.md) | Multi-agente |
+| 24 | [📋 Asistente PM](cases/24-pm-assistant/README.md) | Gestión de proyectos |
 
 ---
 
@@ -137,9 +139,9 @@ TRUST_PROXY_HEADERS=false
 
 | Nivel | Criterios | Casos |
 |:---|:---|:---|
-| ✅ **OPERATIVO** | Backend real, DEMO/LIVE, CI, tests, hardening | 01, 02 |
+| ✅ **OPERATIVO** | Backend real, DEMO/LIVE, CI, tests, hardening, OAuth2 opt-in | 01, 02, 03, 19, 25 |
 | 🏭 **INDUSTRIAL** | Backend real, streaming, observabilidad, docs completas | 09, 10, 13 |
-| 🔧 **SCAFFOLD** | Demo estática lista para evolucionar | 03–08, 11–12, 14–25 |
+| 🔧 **SCAFFOLD** | Demo estática lista para evolucionar | 04–08, 11–12, 14–18, 20–24 |
 
 ---
 

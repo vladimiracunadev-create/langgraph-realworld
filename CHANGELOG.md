@@ -5,6 +5,35 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/1.0.0/).
 
 ---
 
+## v4.0.0 — 2026-04-09
+
+### Agregado
+
+- **Casos 03, 19, 25 elevados a OPERATIVO**: backends FastAPI + LangGraph completos con modo DEMO/LIVE, tests, Docker y CI.
+  - **Caso 03** — Incident Response SRE: StateGraph con HITL auto-aprobado en DEMO, runbooks P1/P2/P3, integrations stub (PagerDuty, remediación, recovery), postmortem.
+  - **Caso 19** — DevEx PR Review: análisis de seguridad/calidad/tests sobre diffs con detección de patrones (SQL injection, eval, imports), router por nivel de riesgo, changelog automático.
+  - **Caso 25** — Supervisor/Workers: patrón multi-agente con 4 workers (financial, legal, operational, reputational), acumulación de resultados con `Annotated[list, operator.add]`, reconciliación y detección de conflictos.
+- **OAuth2/OIDC opt-in** en todos los backends: nuevo módulo `auth.py` por caso con validación JWT vía JWKS. `USE_OAUTH2=false` por defecto (backward-compatible). Activa con `USE_OAUTH2=true` + `OAUTH2_JWKS_URL`.
+- **Logging JSON estructurado** estandarizado en los 8 backends operativos: `ContextVar` + `TraceIdFilter` + `LOG_FORMAT` JSON + `X-Trace-ID` en respuestas. Los casos 01, 02 y 13 ahora tienen el mismo nivel de observabilidad que 09 y 10.
+- **Endpoint `/metrics`** en todos los backends: uptime, requests_total, errors_total, avg_latency_ms, modo DEMO/LIVE, langsmith_enabled, oauth2_enabled.
+- **LangSmith opt-in**: `langsmith` agregado a `requirements.in/txt` de los 8 casos. Activar con `LANGCHAIN_TRACING_V2=true` + `LANGCHAIN_API_KEY`. Sin credenciales, LangSmith permanece inactivo (modo DEMO intacto).
+- **Nginx reverse proxy + TLS**: `nginx/` con Dockerfile, `nginx.conf`, `conf.d/default.conf` (8 upstreams), `scripts/gen-certs.sh` (self-signed para dev). `docker-compose.tls.yml` como override sin tocar el compose principal.
+- **pip-compile workflow**: `requirements.in` para los 8 casos operativos, `scripts/pip-compile-all.sh` con modo `--check`, job `dependency_lock_check` en CI.
+- **Seguridad CI mejorada**: grype con `fail-build: true` + `.grype.yaml` (`only-fixed: true`). detect-secrets con escaneo completo del filesystem y últimos 50 commits del git history.
+
+### Modificado
+
+- `docker-compose.yml`: agregados case03, case19, case25 (ports en `127.0.0.1`).
+- `docker-compose.tls.yml`: 3 casos nuevos con ports reseteados para acceso solo vía nginx.
+- `nginx/conf.d/default.conf`: upstreams y locations para case03, case19, case25.
+- `.github/workflows/ci.yml`: jobs `python_case03`, `python_case19`, `python_case25` + `dependency_lock_check`.
+- `.github/workflows/security.yml`: 3 casos nuevos en matrix de grype, `fail-build: true`, steps de full-scan y git-history-scan en detect-secrets.
+- `Makefile`: targets `test-case03`, `test-case19`, `test-case25`, `pip-compile`, `pip-compile-check`.
+- `scripts/pip-compile-all.sh`: casos 03, 19, 25 incluidos en la lista de compilación.
+- `cases/09, 10 api.py`: middleware refactorizado para usar `auth.py` centralizado; eliminado código duplicado.
+
+---
+
 ## v3.9.0 — 2026-04-06
 
 ### Seguridad

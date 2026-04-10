@@ -1,0 +1,18 @@
+{
+  "id": "PR-001",
+  "title": "feat: add user search endpoint with filters",
+  "author": "dev-junior",
+  "base_branch": "main",
+  "head_branch": "feat/user-search",
+  "diff": "diff --git a/app/api/users.py b/app/api/users.py\n--- a/app/api/users.py\n+++ b/app/api/users.py\n@@ -1,8 +1,47 @@\n import os\n+import json\n import requests\n from flask import Flask, request, jsonify\n+from datetime import datetime\n \n app = Flask(__name__)\n \n+def search_users(query, role=None):\n+    \"\"\"Search users by name or email with optional role filter.\"\"\"\n+    conn = get_db_connection()\n+    cursor = conn.cursor()\n+    # WARNING: SQL built by concatenation - vulnerable to injection\n+    sql = \"SELECT * FROM users WHERE name LIKE '%\" + query + \"%'\"\n+    if role:\n+        sql = sql + \" AND role = '\" + role + \"'\"\n+    cursor.execute(sql)\n+    rows = cursor.fetchall()\n+    conn.close()\n+    return rows\n+\n+def execute_raw(command):\n+    \"\"\"Execute a raw system command for diagnostics.\"\"\"\n+    result = eval(command)\n+    return result\n+\n+def process_user_data(data):\n+    \"\"\"Process and transform user data from external source.\"\"\"\n+    output = []\n+    for item in data:\n+        user_id = item['id']\n+        name = item['name']\n+        email = item['email']\n+        role = item.get('role', 'viewer')\n+        created_at = item.get('created_at', '')\n+        last_login = item.get('last_login', '')\n+        department = item.get('department', 'general')\n+        manager_id = item.get('manager_id', None)\n+        permissions = item.get('permissions', [])\n+        tags = item.get('tags', [])\n+        notes = item.get('notes', '')\n+        output.append({'id': user_id, 'name': name, 'email': email, 'role': role,\n+                       'dept': department, 'mgr': manager_id, 'perms': permissions,\n+                       'tags': tags, 'notes': notes})\n+    return output\n+\n+@app.route('/api/users/search', methods=['GET'])\n+def user_search():\n+    q = request.args.get('q', '')\n+    role = request.args.get('role')\n+    users = search_users(q, role)\n+    return jsonify({'users': users, 'count': len(users)})\n+\n def get_db_connection():\n     return sqlite3.connect(os.getenv('DATABASE_URL', 'app.db'))",
+  "files_changed": [
+    "app/api/users.py",
+    "app/utils/helpers.py"
+  ],
+  "commits": [
+    "feat: add user search endpoint with name and email filter",
+    "feat: add role filter param to search",
+    "fix: handle empty query string in search",
+    "chore: remove debug print statements"
+  ]
+}

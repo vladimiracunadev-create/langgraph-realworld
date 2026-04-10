@@ -68,3 +68,36 @@ services:
     environment:
       - DATA_DIR=/app/data
       - OPENAI_API_KEY=${OPENAI_API_KEY}
+
+  case03:
+    build:
+      context: cases/03-incident-response-sre/backend
+    ports:
+      - "127.0.0.1:8003:8003"
+    volumes:
+      - ./cases/03-incident-response-sre/data:/app/data:ro
+    environment:
+      - DATA_DIR=/app/data
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+
+  case19:
+    build:
+      context: cases/19-devex-pr-review/backend
+    ports:
+      - "127.0.0.1:8019:8019"
+    volumes:
+      - ./cases/19-devex-pr-review/data:/app/data:ro
+    environment:
+      - DATA_DIR=/app/data
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+
+  case25:
+    build:
+      context: cases/25-supervisor-workers/backend
+    ports:
+      - "127.0.0.1:8025:8025"
+    volumes:
+      - ./cases/25-supervisor-workers/data:/app/data:ro
+    environment:
+      - DATA_DIR=/app/data
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}

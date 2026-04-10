@@ -1,0 +1,9 @@
+working_dir: backend
+entrypoint: python -m uvicorn src.api:app --host 0.0.0.0 --port 8003
+serve: python -m uvicorn src.api:app --host 0.0.0.0 --port 8003
+env:
+  DATA_DIR: ../data
+ports:
+  - 8003
+dockerfile: backend/Dockerfile
+compose: backend/compose.yml

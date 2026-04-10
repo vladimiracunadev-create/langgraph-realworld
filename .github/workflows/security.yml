@@ -54,6 +54,31 @@ jobs:
       - name: Scan tracked files for new secrets
         run: |
           git ls-files -z | xargs -0 detect-secrets-hook --baseline .secrets.baseline
+      - name: Full filesystem scan (untracked + all files)
+        run: |
+          detect-secrets scan --all-files \
+            --exclude-files '\.secrets\.baseline' \
+            --exclude-files '.*\.lock' \
+            > /tmp/full-scan-results.json
+          python - <<'EOF'
+          import json, sys
+          with open('/tmp/full-scan-results.json') as f:
+              results = json.load(f)
+          secrets = results.get('results', {})
+          if secrets:
+              print('SECRETS DETECTED:', json.dumps(secrets, indent=2))
+              sys.exit(1)
+          print('No new secrets found in full filesystem scan.')
+          EOF
+      - name: Git history scan (last 50 commits)
+        run: |
+          git log --format="%H" -n 50 | while read -r sha; do
+            git show "$sha" | detect-secrets-hook --baseline .secrets.baseline || {
+              echo "::error::Secret detected in commit $sha"
+              exit 1
+            }
+          done
+          echo "Git history scan complete — no secrets found."
 
   supply_chain:
     name: Supply-chain checks (bidi + obfuscation)
@@ -108,9 +133,12 @@ jobs:
         case:
           - "01-soporte-cliente-omnicanal"
           - "02-mesa-ayuda-ti-runbooks"
+          - "03-incident-response-sre"
           - "09-rrhh-screening-agenda"
           - "10-onboarding-empleados"
           - "13-bi-analista-datos"
+          - "19-devex-pr-review"
+          - "25-supervisor-workers"
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -127,7 +155,7 @@ jobs:
         uses: anchore/scan-action@2c901ab7378897c01b8efaa2d0c9bf519cc64b9e
         with:
           image: "scan-target:ci"
-          fail-build: false
+          fail-build: true
           severity-cutoff: critical
           output-format: table
 
