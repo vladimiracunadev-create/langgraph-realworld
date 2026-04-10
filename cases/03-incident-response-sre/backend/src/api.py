@@ -136,7 +136,9 @@ def run(payload: RunIn):
         out = graph.invoke(initial_state, config=cfg)
 
         snapshot = {
-            "incident_id": out.get("incident_id", payload.incident_id) if isinstance(out, dict) else payload.incident_id,
+            "incident_id": (
+                out.get("incident_id", payload.incident_id) if isinstance(out, dict) else payload.incident_id
+            ),
             "severity": out.get("severity", "") if isinstance(out, dict) else "",
             "approved": bool(out.get("approved")) if isinstance(out, dict) else False,
             "actions_taken": out.get("actions_taken", []) if isinstance(out, dict) else [],

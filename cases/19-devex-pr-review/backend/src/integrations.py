@@ -140,7 +140,11 @@ def _demo_pr_stub(pr_id: str) -> dict:
         "author": "demo-user",
         "base_branch": "main",
         "head_branch": "feat/demo",
-        "diff": "diff --git a/app.py b/app.py\n+def search(q):\n+    sql = 'SELECT * FROM t WHERE name=' + q\n+    cursor.execute(sql)",
+        "diff": (  # noqa: E501
+            "diff --git a/app.py b/app.py\n+def search(q):\n"
+            "+    sql = 'SELECT * FROM t WHERE name=' + q\n"
+            "+    cursor.execute(sql)"
+        ),
         "files_changed": ["app.py"],
         "commits": ["feat: add demo feature"],
     }

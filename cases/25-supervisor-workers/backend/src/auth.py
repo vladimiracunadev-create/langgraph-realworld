@@ -59,6 +59,7 @@ def _validate_jwt(token: str) -> None:
         raise ValueError("USE_OAUTH2=true pero OAUTH2_JWKS_URL no está configurado")
     try:
         import urllib.request
+
         from jose import jwt
         with urllib.request.urlopen(jwks_url, timeout=5) as resp:  # noqa: S310
             keys = __import__("json").loads(resp.read())

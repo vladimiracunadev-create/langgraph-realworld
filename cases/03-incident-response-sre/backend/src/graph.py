@@ -212,7 +212,7 @@ def generate_postmortem(state: IncidentState) -> dict:
 
     lines += [
         "",
-        f"## Estado de recuperación",
+        "## Estado de recuperación",
         f"- Recuperado: {recovery.get('recovered', False)}",
         f"- Checks: {', '.join(recovery.get('checks', []))}",
         "",

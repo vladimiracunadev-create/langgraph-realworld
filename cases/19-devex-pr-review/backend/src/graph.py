@@ -13,7 +13,6 @@ from __future__ import annotations
 
 import logging
 import operator
-import os
 import re
 import time
 from typing import Annotated, Literal
@@ -119,7 +118,6 @@ def classify_changes(state: PRReviewState) -> PRReviewState:
     Determina el contexto para los nodos de análisis posteriores.
     """
     files = state.get("pr_data", {}).get("files_changed", []) or []
-    diff = state.get("diff", "") or ""
 
     change_types = []
     if any(f.endswith(".py") for f in files):
@@ -271,7 +269,7 @@ def analyze_quality(state: PRReviewState) -> PRReviewState:
     # Patrón 2: funciones demasiado largas
     func_blocks = re.findall(r'(def \w+[^:]+:(?:\n.+)+?)(?=\ndef |\Z)', added_code)
     for block in func_blocks:
-        line_count = len([l for l in block.split("\n") if l.strip() and not l.strip().startswith("#")])
+        line_count = len([ln for ln in block.split("\n") if ln.strip() and not ln.strip().startswith("#")])
         if line_count > 20:
             func_name_match = re.match(r'def (\w+)', block)
             func_name = func_name_match.group(1) if func_name_match else "desconocida"
@@ -596,7 +594,9 @@ def generate_changelog(state: PRReviewState) -> PRReviewState:
 # Router
 # ---------------------------------------------------------------------------
 
-def route_by_risk(state: PRReviewState) -> Literal["request_changes_node", "approve_with_comments_node", "approve_node"]:
+def route_by_risk(
+    state: PRReviewState,
+) -> Literal["request_changes_node", "approve_with_comments_node", "approve_node"]:
     """Router que determina el nodo de acción según el nivel de riesgo."""
     decision = state.get("decision", "approve")
     if decision == "request_changes":

@@ -5,14 +5,13 @@ import logging
 import os
 import time
 import uuid
-from collections import deque
 from contextvars import ContextVar
 from time import monotonic
 from typing import Any, Dict
 
 from fastapi import FastAPI, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.responses import StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
