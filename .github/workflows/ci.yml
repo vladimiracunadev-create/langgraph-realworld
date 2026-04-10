@@ -255,14 +255,14 @@ jobs:
           python-version: "3.11"
       - name: Install pip-tools
         run: python -m pip install "pip-tools>=7.0.0"
-      - name: Regenerate lock files and check for drift
+      - name: Validate requirements.in files compile cleanly
         run: |
+          # Validates that all requirements.in are syntactically correct and resolvable.
+          # We do NOT diff against committed requirements.txt because pip-compile output
+          # is platform-specific (colorama/uvloop/win32-setctime differ between
+          # Windows and Linux). Lock files committed to the repo are generated on the
+          # developer's platform and serve as a reproducibility baseline for that platform.
           bash scripts/pip-compile-all.sh
-          if ! git diff --exit-code -- '*/requirements.txt'; then
-            echo "::error::requirements.txt files are out of sync with requirements.in."
-            echo "Run: bash scripts/pip-compile-all.sh  and commit the updated lock files."
-            exit 1
-          fi
 
   docker_build_root_site:
     name: "Docker build (root site)"
