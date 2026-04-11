@@ -2,63 +2,69 @@
 
 [![CI](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml)
 [![Security Scan](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml/badge.svg?branch=main)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml)
-[![Version](https://img.shields.io/badge/version-3.9.0-blue.svg)](https://github.com/vladimiracunadev-create/langgraph-realworld/blob/main/CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-4.0.1-blue.svg)](https://github.com/vladimiracunadev-create/langgraph-realworld/blob/main/CHANGELOG.md)
 
-Portafolio de 25 casos de uso empresariales construidos con **LangGraph**, **FastAPI** y demos interactivas.
-Cinco casos completamente operativos (01, 02, 09, 10 y 13); los restantes son scaffolds documentados y listos para elevarse.
+Portafolio de 25 casos de uso empresariales construidos con **LangGraph** y **FastAPI**.
+**8 backends completamente operativos** (01, 02, 03, 09, 10, 13, 19 y 25) con streaming, OAuth2/OIDC opt-in, observabilidad LangSmith, `/metrics` por servicio, logging JSON estructurado y reverse proxy nginx + TLS.
+Los 17 casos restantes son scaffolds documentados listos para elevar al siguiente nivel.
 
 ---
 
-## Implementación Industrial — v3.9.0
+## Implementacion Industrial — v4.0.1
 
-El estándar actual se apoya en estos pilares:
-
-1. **Portal unificado** — `index.html` como entrada principal del portafolio.
-2. **Casos de referencia reales** — backends FastAPI y UIs activas en los casos 01, 02, 09, 10 y 13.
-3. **Estado tipado** — contratos explícitos con `TypedDict` y flujos compatibles con LangGraph.
-4. **Observabilidad** — endpoints `/health` y `/ready`, trazabilidad por eventos o `trace_id`.
-5. **Modo dual** — demos offline + ruta guiada para activar integraciones reales.
-6. **Operación portable** — Docker, Hub CLI o entorno local.
-7. **Hardening integrado** — workflows pinneados, baseline de secretos, auditoría de dependencias.
-8. **Exposición externa opcional** — `X-Demo-Token` y `RATE_LIMIT_RPM` sin romper el quickstart.
-9. **Auditoría de seguridad por 8 capas** — v3.9.0: non-root, `127.0.0.1`, HTTP headers, grype, Dependabot, Trojan Source.
+| # | Pilar | Descripcion |
+|:-:|:---|:---|
+| 1 | Portal unificado | `index.html` como entrada principal del portfolio |
+| 2 | Casos de referencia reales | Backends FastAPI y UIs activas en los casos 01, 02, 03, 09, 10, 13, 19 y 25 |
+| 3 | Estado tipado | Contratos explicitos con TypedDict y flujos compatibles con LangGraph |
+| 4 | Observabilidad | /health, /ready, /metrics con latencia, errores y modo; LangSmith opt-in |
+| 5 | Modo dual | DEMO offline + ruta clara para activar integraciones reales |
+| 6 | Operacion portable | Docker, nginx+TLS, Hub CLI o entorno local segun el caso |
+| 7 | Hardening integrado | grype fail-build, detect-secrets history, pip-compile, Dependabot |
+| 8 | Auth multicapa | X-Demo-Token (opt-in) + OAuth2/OIDC JWT (opt-in via USE_OAUTH2=true) |
+| 9 | Auditoria 8 capas | Non-root, 127.0.0.1, HTTP headers, grype, Trojan Source, nginx TLS |
 
 ---
 
 ## Estado de los casos
 
-| ID | Nombre | Estado |
-|:---|:---|:---:|
-| 01 | Soporte Cliente Omnicanal | `OPERATIVO` |
-| 02 | Mesa de Ayuda TI / SRE | `OPERATIVO` |
-| 09 | RRHH Screening & Agenda | `INDUSTRIAL` |
-| 10 | Onboarding de Empleados | `INDUSTRIAL` |
-| 13 | Analista de Datos BI | `INDUSTRIAL` |
-| 03–08, 11–12, 14–25 | Casos scaffold | `SCAFFOLD` |
+### Operativos e industriales (8)
+
+| ID | Nombre | Nivel | UI web |
+|:---:|:---|:---:|:---:|
+| 01 | Soporte Cliente Omnicanal | OPERATIVO | Si |
+| 02 | Mesa de Ayuda TI / SRE | OPERATIVO | Si |
+| 03 | Incident Response SRE | OPERATIVO | Si |
+| 09 | RRHH Screening & Agenda | INDUSTRIAL | Si |
+| 10 | Onboarding de Empleados | INDUSTRIAL | Si |
+| 13 | Analista de Datos BI | INDUSTRIAL | Si |
+| 19 | DevEx: PR Review | OPERATIVO | Si |
+| 25 | Supervisor + Workers | OPERATIVO | Si |
+
+### Scaffold (17)
+
+Casos 04–08, 11–12, 14–18, 20–24 — scaffolds documentados con README y Mermaid listos para elevar.
+Orden de prioridad en el [Roadmap](Roadmap).
 
 ---
 
-## Por dónde empezar
-
-| Perfil | Recurso |
-|:---|:---|
-| Dev / DevOps | [Caso 01](https://github.com/vladimiracunadev-create/langgraph-realworld/tree/main/cases/01-soporte-cliente-omnicanal) |
-| IT Admin / SRE | [Caso 02](https://github.com/vladimiracunadev-create/langgraph-realworld/tree/main/cases/02-mesa-ayuda-ti-runbooks) |
-| Analista / BI | [Caso 13](https://github.com/vladimiracunadev-create/langgraph-realworld/tree/main/cases/13-bi-analista-datos) |
-| Auditor / CISO | [SECURITY.md](Security) |
-| Contribuidor | [Guía de Contribución](Guia-de-Contribucion) |
-| Principiante | [Guía para Principiantes](Guia-para-Principiantes) |
-
----
-
-## Inicio rápido
+## Inicio rapido
 
 ```bash
 git clone https://github.com/vladimiracunadev-create/langgraph-realworld.git
 cd langgraph-realworld
+
+# Levantar un caso con Docker (funciona sin API keys en DEMO)
 docker compose up case01
-# UI disponible en http://localhost:8001/web/
+# UI en http://localhost:8001/web/
+
+# O usar el Hub CLI
+python hub.py list
+python hub.py run --case 01
 ```
 
-> [!IMPORTANT]
-> Los casos funcionan en **DEMO** sin credenciales externas. Agrega `OPENAI_API_KEY` en `.env` para activar el modo **LIVE**.
+> Los casos funcionan en **DEMO** sin credenciales. Agrega `OPENAI_API_KEY` en `.env` para modo **LIVE**.
+
+---
+
+Para mas detalle, ver el [repositorio en GitHub](https://github.com/vladimiracunadev-create/langgraph-realworld).

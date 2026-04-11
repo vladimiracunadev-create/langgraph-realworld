@@ -1,36 +1,67 @@
-﻿# Hoja de Ruta
+# Hoja de Ruta
 
-> [!NOTE]
-> **Version**: 3.9.0 | **Estado**: Industrial | **Audiencia**: Stakeholders, Colaboradores
+> **Version**: 4.0.1 | **Estado**: Industrial
 
-Resumen de prioridades del repositorio despues de consolidar los casos 01, 02, 09, 10 y 13 como referencias operativas del portafolio.
+El estandar tecnico del repositorio ya esta definido. Ver el [SKILL de creacion de casos](https://github.com/vladimiracunadev-create/langgraph-realworld/blob/main/.agents/skills/crear_caso/SKILL.md) antes de ejecutar cualquier tarea.
+
+---
 
 ## Estado actual
 
-- Caso 01 listo como referencia operativa de soporte omnicanal y fallback DEMO/LIVE.
-- Caso 02 listo como referencia operativa SRE Agentic, con suite propia y job dedicado en CI.
-- Caso 09 listo como referencia de resiliencia.
-- Caso 10 listo como referencia de flujo empresarial.
-- Caso 13 listo como referencia de analitica conversacional con SQL endurecido.
-- Hub CLI y documentacion sincronizados como capa de operacion del monorepo.
-- Fase 2 aplicada para exposicion externa opcional y documentacion completa alineada.
+8 casos operativos e industriales: 01, 02, 03, 09, 10, 13, 19, 25.
+17 casos scaffold listos para elevar.
 
-## Proximos focos
+---
 
-### Corto plazo
+## Orden de elevacion de casos
 
-- agregar un perfil de reverse proxy/TLS mas opinionado para demos publicas;
-- mejorar lockfiles o constraints por caso para auditoria mas determinista;
-- explorar escaneo historico de secretos en modo manual/schedule.
+```
+SCAFFOLD  →  (SKILL.md)  →  OPERATIVO  →  (observabilidad + hardening)  →  INDUSTRIAL
+```
 
-### Medio plazo
+### Ola 1 — Alta prioridad
 
-- observabilidad mas profunda con LangSmith u OpenTelemetry;
-- auth mas robusta si algunos casos se exponen de forma persistente;
-- mas casos con backend real, no solo demo estatica.
+| Caso | Dominio | Por que |
+|:---|:---|:---|
+| 04 — SOC Triage | Seguridad | Complementa caso 03. Alto valor en portfolios AI+Seg. |
+| 05 — Analista de Documentos | Legal / Contratos | Patron de extraccion sobre PDFs, muy demandado. |
+| 17 — Legal Intake | Legal | Continuacion natural del 05. Clasificacion + routing a especialistas. |
 
-### Largo plazo
+### Ola 2 — Impacto comercial
 
-- despliegues mas maduros en Kubernetes;
-- IaC para entornos reproducibles;
-- catalogo de casos con criterios mas explicitos de madurez y seguridad.
+| Caso | Dominio |
+|:---|:---|
+| 08 — Ventas B2B + CRM | Comercial |
+| 14 — Finanzas: Conciliacion | Finanzas |
+| 06 — Compliance & Auditorias | Gobernanza |
+| 21 — Documentacion Automatica | DevOps |
+
+### Ola 3 — Dominio especializado
+
+07, 11, 12, 15, 18, 22, 24, 16, 20, 23 — segun disponibilidad y demanda.
+
+---
+
+## Mejoras transversales pendientes (v4.1.0)
+
+| Caso | Integracion pendiente |
+|:---:|:---|
+| 03 | PagerDuty + Datadog reales |
+| 10 | HRIS, IAM, Slack, correo (4 TODO REAL) |
+| 19 | GitHub API real (GITHUB_TOKEN) |
+| 25 | APIs financieras/legales reales |
+
+Casos 03, 19, 25 pendientes de elevacion a INDUSTRIAL: compose.smoke, logging JSON estructurado, /metrics documentado, OAuth2 verificado en tests.
+
+---
+
+## Largo plazo
+
+- Kubernetes con NetworkPolicy y SecurityContext completos.
+- IaC (Terraform / Pulumi) para entornos reproducibles en cloud.
+- OpenTelemetry para trazas distribuidas entre servicios.
+- Secret manager externo (Vault, AWS Secrets Manager).
+
+---
+
+Para el detalle completo con enlaces a todos los documentos, ver [ROADMAP.md en el repositorio](https://github.com/vladimiracunadev-create/langgraph-realworld/blob/main/ROADMAP.md).

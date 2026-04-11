@@ -112,6 +112,20 @@ El estándar actual del repositorio se apoya en estos pilares:
 | [docs/HUB.md](docs/HUB.md) | Hub CLI — comandos, guardrails, estado de casos |
 | [docs/AGENTS_AND_SKILLS.md](docs/AGENTS_AND_SKILLS.md) | Skills de agentes, estándar de un caso completo, orden de trabajo |
 
+### Wiki (publicada en GitHub)
+
+La wiki contiene versiones navegables de la documentación técnica publicadas automáticamente desde `docs/wiki/` en cada push a `main`.
+
+| Página | Contenido |
+|:---|:---|
+| [Wiki Home](https://github.com/vladimiracunadev-create/langgraph-realworld/wiki) | Entrada de la wiki — estado del portfolio, inicio rápido |
+| [Roadmap](https://github.com/vladimiracunadev-create/langgraph-realworld/wiki/Roadmap) | Hoja de ruta — orden de elevación de casos, mejoras pendientes |
+| [Arquitectura](https://github.com/vladimiracunadev-create/langgraph-realworld/wiki/Arquitectura) | Estructura del monorepo y patrón DEMO/LIVE |
+| [Especificaciones Técnicas](https://github.com/vladimiracunadev-create/langgraph-realworld/wiki/Especificaciones-Tecnicas) | Stack, contratos de API, guardrails |
+| [Seguridad](https://github.com/vladimiracunadev-create/langgraph-realworld/wiki/Security) | Auditoría 8 capas |
+| [Guía para Principiantes](https://github.com/vladimiracunadev-create/langgraph-realworld/wiki/Guia-para-Principiantes) | Mapa del repo paso a paso |
+| [Hub CLI](https://github.com/vladimiracunadev-create/langgraph-realworld/wiki/Hub-CLI) | Comandos del Hub CLI |
+
 ---
 
 ## ⚡ Inicio rápido
