@@ -2,44 +2,11 @@
 
 > **Versión**: 4.0.1 | **Estado**: Industrial | **Rama principal**: `main`
 
-El estándar técnico del repositorio ya está definido. Los agentes y colaboradores deben leer el skill correspondiente antes de ejecutar cualquier tarea — no se rediseña lo ya definido.
+El estándar técnico del repositorio ya está definido. Antes de crear o modificar un caso, leer el skill directamente — no se rediseña lo que ya existe:
 
----
-
-## Mapa de documentación
-
-### Raíz
-
-| Documento | Propósito |
-|:---|:---|
-| [README.md](README.md) | Entrada principal del portfolio — estado de casos, inicio rápido, taxonomía |
-| [CHANGELOG.md](CHANGELOG.md) | Historial de cambios por versión |
-| [ROADMAP.md](ROADMAP.md) | Este documento — visión estratégica y orden de trabajo |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | Reglas de código, estilo, testing y Docker para colaboradores |
-| [SECURITY.md](SECURITY.md) | Postura de seguridad, auditoría 8 capas, riesgos aceptados |
-| [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | Código de conducta del proyecto |
-| [killed.md](killed.md) | Features eliminadas o pausadas con su razón |
-
-### Documentación técnica (`docs/`)
-
-| Documento | Propósito |
-|:---|:---|
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Estructura del monorepo, patrón DEMO/LIVE, integración compose y hub |
-| [docs/TECHNICAL_SPECS.md](docs/TECHNICAL_SPECS.md) | Stack técnico, contratos de API, guardrails de seguridad |
-| [docs/AGENTS_AND_SKILLS.md](docs/AGENTS_AND_SKILLS.md) | Skills disponibles, estándar de un caso completo, orden de trabajo para agentes |
-| [docs/INSTALL.md](docs/INSTALL.md) | Cómo levantar el repo: Docker, local, Hub CLI |
-| [docs/REQUIREMENTS.md](docs/REQUIREMENTS.md) | Requisitos de entorno: Git, Python, Docker, APIs opcionales |
-| [docs/HUB.md](docs/HUB.md) | Hub CLI — comandos, guardrails, estado de casos |
-| [docs/BEGINNERS_GUIDE.md](docs/BEGINNERS_GUIDE.md) | Mapa del repo paso a paso para nuevos usuarios |
-| [docs/RECRUITER.md](docs/RECRUITER.md) | Resumen ejecutivo del portfolio para recruiters y tech leads |
-
-### Skills de agentes (`.agents/`)
-
-| Documento | Propósito |
-|:---|:---|
-| [.agents/skills/crear_caso/SKILL.md](.agents/skills/crear_caso/SKILL.md) | Crear o elevar un caso — contrato técnico completo, estándar de UI, DEMO/LIVE |
-| [.agents/skills/actualizar_doc/SKILL.md](.agents/skills/actualizar_doc/SKILL.md) | Sincronizar README, docs y wiki cuando cambia el código |
-| [.agents/skills/validar_caso/SKILL.md](.agents/skills/validar_caso/SKILL.md) | Auditar un caso existente — Docker, CI, DEMO/LIVE, hub, seguridad, docs |
+- Crear / elevar un caso → [`.agents/skills/crear_caso/SKILL.md`](.agents/skills/crear_caso/SKILL.md)
+- Actualizar documentación → [`.agents/skills/actualizar_doc/SKILL.md`](.agents/skills/actualizar_doc/SKILL.md)
+- Auditar un caso existente → [`.agents/skills/validar_caso/SKILL.md`](.agents/skills/validar_caso/SKILL.md)
 
 ---
 
@@ -47,7 +14,7 @@ El estándar técnico del repositorio ya está definido. Los agentes y colaborad
 
 ### Operativos e industriales (8)
 
-| ID | README | Nivel | UI web | Integraciones LIVE disponibles |
+| ID | Caso | Nivel | UI web | Integraciones LIVE |
 |:---:|:---|:---:|:---:|:---|
 | 01 | [Soporte Cliente Omnicanal](cases/01-soporte-cliente-omnicanal/README.md) | OPERATIVO | ✅ | LLM opt-in (OpenAI) |
 | 02 | [Mesa de Ayuda TI / SRE](cases/02-mesa-ayuda-ti-runbooks/README.md) | OPERATIVO | ✅ | CMDB, runbooks (DEMO) |
@@ -60,7 +27,7 @@ El estándar técnico del repositorio ya está definido. Los agentes y colaborad
 
 ### Scaffold — listos para elevar (17)
 
-| ID | README | Dominio | Prioridad de elevación |
+| ID | Caso | Dominio | Prioridad |
 |:---:|:---|:---|:---:|
 | 04 | [SOC: Triage de Alertas](cases/04-soc-triage-alertas/README.md) | Seguridad / SOC | 🔴 Ola 1 |
 | 05 | [Analista de Documentos](cases/05-analista-documentos/README.md) | Legal / Contratos | 🔴 Ola 1 |
@@ -84,27 +51,23 @@ El estándar técnico del repositorio ya está definido. Los agentes y colaborad
 
 ## Orden de elevación de casos
 
-Elevar un caso de SCAFFOLD a OPERATIVO sigue siempre el mismo proceso. Está definido en el skill — no se reinventa:
-
-> **Leer [`.agents/skills/crear_caso/SKILL.md`](.agents/skills/crear_caso/SKILL.md) antes de tocar código.**
-
 ```
-SCAFFOLD  →  (SKILL.md)  →  OPERATIVO  →  (streaming + observabilidad + hardening)  →  INDUSTRIAL
+SCAFFOLD  →  (seguir SKILL.md)  →  OPERATIVO  →  (observabilidad + hardening)  →  INDUSTRIAL
 ```
 
 ### Ola 1 — Alta prioridad
 
-| Caso | Por qué primero | Núcleo LangGraph |
+| Caso | Por qué | Núcleo LangGraph |
 |:---|:---|:---|
-| **04 — SOC Triage** | Complementa caso 03 (Incident Response). Alto valor en portfolios AI+Seguridad. | Router por severidad, HITL, escalada |
-| **05 — Analista de Documentos** | Patrón de extracción sobre PDFs muy demandado en enterprise. Bajo acoplamiento externo. | Pipeline secuencial, extracción estructurada, resumen LLM |
-| **17 — Legal Intake** | Continuación natural del 05 en dominio legal. Intake + clasificación + routing a especialistas. | Router condicional, HITL para escalada |
+| **04 — SOC Triage** | Complementa caso 03. Alto valor en portfolios AI+Seguridad. | Router por severidad, HITL, escalada |
+| **05 — Analista de Documentos** | Extracción sobre PDFs, patrón muy demandado en enterprise. Bajo acoplamiento externo. | Pipeline secuencial, extracción estructurada, resumen LLM |
+| **17 — Legal Intake** | Continuación natural del 05. Intake + clasificación + routing a especialistas. | Router condicional, HITL para escalada |
 
-### Ola 2 — Impacto comercial y operativo
+### Ola 2 — Impacto comercial
 
 | Caso | Por qué |
 |:---|:---|
-| **08 — Ventas B2B + CRM** | Lead scoring + CRM automation. Alta demanda. Integra con HubSpot/Salesforce en LIVE. |
+| **08 — Ventas B2B + CRM** | Lead scoring + CRM automation. Integra con HubSpot/Salesforce en LIVE. |
 | **14 — Finanzas: Conciliación** | Reconciliación de transacciones. ROI claro. Patrón verificación + excepción. |
 | **06 — Compliance** | Gobernanza + reportes. Complementa el hardening de seguridad del repo. |
 | **21 — Docs Automática** | Código → documentación estructurada. Relevante para el propio repo. |
@@ -147,9 +110,9 @@ Elevar según disponibilidad y demanda: 07, 11, 12, 15, 18, 22, 24, 16, 20, 23.
 
 ```
 SCAFFOLD   → README con Mermaid + case.yml + estructura de carpetas base
-                 ↓  seguir SKILL.md — el proceso ya está definido
+                 ↓  seguir .agents/skills/crear_caso/SKILL.md
 OPERATIVO  → backend real + interfaz web + DEMO/LIVE + Docker + tests + docs
-                 ↓  streaming verificado + observabilidad + hardening
+                 ↓  streaming verificado + observabilidad + hardening completo
 INDUSTRIAL → todo lo de OPERATIVO + compose.smoke + logging JSON estructurado
              + /metrics documentado + OAuth2 verificado en tests + docs operativas completas
 ```
