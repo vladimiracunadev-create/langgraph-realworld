@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Caso 19 — DevEx: Revisión de PRs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #07111f;
+      --panel: rgba(11, 23, 38, 0.82);
+      --line: rgba(255,255,255,0.08);
+      --ink: #eaf3ff;
+      --muted: #92a6bf;
+      --accent: #2f81f7;
+      --good: #4dd48a;
+      --warn: #fbbf24;
+      --danger: #f87171;
+      --critical: #f43f5e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Inter", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(47,129,247,0.15), transparent 34%),
+        radial-gradient(circle at top right, rgba(77,212,138,0.10), transparent 28%),
+        linear-gradient(180deg, #05101c, #081423 60%, #0b1525);
+    }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 24px 18px 48px; }
+
+    .hero {
+      background: var(--panel); border: 1px solid var(--line);
+      border-radius: 22px; backdrop-filter: blur(12px); padding: 28px; margin-bottom: 18px;
+    }
+    .hero-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
+    .hero h1 { margin: 0 0 10px; font-size: 28px; font-weight: 800; }
+    .hero p { color: var(--muted); line-height: 1.6; margin: 0; max-width: 780px; font-size: 14px; }
+    .nav-back { margin-top: 14px; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+    .nav-back a { color: var(--accent); text-decoration: none; opacity: 0.75; }
+    .nav-back a:hover { opacity: 1; }
+    .pillrow { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .pill {
+      border-radius: 999px; border: 1px solid var(--line);
+      padding: 6px 12px; font-size: 11px; font-weight: 600;
+      background: rgba(255,255,255,0.03);
+    }
+    .mode-badge {
+      display: inline-block; padding: 6px 14px; border-radius: 20px;
+      font-size: 11px; font-weight: 700; white-space: nowrap;
+      background: rgba(249,115,22,0.2); color: var(--warn); border: 1px solid #f97316;
+    }
+    .mode-badge.live { background: rgba(77,212,138,0.2); color: var(--good); border-color: var(--good); }
+
+    .grid { display: grid; grid-template-columns: 280px 1fr 300px; gap: 18px; }
+    section {
+      background: var(--panel); border: 1px solid var(--line);
+      border-radius: 18px; backdrop-filter: blur(12px); padding: 20px;
+    }
+    h2 {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.6px; color: var(--muted); margin: 0 0 14px;
+    }
+
+    label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 6px; color: var(--muted); }
+    select {
+      width: 100%; border-radius: 10px; border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04); color: var(--ink);
+      padding: 10px 12px; font: inherit; font-size: 13px; cursor: pointer;
+    }
+    select:focus { outline: none; border-color: var(--accent); }
+
+    .btns { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+    button {
+      width: 100%; border-radius: 10px; border: none; cursor: pointer;
+      padding: 11px 14px; font: inherit; font-size: 13px; font-weight: 700; transition: opacity .2s;
+    }
+    button:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-run { background: linear-gradient(135deg, #1d4ed8, var(--accent)); color: #fff; }
+    .btn-stream { background: rgba(255,255,255,0.06); color: var(--ink); border: 1px solid var(--line); }
+    button:not(:disabled):hover { opacity: 0.85; }
+
+    .spinner {
+      display: none; width: 16px; height: 16px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.15); border-top-color: var(--accent);
+      animation: spin .7s linear infinite; margin: 0 auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .events-log {
+      max-height: 520px; overflow-y: auto;
+      background: rgba(0,0,0,0.2); border: 1px solid var(--line);
+      border-radius: 10px; padding: 12px; font-family: 'JetBrains Mono', monospace;
+    }
+    .ev {
+      padding: 10px; margin-bottom: 8px;
+      border-left: 3px solid rgba(47,129,247,0.4);
+      border-radius: 4px; background: rgba(255,255,255,0.03);
+      font-size: 11px; line-height: 1.6; animation: fadeIn .3s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateX(-6px); } to { opacity: 1; } }
+    .ev.ok { border-left-color: var(--good); }
+    .ev.warn { border-left-color: var(--warn); }
+    .ev.danger { border-left-color: var(--danger); }
+    .ev-time { color: var(--muted); margin-right: 6px; }
+    .ev-type { font-weight: 700; color: var(--good); }
+    .ev.warn .ev-type, .ev.danger .ev-type { color: var(--danger); }
+    .ev-detail { color: var(--muted); margin-top: 3px; padding-left: 16px; font-size: 10px; }
+    .log-placeholder { color: var(--muted); font-size: 12px; text-align: center; padding: 24px 0; }
+
+    /* Risk badges */
+    .risk-badge {
+      display: inline-block; padding: 8px 16px; border-radius: 8px;
+      font-size: 13px; font-weight: 800; text-transform: uppercase;
+      width: 100%; text-align: center; margin: 10px 0;
+    }
+    .risk-HIGH { background: rgba(244,63,94,0.15); color: var(--critical); border: 1px solid var(--critical); }
+    .risk-MEDIUM { background: rgba(249,115,22,0.15); color: var(--warn); border: 1px solid #f97316; }
+    .risk-LOW, .risk-low { background: rgba(77,212,138,0.15); color: var(--good); border: 1px solid var(--good); }
+
+    /* Severity tags */
+    .sev {
+      display: inline-block; padding: 2px 7px; border-radius: 4px;
+      font-size: 10px; font-weight: 700; text-transform: uppercase; margin-right: 6px;
+    }
+    .sev-CRITICAL { background: rgba(244,63,94,0.2); color: var(--critical); }
+    .sev-HIGH { background: rgba(248,113,113,0.2); color: var(--danger); }
+    .sev-MEDIUM { background: rgba(251,191,36,0.2); color: var(--warn); }
+    .sev-LOW { background: rgba(77,212,138,0.2); color: var(--good); }
+
+    /* Findings */
+    .findings-list { max-height: 360px; overflow-y: auto; }
+    .finding {
+      padding: 10px; margin-bottom: 8px;
+      border-left: 3px solid var(--line);
+      border-radius: 4px; background: rgba(0,0,0,0.18); font-size: 12px; line-height: 1.5;
+    }
+    .finding.CRITICAL { border-left-color: var(--critical); }
+    .finding.HIGH { border-left-color: var(--danger); }
+    .finding.MEDIUM { border-left-color: var(--warn); }
+    .finding.LOW { border-left-color: var(--good); }
+    .finding-msg { color: var(--muted); margin-top: 3px; }
+    .finding-rec { color: #60a5fa; margin-top: 3px; font-size: 11px; }
+
+    .result-row { padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+    .result-row:last-child { border-bottom: none; }
+    .rl { color: var(--muted); font-size: 11px; margin-bottom: 3px; }
+    .rv { font-weight: 700; }
+    .placeholder-text { color: var(--muted); font-size: 12px; padding: 16px 0; }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+    @media (max-width: 960px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-top">
+        <div>
+          <h1>DevEx: Revisión Automatizada de PRs — Caso 19</h1>
+          <p>
+            Cada Pull Request que llega al repositorio puede introducir vulnerabilidades de seguridad sin que nadie
+            las note. Este caso analiza automáticamente el diff de un PR detectando inyección SQL, uso de
+            <code style="font-family:monospace;color:#79c0ff">eval()</code>,
+            credenciales hardcodeadas y shell injection; evalúa calidad del código (imports sin usar, funciones largas,
+            comentarios pendientes) y verifica cobertura de tests. Con todo ello calcula el nivel de riesgo
+            (HIGH / MEDIUM / LOW), toma una decisión (solicitar cambios, aprobar con observaciones o aprobar) y
+            postea el comentario de revisión en GitHub. En modo DEMO trabaja con un PR de ejemplo que incluye
+            vulnerabilidades reales para demostrar el análisis.
+          </p>
+          <div class="pillrow">
+            <div class="pill">LangGraph pipeline</div>
+            <div class="pill">Análisis de seguridad</div>
+            <div class="pill">Router por riesgo</div>
+            <div class="pill">Streaming NDJSON</div>
+            <div class="pill">DEMO / LIVE (GitHub token)</div>
+            <div class="pill">Puerto 8019</div>
+          </div>
+          <div class="nav-back"><a href="http://localhost:8080/">← VOLVER AL HUB</a></div>
+        </div>
+        <span class="mode-badge" id="modeBadge">DEMO</span>
+      </div>
+    </div>
+
+    <!-- GRID -->
+    <div class="grid">
+
+      <!-- INPUT -->
+      <section>
+        <h2>Seleccionar PR</h2>
+        <label for="prSelect">PR demo</label>
+        <select id="prSelect">
+          <option value="PR-001">PR-001 — Feature con SQL injection</option>
+          <option value="PR-042">PR-042 — Auth module (eval + creds)</option>
+          <option value="PR-105">PR-105 — Docs update (bajo riesgo)</option>
+        </select>
+
+        <div class="btns">
+          <button class="btn-run" id="runBtn" onclick="handleRun()">▶ Analizar PR</button>
+          <button class="btn-stream" id="streamBtn" onclick="handleStream()">⚡ Ver streaming</button>
+          <div class="spinner" id="spinner"></div>
+        </div>
+
+        <div style="margin-top:20px; padding:12px; background:rgba(47,129,247,0.05); border:1px solid rgba(47,129,247,0.2); border-radius:10px; font-size:11px; color:var(--muted); line-height:1.6;">
+          <strong style="color:var(--accent);">Flujo LangGraph:</strong><br>
+          fetch_pr → classify_changes → analyze_security → analyze_quality → check_tests → aggregate_findings → <em>router</em> → (request_changes | approve_with_comments | approve) → generate_changelog
+        </div>
+      </section>
+
+      <!-- EVENTS -->
+      <section>
+        <h2>Timeline de Análisis (en vivo)</h2>
+        <div class="events-log" id="eventsLog">
+          <div class="log-placeholder">Selecciona un PR y ejecuta para ver el análisis en tiempo real.</div>
+        </div>
+      </section>
+
+      <!-- RESULTS -->
+      <section>
+        <h2>Resultado</h2>
+        <div id="resultsPlaceholder" class="placeholder-text">Los resultados aparecerán aquí tras la ejecución.</div>
+        <div id="resultsContent" style="display:none">
+          <div id="riskBadge"></div>
+
+          <div class="result-row">
+            <div class="rl">Decisión</div>
+            <div class="rv" id="rDecision">—</div>
+          </div>
+          <div class="result-row">
+            <div class="rl">Hallazgos</div>
+            <div class="rv" id="rCounts">—</div>
+          </div>
+          <div class="result-row">
+            <div class="rl">GitHub</div>
+            <div class="rv" id="rGithub">—</div>
+          </div>
+
+          <h2 style="margin-top:16px;">Detalle de Hallazgos</h2>
+          <div class="findings-list" id="findingsList"></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const API = 'http://localhost:8019';
+
+    function fmtTime(ts) { return new Date(ts).toLocaleTimeString('es-ES', {hour12:false}); }
+
+    function setMode(mode) {
+      const b = document.getElementById('modeBadge');
+      b.textContent = mode === 'LIVE' ? 'LIVE 🟢' : 'DEMO 🟠';
+      b.className = 'mode-badge' + (mode === 'LIVE' ? ' live' : '');
+    }
+
+    function clearLog() { document.getElementById('eventsLog').innerHTML = ''; }
+
+    function pushEvent(type, data, ts) {
+      const log = document.getElementById('eventsLog');
+      const ph = log.querySelector('.log-placeholder');
+      if (ph) ph.remove();
+
+      // Color the event based on findings
+      let cls = 'ok';
+      if (type === 'security_analyzed' && data?.findings_count > 0) cls = 'danger';
+      if (type === 'findings_aggregated' && (data?.risk_level === 'HIGH' || data?.risk_level === 'high')) cls = 'warn';
+
+      const detail = data ? Object.entries(data).slice(0,4).map(([k,v]) => `${k}: ${v}`).join(' · ') : '';
+      const div = document.createElement('div');
+      div.className = `ev ${cls}`;
+      div.innerHTML = `<span class="ev-time">${fmtTime(ts||Date.now())}</span><span class="ev-type">✓ ${type}</span>${detail ? `<div class="ev-detail">${detail}</div>` : ''}`;
+      log.appendChild(div);
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function renderResults(s) {
+      document.getElementById('resultsPlaceholder').style.display = 'none';
+      document.getElementById('resultsContent').style.display = 'block';
+
+      const risk = (s.risk_level || 'low').toUpperCase();
+      document.getElementById('riskBadge').innerHTML = `<div class="risk-badge risk-${risk}">Riesgo: ${risk}</div>`;
+
+      const decMap = {
+        request_changes: '❌ Solicitar Cambios',
+        approve_with_comments: '⚠️ Aprobar con Observaciones',
+        approve: '✅ Aprobar'
+      };
+      document.getElementById('rDecision').textContent = decMap[s.decision] || s.decision || '—';
+
+      const all = s.all_findings || [];
+      const crit = all.filter(f => f.severity === 'CRITICAL').length;
+      const high = all.filter(f => f.severity === 'HIGH').length;
+      const med  = all.filter(f => f.severity === 'MEDIUM').length;
+      const low  = all.filter(f => f.severity === 'LOW').length;
+      document.getElementById('rCounts').textContent = `Críticos: ${crit} · Altos: ${high} · Medios: ${med} · Bajos: ${low}`;
+
+      const mode = s.mode || 'DEMO';
+      const ghMap = {
+        request_changes: `❌ Cambios solicitados${mode==='LIVE'?' (GitHub real)':' (simulado en DEMO)'}`,
+        approve_with_comments: `⚠️ Aprobado c/obs${mode==='LIVE'?' (GitHub real)':' (simulado en DEMO)'}`,
+        approve: `✅ Aprobado${mode==='LIVE'?' (GitHub real)':' (simulado en DEMO)'}`
+      };
+      document.getElementById('rGithub').textContent = ghMap[s.decision] || '—';
+
+      const fl = document.getElementById('findingsList');
+      if (!all.length) { fl.innerHTML = '<div style="color:var(--good);font-size:12px;padding:8px 0">✓ Sin hallazgos</div>'; return; }
+      fl.innerHTML = all.map(f => `
+        <div class="finding ${f.severity}">
+          <span class="sev sev-${f.severity}">${f.severity}</span><strong>${f.category || ''}</strong>
+          <div class="finding-msg">${f.message || ''}</div>
+          ${f.recommendation ? `<div class="finding-rec">💡 ${f.recommendation}</div>` : ''}
+        </div>`).join('');
+    }
+
+    function setBusy(b) {
+      ['runBtn','streamBtn'].forEach(id => document.getElementById(id).disabled = b);
+      document.getElementById('spinner').style.display = b ? 'block' : 'none';
+    }
+
+    async function handleRun() {
+      const pr_id = document.getElementById('prSelect').value;
+      clearLog(); setBusy(true);
+      try {
+        const r = await fetch(`${API}/api/run`, {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ pr_id, thread_id: 'ui-' + Date.now() })
+        });
+        if (!r.ok) throw new Error(await r.text());
+        const data = await r.json();
+        const snap = data.snapshot || data;
+        setMode(snap.mode || 'DEMO');
+        (snap.events || []).forEach(e => pushEvent(e.type, e.data, e.ts));
+        renderResults(snap);
+      } catch(e) { pushEvent('error', {message: e.message}, Date.now()); }
+      finally { setBusy(false); }
+    }
+
+    async function handleStream() {
+      const pr_id = document.getElementById('prSelect').value;
+      clearLog(); setBusy(true);
+      try {
+        const r = await fetch(`${API}/api/stream?pr_id=${pr_id}&thread_id=ui-${Date.now()}`);
+        if (!r.ok) throw new Error(await r.text());
+        const reader = r.body.getReader();
+        const dec = new TextDecoder();
+        let buf = '';
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buf += dec.decode(value, {stream:true});
+          const lines = buf.split('\n'); buf = lines.pop();
+          for (const line of lines) {
+            if (!line.trim()) continue;
+            try {
+              const msg = JSON.parse(line);
+              if (msg.type === 'snapshot') {
+                const s = msg.snapshot;
+                setMode(s.mode || 'DEMO');
+                (s.events || []).forEach(e => pushEvent(e.type, e.data, e.ts));
+                if (s.done) renderResults(s);
+              }
+            } catch(_) {}
+          }
+        }
+      } catch(e) { pushEvent('error', {message: e.message}, Date.now()); }
+      finally { setBusy(false); }
+    }
+
+    fetch(`${API}/health`).then(r=>r.json()).then(d=>setMode(d.mode||'DEMO')).catch(()=>setMode('DEMO'));
+  </script>
+</body>
+</html>

@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Caso 25 — Due Diligence M&A (Supervisor + Workers)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --panel: rgba(11, 23, 38, 0.82);
+      --line: rgba(255,255,255,0.08);
+      --ink: #eaf3ff;
+      --muted: #92a6bf;
+      --accent: #a855f7;
+      --good: #4dd48a;
+      --warn: #fbbf24;
+      --danger: #f87171;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Inter", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(168,85,247,0.14), transparent 34%),
+        radial-gradient(circle at top right, rgba(77,212,138,0.10), transparent 28%),
+        linear-gradient(180deg, #05101c, #081423 60%, #0b1525);
+    }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 24px 18px 48px; }
+
+    .hero {
+      background: var(--panel); border: 1px solid var(--line);
+      border-radius: 22px; backdrop-filter: blur(12px); padding: 28px; margin-bottom: 18px;
+    }
+    .hero-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
+    .hero h1 { margin: 0 0 10px; font-size: 28px; font-weight: 800; }
+    .hero p { color: var(--muted); line-height: 1.6; margin: 0; max-width: 780px; font-size: 14px; }
+    .nav-back { margin-top: 14px; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+    .nav-back a { color: var(--accent); text-decoration: none; opacity: 0.75; }
+    .nav-back a:hover { opacity: 1; }
+    .pillrow { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .pill {
+      border-radius: 999px; border: 1px solid var(--line);
+      padding: 6px 12px; font-size: 11px; font-weight: 600; background: rgba(255,255,255,0.03);
+    }
+    .mode-badge {
+      display: inline-block; padding: 6px 14px; border-radius: 20px;
+      font-size: 11px; font-weight: 700; white-space: nowrap;
+      background: rgba(249,115,22,0.2); color: var(--warn); border: 1px solid #f97316;
+    }
+    .mode-badge.live { background: rgba(77,212,138,0.2); color: var(--good); border-color: var(--good); }
+
+    .grid { display: grid; grid-template-columns: 280px 1fr 320px; gap: 18px; }
+    section {
+      background: var(--panel); border: 1px solid var(--line);
+      border-radius: 18px; backdrop-filter: blur(12px); padding: 20px;
+    }
+    h2 {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.6px; color: var(--muted); margin: 0 0 14px;
+    }
+
+    label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 6px; color: var(--muted); }
+    select {
+      width: 100%; border-radius: 10px; border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04); color: var(--ink);
+      padding: 10px 12px; font: inherit; font-size: 13px; cursor: pointer;
+    }
+    select:focus { outline: none; border-color: var(--accent); }
+
+    .btns { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+    button {
+      width: 100%; border-radius: 10px; border: none; cursor: pointer;
+      padding: 11px 14px; font: inherit; font-size: 13px; font-weight: 700; transition: opacity .2s;
+    }
+    button:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-run { background: linear-gradient(135deg, #7e22ce, var(--accent)); color: #fff; }
+    .btn-stream { background: rgba(255,255,255,0.06); color: var(--ink); border: 1px solid var(--line); }
+    button:not(:disabled):hover { opacity: 0.85; }
+
+    .spinner {
+      display: none; width: 16px; height: 16px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.15); border-top-color: var(--accent);
+      animation: spin .7s linear infinite; margin: 0 auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .events-log {
+      max-height: 520px; overflow-y: auto;
+      background: rgba(0,0,0,0.2); border: 1px solid var(--line);
+      border-radius: 10px; padding: 12px; font-family: 'JetBrains Mono', monospace;
+    }
+    .ev {
+      padding: 10px; margin-bottom: 8px; border-left: 3px solid rgba(168,85,247,0.4);
+      border-radius: 4px; background: rgba(255,255,255,0.03);
+      font-size: 11px; line-height: 1.6; animation: fadeIn .3s ease;
+    }
+    @keyframes fadeIn { from { opacity:0; transform: translateX(-6px); } to { opacity:1; } }
+    .ev.ok { border-left-color: var(--good); }
+    .ev.warn { border-left-color: var(--warn); }
+    .ev.worker { border-left-color: #60a5fa; }
+    .ev-time { color: var(--muted); margin-right: 6px; }
+    .ev-type { font-weight: 700; color: var(--good); }
+    .ev.warn .ev-type { color: var(--warn); }
+    .ev.worker .ev-type { color: #93c5fd; }
+    .ev-detail { color: var(--muted); margin-top: 3px; padding-left: 16px; font-size: 10px; }
+    .log-placeholder { color: var(--muted); font-size: 12px; text-align: center; padding: 24px 0; }
+
+    /* Score display */
+    .score-big {
+      font-size: 52px; font-weight: 800; text-align: center;
+      line-height: 1; margin: 12px 0 4px;
+    }
+    .score-label { text-align: center; font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+    .score-VIABLE { color: var(--good); }
+    .score-CONDICIONAL { color: var(--warn); }
+    .score-NO { color: var(--danger); }
+
+    .rec-badge {
+      display: block; padding: 10px; border-radius: 8px;
+      font-size: 12px; font-weight: 700; text-align: center; margin-bottom: 14px;
+    }
+    .rec-VIABLE { background: rgba(77,212,138,0.15); color: var(--good); border: 1px solid var(--good); }
+    .rec-CONDICIONAL { background: rgba(251,191,36,0.15); color: var(--warn); border: 1px solid #f97316; }
+    .rec-NO { background: rgba(248,113,113,0.15); color: var(--danger); border: 1px solid var(--danger); }
+
+    .scores-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
+    .score-card {
+      padding: 10px; background: rgba(0,0,0,0.2); border: 1px solid var(--line);
+      border-radius: 8px; text-align: center;
+    }
+    .score-card-label { font-size: 10px; color: var(--muted); margin-bottom: 4px; }
+    .score-card-val { font-size: 20px; font-weight: 800; }
+
+    .conflict-item {
+      padding: 8px 10px; margin-bottom: 6px;
+      border-left: 3px solid var(--warn); border-radius: 4px;
+      background: rgba(251,191,36,0.05); font-size: 11px; color: var(--warn); line-height: 1.5;
+    }
+    .flag-wrap { display: flex; flex-wrap: wrap; gap: 5px; margin: 8px 0; }
+    .flag {
+      padding: 3px 8px; border-radius: 999px; font-size: 10px; font-weight: 600;
+      background: rgba(249,115,22,0.15); border: 1px solid rgba(249,115,22,0.3); color: var(--warn);
+    }
+    .condition-list { list-style: none; padding: 0; font-size: 11px; }
+    .condition-list li {
+      padding: 6px 0 6px 12px; border-bottom: 1px solid var(--line);
+      border-left: 2px solid #60a5fa; margin-bottom: 5px;
+      background: rgba(0,0,0,0.15); border-radius: 0 4px 4px 0;
+      color: var(--muted);
+    }
+    .condition-list li:last-child { border-bottom: none; }
+
+    .result-row { padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+    .rl { color: var(--muted); font-size: 11px; margin-bottom: 3px; }
+    .rv { font-weight: 700; }
+    .placeholder-text { color: var(--muted); font-size: 12px; padding: 16px 0; }
+    .dl-btn {
+      margin-top: 14px; width: 100%; background: rgba(168,85,247,0.12);
+      border: 1px solid var(--accent); color: var(--accent);
+      border-radius: 10px; padding: 9px; font-size: 12px; font-weight: 700; cursor: pointer;
+    }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+    @media (max-width: 960px) { .grid { grid-template-columns: 1fr; } .scores-grid { grid-template-columns: 1fr 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-top">
+        <div>
+          <h1>Due Diligence M&A — Supervisor + 4 Workers (Caso 25)</h1>
+          <p>
+            Adquirir una empresa sin analizar todos los ángulos puede resultar en pérdidas millonarias. Este caso
+            demuestra el patrón <strong>Supervisor + Workers</strong> de LangGraph: un nodo supervisor descompone
+            la evaluación de due diligence en cuatro análisis especializados que corren secuencialmente —
+            <strong>💰 Financiero</strong> (revenue, burn rate, EBITDA, runway),
+            <strong>⚖️ Legal</strong> (litigios, IP, GDPR, regulatorio),
+            <strong>⚙️ Operacional</strong> (equipo, tech debt, product maturity, NPS, churn) y
+            <strong>📢 Reputacional</strong> (Glassdoor, prensa, redes sociales, quejas públicas).
+            Al finalizar, detecta conflictos entre análisis, calcula un score de viabilidad (0–10) y emite una
+            recomendación: VIABLE, CONDICIONAL o NO RECOMENDADO. En modo DEMO usa datos realistas de una startup
+            de USD 5M para mostrar el flujo completo.
+          </p>
+          <div class="pillrow">
+            <div class="pill">Patrón Supervisor + Workers</div>
+            <div class="pill">4 análisis especializados</div>
+            <div class="pill">Detección de conflictos</div>
+            <div class="pill">Streaming NDJSON</div>
+            <div class="pill">DEMO / LIVE</div>
+            <div class="pill">Puerto 8025</div>
+          </div>
+          <div class="nav-back"><a href="http://localhost:8080/">← VOLVER AL HUB</a></div>
+        </div>
+        <span class="mode-badge" id="modeBadge">DEMO</span>
+      </div>
+    </div>
+
+    <!-- GRID -->
+    <div class="grid">
+
+      <!-- INPUT -->
+      <section>
+        <h2>Seleccionar Evaluación</h2>
+        <label for="taskSelect">Tarea M&A</label>
+        <select id="taskSelect">
+          <option value="DDL-2026-001">DDL-2026-001 — TechStartup S.A. (USD 5M)</option>
+          <option value="DDL-2026-002">DDL-2026-002 — FinTech Co. (USD 3.2M)</option>
+          <option value="DDL-2026-003">DDL-2026-003 — CloudData Inc. (USD 12M)</option>
+        </select>
+
+        <div class="btns">
+          <button class="btn-run" id="runBtn" onclick="handleRun()">▶ Iniciar Evaluación</button>
+          <button class="btn-stream" id="streamBtn" onclick="handleStream()">⚡ Ver streaming</button>
+          <div class="spinner" id="spinner"></div>
+        </div>
+
+        <div style="margin-top:20px; padding:12px; background:rgba(168,85,247,0.05); border:1px solid rgba(168,85,247,0.2); border-radius:10px; font-size:11px; color:var(--muted); line-height:1.6;">
+          <strong style="color:var(--accent);">Flujo LangGraph:</strong><br>
+          load_task → decompose_task → run_financial → run_legal → run_operational → run_reputational → collect_results → reconcile_and_report
+        </div>
+      </section>
+
+      <!-- EVENTS -->
+      <section>
+        <h2>Workers en Ejecución (en vivo)</h2>
+        <div class="events-log" id="eventsLog">
+          <div class="log-placeholder">Selecciona una evaluación y ejecuta para ver los workers en tiempo real.</div>
+        </div>
+      </section>
+
+      <!-- RESULTS -->
+      <section>
+        <h2>Reporte de Viabilidad</h2>
+        <div id="resultsPlaceholder" class="placeholder-text">El reporte aparecerá aquí tras la ejecución.</div>
+        <div id="resultsContent" style="display:none">
+          <div class="score-big" id="scoreBig">—</div>
+          <div class="score-label">/ 10 — Viability Score</div>
+          <div class="rec-badge" id="recBadge">—</div>
+
+          <h2>Puntuaciones por Área</h2>
+          <div class="scores-grid" id="scoresGrid"></div>
+
+          <div class="result-row" style="margin-top:12px;">
+            <div class="rl">Conflictos detectados</div>
+            <div class="rv" id="rConflicts">—</div>
+          </div>
+          <div id="conflictsList"></div>
+
+          <h2 style="margin-top:14px;">Flags de Riesgo</h2>
+          <div class="flag-wrap" id="flagWrap"></div>
+
+          <h2 style="margin-top:14px;">Condiciones para Proceder</h2>
+          <ul class="condition-list" id="conditionList"></ul>
+
+          <button class="dl-btn" onclick="downloadReport()">⬇ Descargar Reporte JSON</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const API = 'http://localhost:8025';
+    let lastState = null;
+
+    function fmtTime(ts) { return new Date(ts).toLocaleTimeString('es-ES', {hour12:false}); }
+
+    function setMode(mode) {
+      const b = document.getElementById('modeBadge');
+      b.textContent = mode === 'LIVE' ? 'LIVE 🟢' : 'DEMO 🟠';
+      b.className = 'mode-badge' + (mode === 'LIVE' ? ' live' : '');
+    }
+
+    function clearLog() { document.getElementById('eventsLog').innerHTML = ''; }
+
+    const WORKER_ICONS = { financial:'💰', legal:'⚖️', operational:'⚙️', reputational:'📢' };
+
+    function pushEvent(type, data, ts) {
+      const log = document.getElementById('eventsLog');
+      const ph = log.querySelector('.log-placeholder');
+      if (ph) ph.remove();
+
+      let cls = 'ok';
+      if (type === 'results_collected' && data?.conflicts_detected > 0) cls = 'warn';
+      if (type === 'worker_completed') cls = 'worker';
+
+      const icon = WORKER_ICONS[data?.worker_type] || '';
+      const label = icon ? `${icon} worker_completed: ${data.worker_type}` : type;
+      const detail = data ? Object.entries(data).slice(0,4).map(([k,v]) => `${k}: ${v}`).join(' · ') : '';
+
+      const div = document.createElement('div');
+      div.className = `ev ${cls}`;
+      div.innerHTML = `<span class="ev-time">${fmtTime(ts||Date.now())}</span><span class="ev-type">✓ ${label}</span>${detail ? `<div class="ev-detail">${detail}</div>` : ''}`;
+      log.appendChild(div);
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function scoreClass(n) {
+      return n >= 7 ? 'var(--good)' : n >= 4 ? 'var(--warn)' : 'var(--danger)';
+    }
+
+    function recKey(text) {
+      if (!text) return 'NO';
+      if (text.includes('VIABLE') && !text.includes('CONDICIONAL')) return 'VIABLE';
+      if (text.includes('CONDICIONAL')) return 'CONDICIONAL';
+      return 'NO';
+    }
+
+    function renderResults(s) {
+      lastState = s;
+      document.getElementById('resultsPlaceholder').style.display = 'none';
+      document.getElementById('resultsContent').style.display = 'block';
+
+      // Parse final_report — it's a JSON string in the backend
+      let report = {};
+      try {
+        report = typeof s.final_report === 'string' ? JSON.parse(s.final_report) : (s.final_report || {});
+      } catch(_) {}
+
+      const score = report.global_viability_score ?? report.viability_score ?? 0;
+      const rk = recKey(report.recommendation || '');
+
+      const scoreBig = document.getElementById('scoreBig');
+      scoreBig.textContent = typeof score === 'number' ? score.toFixed(1) : score;
+      scoreBig.style.color = scoreClass(score);
+
+      const recBadge = document.getElementById('recBadge');
+      const recText = { VIABLE: '✅ VIABLE — Proceder con adquisición', CONDICIONAL: '🟠 CONDICIONAL — Negociar con descuento', NO: '❌ NO RECOMENDADO — Riesgos superan beneficios' };
+      recBadge.textContent = recText[rk] || report.recommendation || '—';
+      recBadge.className = `rec-badge rec-${rk}`;
+
+      // Scores by area from worker_results
+      const workers = s.worker_results || [];
+      const areaMap = { financial:'💰 Financial', legal:'⚖️ Legal', operational:'⚙️ Operational', reputational:'📢 Reputacional' };
+      const riskMap = { financial: workers.find(w=>w.worker==='financial')?.data?.risk_score,
+                        legal: workers.find(w=>w.worker==='legal')?.data?.risk_score,
+                        operational: workers.find(w=>w.worker==='operational')?.data?.risk_score,
+                        reputational: workers.find(w=>w.worker==='reputational')?.data?.risk_score };
+
+      // Use scores from report if available
+      const scores = report.scores || {};
+      document.getElementById('scoresGrid').innerHTML = Object.entries(areaMap).map(([key, label]) => {
+        const v = scores[key] ?? (riskMap[key] != null ? (10 - riskMap[key]).toFixed(1) : '—');
+        const numV = parseFloat(v);
+        return `<div class="score-card">
+          <div class="score-card-label">${label}</div>
+          <div class="score-card-val" style="color:${scoreClass(numV)}">${isNaN(numV) ? v : numV.toFixed(1)}</div>
+        </div>`;
+      }).join('');
+
+      // Conflicts
+      const conflicts = s.conflicts || report.conflicts || [];
+      document.getElementById('rConflicts').textContent = conflicts.length || '0';
+      document.getElementById('conflictsList').innerHTML = conflicts.map(c =>
+        `<div class="conflict-item">⚠️ ${c}</div>`).join('') ||
+        '<div style="color:var(--good);font-size:11px;margin:6px 0">✓ Sin conflictos detectados</div>';
+
+      // Flags
+      const allFlags = [];
+      workers.forEach(w => { if (Array.isArray(w.data?.flags)) allFlags.push(...w.data.flags); });
+      document.getElementById('flagWrap').innerHTML = allFlags.map(f =>
+        `<span class="flag">${f}</span>`).join('') || '<span style="color:var(--muted);font-size:11px">Sin flags</span>';
+
+      // Conditions
+      const conds = report.conditions || [];
+      document.getElementById('conditionList').innerHTML = conds.map(c =>
+        `<li>✓ ${c}</li>`).join('') || '<li style="color:var(--muted)">—</li>';
+    }
+
+    function setBusy(b) {
+      ['runBtn','streamBtn'].forEach(id => document.getElementById(id).disabled = b);
+      document.getElementById('spinner').style.display = b ? 'block' : 'none';
+    }
+
+    async function handleRun() {
+      const task_id = document.getElementById('taskSelect').value;
+      clearLog(); setBusy(true);
+      try {
+        const r = await fetch(`${API}/api/run`, {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ task_id, thread_id: 'ui-' + Date.now() })
+        });
+        if (!r.ok) throw new Error(await r.text());
+        const data = await r.json();
+        const snap = data.snapshot || data;
+        setMode(snap.mode || 'DEMO');
+        (snap.events || []).forEach(e => pushEvent(e.type, e.data, e.ts));
+        renderResults(snap);
+      } catch(e) { pushEvent('error', {message: e.message}, Date.now()); }
+      finally { setBusy(false); }
+    }
+
+    async function handleStream() {
+      const task_id = document.getElementById('taskSelect').value;
+      clearLog(); setBusy(true);
+      try {
+        const r = await fetch(`${API}/api/stream?task_id=${task_id}&thread_id=ui-${Date.now()}`);
+        if (!r.ok) throw new Error(await r.text());
+        const reader = r.body.getReader();
+        const dec = new TextDecoder();
+        let buf = '';
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buf += dec.decode(value, {stream:true});
+          const lines = buf.split('\n'); buf = lines.pop();
+          for (const line of lines) {
+            if (!line.trim()) continue;
+            try {
+              const msg = JSON.parse(line);
+              if (msg.type === 'snapshot') {
+                const s = msg.snapshot;
+                setMode(s.mode || 'DEMO');
+                (s.events || []).forEach(e => pushEvent(e.type, e.data, e.ts));
+                if (s.done) renderResults(s);
+              }
+            } catch(_) {}
+          }
+        }
+      } catch(e) { pushEvent('error', {message: e.message}, Date.now()); }
+      finally { setBusy(false); }
+    }
+
+    function downloadReport() {
+      if (!lastState) return;
+      let report = {};
+      try { report = typeof lastState.final_report === 'string' ? JSON.parse(lastState.final_report) : lastState.final_report; } catch(_) {}
+      const a = document.createElement('a');
+      a.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(report, null, 2));
+      a.download = `viability-${lastState.task_id || 'report'}.json`;
+      a.click();
+    }
+
+    fetch(`${API}/health`).then(r=>r.json()).then(d=>setMode(d.mode||'DEMO')).catch(()=>setMode('DEMO'));
+  </script>
+</body>
+</html>

@@ -1,9 +1,29 @@
-{
-  "task_id": "DDL-2026-001",
-  "title": "Due Diligence: Adquisición TechStartup S.A.",
-  "description": "Evaluar la viabilidad de adquirir TechStartup S.A. por USD 5M. Analizar aspectos financieros, legales, operacionales y reputacionales.",
-  "company": "TechStartup S.A.",
-  "budget_usd": 5000000,
-  "deadline": "2026-04-30",
-  "priority": "high"
-}
+[
+  {
+    "task_id": "DDL-2026-001",
+    "title": "Due Diligence: Adquisición TechStartup S.A.",
+    "description": "Evaluar la viabilidad de adquirir TechStartup S.A. por USD 5M. Analizar aspectos financieros, legales, operacionales y reputacionales.",
+    "company": "TechStartup S.A.",
+    "budget_usd": 5000000,
+    "deadline": "2026-04-30",
+    "priority": "high"
+  },
+  {
+    "task_id": "DDL-2026-002",
+    "title": "Due Diligence: Adquisición FinTech Co.",
+    "description": "Evaluar la viabilidad de adquirir FinTech Co. por USD 3.2M. Startup de pagos digitales con regulaciones PCI-DSS pendientes.",
+    "company": "FinTech Co.",
+    "budget_usd": 3200000,
+    "deadline": "2026-05-15",
+    "priority": "medium"
+  },
+  {
+    "task_id": "DDL-2026-003",
+    "title": "Due Diligence: Adquisición CloudData Inc.",
+    "description": "Evaluar la viabilidad de adquirir CloudData Inc. por USD 12M. Empresa de almacenamiento cloud con cartera de 200 clientes enterprise.",
+    "company": "CloudData Inc.",
+    "budget_usd": 12000000,
+    "deadline": "2026-06-01",
+    "priority": "high"
+  }
+]
