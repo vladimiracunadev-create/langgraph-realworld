@@ -5,6 +5,27 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/1.0.0/).
 
 ---
 
+## v4.0.1 — 2026-04-10
+
+### Agregado
+
+- **Interfaces web `backend/web/index.html`** para los casos 03, 19 y 25 (faltaban completamente).
+  Cada interfaz incluye: hero en español con descripción del flujo, badge DEMO/LIVE, enlace `← VOLVER AL HUB` a `http://localhost:8080/`, pillrow de tecnologías, timeline de eventos en vivo via NDJSON streaming y panel de resultados con badges y listas.
+  - **Caso 03 — Incident Response**: select INC-001/INC-002/INC-003, timeline de severidad P1/P2/P3, recovery checks, postmortem.
+  - **Caso 19 — DevEx PR Review**: select PR-001/PR-042/PR-105, timeline de hallazgos por severidad, decision badge (REQUEST_CHANGES/APPROVE_WITH_COMMENTS/APPROVE).
+  - **Caso 25 — Supervisor/Workers**: select DDL-2026-001/002/003, workers timeline con iconos, viability score coloreado, conflictos detectados y condiciones para proceder.
+- **Datos DEMO completos** para casos 19 y 25:
+  - `cases/19-devex-pr-review/data/sample_pr.json`: convertido de objeto único a array con 3 PRs distintos. PR-001 (SQL injection + eval → CRITICAL), PR-042 (creds hardcodeadas + shell injection → HIGH), PR-105 (solo docs → APPROVE).
+  - `cases/25-supervisor-workers/data/sample_task.json`: convertido de objeto único a array con 3 tareas distintas. DDL-2026-001 (TechStartup $5M), DDL-2026-002 (FinTech $3.2M), DDL-2026-003 (CloudData $12M).
+- **Sección "Estandar de la interfaz web"** en `.agents/skills/crear_caso/SKILL.md`: define qué es y qué NO es un caso (no es un link a JSON, no es una página sin UI, DEMO siempre funciona, datos deben cubrir todas las opciones del select).
+
+### Corregido
+
+- `cases/19-devex-pr-review/backend/src/integrations.py`: fallback gracioso a stub en vez de `ValueError` cuando el `pr_id` solicitado no existe en el JSON de datos.
+- `index.html` (hub raíz): casos 03, 19 y 25 marcados como `OPERATIVO` con links correctos a `http://localhost:8003/web/`, `http://localhost:8019/web/` y `http://localhost:8025/web/`.
+
+---
+
 ## v4.0.0 — 2026-04-09
 
 ### Agregado
