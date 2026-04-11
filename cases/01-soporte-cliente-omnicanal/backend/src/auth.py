@@ -76,8 +76,8 @@ def _validate_jwt(token: str) -> None:
 
     try:
         import urllib.request
-        from jose import jwt, jwk, JWTError
-        from jose.utils import base64url_decode
+
+        from jose import jwt
 
         with urllib.request.urlopen(jwks_url, timeout=5) as resp:  # noqa: S310
             keys = __import__("json").loads(resp.read())

@@ -1,7 +1,7 @@
 # Caso 20: Migración de Sistemas Legacy
 
 > [!NOTE]
-> **Estado**: `SCAFFOLD` | **Versión repo**: 3.9.0 | **Tipo**: Agente con estado y ejecución por lotes
+> **Estado**: `SCAFFOLD` | **Versión repo**: 4.0.0 | **Tipo**: Agente con estado y ejecución por lotes
 
 Automatiza la migración de sistemas legacy coordinando el análisis del código fuente, la planificación del refactor por módulos, la transformación por lotes con validación continua y la verificación de equivalencia funcional mediante tests automáticos. Reduce el riesgo y el tiempo de proyectos de modernización que normalmente toman meses, permitiendo una migración incremental y auditable.
 

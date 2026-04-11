@@ -1,0 +1,10 @@
+id: "14"
+slug: "14-finanzas-conciliacion"
+name: "Finanzas Conciliacion"
+status: "scaffold"
+version: "4.0.0"
+working_dir: demo
+ports:
+  - 9014
+compose: demo/compose.yml
+dockerfile: demo/Dockerfile

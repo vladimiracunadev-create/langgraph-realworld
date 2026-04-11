@@ -54,6 +54,41 @@ Regla recomendada:
 - `graph.py` consume helpers agnosticos al modo.
 - `api.py` informa `mode=DEMO|LIVE`.
 
+## Estandar de la interfaz web
+
+La interfaz `backend/web/index.html` es OBLIGATORIA en todo caso. No es un JSON demo ni un enlace estatico. Es una UI funcional que opera en tiempo real contra el backend del caso.
+
+### Que debe incluir siempre
+
+- **Hero con descripcion en texto**: explicar en espanol que hace el caso, por que existe y que problema de negocio resuelve. El usuario debe entenderlo sin leer codigo.
+- **Indicador de modo**: badge visible de DEMO (naranja) o LIVE (verde), obtenido de `GET /health`.
+- **Enlace de retorno**: `← VOLVER AL HUB` apuntando a `http://localhost:8080/` con font JetBrains Mono (patron existente en todos los casos del repo).
+- **Formulario de entrada**: select, inputs o botones que permitan ejecutar el caso con datos de prueba reales del directorio `data/`.
+- **Timeline de eventos en vivo**: consumir `GET /api/stream` via NDJSON y mostrar cada evento a medida que llega.
+- **Panel de resultados**: mostrar el estado final del grafo de forma legible (badges, tablas, listas).
+- **Pillrow de tecnologias**: pills con las tecnologias clave del caso (LangGraph, nodos usados, modo, puerto).
+
+### Estandar visual
+
+- Vanilla HTML/CSS/JS sin frameworks.
+- Tema oscuro coherente con el resto del repo (fondo `#07111f` o similar, acentos de color propios del caso).
+- Responsive, sin scroll horizontal en desktop ni mobile.
+- Fuentes: Inter para texto, JetBrains Mono para codigo, monoespaciado y pills tecnicas.
+
+### Estandar de datos DEMO
+
+- El directorio `data/` debe contener registros reales suficientes para cubrir todas las opciones del select o formulario de la UI.
+- Si el select tiene 3 opciones, el archivo JSON de datos debe tener 3 registros con IDs que coincidan exactamente.
+- DEMO no significa "devolver siempre el mismo dato". Significa "funcionar sin tokens externos con datos de muestra reales".
+- Los stubs en `integrations.py` deben producir resultados variados y realistas que demuestren el flujo del grafo.
+
+### Lo que NO es un caso
+
+- Un caso NO es un enlace a un JSON estatico.
+- Un caso NO es una pagina HTML con un boton que llama a una URL hardcodeada.
+- Un caso NO es "funciona si tienes el token". El DEMO debe funcionar siempre, sin excepciones.
+- Un caso NO esta terminado si la UI no existe o si los datos de demo no cubren todas las opciones disponibles.
+
 ## Flujo de trabajo
 
 ### Paso 1: Entender el caso

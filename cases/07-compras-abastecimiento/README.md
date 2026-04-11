@@ -1,7 +1,7 @@
 # Caso 07: Compras y Abastecimiento
 
 > [!NOTE]
-> **Estado**: `SCAFFOLD` | **Versión repo**: 3.9.0 | **Tipo**: Agente con estado y aprobación humana
+> **Estado**: `SCAFFOLD` | **Versión repo**: 4.0.0 | **Tipo**: Agente con estado y aprobación humana
 
 Automatiza el ciclo de compras desde la solicitud hasta la orden de compra: cotiza automáticamente a proveedores homologados, compara ofertas por criterios configurables (precio, plazo, calidad, riesgo de proveedor), genera la recomendación justificada y produce la orden de compra lista para aprobación. Reduce el ciclo de adquisición de días a horas y garantiza la aplicación consistente de la política de compras.
 

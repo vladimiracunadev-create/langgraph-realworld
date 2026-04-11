@@ -1,7 +1,7 @@
 # Caso 14: Finanzas y Conciliación
 
 > [!NOTE]
-> **Estado**: `SCAFFOLD` | **Versión repo**: 3.9.0 | **Tipo**: Agente con estado y detección de anomalías
+> **Estado**: `SCAFFOLD` | **Versión repo**: 4.0.0 | **Tipo**: Agente con estado y detección de anomalías
 
 Automatiza el proceso de conciliación contable y bancaria clasificando transacciones, detectando outliers y discrepancias, sugiriendo acciones correctivas y generando los reportes de cuadre para el cierre financiero. Reduce el tiempo de conciliación mensual de días a horas y aumenta la cobertura de revisión al 100% de las transacciones.
 

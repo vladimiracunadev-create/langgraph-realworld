@@ -1,7 +1,7 @@
 # Caso 16: Planificador de Viajes
 
 > [!NOTE]
-> **Estado**: `SCAFFOLD` | **Versión repo**: 3.9.0 | **Tipo**: Agente con estado y refinamiento iterativo
+> **Estado**: `SCAFFOLD` | **Versión repo**: 4.0.0 | **Tipo**: Agente con estado y refinamiento iterativo
 
 Automatiza la planificación de itinerarios de viaje corporativos y personales respetando restricciones de presupuesto, política de viajes, preferencias del viajero y disponibilidad en tiempo real, con capacidad de ajuste iterativo ante cambios. Reduce el tiempo de planificación de viajes complejos de horas a minutos y garantiza el cumplimiento de la política de viajes corporativos.
 

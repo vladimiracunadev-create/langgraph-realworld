@@ -1,7 +1,7 @@
 # Caso 05: Analista de Documentos
 
 > [!NOTE]
-> **Estado**: `SCAFFOLD` | **Versión repo**: 3.9.0 | **Tipo**: Agente con estado y memoria de documento
+> **Estado**: `SCAFFOLD` | **Versión repo**: 4.0.0 | **Tipo**: Agente con estado y memoria de documento
 
 Automatiza el análisis exhaustivo de documentos contractuales y legales extrayendo cláusulas críticas, identificando riesgos, generando checklists de cumplimiento y produciendo resúmenes ejecutivos, reduciendo el tiempo de revisión de contratos de horas a minutos. Permite que los equipos legales y de procura procesen un volumen mayor de documentos con mayor consistencia y trazabilidad.
 

@@ -1,0 +1,10 @@
+id: "05"
+slug: "05-analista-documentos"
+name: "Analista de Documentos"
+status: "scaffold"
+version: "4.0.0"
+working_dir: demo
+ports:
+  - 9005
+compose: demo/compose.yml
+dockerfile: demo/Dockerfile

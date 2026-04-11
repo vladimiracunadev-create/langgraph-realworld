@@ -1,7 +1,7 @@
 # Caso 18: Marketing de Contenido con QA
 
 > [!NOTE]
-> **Estado**: `SCAFFOLD` | **Versión repo**: 3.9.0 | **Tipo**: Multi-agente con pipeline de revisión
+> **Estado**: `SCAFFOLD` | **Versión repo**: 4.0.0 | **Tipo**: Multi-agente con pipeline de revisión
 
 Automatiza la producción de contenido de marketing con un pipeline de calidad integrado: genera el contenido según el brief, lo somete a revisión de estilo y tono de marca, verifica la exactitud factual y la ausencia de alucinaciones, y lo presenta para aprobación final antes de publicación. Permite a los equipos de marketing escalar la producción de contenido sin sacrificar la coherencia de marca ni la fiabilidad de la información.
 

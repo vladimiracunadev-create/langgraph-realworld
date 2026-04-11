@@ -1,3 +1,8 @@
+id: "13"
+slug: "13-bi-analista-datos"
+name: "Analista de Datos BI"
+status: "industrial"
+version: "4.0.0"
 working_dir: backend
 entrypoint: python -m uvicorn src.api:app --host 0.0.0.0 --port 8013
 serve: python -m uvicorn src.api:app --host 0.0.0.0 --port 8013

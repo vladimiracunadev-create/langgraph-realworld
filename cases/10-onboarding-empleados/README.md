@@ -1,7 +1,10 @@
 # Caso 10: Onboarding de Empleados
 
 > [!IMPORTANT]
-> **Estado**: `INDUSTRIAL` | **Versión**: 3.9.0 | **Referencia**: Flujo empresarial y RBAC
+> **Estado**: `INDUSTRIAL` | **Versión**: 4.0.0 | **Referencia**: Flujo empresarial y RBAC
+>
+> **Modo DEMO**: Completamente funcional sin credenciales externas.
+> **Integraciones reales** (HRIS, IAM, Slack, correo): marcadas como `TODO REAL` en `integrations.py`. Pendientes para v4.1.0.
 
 Agente de onboarding que orquesta el proceso de incorporación de nuevos empleados:
 provisionamiento de cuentas, asignación de accesos según rol (RBAC), notificaciones

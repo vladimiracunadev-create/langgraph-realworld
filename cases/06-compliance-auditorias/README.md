@@ -1,7 +1,7 @@
 # Caso 06: Compliance y Auditorías
 
 > [!NOTE]
-> **Estado**: `SCAFFOLD` | **Versión repo**: 3.9.0 | **Tipo**: Agente con estado y trazabilidad completa
+> **Estado**: `SCAFFOLD` | **Versión repo**: 4.0.0 | **Tipo**: Agente con estado y trazabilidad completa
 
 Automatiza el ciclo completo de preparación de auditorías recopilando evidencias, identificando faltantes, mapeando controles a marcos regulatorios (ISO 27001, SOC 2, GDPR) y generando el expediente de auditoría con trazabilidad de cada hallazgo. Reduce el tiempo de preparación de auditorías de semanas a días y elimina los riesgos de evidencia incompleta o mal clasificada.
 

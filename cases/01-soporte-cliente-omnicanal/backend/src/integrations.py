@@ -6,7 +6,6 @@ from typing import Any
 
 from .settings import data_dir, is_live_mode, mode_label, openai_api_key, openai_model
 
-
 TEXT_INTENTS = {
     "billing": ["cobro", "factura", "pago", "reembolso", "devolucion", "cargo"],
     "technical": ["error", "caida", "no puedo", "fallando", "incidente", "bug", "acceso", "panel"],
@@ -130,7 +129,13 @@ def knowledge_summary(intent: str) -> dict[str, Any]:
     }
 
 
-def draft_customer_response(ticket: dict[str, Any], intent: str, priority: str, route: dict[str, Any], article: dict[str, Any]) -> str:
+def draft_customer_response(
+    ticket: dict[str, Any],
+    intent: str,
+    priority: str,
+    route: dict[str, Any],
+    article: dict[str, Any],
+) -> str:
     customer_name = ticket.get("customer", {}).get("name", "cliente")
     base = (
         f"Hola {customer_name}, detectamos tu caso como {intent} con prioridad {priority}. "

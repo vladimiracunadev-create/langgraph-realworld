@@ -101,3 +101,106 @@ services:
     environment:
       - DATA_DIR=/app/data
       - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+
+  # Scaffold demos — static HTML served by nginx
+  case04:
+    build:
+      context: cases/04-soc-triage-alertas/demo
+    ports:
+      - "127.0.0.1:9004:80"
+
+  case05:
+    build:
+      context: cases/05-analista-documentos/demo
+    ports:
+      - "127.0.0.1:9005:80"
+
+  case06:
+    build:
+      context: cases/06-compliance-auditorias/demo
+    ports:
+      - "127.0.0.1:9006:80"
+
+  case07:
+    build:
+      context: cases/07-compras-abastecimiento/demo
+    ports:
+      - "127.0.0.1:9007:80"
+
+  case08:
+    build:
+      context: cases/08-ventas-b2b-crm/demo
+    ports:
+      - "127.0.0.1:9008:80"
+
+  case11:
+    build:
+      context: cases/11-educacion-tutor-adaptativo/demo
+    ports:
+      - "127.0.0.1:9011:80"
+
+  case12:
+    build:
+      context: cases/12-psicometria-evaluaciones/demo
+    ports:
+      - "127.0.0.1:9012:80"
+
+  case14:
+    build:
+      context: cases/14-finanzas-conciliacion/demo
+    ports:
+      - "127.0.0.1:9014:80"
+
+  case15:
+    build:
+      context: cases/15-ecommerce-postventa/demo
+    ports:
+      - "127.0.0.1:9015:80"
+
+  case16:
+    build:
+      context: cases/16-viajes-planificador/demo
+    ports:
+      - "127.0.0.1:9016:80"
+
+  case17:
+    build:
+      context: cases/17-legal-intake/demo
+    ports:
+      - "127.0.0.1:9017:80"
+
+  case18:
+    build:
+      context: cases/18-marketing-contenido-qa/demo
+    ports:
+      - "127.0.0.1:9018:80"
+
+  case20:
+    build:
+      context: cases/20-migracion-legacy/demo
+    ports:
+      - "127.0.0.1:9020:80"
+
+  case21:
+    build:
+      context: cases/21-docs-auto/demo
+    ports:
+      - "127.0.0.1:9021:80"
+
+  case22:
+    build:
+      context: cases/22-backoffice-automatizacion/demo
+    ports:
+      - "127.0.0.1:9022:80"
+
+  case23:
+    build:
+      context: cases/23-salud-pretriage/demo
+    ports:
+      - "127.0.0.1:9023:80"
+
+  case24:
+    build:
+      context: cases/24-pm-assistant/demo
+    ports:
+      - "127.0.0.1:9024:80"

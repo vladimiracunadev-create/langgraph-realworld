@@ -1,0 +1,10 @@
+id: "23"
+slug: "23-salud-pretriage"
+name: "Salud Pre-triage"
+status: "scaffold"
+version: "4.0.0"
+working_dir: demo
+ports:
+  - 9023
+compose: demo/compose.yml
+dockerfile: demo/Dockerfile

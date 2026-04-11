@@ -1,0 +1,10 @@
+id: "12"
+slug: "12-psicometria-evaluaciones"
+name: "Psicometria y Evaluaciones"
+status: "scaffold"
+version: "4.0.0"
+working_dir: demo
+ports:
+  - 9012
+compose: demo/compose.yml
+dockerfile: demo/Dockerfile

@@ -5,7 +5,6 @@ import logging
 import os
 import time
 import uuid
-from collections import deque
 from contextvars import ContextVar
 from functools import lru_cache
 from pathlib import Path
@@ -203,7 +202,8 @@ def stream(
 
     def gen():
         try:
-            for state in graph.stream({"request": {"ticket_id": ticket_id}, "events": []}, config=cfg, stream_mode="values"):
+            input_data = {"request": {"ticket_id": ticket_id}, "events": []}
+            for state in graph.stream(input_data, config=cfg, stream_mode="values"):
                 snapshot = {
                     "ticket": state.get("ticket") or {},
                     "intent": state.get("intent") or "",
@@ -216,7 +216,8 @@ def stream(
                     "done": bool(state.get("done", False)),
                     "mode": state.get("mode") or mode_label(),
                 }
-                yield (json.dumps({"type": "snapshot", "snapshot": snapshot}, ensure_ascii=False) + "\n").encode("utf-8")
+                payload = json.dumps({"type": "snapshot", "snapshot": snapshot}, ensure_ascii=False)
+                yield (payload + "\n").encode("utf-8")
             yield (json.dumps({"type": "final", "ok": True}) + "\n").encode("utf-8")
         except Exception as exc:
             logger.error("Error en stream: %s", exc)

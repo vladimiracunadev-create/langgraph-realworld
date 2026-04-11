@@ -1,18 +1,54 @@
-{
-  "id": "PR-001",
-  "title": "feat: add user search endpoint with filters",
-  "author": "dev-junior",
-  "base_branch": "main",
-  "head_branch": "feat/user-search",
-  "diff": "diff --git a/app/api/users.py b/app/api/users.py\n--- a/app/api/users.py\n+++ b/app/api/users.py\n@@ -1,8 +1,47 @@\n import os\n+import json\n import requests\n from flask import Flask, request, jsonify\n+from datetime import datetime\n \n app = Flask(__name__)\n \n+def search_users(query, role=None):\n+    \"\"\"Search users by name or email with optional role filter.\"\"\"\n+    conn = get_db_connection()\n+    cursor = conn.cursor()\n+    # WARNING: SQL built by concatenation - vulnerable to injection\n+    sql = \"SELECT * FROM users WHERE name LIKE '%\" + query + \"%'\"\n+    if role:\n+        sql = sql + \" AND role = '\" + role + \"'\"\n+    cursor.execute(sql)\n+    rows = cursor.fetchall()\n+    conn.close()\n+    return rows\n+\n+def execute_raw(command):\n+    \"\"\"Execute a raw system command for diagnostics.\"\"\"\n+    result = eval(command)\n+    return result\n+\n+def process_user_data(data):\n+    \"\"\"Process and transform user data from external source.\"\"\"\n+    output = []\n+    for item in data:\n+        user_id = item['id']\n+        name = item['name']\n+        email = item['email']\n+        role = item.get('role', 'viewer')\n+        created_at = item.get('created_at', '')\n+        last_login = item.get('last_login', '')\n+        department = item.get('department', 'general')\n+        manager_id = item.get('manager_id', None)\n+        permissions = item.get('permissions', [])\n+        tags = item.get('tags', [])\n+        notes = item.get('notes', '')\n+        output.append({'id': user_id, 'name': name, 'email': email, 'role': role,\n+                       'dept': department, 'mgr': manager_id, 'perms': permissions,\n+                       'tags': tags, 'notes': notes})\n+    return output\n+\n+@app.route('/api/users/search', methods=['GET'])\n+def user_search():\n+    q = request.args.get('q', '')\n+    role = request.args.get('role')\n+    users = search_users(q, role)\n+    return jsonify({'users': users, 'count': len(users)})\n+\n def get_db_connection():\n     return sqlite3.connect(os.getenv('DATABASE_URL', 'app.db'))",
-  "files_changed": [
-    "app/api/users.py",
-    "app/utils/helpers.py"
-  ],
-  "commits": [
-    "feat: add user search endpoint with name and email filter",
-    "feat: add role filter param to search",
-    "fix: handle empty query string in search",
-    "chore: remove debug print statements"
-  ]
-}
+[
+  {
+    "id": "PR-001",
+    "title": "feat: add user search endpoint with filters",
+    "author": "dev-junior",
+    "base_branch": "main",
+    "head_branch": "feat/user-search",
+    "diff": "diff --git a/app/api/users.py b/app/api/users.py\n--- a/app/api/users.py\n+++ b/app/api/users.py\n@@ -1,8 +1,47 @@\n import os\n+import json\n import requests\n from flask import Flask, request, jsonify\n+from datetime import datetime\n \n app = Flask(__name__)\n \n+def search_users(query, role=None):\n+    \"\"\"Search users by name or email with optional role filter.\"\"\"\n+    conn = get_db_connection()\n+    cursor = conn.cursor()\n+    # WARNING: SQL built by concatenation - vulnerable to injection\n+    sql = \"SELECT * FROM users WHERE name LIKE '%\" + query + \"%'\"\n+    if role:\n+        sql = sql + \" AND role = '\" + role + \"'\"\n+    cursor.execute(sql)\n+    rows = cursor.fetchall()\n+    conn.close()\n+    return rows\n+\n+def execute_raw(command):\n+    \"\"\"Execute a raw system command for diagnostics.\"\"\"\n+    result = eval(command)\n+    return result\n+\n+def process_user_data(data):\n+    \"\"\"Process and transform user data from external source.\"\"\"\n+    output = []\n+    for item in data:\n+        user_id = item['id']\n+        name = item['name']\n+        email = item['email']\n+        role = item.get('role', 'viewer')\n+        created_at = item.get('created_at', '')\n+        last_login = item.get('last_login', '')\n+        department = item.get('department', 'general')\n+        manager_id = item.get('manager_id', None)\n+        permissions = item.get('permissions', [])\n+        tags = item.get('tags', [])\n+        notes = item.get('notes', '')\n+        output.append({'id': user_id, 'name': name, 'email': email, 'role': role,\n+                       'dept': department, 'mgr': manager_id, 'perms': permissions,\n+                       'tags': tags, 'notes': notes})\n+    return output\n+\n+@app.route('/api/users/search', methods=['GET'])\n+def user_search():\n+    q = request.args.get('q', '')\n+    role = request.args.get('role')\n+    users = search_users(q, role)\n+    return jsonify({'users': users, 'count': len(users)})\n+\n def get_db_connection():\n     return sqlite3.connect(os.getenv('DATABASE_URL', 'app.db'))",
+    "files_changed": [
+      "app/api/users.py",
+      "app/utils/helpers.py"
+    ],
+    "commits": [
+      "feat: add user search endpoint with name and email filter",
+      "feat: add role filter param to search",
+      "fix: handle empty query string in search",
+      "chore: remove debug print statements"
+    ]
+  },
+  {
+    "id": "PR-042",
+    "title": "feat: refactor auth module with token validation",
+    "author": "dev-mid",
+    "base_branch": "main",
+    "head_branch": "feat/auth-refactor",
+    "diff": "diff --git a/app/auth/validator.py b/app/auth/validator.py\n--- a/app/auth/validator.py\n+++ b/app/auth/validator.py\n@@ -1,5 +1,38 @@\n import os\n import hashlib\n+import subprocess\n \n+# Hardcoded fallback credentials — remove before merge!\n+ADMIN_API_KEY = \"sk-prod-a8f3k2j9xm1p7\"\n+BACKUP_PASSWORD = \"Adm1n@2025!\"\n+\n+def validate_token(token):\n+    \"\"\"Validate JWT token from request header.\"\"\"\n+    if token == ADMIN_API_KEY:\n+        return {\"user\": \"admin\", \"role\": \"superuser\"}\n+    try:\n+        payload = eval(token)  # TODO: replace with jwt.decode()\n+        return payload\n+    except Exception:\n+        return None\n+\n+def run_health_check(target):\n+    \"\"\"Run connectivity check for given host.\"\"\"\n+    result = subprocess.run(\n+        f\"ping -c 1 {target}\", shell=True, capture_output=True, text=True\n+    )\n+    return result.stdout\n+\n+def hash_password(password):\n+    \"\"\"Hash password for storage.\"\"\"\n+    return hashlib.sha256(password.encode()).hexdigest()\n+\n+def check_admin_access(user, role):\n+    \"\"\"Verify admin privileges.\"\"\"\n+    return role in [\"admin\", \"superuser\", \"root\"]\n+\n def get_user_by_token(token):\n     return None",
+    "files_changed": [
+      "app/auth/validator.py",
+      "app/auth/__init__.py"
+    ],
+    "commits": [
+      "feat: add token validation with eval fallback",
+      "chore: add admin key for emergency access",
+      "feat: add health check using ping command"
+    ]
+  },
+  {
+    "id": "PR-105",
+    "title": "docs: update API documentation and changelog",
+    "author": "dev-senior",
+    "base_branch": "main",
+    "head_branch": "docs/api-update",
+    "diff": "diff --git a/docs/API.md b/docs/API.md\n--- a/docs/API.md\n+++ b/docs/API.md\n@@ -1,5 +1,42 @@\n # API Documentation\n \n+## v2.1.0 — Released 2026-04-01\n+\n+### New Endpoints\n+\n+#### GET /api/users/search\n+Search users by name or email with optional role filter.\n+\n+**Parameters**:\n+- `q` (string): Search query (name or email substring)\n+- `role` (string, optional): Filter by role (viewer, editor, admin)\n+\n+**Response**:\n+```json\n+{\n+  \"users\": [{\"id\": 1, \"name\": \"Alice\", \"email\": \"alice@example.com\"}],\n+  \"count\": 1\n+}\n+```\n+\n+#### POST /api/auth/validate\n+Validate an API token.\n+\n+**Body**: `{\"token\": \"<jwt_token>\"}`\n+\n+**Response**: `{\"valid\": true, \"user\": \"alice\", \"role\": \"editor\"}`\n+\n+### Breaking Changes\n+None in this release.\n+\n+### Bug Fixes\n+- Fixed empty query string handling in user search\n+- Improved error messages for invalid tokens\n+\n+## v2.0.0 — Released 2026-03-15\n+See CHANGELOG.md for full history.\n+\n ## Overview\n This document describes the REST API for the application.",
+    "files_changed": [
+      "docs/API.md",
+      "CHANGELOG.md"
+    ],
+    "commits": [
+      "docs: add v2.1.0 release notes",
+      "docs: document new search and auth endpoints",
+      "docs: update changelog with bug fixes"
+    ]
+  }
+]

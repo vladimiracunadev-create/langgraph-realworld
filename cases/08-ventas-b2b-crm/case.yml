@@ -1,0 +1,10 @@
+id: "08"
+slug: "08-ventas-b2b-crm"
+name: "Ventas B2B CRM"
+status: "scaffold"
+version: "4.0.0"
+working_dir: demo
+ports:
+  - 9008
+compose: demo/compose.yml
+dockerfile: demo/Dockerfile

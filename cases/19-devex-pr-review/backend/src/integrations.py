@@ -50,7 +50,8 @@ def get_pr_data(pr_id: str, pr_data_path: str | None = None) -> dict:
                 for pr in data:
                     if pr.get("id") == pr_id:
                         return pr
-                raise ValueError(f"PR {pr_id} no encontrado en {path}")
+                logger.warning(f"[DEMO] PR {pr_id} no encontrado en {path}. Devolviendo stub.")
+                return _demo_pr_stub(pr_id)
         except FileNotFoundError:
             logger.warning(f"[DEMO] Archivo no encontrado: {path}. Devolviendo PR simulado.")
             return _demo_pr_stub(pr_id)
