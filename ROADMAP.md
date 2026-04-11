@@ -1,143 +1,155 @@
 # Hoja de Ruta
 
-> [!NOTE]
-> **Versión**: 4.0.1 | **Estado**: Industrial | **Audiencia**: Stakeholders, Colaboradores, Agentes automatizados
+> **Versión**: 4.0.1 | **Estado**: Industrial | **Rama principal**: `main`
 
-El estándar técnico del repositorio ya está definido. No se re-analiza en cada ciclo. Para crear o elevar un caso, seguir el SKILL directamente: [`.agents/skills/crear_caso/SKILL.md`](.agents/skills/crear_caso/SKILL.md).
+El estándar técnico del repositorio ya está definido. Los agentes y colaboradores deben leer el skill correspondiente antes de ejecutar cualquier tarea — no se rediseña lo ya definido.
 
 ---
 
-## Estado actual
+## Mapa de documentación
 
-### Casos operativos e industriales (8)
+### Raíz
 
-| ID | Nombre | Nivel | Interfaz web | Integraciones LIVE |
+| Documento | Propósito |
+|:---|:---|
+| [README.md](README.md) | Entrada principal del portfolio — estado de casos, inicio rápido, taxonomía |
+| [CHANGELOG.md](CHANGELOG.md) | Historial de cambios por versión |
+| [ROADMAP.md](ROADMAP.md) | Este documento — visión estratégica y orden de trabajo |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Reglas de código, estilo, testing y Docker para colaboradores |
+| [SECURITY.md](SECURITY.md) | Postura de seguridad, auditoría 8 capas, riesgos aceptados |
+| [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | Código de conducta del proyecto |
+| [killed.md](killed.md) | Features eliminadas o pausadas con su razón |
+
+### Documentación técnica (`docs/`)
+
+| Documento | Propósito |
+|:---|:---|
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Estructura del monorepo, patrón DEMO/LIVE, integración compose y hub |
+| [docs/TECHNICAL_SPECS.md](docs/TECHNICAL_SPECS.md) | Stack técnico, contratos de API, guardrails de seguridad |
+| [docs/AGENTS_AND_SKILLS.md](docs/AGENTS_AND_SKILLS.md) | Skills disponibles, estándar de un caso completo, orden de trabajo para agentes |
+| [docs/INSTALL.md](docs/INSTALL.md) | Cómo levantar el repo: Docker, local, Hub CLI |
+| [docs/REQUIREMENTS.md](docs/REQUIREMENTS.md) | Requisitos de entorno: Git, Python, Docker, APIs opcionales |
+| [docs/HUB.md](docs/HUB.md) | Hub CLI — comandos, guardrails, estado de casos |
+| [docs/BEGINNERS_GUIDE.md](docs/BEGINNERS_GUIDE.md) | Mapa del repo paso a paso para nuevos usuarios |
+| [docs/RECRUITER.md](docs/RECRUITER.md) | Resumen ejecutivo del portfolio para recruiters y tech leads |
+
+### Skills de agentes (`.agents/`)
+
+| Documento | Propósito |
+|:---|:---|
+| [.agents/skills/crear_caso/SKILL.md](.agents/skills/crear_caso/SKILL.md) | Crear o elevar un caso — contrato técnico completo, estándar de UI, DEMO/LIVE |
+| [.agents/skills/actualizar_doc/SKILL.md](.agents/skills/actualizar_doc/SKILL.md) | Sincronizar README, docs y wiki cuando cambia el código |
+| [.agents/skills/validar_caso/SKILL.md](.agents/skills/validar_caso/SKILL.md) | Auditar un caso existente — Docker, CI, DEMO/LIVE, hub, seguridad, docs |
+
+---
+
+## Estado de los 25 casos
+
+### Operativos e industriales (8)
+
+| ID | README | Nivel | UI web | Integraciones LIVE disponibles |
 |:---:|:---|:---:|:---:|:---|
-| 01 | Soporte Cliente Omnicanal | `OPERATIVO` | ✅ | LLM (OpenAI opt-in) |
-| 02 | Mesa de Ayuda TI / SRE | `OPERATIVO` | ✅ | CMDB, runbooks (DEMO) |
-| 03 | Incident Response SRE | `OPERATIVO` | ✅ | PagerDuty, Datadog (DEMO) |
-| 09 | RRHH Screening & Agenda | `INDUSTRIAL` | ✅ | LLM + MemorySaver |
-| 10 | Onboarding de Empleados | `INDUSTRIAL` | ✅ | HRIS, IAM, Slack (DEMO) |
-| 13 | Analista de Datos BI | `INDUSTRIAL` | ✅ | SQL + Chart.js + LLM opt-in |
-| 19 | DevEx: PR Review | `OPERATIVO` | ✅ | GitHub API (DEMO) |
-| 25 | Supervisor + Workers | `OPERATIVO` | ✅ | 4 workers especializados (DEMO) |
+| 01 | [Soporte Cliente Omnicanal](cases/01-soporte-cliente-omnicanal/README.md) | OPERATIVO | ✅ | LLM opt-in (OpenAI) |
+| 02 | [Mesa de Ayuda TI / SRE](cases/02-mesa-ayuda-ti-runbooks/README.md) | OPERATIVO | ✅ | CMDB, runbooks (DEMO) |
+| 03 | [Incident Response SRE](cases/03-incident-response-sre/README.md) | OPERATIVO | ✅ | PagerDuty, Datadog (DEMO) |
+| 09 | [RRHH Screening & Agenda](cases/09-rrhh-screening-agenda/README.md) | INDUSTRIAL | ✅ | LLM + MemorySaver |
+| 10 | [Onboarding de Empleados](cases/10-onboarding-empleados/README.md) | INDUSTRIAL | ✅ | HRIS, IAM, Slack (DEMO) |
+| 13 | [Analista de Datos BI](cases/13-bi-analista-datos/README.md) | INDUSTRIAL | ✅ | SQL + Chart.js + LLM opt-in |
+| 19 | [DevEx: PR Review](cases/19-devex-pr-review/README.md) | OPERATIVO | ✅ | GitHub API (DEMO) |
+| 25 | [Supervisor + Workers](cases/25-supervisor-workers/README.md) | OPERATIVO | ✅ | 4 workers especializados (DEMO) |
 
-### Casos scaffold (17) — listos para elevar
+### Scaffold — listos para elevar (17)
 
-| ID | Nombre | Dominio | Prioridad |
+| ID | README | Dominio | Prioridad de elevación |
 |:---:|:---|:---|:---:|
-| 04 | SOC: Triage de Alertas | Seguridad / SOC | 🔴 Alta |
-| 05 | Analista de Documentos | Legal / Contratos | 🔴 Alta |
-| 17 | Legal Intake | Legal | 🔴 Alta |
-| 08 | Ventas B2B + CRM | Comercial | 🟠 Media |
-| 14 | Finanzas: Conciliación | Finanzas | 🟠 Media |
-| 06 | Compliance & Auditorías | Gobernanza | 🟠 Media |
-| 21 | Documentación Automática | DevOps | 🟠 Media |
-| 22 | Backoffice: Automatización | Operaciones | 🟡 Normal |
-| 24 | Asistente PM | Gestión de proyectos | 🟡 Normal |
-| 15 | E-commerce Postventa | Comercio electrónico | 🟡 Normal |
-| 07 | Compras y Abastecimiento | Procurement | 🟡 Normal |
-| 11 | Tutor Adaptativo | Educación | 🟡 Normal |
-| 12 | Psicometría y Evaluaciones | RRHH / Evaluación | 🟡 Normal |
-| 18 | Marketing con QA | Marketing | 🟡 Normal |
-| 20 | Migración Legacy | Arquitectura | 🟡 Normal |
-| 23 | Salud: Pre-triage | Salud | 🟡 Normal |
-| 16 | Planificador de Viajes | Travel | 🟡 Normal |
+| 04 | [SOC: Triage de Alertas](cases/04-soc-triage-alertas/README.md) | Seguridad / SOC | 🔴 Ola 1 |
+| 05 | [Analista de Documentos](cases/05-analista-documentos/README.md) | Legal / Contratos | 🔴 Ola 1 |
+| 17 | [Legal Intake](cases/17-legal-intake/README.md) | Legal | 🔴 Ola 1 |
+| 08 | [Ventas B2B + CRM](cases/08-ventas-b2b-crm/README.md) | Comercial | 🟠 Ola 2 |
+| 14 | [Finanzas: Conciliación](cases/14-finanzas-conciliacion/README.md) | Finanzas | 🟠 Ola 2 |
+| 06 | [Compliance & Auditorías](cases/06-compliance-auditorias/README.md) | Gobernanza | 🟠 Ola 2 |
+| 21 | [Documentación Automática](cases/21-docs-auto/README.md) | DevOps | 🟠 Ola 2 |
+| 07 | [Compras y Abastecimiento](cases/07-compras-abastecimiento/README.md) | Procurement | 🟡 Ola 3 |
+| 11 | [Tutor Adaptativo](cases/11-educacion-tutor-adaptativo/README.md) | Educación | 🟡 Ola 3 |
+| 12 | [Psicometría y Evaluaciones](cases/12-psicometria-evaluaciones/README.md) | RRHH / Evaluación | 🟡 Ola 3 |
+| 15 | [E-commerce Postventa](cases/15-ecommerce-postventa/README.md) | Comercio electrónico | 🟡 Ola 3 |
+| 18 | [Marketing con QA](cases/18-marketing-contenido-qa/README.md) | Marketing | 🟡 Ola 3 |
+| 22 | [Backoffice: Automatización](cases/22-backoffice-automatizacion/README.md) | Operaciones | 🟡 Ola 3 |
+| 24 | [Asistente PM](cases/24-pm-assistant/README.md) | Gestión de proyectos | 🟡 Ola 3 |
+| 16 | [Planificador de Viajes](cases/16-viajes-planificador/README.md) | Travel | 🟡 Ola 3 |
+| 20 | [Migración Legacy](cases/20-migracion-legacy/README.md) | Arquitectura | 🟡 Ola 3 |
+| 23 | [Salud: Pre-triage](cases/23-salud-pretriage/README.md) | Salud | 🟡 Ola 3 |
 
 ---
 
 ## Orden de elevación de casos
 
-La elevación de un scaffold a OPERATIVO sigue siempre el mismo proceso. No se rediseña el proceso en cada ciclo: está en el SKILL.
+Elevar un caso de SCAFFOLD a OPERATIVO sigue siempre el mismo proceso. Está definido en el skill — no se reinventa:
 
-```text
-SCAFFOLD  →  (seguir SKILL.md)  →  OPERATIVO  →  (streaming + observabilidad + hardening)  →  INDUSTRIAL
+> **Leer [`.agents/skills/crear_caso/SKILL.md`](.agents/skills/crear_caso/SKILL.md) antes de tocar código.**
+
+```
+SCAFFOLD  →  (SKILL.md)  →  OPERATIVO  →  (streaming + observabilidad + hardening)  →  INDUSTRIAL
 ```
 
-### Ola 1 — Casos de alta prioridad (próximos a elevar)
+### Ola 1 — Alta prioridad
 
-Estos tres casos tienen dominio de alto impacto empresarial y sus scaffolds ya tienen README con Mermaid. Son los candidatos naturales para la siguiente ola.
+| Caso | Por qué primero | Núcleo LangGraph |
+|:---|:---|:---|
+| **04 — SOC Triage** | Complementa caso 03 (Incident Response). Alto valor en portfolios AI+Seguridad. | Router por severidad, HITL, escalada |
+| **05 — Analista de Documentos** | Patrón de extracción sobre PDFs muy demandado en enterprise. Bajo acoplamiento externo. | Pipeline secuencial, extracción estructurada, resumen LLM |
+| **17 — Legal Intake** | Continuación natural del 05 en dominio legal. Intake + clasificación + routing a especialistas. | Router condicional, HITL para escalada |
 
-| # | Caso | Razón de prioridad | LangGraph central |
-|:---:|:---|:---|:---|
-| 1 | **04 — SOC Triage** | Dominio de seguridad. Complementa el caso 03 (Incident Response). Alto valor en portfolios de AI+Sec. | Router por severidad, HITL, escalada automatizada |
-| 2 | **05 — Analista de Documentos** | Caso de extracción y síntesis sobre PDFs/contratos. Patrón muy solicitado en enterprise. Bajo acoplamiento externo. | Pipeline secuencial, extracción estructurada, resumen LLM |
-| 3 | **17 — Legal Intake** | Continuación natural del caso 05 en dominio legal. Intake + clasificación + routing a especialistas. | Clasificación + routing condicional, HITL para escalada |
+### Ola 2 — Impacto comercial y operativo
 
-### Ola 2 — Casos de impacto comercial y operativo
+| Caso | Por qué |
+|:---|:---|
+| **08 — Ventas B2B + CRM** | Lead scoring + CRM automation. Alta demanda. Integra con HubSpot/Salesforce en LIVE. |
+| **14 — Finanzas: Conciliación** | Reconciliación de transacciones. ROI claro. Patrón verificación + excepción. |
+| **06 — Compliance** | Gobernanza + reportes. Complementa el hardening de seguridad del repo. |
+| **21 — Docs Automática** | Código → documentación estructurada. Relevante para el propio repo. |
 
-| # | Caso | Razón de prioridad |
-|:---:|:---|:---|
-| 4 | **08 — Ventas B2B + CRM** | CRM automation + lead scoring. Alta demanda de negocio. Integración con HubSpot/Salesforce en LIVE. |
-| 5 | **14 — Finanzas: Conciliación** | Reconciliación automática de transacciones. Alto ROI claro. Patrón de verificación + excepción. |
-| 6 | **06 — Compliance & Auditorías** | Gobernanza + generación de reportes. Complementa el hardening de seguridad del repo. |
-| 7 | **21 — Documentación Automática** | DevOps docs generation. Relevante para el propio repo. Patrón de código → doc estructurada. |
+### Ola 3 — Dominio especializado
 
-### Ola 3 — Casos de dominio especializado
-
-| # | Caso | Razón de prioridad |
-|:---:|:---|:---|
-| 8 | **22 — Backoffice Automatización** | Automatización de procesos repetitivos. Alta generalización. |
-| 9 | **24 — Asistente PM** | Gestión de proyectos con LLM. Patrón de planning + tracking + reporting. |
-| 10 | **15 — E-commerce Postventa** | Atención postventa automatizada. Complementa caso 01 (soporte). |
-| 11 | **07 — Compras y Abastecimiento** | Procurement con aprobaciones. HITL natural. |
-| 12-17 | Resto | Elevar según disponibilidad y demanda del portfolio. |
+Elevar según disponibilidad y demanda: 07, 11, 12, 15, 18, 22, 24, 16, 20, 23.
 
 ---
 
 ## Mejoras transversales pendientes
 
-Estas mejoras no son casos nuevos sino mejoras al estándar de los casos existentes. Se priorizan cuando hay capacidad entre olas.
-
 ### v4.1.0 — Integraciones reales en casos operativos
 
-| Caso | Integración pendiente | Requisito |
+| Caso | Integración pendiente | Variable de entorno |
 |:---:|:---|:---|
-| 19 — PR Review | GitHub API real para modo LIVE | `GITHUB_TOKEN` configurado |
-| 10 — Onboarding | HRIS, IAM, Slack, correo (4 `TODO REAL` en `integrations.py`) | Credenciales por `.env` |
-| 03 — Incident Response | PagerDuty + Datadog reales | `PAGERDUTY_TOKEN`, `DATADOG_API_KEY` |
-| 25 — Due Diligence | APIs financieras/legales reales | Por definir según caso de uso |
+| [03](cases/03-incident-response-sre/README.md) | PagerDuty + Datadog reales | `PAGERDUTY_TOKEN`, `DATADOG_API_KEY` |
+| [10](cases/10-onboarding-empleados/README.md) | HRIS, IAM, Slack, correo (4 `TODO REAL`) | Por `.env` del caso |
+| [19](cases/19-devex-pr-review/README.md) | GitHub API real | `GITHUB_TOKEN` |
+| [25](cases/25-supervisor-workers/README.md) | APIs financieras/legales reales | Por definir |
 
-### Elevación a INDUSTRIAL (casos operativos actuales)
-
-Los casos 03, 19 y 25 son OPERATIVO. Para llegar a INDUSTRIAL necesitan:
+### Elevación OPERATIVO → INDUSTRIAL (casos 03, 19, 25)
 
 - [ ] `compose.smoke.yml` con smoke tests en Docker
 - [ ] Tests de integración con `stream_mode` verificado
-- [ ] `/metrics` documentado en su `README.md`
 - [ ] Logging JSON estructurado con `ContextVar` + `TraceIdFilter` (como casos 09/10)
-- [ ] OAuth2/OIDC opt-in verificado (ya tienen `auth.py`, confirmar en tests)
+- [ ] OAuth2/OIDC opt-in confirmado en tests
+- [ ] `/metrics` documentado en README del caso
 
 ### Largo plazo
 
-- Kubernetes con `NetworkPolicy` y `SecurityContext` completos.
-- IaC (Terraform / Pulumi) para entornos reproducibles en cloud.
-- OpenTelemetry para trazas distribuidas entre servicios (más allá de LangSmith).
-- Secret manager externo (Vault, AWS Secrets Manager) para demos persistentes.
+- Kubernetes con `NetworkPolicy` y `SecurityContext` completos
+- IaC (Terraform / Pulumi) para entornos reproducibles en cloud
+- OpenTelemetry para trazas distribuidas entre servicios
+- Secret manager externo (Vault, AWS Secrets Manager)
 
 ---
 
 ## Criterios de madurez
 
-```text
-SCAFFOLD   → README con Mermaid + case.yml + estructura de carpetas
-               ↓  (seguir SKILL.md — el proceso ya está definido)
-OPERATIVO  → backend real + interfaz web + DEMO/LIVE + Docker + tests básicos + docs
-               ↓  (streaming + observabilidad + hardening completo)
-INDUSTRIAL → OPERATIVO + compose.smoke + logging JSON + /metrics documentado
-             + OAuth2 opt-in verificado + tests de streaming + docs operativas completas
 ```
-
----
-
-## Referencias de estándar
-
-El estándar del repositorio **ya está definido**. No se rediseña en cada ciclo. Consultar directamente:
-
-| Documento | Qué define |
-|:---|:---|
-| [`.agents/skills/crear_caso/SKILL.md`](.agents/skills/crear_caso/SKILL.md) | Proceso completo de creación/elevación de un caso (contrato técnico, DEMO/LIVE, interfaz web, criterios de cierre) |
-| [`docs/TECHNICAL_SPECS.md`](docs/TECHNICAL_SPECS.md) | Stack técnico, contratos de API, guardrails de seguridad |
-| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Estructura del monorepo, patrón DEMO/LIVE, integración con compose y hub |
-| [`CONTRIBUTING.md`](CONTRIBUTING.md) | Reglas de código, estilo, testing y Docker |
-| [`SECURITY.md`](SECURITY.md) | Postura de seguridad, 8 capas, riesgos aceptados |
+SCAFFOLD   → README con Mermaid + case.yml + estructura de carpetas base
+                 ↓  seguir SKILL.md — el proceso ya está definido
+OPERATIVO  → backend real + interfaz web + DEMO/LIVE + Docker + tests + docs
+                 ↓  streaming verificado + observabilidad + hardening
+INDUSTRIAL → todo lo de OPERATIVO + compose.smoke + logging JSON estructurado
+             + /metrics documentado + OAuth2 verificado en tests + docs operativas completas
+```
