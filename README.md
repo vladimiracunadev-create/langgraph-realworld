@@ -88,6 +88,32 @@ El estándar actual del repositorio se apoya en estos pilares:
 
 ---
 
+## 📚 Documentación completa
+
+### Visión y estrategia
+
+| Documento | Contenido |
+|:---|:---|
+| [ROADMAP.md](ROADMAP.md) | Hoja de ruta — mapa de todos los documentos, estado de los 25 casos, orden de elevación por olas, mejoras transversales |
+| [CHANGELOG.md](CHANGELOG.md) | Historial de cambios por versión |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Cómo contribuir — estructura, estilo, testing y Docker |
+| [SECURITY.md](SECURITY.md) | Auditoría 8 capas, riesgos aceptados, hardening |
+| [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | Código de conducta |
+| [killed.md](killed.md) | Features eliminadas o pausadas |
+
+### Técnica
+
+| Documento | Contenido |
+|:---|:---|
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Estructura del monorepo, patrón DEMO/LIVE, compose y hub |
+| [docs/TECHNICAL_SPECS.md](docs/TECHNICAL_SPECS.md) | Stack, contratos de API, guardrails de seguridad |
+| [docs/INSTALL.md](docs/INSTALL.md) | Cómo levantar el repo: Docker, local, Hub CLI |
+| [docs/REQUIREMENTS.md](docs/REQUIREMENTS.md) | Requisitos: Git, Python, Docker, APIs opcionales |
+| [docs/HUB.md](docs/HUB.md) | Hub CLI — comandos, guardrails, estado de casos |
+| [docs/AGENTS_AND_SKILLS.md](docs/AGENTS_AND_SKILLS.md) | Skills de agentes, estándar de un caso completo, orden de trabajo |
+
+---
+
 ## ⚡ Inicio rápido
 
 ```bash
