@@ -9,7 +9,7 @@ select = ["E", "F", "I"]
 name = "langgraph-realworld"
 version = "4.0.0"
 dependencies = [
-    "PyYAML>=6.0.1",
+    "PyYAML>=6.0.3",
 ]
 
 [tool.pytest.ini_options]
