@@ -1,0 +1,75 @@
+{
+  "ip_reputation": {
+    "185.220.101.47": {
+      "malicious": true,
+      "score": 92,
+      "categories": ["tor_exit_node", "brute_force", "scanner"],
+      "country": "DE",
+      "abuse_reports": 847,
+      "last_reported": "2026-04-21T22:00:00Z",
+      "sources": ["AbuseIPDB", "VirusTotal", "Shodan"]
+    },
+    "185.220.101.55": {
+      "malicious": true,
+      "score": 88,
+      "categories": ["tor_exit_node", "malware_distribution"],
+      "country": "NL",
+      "abuse_reports": 533,
+      "last_reported": "2026-04-20T18:00:00Z",
+      "sources": ["AbuseIPDB", "VirusTotal"]
+    },
+    "93.184.216.34": {
+      "malicious": false,
+      "score": 5,
+      "categories": [],
+      "country": "US",
+      "abuse_reports": 0,
+      "last_reported": null,
+      "sources": ["VirusTotal"],
+      "note": "example.com — IP legítima, posible falso positivo"
+    },
+    "10.0.5.207": {
+      "malicious": false,
+      "score": 0,
+      "categories": [],
+      "country": "internal",
+      "abuse_reports": 0,
+      "last_reported": null,
+      "sources": [],
+      "note": "IP interna — no aplica threat intel externa"
+    }
+  },
+  "file_hashes": {
+    "d41d8cd98f00b204e9800998ecf8427e": {
+      "malicious": true,
+      "score": 95,
+      "family": "Emotet",
+      "type": "trojan_downloader",
+      "first_seen": "2026-03-15T00:00:00Z",
+      "detections": 62,
+      "total_av_engines": 72,
+      "sources": ["VirusTotal", "MalwareBazaar"]
+    }
+  },
+  "domains": {
+    "update-cdn-delivery.net": {
+      "malicious": true,
+      "score": 78,
+      "categories": ["c2", "phishing"],
+      "registrar": "NameCheap",
+      "created": "2026-04-01T00:00:00Z",
+      "age_days": 21,
+      "sources": ["VirusTotal", "URLhaus"]
+    }
+  },
+  "mitre_mapping": {
+    "brute_force": {"tactic": "Credential Access", "technique": "T1110", "subtechnique": "T1110.001"},
+    "port_scan": {"tactic": "Discovery", "technique": "T1046"},
+    "lateral_movement": {"tactic": "Lateral Movement", "technique": "T1021"},
+    "malware": {"tactic": "Execution", "technique": "T1204", "subtechnique": "T1204.002"},
+    "dns_exfil": {"tactic": "Command and Control", "technique": "T1071", "subtechnique": "T1071.004"},
+    "c2": {"tactic": "Command and Control", "technique": "T1071"},
+    "off_hours": {"tactic": "Initial Access", "technique": "T1078"},
+    "credential_access": {"tactic": "Credential Access", "technique": "T1110"}
+  }
+}

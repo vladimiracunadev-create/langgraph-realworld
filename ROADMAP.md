@@ -1,6 +1,6 @@
 # Hoja de Ruta
 
-> **Versión**: 4.0.1 | **Estado**: Industrial | **Rama principal**: `main`
+> **Versión**: 4.1.0 | **Estado**: Industrial | **Rama principal**: `main`
 
 El estándar técnico del repositorio ya está definido. Antes de crear o modificar un caso, leer el skill directamente — no se rediseña lo que ya existe:
 
@@ -12,24 +12,24 @@ El estándar técnico del repositorio ya está definido. Antes de crear o modifi
 
 ## Estado de los 25 casos
 
-### Operativos e industriales (8)
+### Operativos e industriales (9)
 
 | ID | Caso | Nivel | UI web | Integraciones LIVE |
 |:---:|:---|:---:|:---:|:---|
 | 01 | [Soporte Cliente Omnicanal](cases/01-soporte-cliente-omnicanal/README.md) | OPERATIVO | ✅ | LLM opt-in (OpenAI) |
 | 02 | [Mesa de Ayuda TI / SRE](cases/02-mesa-ayuda-ti-runbooks/README.md) | OPERATIVO | ✅ | CMDB, runbooks (DEMO) |
 | 03 | [Incident Response SRE](cases/03-incident-response-sre/README.md) | OPERATIVO | ✅ | PagerDuty, Datadog (DEMO) |
+| 04 | [SOC Triage de Alertas](cases/04-soc-triage-alertas/README.md) | OPERATIVO | ✅ | VirusTotal, AbuseIPDB, SIEM (DEMO) |
 | 09 | [RRHH Screening & Agenda](cases/09-rrhh-screening-agenda/README.md) | INDUSTRIAL | ✅ | LLM + MemorySaver |
 | 10 | [Onboarding de Empleados](cases/10-onboarding-empleados/README.md) | INDUSTRIAL | ✅ | HRIS, IAM, Slack (DEMO) |
 | 13 | [Analista de Datos BI](cases/13-bi-analista-datos/README.md) | INDUSTRIAL | ✅ | SQL + Chart.js + LLM opt-in |
 | 19 | [DevEx: PR Review](cases/19-devex-pr-review/README.md) | OPERATIVO | ✅ | GitHub API (DEMO) |
 | 25 | [Supervisor + Workers](cases/25-supervisor-workers/README.md) | OPERATIVO | ✅ | 4 workers especializados (DEMO) |
 
-### Scaffold — listos para elevar (17)
+### Scaffold — listos para elevar (16)
 
 | ID | Caso | Dominio | Prioridad |
 |:---:|:---|:---|:---:|
-| 04 | [SOC: Triage de Alertas](cases/04-soc-triage-alertas/README.md) | Seguridad / SOC | 🔴 Ola 1 |
 | 05 | [Analista de Documentos](cases/05-analista-documentos/README.md) | Legal / Contratos | 🔴 Ola 1 |
 | 17 | [Legal Intake](cases/17-legal-intake/README.md) | Legal | 🔴 Ola 1 |
 | 08 | [Ventas B2B + CRM](cases/08-ventas-b2b-crm/README.md) | Comercial | 🟠 Ola 2 |
@@ -59,7 +59,7 @@ SCAFFOLD  →  (seguir SKILL.md)  →  OPERATIVO  →  (observabilidad + hardeni
 
 | Caso | Por qué | Núcleo LangGraph |
 |:---|:---|:---|
-| **04 — SOC Triage** | Complementa caso 03. Alto valor en portfolios AI+Seguridad. | Router por severidad, HITL, escalada |
+| ~~**04 — SOC Triage**~~ | ✅ **COMPLETADO v4.1.0** — Router de riesgo (3 vías), threat intel, SIEM context | Router por score, 2 routers condicionales, stubs LIVE |
 | **05 — Analista de Documentos** | Extracción sobre PDFs, patrón muy demandado en enterprise. Bajo acoplamiento externo. | Pipeline secuencial, extracción estructurada, resumen LLM |
 | **17 — Legal Intake** | Continuación natural del 05. Intake + clasificación + routing a especialistas. | Router condicional, HITL para escalada |
 
@@ -80,11 +80,16 @@ Elevar según disponibilidad y demanda: 07, 11, 12, 15, 18, 22, 24, 16, 20, 23.
 
 ## Mejoras transversales pendientes
 
-### v4.1.0 — Integraciones reales en casos operativos
+### v4.1.0 — SOC Triage operativo + integraciones reales
+
+**Completado**: Caso 04 elevado a OPERATIVO — 8 nodos, 2 routers, stubs VirusTotal/SIEM/Ticketing.
+
+**Integraciones reales pendientes en casos existentes**:
 
 | Caso | Integración pendiente | Variable de entorno |
 |:---:|:---|:---|
 | [03](cases/03-incident-response-sre/README.md) | PagerDuty + Datadog reales | `PAGERDUTY_TOKEN`, `DATADOG_API_KEY` |
+| [04](cases/04-soc-triage-alertas/README.md) | VirusTotal + AbuseIPDB + Splunk/Elastic reales | `VIRUSTOTAL_API_KEY`, `SPLUNK_TOKEN` |
 | [10](cases/10-onboarding-empleados/README.md) | HRIS, IAM, Slack, correo (4 `TODO REAL`) | Por `.env` del caso |
 | [19](cases/19-devex-pr-review/README.md) | GitHub API real | `GITHUB_TOKEN` |
 | [25](cases/25-supervisor-workers/README.md) | APIs financieras/legales reales | Por definir |
