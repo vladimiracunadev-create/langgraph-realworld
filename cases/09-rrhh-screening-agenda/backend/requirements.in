@@ -17,7 +17,7 @@ rich
 
 # Carga de archivos (CVs) y parsing
 python-multipart
-pypdf
+pypdf>=6.10.2
 pdfminer.six
 python-docx
 
@@ -43,6 +43,6 @@ boto3
 # LLM opcional (si luego quieres scoring/preguntas con modelos)
 openai
 langchain-core
-langchain-openai
-langsmith
+langchain-openai>=1.1.14
+langsmith>=0.7.31
 python-jose[cryptography]

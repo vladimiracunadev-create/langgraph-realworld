@@ -73,7 +73,7 @@ langchain-core==1.2.28
     #   langgraph
     #   langgraph-checkpoint
     #   langgraph-prebuilt
-langchain-openai==1.1.12
+langchain-openai==1.1.14
     # via -r cases/19-devex-pr-review/backend/requirements.in
 langgraph==1.1.6
     # via -r cases/19-devex-pr-review/backend/requirements.in
@@ -85,7 +85,7 @@ langgraph-prebuilt==1.0.9
     # via langgraph
 langgraph-sdk==0.3.13
     # via langgraph
-langsmith==0.7.30
+langsmith==0.7.31
     # via
     #   -r cases/19-devex-pr-review/backend/requirements.in
     #   langchain-core

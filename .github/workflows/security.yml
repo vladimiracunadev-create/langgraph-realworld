@@ -60,6 +60,7 @@ jobs:
             --exclude-files '\.secrets\.baseline' \
             --exclude-files '.*\.lock' \
             --exclude-files '\.git/' \
+            --exclude-files 'cases/.*/data/' \
             > /tmp/full-scan-results.json
           python - <<'EOF'
           import json, sys
@@ -138,6 +139,7 @@ jobs:
           - "01-soporte-cliente-omnicanal"
           - "02-mesa-ayuda-ti-runbooks"
           - "03-incident-response-sre"
+          - "04-soc-triage-alertas"
           - "09-rrhh-screening-agenda"
           - "10-onboarding-empleados"
           - "13-bi-analista-datos"

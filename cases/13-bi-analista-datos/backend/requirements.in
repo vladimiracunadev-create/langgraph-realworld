@@ -1,5 +1,5 @@
 langgraph
-langchain-openai
+langchain-openai>=1.1.14
 fastapi
 uvicorn
 pydantic
@@ -7,5 +7,5 @@ pydantic-settings
 python-dotenv
 sqlalchemy
 pytest
-langsmith
+langsmith>=0.7.31
 python-jose[cryptography]
