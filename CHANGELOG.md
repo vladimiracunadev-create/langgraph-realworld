@@ -23,6 +23,24 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/1.0.0/).
 ### Modificado
 
 - `README.md`: badge de versión → 4.1.0, contador de casos operativos 8 → 9, tabla de estados actualizada, taxonomía corregida.
+- `index.html`: caso 04 badge `LEGACY` → `OPERATIVO`, enlace al backend (puerto 8004).
+- `docs/ARCHITECTURE.md`, `docs/wiki/Home.md`, `docs/wiki/Roadmap.md`, `docs/wiki/_Sidebar.md`: versión → 4.1.0, 9 operativos.
+
+### Seguridad / Despliegue
+
+- **`security.yml` — detect-secrets**: agregado `--exclude-files 'cases/.*/data/'` al paso de full filesystem scan para excluir hashes MD5 de IOCs de malware demo (falsos positivos). Consistente con la exclusión ya existente en el job `supply_chain`.
+- **`security.yml` — grype matrix**: caso 04 añadido al escaneo de imagen Docker.
+- **CVEs resueltos en los 9 backends** — lockfiles regenerados con `pip-compile`:
+
+  | Paquete | Antes | Después | Referencia |
+  |---|---|---|---|
+  | `langsmith` | 0.7.30 | 0.7.31 | GHSA-rr7j-v2q5-chgv |
+  | `langchain-openai` | 1.1.12 | 1.1.14 | GHSA-r7w7-9xr2-qq2r |
+  | `langchain-core` | 1.2.28 | 1.3.0 | transitivo (requerido por langchain-openai 1.1.14) |
+  | `lxml` *(caso 09)* | 6.0.3 | 6.1.0 | CVE-2026-41066 |
+  | `pypdf` *(caso 09)* | 6.10.0 | 6.10.2 | GHSA-jj6c / GHSA-4pxv / GHSA-7gw9 / GHSA-x284 |
+
+- **`requirements.in` de los 9 casos**: pins mínimos actualizados para que futuros `pip-compile` no regresen a versiones vulnerables.
 
 ---
 
