@@ -1,6 +1,6 @@
 # Hoja de Ruta
 
-> **Version**: 4.0.1 | **Estado**: Industrial
+> **Version**: 4.1.0 | **Estado**: Industrial
 
 El estandar tecnico del repositorio ya esta definido. Ver el [SKILL de creacion de casos](https://github.com/vladimiracunadev-create/langgraph-realworld/blob/main/.agents/skills/crear_caso/SKILL.md) antes de ejecutar cualquier tarea.
 
@@ -8,8 +8,8 @@ El estandar tecnico del repositorio ya esta definido. Ver el [SKILL de creacion 
 
 ## Estado actual
 
-8 casos operativos e industriales: 01, 02, 03, 09, 10, 13, 19, 25.
-17 casos scaffold listos para elevar.
+9 casos operativos e industriales: 01, 02, 03, 04, 09, 10, 13, 19, 25.
+16 casos scaffold listos para elevar.
 
 ---
 
@@ -23,7 +23,7 @@ SCAFFOLD  →  (SKILL.md)  →  OPERATIVO  →  (observabilidad + hardening)  �
 
 | Caso | Dominio | Por que |
 |:---|:---|:---|
-| 04 — SOC Triage | Seguridad | Complementa caso 03. Alto valor en portfolios AI+Seg. |
+| ~~04 — SOC Triage~~ | Seguridad | **COMPLETADO v4.1.0** — Router de riesgo, threat intel, SIEM context |
 | 05 — Analista de Documentos | Legal / Contratos | Patron de extraccion sobre PDFs, muy demandado. |
 | 17 — Legal Intake | Legal | Continuacion natural del 05. Clasificacion + routing a especialistas. |
 

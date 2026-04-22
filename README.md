@@ -3,17 +3,17 @@
 [![CI](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml)
 [![Security Scan](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml/badge.svg?branch=main)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-4.0.1-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-4.1.0-blue.svg)](CHANGELOG.md)
 [![Python](https://img.shields.io/badge/python-3.11-informational.svg)](https://www.python.org/)
 [![LangGraph](https://img.shields.io/badge/LangGraph-latest-green.svg)](https://github.com/langchain-ai/langgraph)
 
 > Portafolio de **25 casos de uso empresariales** construidos con **LangGraph** y **FastAPI**:
-> **8 backends completamente operativos** (casos 01, 02, 03, 09, 10, 13, 19 y 25) con streaming, OAuth2/OIDC opt-in, observabilidad LangSmith, `/metrics` por servicio, logging JSON estructurado y reverse proxy nginx + TLS.
-> Los 17 casos restantes son scaffolds documentados listos para elevar al siguiente nivel.
+> **9 backends completamente operativos** (casos 01, 02, 03, 04, 09, 10, 13, 19 y 25) con streaming, OAuth2/OIDC opt-in, observabilidad LangSmith, `/metrics` por servicio, logging JSON estructurado y reverse proxy nginx + TLS.
+> Los 16 casos restantes son scaffolds documentados listos para elevar al siguiente nivel.
 
 ---
 
-## 🏗️ Implementación Industrial — v4.0.0
+## 🏗️ Implementación Industrial — v4.1.0
 
 El estándar actual del repositorio se apoya en estos pilares:
 
@@ -43,6 +43,7 @@ El estándar actual del repositorio se apoya en estos pilares:
 | **01** | [🎧 Soporte Cliente Omnicanal](cases/01-soporte-cliente-omnicanal/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · Routing · OAuth2 opt-in |
 | **02** | [🖥️ Mesa de Ayuda TI / SRE](cases/02-mesa-ayuda-ti-runbooks/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · CMDB · HITL |
 | **03** | [🚨 Incident Response SRE](cases/03-incident-response-sre/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · HITL · Runbooks P1/P2/P3 |
+| **04** | [🔐 SOC Triage de Alertas](cases/04-soc-triage-alertas/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · Threat Intel · Router de riesgo |
 | **09** | [👥 RRHH Screening & Agenda](cases/09-rrhh-screening-agenda/README.md) | `🏭 INDUSTRIAL` | FastAPI · LangGraph · MemorySaver · Resilience |
 | **10** | [🚀 Onboarding de Empleados](cases/10-onboarding-empleados/README.md) | `🏭 INDUSTRIAL` | FastAPI · LangGraph · RBAC · Integrations |
 | **13** | [📊 Analista de Datos BI](cases/13-bi-analista-datos/README.md) | `🏭 INDUSTRIAL` | FastAPI · SQL Agent · Chart.js · DEMO/LLM |
@@ -53,7 +54,6 @@ El estándar actual del repositorio se apoya en estos pilares:
 
 | ID | Nombre | Dominio |
 |:---:|:---|:---|
-| 04 | [🔐 SOC: Triage de Alertas](cases/04-soc-triage-alertas/README.md) | Seguridad / SOC |
 | 05 | [📄 Analista de Documentos](cases/05-analista-documentos/README.md) | Legal / Contratos |
 | 06 | [⚖️ Compliance & Auditorías](cases/06-compliance-auditorias/README.md) | Gobernanza |
 | 07 | [🛒 Compras y Abastecimiento](cases/07-compras-abastecimiento/README.md) | Procurement |
@@ -178,15 +178,15 @@ TRUST_PROXY_HEADERS=false
 
 | Nivel | Criterios | Casos |
 |:---|:---|:---|
-| ✅ **OPERATIVO** | Backend real, DEMO/LIVE, CI, tests, hardening, OAuth2 opt-in | 01, 02, 03, 19, 25 |
+| ✅ **OPERATIVO** | Backend real, DEMO/LIVE, CI, tests, hardening, OAuth2 opt-in | 01, 02, 03, 04, 19, 25 |
 | 🏭 **INDUSTRIAL** | Backend real, streaming, observabilidad, docs completas | 09, 10, 13 |
-| 🔧 **SCAFFOLD** | Demo estática lista para evolucionar | 04–08, 11–12, 14–18, 20–24 |
+| 🔧 **SCAFFOLD** | Demo estática lista para evolucionar | 05–08, 11–12, 14–18, 20–24 |
 
 ---
 
 ## 🛡️ Seguridad
 
-Este repositorio ha sido auditado por **8 capas de seguridad** (v4.0.0):
+Este repositorio ha sido auditado por **8 capas de seguridad** (v4.1.0):
 
 | Capa | Control | Estado |
 |:---|:---|:---:|

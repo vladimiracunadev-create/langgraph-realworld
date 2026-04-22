@@ -5,6 +5,27 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/1.0.0/).
 
 ---
 
+## v4.1.0 — 2026-04-22
+
+### Agregado
+
+- **Caso 04 — SOC Triage de Alertas elevado a OPERATIVO**: backend FastAPI + LangGraph completo con modo DEMO/LIVE.
+  - `StateGraph` con 8 nodos y 2 routers condicionales: `normalizar_alerta → enriquecer_ioc → correlacionar_eventos → evaluar_riesgo → [cerrar_automatico | investigacion_adicional → decision | escalar_analista → generar_informe_triage]`.
+  - Score de riesgo compuesto (0-100) que pondera reputación de IOCs (VirusTotal/AbuseIPDB), desviación del baseline SIEM y severidad de la fuente.
+  - Modo DEMO: lógica determinista sobre `alerts.json` (5 alertas reales: brute force SSH, nmap, Emotet, DNS C2, off-hours login) y `threat_intel.json` (IP reputation + file hashes + dominios + MITRE ATT&CK mapping).
+  - Modo LIVE: GPT-4o-mini ajusta el score de riesgo y redacta el informe de triage narrativo.
+  - Stubs de VirusTotal, AbuseIPDB, MISP, Splunk/Elastic y JIRA/ServiceNow listos para reemplazar por APIs reales.
+  - 19 tests (7 API + 12 graph flow) — todos pasando.
+  - Docker: Dockerfile + compose.yml + `.env.example` (puerto 8004).
+- **`.secrets.baseline` actualizado**: hashes MD5 de malware demo registrados como falsos positivos conocidos.
+- **ROADMAP v4.1.0**: caso 04 movido de scaffold a operativos (9 casos totales). Siguiente Ola 1: caso 05 (Analista de Documentos).
+
+### Modificado
+
+- `README.md`: badge de versión → 4.1.0, contador de casos operativos 8 → 9, tabla de estados actualizada, taxonomía corregida.
+
+---
+
 ## v4.0.1 — 2026-04-10
 
 ### Agregado
