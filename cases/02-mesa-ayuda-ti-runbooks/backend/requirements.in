@@ -1,7 +1,7 @@
 fastapi
 uvicorn[standard]
 python-dotenv
-langgraph>=0.2.0
+langgraph>=1.1.9
 langchain-core
 langchain-openai>=1.1.14
 langsmith>=0.7.31
