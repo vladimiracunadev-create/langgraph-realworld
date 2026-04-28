@@ -18,7 +18,7 @@
 - [Contribucion](Guia-de-Contribucion)
 - [Roadmap](Roadmap)
 
-### Version actual: 4.1.0
+### Version actual: 4.2.0
 
 ---
 

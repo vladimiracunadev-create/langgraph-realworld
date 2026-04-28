@@ -2,20 +2,20 @@
 
 [![CI](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml)
 [![Security Scan](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml/badge.svg?branch=main)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml)
-[![Version](https://img.shields.io/badge/version-4.1.0-blue.svg)](https://github.com/vladimiracunadev-create/langgraph-realworld/blob/main/CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-4.2.0-blue.svg)](https://github.com/vladimiracunadev-create/langgraph-realworld/blob/main/CHANGELOG.md)
 
 Portafolio de 25 casos de uso empresariales construidos con **LangGraph** y **FastAPI**.
-**9 backends completamente operativos** (01, 02, 03, 04, 09, 10, 13, 19 y 25) con streaming, OAuth2/OIDC opt-in, observabilidad LangSmith, `/metrics` por servicio, logging JSON estructurado y reverse proxy nginx + TLS.
-Los 16 casos restantes son scaffolds documentados listos para elevar al siguiente nivel.
+**10 backends completamente operativos** (01, 02, 03, 04, 05, 09, 10, 13, 19 y 25) con streaming, OAuth2/OIDC opt-in, observabilidad LangSmith, `/metrics` por servicio, logging JSON estructurado y reverse proxy nginx + TLS.
+Los 15 casos restantes son scaffolds documentados listos para elevar al siguiente nivel.
 
 ---
 
-## Implementacion Industrial — v4.1.0
+## Implementacion Industrial — v4.2.0
 
 | # | Pilar | Descripcion |
 |:-:|:---|:---|
 | 1 | Portal unificado | `index.html` como entrada principal del portfolio |
-| 2 | Casos de referencia reales | Backends FastAPI y UIs activas en los casos 01, 02, 03, 04, 09, 10, 13, 19 y 25 |
+| 2 | Casos de referencia reales | Backends FastAPI y UIs activas en los casos 01, 02, 03, 04, 05, 09, 10, 13, 19 y 25 |
 | 3 | Estado tipado | Contratos explicitos con TypedDict y flujos compatibles con LangGraph |
 | 4 | Observabilidad | /health, /ready, /metrics con latencia, errores y modo; LangSmith opt-in |
 | 5 | Modo dual | DEMO offline + ruta clara para activar integraciones reales |
@@ -28,7 +28,7 @@ Los 16 casos restantes son scaffolds documentados listos para elevar al siguient
 
 ## Estado de los casos
 
-### Operativos e industriales (9)
+### Operativos e industriales (10)
 
 | ID | Nombre | Nivel | UI web |
 |:---:|:---|:---:|:---:|
@@ -36,15 +36,16 @@ Los 16 casos restantes son scaffolds documentados listos para elevar al siguient
 | 02 | Mesa de Ayuda TI / SRE | OPERATIVO | Si |
 | 03 | Incident Response SRE | OPERATIVO | Si |
 | 04 | SOC Triage de Alertas | OPERATIVO | Si |
+| 05 | Analista de Documentos | OPERATIVO | Si |
 | 09 | RRHH Screening & Agenda | INDUSTRIAL | Si |
 | 10 | Onboarding de Empleados | INDUSTRIAL | Si |
 | 13 | Analista de Datos BI | INDUSTRIAL | Si |
 | 19 | DevEx: PR Review | OPERATIVO | Si |
 | 25 | Supervisor + Workers | OPERATIVO | Si |
 
-### Scaffold (16)
+### Scaffold (15)
 
-Casos 05–08, 11–12, 14–18, 20–24 — scaffolds documentados con README y Mermaid listos para elevar.
+Casos 06–08, 11–12, 14–18, 20–24 — scaffolds documentados con README y Mermaid listos para elevar.
 Orden de prioridad en el [Roadmap](Roadmap).
 
 ---

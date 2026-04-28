@@ -2,9 +2,9 @@
 
 ## Estado actual
 
-- casos 01 y 02: `Operational (v3.9.0)`
-- casos 09, 10 y 13: `Industrial (v3.9.0)`
-- resto del catalogo: `Legacy` o `Scaffold`
+- casos 01, 02, 03, 04, 05, 19 y 25: `Operativo (v4.2.0)`
+- casos 09, 10 y 13: `Industrial (v4.2.0)`
+- resto del catalogo: `Scaffold`
 
 ## Guardrails de seguridad
 

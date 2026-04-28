@@ -1,10 +1,10 @@
 ﻿# Hub CLI
 
-## Estado actual (v4.0.0)
+## Estado actual (v4.2.0)
 
-- casos 01, 02, 03, 19 y 25: `Operational (v4.0.0)`
-- casos 09, 10 y 13: `Industrial (v4.0.0)`
-- casos 04–08, 11–12, 14–18, 20–24: `Scaffold`
+- casos 01, 02, 03, 04, 05, 19 y 25: `Operativo (v4.2.0)`
+- casos 09, 10 y 13: `Industrial (v4.2.0)`
+- casos 06–08, 11–12, 14–18, 20–24: `Scaffold`
 
 ## Guardrails de seguridad
 

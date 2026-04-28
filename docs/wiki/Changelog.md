@@ -1,5 +1,20 @@
 ﻿# Changelog
 
+## v4.2.0 - 2026-04-28
+
+### Added
+
+- Caso 05 — Analista de Documentos elevado a OPERATIVO: 7 nodos LangGraph, router condicional de riesgo, 3 documentos DEMO (NDA, SLA, licitacion), streaming NDJSON, UI interactiva en puerto 8005.
+- Suite de tests completa para caso 05: 27 tests (18 de grafo + 9 de API) todos en verde.
+
+### Changed
+
+- Total de backends operativos: 10 (01, 02, 03, 04, 05, 09, 10, 13, 19, 25).
+- Total de scaffolds: 15.
+- Version bumped a 4.2.0 en README, docs, wiki y case.yml del caso 05.
+
+---
+
 ## v3.9.0 - 2026-04-06
 
 ### Added

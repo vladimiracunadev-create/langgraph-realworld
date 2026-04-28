@@ -1,7 +1,7 @@
-﻿# Caso 09: RRHH Screening + Agenda (Industrial v3.9.0)
+﻿# Caso 09: RRHH Screening + Agenda (Industrial v4.2.0)
 
 > [!IMPORTANT]
-> **Estado**: Industrial | **Version**: 3.9.0 | **Referencia**: Resiliencia y observabilidad
+> **Estado**: Industrial | **Version**: 4.2.0 | **Referencia**: Resiliencia y observabilidad
 
 - Variables opcionales para Google Calendar, SMTP, SendGrid, AWS y OpenAI.
 - Formulario de APIs accesible desde la UI para exportar el `.env` del caso.

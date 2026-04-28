@@ -1,6 +1,6 @@
 # Hoja de Ruta
 
-> **Versión**: 4.1.0 | **Estado**: Industrial | **Rama principal**: `main`
+> **Versión**: 4.2.0 | **Estado**: Industrial | **Rama principal**: `main`
 
 El estándar técnico del repositorio ya está definido. Antes de crear o modificar un caso, leer el skill directamente — no se rediseña lo que ya existe:
 
@@ -31,7 +31,6 @@ El estándar técnico del repositorio ya está definido. Antes de crear o modifi
 
 | ID | Caso | Dominio | Prioridad |
 |:---:|:---|:---|:---:|
-| ~~05~~ | ~~[Analista de Documentos](cases/05-analista-documentos/README.md)~~ | ~~Legal / Contratos~~ | ~~🔴 Ola 1~~ |
 | 17 | [Legal Intake](cases/17-legal-intake/README.md) | Legal | 🔴 Ola 1 |
 | 08 | [Ventas B2B + CRM](cases/08-ventas-b2b-crm/README.md) | Comercial | 🟠 Ola 2 |
 | 14 | [Finanzas: Conciliación](cases/14-finanzas-conciliacion/README.md) | Finanzas | 🟠 Ola 2 |

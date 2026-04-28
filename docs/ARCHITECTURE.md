@@ -1,7 +1,7 @@
 ﻿# Arquitectura del Sistema
 
 > [!NOTE]
-> **Version**: 4.1.0 | **Estado**: Industrial | **Audiencia**: Arquitectos Cloud, System Designers, DevOps
+> **Version**: 4.2.0 | **Estado**: Industrial | **Audiencia**: Arquitectos Cloud, System Designers, DevOps
 
 ## Vision General
 
@@ -10,10 +10,10 @@
 ## Capas Principales
 
 - **Portal raiz**: `index.html` como punto de entrada, navegacion y ayuda para configuracion opcional de APIs.
-- **Backends operativos**: casos 01, 02, 03, 04, 09, 10, 13, 19 y 25 con endpoints reales, modo DEMO/LIVE y contratos de estado.
+- **Backends operativos**: casos 01, 02, 03, 04, 05, 09, 10, 13, 19 y 25 con endpoints reales, modo DEMO/LIVE y contratos de estado.
 - **Orquestacion agentica**: LangGraph con `TypedDict`, edges condicionales, checkpoints y herramientas acotadas por dominio.
 - **Operacion local**: Docker Compose, Hub CLI y arranque directo por `uvicorn`.
-- **Seguridad automatizada**: GitHub Actions con pinning, CodeQL, `detect-secrets`, `pip-audit` y validacion dedicada de los 9 casos operativos.
+- **Seguridad automatizada**: GitHub Actions con pinning, CodeQL, `detect-secrets`, `pip-audit` y validacion dedicada de los 10 casos operativos.
 
 ## Modelo de seguridad integrado
 

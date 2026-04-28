@@ -5,6 +5,29 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/1.0.0/).
 
 ---
 
+## v4.2.0 — 2026-04-28
+
+### Agregado
+
+- **Caso 05 — Analista de Documentos elevado a OPERATIVO**: backend FastAPI + LangGraph completo con modo DEMO/LIVE.
+  - `StateGraph` con 7 nodos y 1 router condicional: `ingesta_texto → segmentar_secciones → extraer_clausulas → clasificar_riesgos → [escalar_revision_legal →] generar_checklist → producir_resumen_ejecutivo`.
+  - Keyword extraction sobre secciones contractuales segmentadas por regex (CLÁUSULA, ARTÍCULO, SECCIÓN, CONSIDERANDOS, etc.).
+  - Score de riesgo compuesto (0-100) a partir de cláusulas detectadas; router dirige a escalación legal solo si riesgo es ALTO.
+  - Modo DEMO: lógica determinista sobre 3 documentos locales (NDA/bajo, Servicios TI/medio, Licitación/alto) y 8 patrones de cláusulas en `clause_patterns.json`.
+  - Modo LIVE: GPT-4o-mini ajusta el score de riesgo y genera resumen ejecutivo narrativo.
+  - 27 tests (18 graph flow + 9 API) — todos pasando.
+  - Docker: Dockerfile non-root + compose.yml con volumen data/ read-only (puerto 8005).
+  - UI dark theme con selector de documento, badge DEMO/LIVE, timeline de nodos y panel de resultados (cláusulas, checklist, resumen ejecutivo, escalación).
+- **ROADMAP v4.2.0**: caso 05 movido de scaffold a operativos (10 casos totales). Siguiente Ola 1: caso 17 (Legal Intake).
+
+### Modificado
+
+- `README.md`: badge de versión → 4.2.0, contador de casos operativos 9 → 10, taxonomía corregida (caso 05 en OPERATIVO).
+- `ROADMAP.md`: versión → 4.2.0, caso 05 marcado como completado, scaffolds 16 → 15.
+- `docs/ARCHITECTURE.md`, `docs/wiki/Home.md`, `docs/wiki/Roadmap.md`, `docs/wiki/README.md`, `docs/wiki/_Sidebar.md`: versión → 4.2.0, 10 operativos.
+
+---
+
 ## v4.1.0 — 2026-04-22
 
 ### Agregado

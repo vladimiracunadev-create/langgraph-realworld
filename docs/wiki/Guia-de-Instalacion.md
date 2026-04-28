@@ -1,9 +1,9 @@
 ﻿# Guia de Instalacion y Despliegue
 
 > [!NOTE]
-> **Version**: 3.9.0 | **Estado**: Estable | **Audiencia**: Desarrolladores, DevOps
+> **Version**: 4.2.0 | **Estado**: Estable | **Audiencia**: Desarrolladores, DevOps
 
-Esta guia explica como levantar el repositorio completo y como ejecutar por separado los casos operativos 01, 02, 09, 10 y 13.
+Esta guia explica como levantar el repositorio completo y como ejecutar por separado los casos operativos 01, 02, 03, 04, 05, 09, 10, 13, 19 y 25.
 
 ---
 
@@ -31,6 +31,7 @@ Antes o despues del primer arranque puedes preparar las variables opcionales:
 ```bash
 copy cases\01-soporte-cliente-omnicanal\backend\.env.example cases\01-soporte-cliente-omnicanal\backend\.env
 copy cases\02-mesa-ayuda-ti-runbooks\backend\.env.example cases\02-mesa-ayuda-ti-runbooks\backend\.env
+copy cases\05-analista-documentos\backend\.env.example cases\05-analista-documentos\backend\.env
 copy cases\09-rrhh-screening-agenda\backend\.env.example cases\09-rrhh-screening-agenda\backend\.env
 copy cases\10-onboarding-empleados\backend\.env.example cases\10-onboarding-empleados\backend\.env
 copy cases\13-bi-analista-datos\backend\.env.example cases\13-bi-analista-datos\backend\.env
@@ -43,6 +44,7 @@ Servicios principales:
 - Portal: `http://localhost:8080`
 - Caso 01: `http://localhost:8001`
 - Caso 02: `http://localhost:8002`
+- Caso 05: `http://localhost:8005`
 - Caso 09: `http://localhost:8009`
 - Caso 10: `http://localhost:8010`
 - Caso 13: `http://localhost:8013`
@@ -61,9 +63,14 @@ Casos hoy estandarizados para el Hub:
 
 - 01
 - 02
+- 03
+- 04
+- 05
 - 09
 - 10
 - 13
+- 19
+- 25
 
 > [!NOTE]
 > `hub.py` ejecuta solo comandos allowlisted declarados en `case.yml`, sin `shell=True`, sin metacaracteres de shell y sin salirse del directorio del caso.
@@ -95,6 +102,18 @@ uvicorn src.api:app --reload --port 8002
 ```
 
 UI del caso 02: `http://localhost:8002/web/`
+
+### Caso 05
+
+```bash
+cd cases/05-analista-documentos/backend
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+uvicorn src.api:app --reload --port 8005
+```
+
+UI del caso 05: `http://localhost:8005/web/`
 
 ### Caso 09
 
@@ -137,6 +156,7 @@ Cada caso operativo incluye o acepta configuracion por `.env`:
 
 - caso 01: `cases/01-soporte-cliente-omnicanal/backend/.env`
 - caso 02: `cases/02-mesa-ayuda-ti-runbooks/backend/.env`
+- caso 05: `cases/05-analista-documentos/backend/.env`
 - caso 09: `cases/09-rrhh-screening-agenda/backend/.env`
 - caso 10: `cases/10-onboarding-empleados/backend/.env`
 - caso 13: `cases/13-bi-analista-datos/backend/.env`
@@ -183,6 +203,13 @@ python -m pytest -q cases/01-soporte-cliente-omnicanal/backend/tests
 ```bash
 python -m compileall cases/02-mesa-ayuda-ti-runbooks/backend/src cases/02-mesa-ayuda-ti-runbooks/backend/tests -q
 python -m pytest -q cases/02-mesa-ayuda-ti-runbooks/backend/tests
+```
+
+### Caso 05
+
+```bash
+python -m compileall cases/05-analista-documentos/backend/src -q
+python -m pytest -q cases/05-analista-documentos/backend/tests
 ```
 
 ### Caso 13
