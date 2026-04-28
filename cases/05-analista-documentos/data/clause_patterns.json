@@ -1,0 +1,58 @@
+{
+  "penalty": {
+    "keywords": ["penalidad", "multa", "penalización", "sanción económica"],
+    "risk": "alto",
+    "description": "Cláusula de penalidad o multa contractual",
+    "checklist_item": "Revisar topes y condiciones de aplicación de penalidades",
+    "escalation_reason": "Las penalidades contractuales pueden representar obligaciones económicas significativas no previstas en el presupuesto del proyecto."
+  },
+  "termination": {
+    "keywords": ["terminación anticipada", "rescisión unilateral", "resolución anticipada"],
+    "risk": "alto",
+    "description": "Condiciones de terminación anticipada del contrato",
+    "checklist_item": "Verificar plazos de notificación y compensaciones por terminación anticipada",
+    "escalation_reason": "La terminación unilateral sin compensación adecuada expone a la organización a pérdidas operativas y costos no recuperables."
+  },
+  "limitation_liability": {
+    "keywords": ["limitación de responsabilidad", "límite de responsabilidad", "responsabilidad estará limitada"],
+    "risk": "medio",
+    "description": "Limitación de responsabilidad contractual",
+    "checklist_item": "Confirmar que los límites de responsabilidad son razonables frente al valor del contrato",
+    "escalation_reason": null
+  },
+  "confidentiality": {
+    "keywords": ["confidencialidad", "información confidencial", "secreto industrial", "datos confidenciales"],
+    "risk": "bajo",
+    "description": "Obligaciones de confidencialidad y no divulgación",
+    "checklist_item": "Confirmar alcance y vigencia de las obligaciones de confidencialidad",
+    "escalation_reason": null
+  },
+  "sla": {
+    "keywords": ["nivel de servicio", "disponibilidad", "tiempo de respuesta", "uptime"],
+    "risk": "medio",
+    "description": "Acuerdo de nivel de servicio (SLA)",
+    "checklist_item": "Validar métricas de SLA y mecanismos de medición y reporte",
+    "escalation_reason": null
+  },
+  "exclusion": {
+    "keywords": ["excluye toda garantía", "garantías excluidas", "expresamente excluidos"],
+    "risk": "medio",
+    "description": "Cláusulas de exclusión de garantías o riesgos",
+    "checklist_item": "Identificar qué garantías están excluidas y evaluar el impacto para la organización",
+    "escalation_reason": null
+  },
+  "arbitration": {
+    "keywords": ["arbitraje", "cámara de arbitraje", "laudo arbitral", "tribunal arbitral"],
+    "risk": "bajo",
+    "description": "Resolución de controversias por arbitraje",
+    "checklist_item": "Verificar sede y reglas del arbitraje y compatibilidad con la jurisdicción aplicable",
+    "escalation_reason": null
+  },
+  "intellectual_property": {
+    "keywords": ["propiedad intelectual", "derechos de autor", "cesión de derechos"],
+    "risk": "medio",
+    "description": "Propiedad intelectual y cesión de derechos",
+    "checklist_item": "Confirmar titularidad de los entregables y alcance de las licencias otorgadas",
+    "escalation_reason": null
+  }
+}

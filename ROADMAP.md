@@ -12,7 +12,7 @@ El estándar técnico del repositorio ya está definido. Antes de crear o modifi
 
 ## Estado de los 25 casos
 
-### Operativos e industriales (9)
+### Operativos e industriales (10)
 
 | ID | Caso | Nivel | UI web | Integraciones LIVE |
 |:---:|:---|:---:|:---:|:---|
@@ -20,17 +20,18 @@ El estándar técnico del repositorio ya está definido. Antes de crear o modifi
 | 02 | [Mesa de Ayuda TI / SRE](cases/02-mesa-ayuda-ti-runbooks/README.md) | OPERATIVO | ✅ | CMDB, runbooks (DEMO) |
 | 03 | [Incident Response SRE](cases/03-incident-response-sre/README.md) | OPERATIVO | ✅ | PagerDuty, Datadog (DEMO) |
 | 04 | [SOC Triage de Alertas](cases/04-soc-triage-alertas/README.md) | OPERATIVO | ✅ | VirusTotal, AbuseIPDB, SIEM (DEMO) |
+| 05 | [Analista de Documentos](cases/05-analista-documentos/README.md) | OPERATIVO | ✅ | PDF/DOCX opt-in, LLM opt-in (OpenAI) |
 | 09 | [RRHH Screening & Agenda](cases/09-rrhh-screening-agenda/README.md) | INDUSTRIAL | ✅ | LLM + MemorySaver |
 | 10 | [Onboarding de Empleados](cases/10-onboarding-empleados/README.md) | INDUSTRIAL | ✅ | HRIS, IAM, Slack (DEMO) |
 | 13 | [Analista de Datos BI](cases/13-bi-analista-datos/README.md) | INDUSTRIAL | ✅ | SQL + Chart.js + LLM opt-in |
 | 19 | [DevEx: PR Review](cases/19-devex-pr-review/README.md) | OPERATIVO | ✅ | GitHub API (DEMO) |
 | 25 | [Supervisor + Workers](cases/25-supervisor-workers/README.md) | OPERATIVO | ✅ | 4 workers especializados (DEMO) |
 
-### Scaffold — listos para elevar (16)
+### Scaffold — listos para elevar (15)
 
 | ID | Caso | Dominio | Prioridad |
 |:---:|:---|:---|:---:|
-| 05 | [Analista de Documentos](cases/05-analista-documentos/README.md) | Legal / Contratos | 🔴 Ola 1 |
+| ~~05~~ | ~~[Analista de Documentos](cases/05-analista-documentos/README.md)~~ | ~~Legal / Contratos~~ | ~~🔴 Ola 1~~ |
 | 17 | [Legal Intake](cases/17-legal-intake/README.md) | Legal | 🔴 Ola 1 |
 | 08 | [Ventas B2B + CRM](cases/08-ventas-b2b-crm/README.md) | Comercial | 🟠 Ola 2 |
 | 14 | [Finanzas: Conciliación](cases/14-finanzas-conciliacion/README.md) | Finanzas | 🟠 Ola 2 |
@@ -60,7 +61,7 @@ SCAFFOLD  →  (seguir SKILL.md)  →  OPERATIVO  →  (observabilidad + hardeni
 | Caso | Por qué | Núcleo LangGraph |
 |:---|:---|:---|
 | ~~**04 — SOC Triage**~~ | ✅ **COMPLETADO v4.1.0** — Router de riesgo (3 vías), threat intel, SIEM context | Router por score, 2 routers condicionales, stubs LIVE |
-| **05 — Analista de Documentos** | Extracción sobre PDFs, patrón muy demandado en enterprise. Bajo acoplamiento externo. | Pipeline secuencial, extracción estructurada, resumen LLM |
+| ~~**05 — Analista de Documentos**~~ | ✅ **COMPLETADO v4.2.0** — Pipeline contractual, 7 nodos, router de riesgo, 3 docs DEMO | Pipeline secuencial, router condicional, keyword extraction, LLM opt-in |
 | **17 — Legal Intake** | Continuación natural del 05. Intake + clasificación + routing a especialistas. | Router condicional, HITL para escalada |
 
 ### Ola 2 — Impacto comercial

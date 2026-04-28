@@ -8,8 +8,8 @@
 [![LangGraph](https://img.shields.io/badge/LangGraph-latest-green.svg)](https://github.com/langchain-ai/langgraph)
 
 > Portafolio de **25 casos de uso empresariales** construidos con **LangGraph** y **FastAPI**:
-> **9 backends completamente operativos** (casos 01, 02, 03, 04, 09, 10, 13, 19 y 25) con streaming, OAuth2/OIDC opt-in, observabilidad LangSmith, `/metrics` por servicio, logging JSON estructurado y reverse proxy nginx + TLS.
-> Los 16 casos restantes son scaffolds documentados listos para elevar al siguiente nivel.
+> **10 backends completamente operativos** (casos 01, 02, 03, 04, 05, 09, 10, 13, 19 y 25) con streaming, OAuth2/OIDC opt-in, observabilidad LangSmith, `/metrics` por servicio, logging JSON estructurado y reverse proxy nginx + TLS.
+> Los 15 casos restantes son scaffolds documentados listos para elevar al siguiente nivel.
 
 ---
 
@@ -44,6 +44,7 @@ El estándar actual del repositorio se apoya en estos pilares:
 | **02** | [🖥️ Mesa de Ayuda TI / SRE](cases/02-mesa-ayuda-ti-runbooks/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · CMDB · HITL |
 | **03** | [🚨 Incident Response SRE](cases/03-incident-response-sre/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · HITL · Runbooks P1/P2/P3 |
 | **04** | [🔐 SOC Triage de Alertas](cases/04-soc-triage-alertas/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · Threat Intel · Router de riesgo |
+| **05** | [📄 Analista de Documentos](cases/05-analista-documentos/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · Keyword extraction · Router de riesgo |
 | **09** | [👥 RRHH Screening & Agenda](cases/09-rrhh-screening-agenda/README.md) | `🏭 INDUSTRIAL` | FastAPI · LangGraph · MemorySaver · Resilience |
 | **10** | [🚀 Onboarding de Empleados](cases/10-onboarding-empleados/README.md) | `🏭 INDUSTRIAL` | FastAPI · LangGraph · RBAC · Integrations |
 | **13** | [📊 Analista de Datos BI](cases/13-bi-analista-datos/README.md) | `🏭 INDUSTRIAL` | FastAPI · SQL Agent · Chart.js · DEMO/LLM |
@@ -54,7 +55,6 @@ El estándar actual del repositorio se apoya en estos pilares:
 
 | ID | Nombre | Dominio |
 |:---:|:---|:---|
-| 05 | [📄 Analista de Documentos](cases/05-analista-documentos/README.md) | Legal / Contratos |
 | 06 | [⚖️ Compliance & Auditorías](cases/06-compliance-auditorias/README.md) | Gobernanza |
 | 07 | [🛒 Compras y Abastecimiento](cases/07-compras-abastecimiento/README.md) | Procurement |
 | 08 | [💼 Ventas B2B + CRM](cases/08-ventas-b2b-crm/README.md) | Comercial |

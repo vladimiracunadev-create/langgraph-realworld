@@ -1,0 +1,10 @@
+services:
+  case05:
+    build: .
+    ports:
+      - "8005:8005"
+    environment:
+      - DATA_DIR=/app/data
+      - WEB_DIR=/app/web
+    volumes:
+      - ../data:/app/data:ro

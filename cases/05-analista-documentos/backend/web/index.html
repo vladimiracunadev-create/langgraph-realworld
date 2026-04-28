@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Caso 05 — Analista de Documentos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: rgba(22, 27, 34, 0.8);
+      --border: rgba(240, 246, 252, 0.1);
+      --accent: #0ea5e9;
+      --accent-dim: rgba(14, 165, 233, 0.15);
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --alto: #f85149;
+      --medio: #d29922;
+      --bajo: #3fb950;
+      font-family: 'Inter', system-ui, sans-serif;
+      color-scheme: dark;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* ── HEADER ── */
+    header {
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex; gap: 12px; align-items: center;
+      background: rgba(13, 17, 23, 0.85);
+      backdrop-filter: blur(10px);
+      position: sticky; top: 0; z-index: 10;
+    }
+    header .back-link {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px; color: var(--accent);
+      text-decoration: none; opacity: 0.85;
+      transition: opacity .15s;
+    }
+    header .back-link:hover { opacity: 1; }
+    header .sep { color: var(--border); font-size: 18px; }
+    header .title { font-weight: 800; letter-spacing: -.4px; font-size: 1rem; flex: 1; }
+    .pill {
+      font-family: 'JetBrains Mono', monospace;
+      padding: 4px 10px; border-radius: 999px;
+      font-size: 10px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .5px;
+      border: 1px solid var(--border);
+    }
+    .pill-demo { color: #d29922; border-color: rgba(210,153,34,.3); background: rgba(210,153,34,.1); }
+    .pill-live { color: #3fb950; border-color: rgba(63,185,80,.3); background: rgba(63,185,80,.1); }
+
+    /* ── HERO ── */
+    .hero {
+      max-width: 860px; margin: 28px auto 0; padding: 0 24px;
+    }
+    .hero h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 10px; }
+    .hero p { color: var(--muted); line-height: 1.65; font-size: .92rem; }
+
+    /* ── GRID ── */
+    main {
+      max-width: 1200px; margin: 24px auto;
+      padding: 0 24px 40px;
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 20px;
+    }
+    @media (max-width: 820px) { main { grid-template-columns: 1fr; } }
+
+    /* ── PANELS ── */
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px; overflow: hidden;
+    }
+    .panel-header {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      font-weight: 700; font-size: .85rem;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .panel-body { padding: 18px; }
+
+    /* ── FORM ── */
+    label { font-size: .8rem; color: var(--muted); display: block; margin-bottom: 6px; }
+    select, button {
+      width: 100%; padding: 10px 14px; border-radius: 8px;
+      border: 1px solid var(--border); font-size: .88rem;
+      font-family: inherit;
+    }
+    select {
+      background: rgba(22,27,34,.9); color: var(--text);
+      cursor: pointer; margin-bottom: 16px;
+    }
+    select:focus { outline: 2px solid var(--accent); }
+    button {
+      background: var(--accent); color: #fff;
+      font-weight: 700; cursor: pointer; border: none;
+      transition: opacity .15s, transform .1s;
+    }
+    button:hover:not(:disabled) { opacity: .88; transform: translateY(-1px); }
+    button:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+
+    /* ── TIMELINE ── */
+    .timeline { margin-top: 20px; }
+    .timeline-title {
+      font-size: .75rem; color: var(--muted); text-transform: uppercase;
+      letter-spacing: .5px; margin-bottom: 10px; font-weight: 600;
+    }
+    .tl-item {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 8px 0; border-bottom: 1px solid var(--border);
+      animation: fadeIn .25s ease;
+    }
+    .tl-item:last-child { border-bottom: none; }
+    .tl-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent); margin-top: 5px; flex-shrink: 0;
+    }
+    .tl-node {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem; color: var(--accent); font-weight: 600;
+    }
+    .tl-detail { font-size: .78rem; color: var(--muted); margin-top: 2px; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; } }
+
+    /* ── RISK BADGE ── */
+    .risk-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 16px 18px; border-bottom: 1px solid var(--border);
+    }
+    .risk-badge {
+      padding: 6px 14px; border-radius: 999px;
+      font-weight: 700; font-size: .8rem;
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase; letter-spacing: .5px;
+    }
+    .risk-alto { background: rgba(248,81,73,.15); color: var(--alto); border: 1px solid rgba(248,81,73,.3); }
+    .risk-medio { background: rgba(210,153,34,.15); color: var(--medio); border: 1px solid rgba(210,153,34,.3); }
+    .risk-bajo { background: rgba(63,185,80,.15); color: var(--bajo); border: 1px solid rgba(63,185,80,.3); }
+    .risk-empty { background: rgba(139,148,158,.1); color: var(--muted); border: 1px solid var(--border); }
+    .risk-score { font-family: 'JetBrains Mono', monospace; font-size: 1.4rem; font-weight: 700; }
+    .risk-label { font-size: .78rem; color: var(--muted); }
+
+    /* ── CLAUSULAS ── */
+    .clause-list { display: flex; flex-direction: column; gap: 8px; }
+    .clause-item {
+      background: rgba(22,27,34,.5);
+      border: 1px solid var(--border); border-radius: 8px;
+      padding: 10px 12px;
+    }
+    .clause-item-header { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+    .clause-type {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .72rem; font-weight: 600; text-transform: uppercase;
+    }
+    .clause-section { font-size: .72rem; color: var(--muted); }
+    .clause-desc { font-size: .8rem; color: var(--muted); }
+    .clause-kw {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .68rem; color: var(--accent); opacity: .75; margin-top: 2px;
+    }
+
+    /* ── CHECKLIST ── */
+    .checklist-list { display: flex; flex-direction: column; gap: 6px; }
+    .checklist-item {
+      font-size: .8rem; padding: 6px 10px;
+      background: rgba(22,27,34,.4); border-radius: 6px;
+      border-left: 3px solid var(--border);
+      line-height: 1.5;
+    }
+
+    /* ── SUMMARY ── */
+    .summary-box {
+      background: rgba(14,165,233,.05);
+      border: 1px solid rgba(14,165,233,.15);
+      border-radius: 10px; padding: 14px 16px;
+      font-size: .83rem; line-height: 1.7;
+      white-space: pre-wrap; color: #cdd9e5;
+    }
+
+    /* ── ESCALATION ── */
+    .escalation-box {
+      background: rgba(248,81,73,.05);
+      border: 1px solid rgba(248,81,73,.2);
+      border-radius: 10px; padding: 14px 16px;
+      font-size: .83rem; line-height: 1.7;
+      white-space: pre-wrap; color: #ffa198;
+      margin-bottom: 16px;
+    }
+
+    /* ── SECTION LABEL ── */
+    .section-label {
+      font-size: .72rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .5px;
+      font-weight: 600; margin: 16px 0 8px;
+    }
+
+    /* ── TECH PILLS ── */
+    .tech-footer {
+      max-width: 1200px; margin: 0 auto;
+      padding: 0 24px 32px;
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .tech-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .7rem; padding: 4px 10px;
+      border-radius: 999px; border: 1px solid var(--border);
+      color: var(--muted); background: var(--surface);
+    }
+
+    /* ── EMPTY STATE ── */
+    .empty {
+      text-align: center; padding: 32px 16px;
+      color: var(--muted); font-size: .85rem;
+    }
+    .empty-icon { font-size: 2rem; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="http://localhost:8080/" class="back-link">← VOLVER AL HUB</a>
+  <span class="sep">|</span>
+  <span class="title">Caso 05 — Analista de Documentos</span>
+  <span class="pill" id="mode-badge">…</span>
+</header>
+
+<div class="hero">
+  <h2>Análisis Contractual Automatizado con IA</h2>
+  <p>
+    Analiza contratos, NDAs, SLAs y licitaciones en segundos. El agente LangGraph ingiere el
+    documento, lo segmenta en secciones, detecta cláusulas clave por tipo y riesgo, genera una
+    escalación si el riesgo es alto, produce un checklist de cumplimiento y un resumen ejecutivo
+    listo para el equipo legal o de procura. Sin dependencias externas en modo DEMO.
+  </p>
+</div>
+
+<main>
+  <!-- ── PANEL IZQUIERDO: controles + timeline ── -->
+  <div>
+    <div class="panel">
+      <div class="panel-header">
+        <span>📄</span> Seleccionar documento
+      </div>
+      <div class="panel-body">
+        <label for="doc-select">Documento a analizar</label>
+        <select id="doc-select">
+          <option value="DOC-001">DOC-001 — NDA / Acuerdo de No Divulgación (riesgo bajo)</option>
+          <option value="DOC-002">DOC-002 — Contrato de Servicios TI con SLA (riesgo medio)</option>
+          <option value="DOC-003">DOC-003 — Licitación Pública Internacional (riesgo alto)</option>
+        </select>
+        <button id="btn-analizar" onclick="iniciarAnalisis()">Analizar documento →</button>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-header"><span>⏱</span> Timeline del agente</div>
+      <div class="panel-body">
+        <div class="timeline" id="timeline">
+          <div class="empty"><div class="empty-icon">🔍</div>Selecciona un documento y pulsa Analizar.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PANEL DERECHO: resultados ── -->
+  <div class="panel" id="results-panel">
+    <div class="risk-header" id="risk-header">
+      <div>
+        <div class="risk-badge risk-empty" id="risk-badge">—</div>
+      </div>
+      <div>
+        <div class="risk-score" id="risk-score">—</div>
+        <div class="risk-label">score de riesgo / 100</div>
+      </div>
+      <div style="flex:1; text-align:right; color:var(--muted); font-size:.78rem;" id="doc-info">
+        Esperando análisis…
+      </div>
+    </div>
+
+    <div class="panel-body" id="results-body">
+      <div class="empty"><div class="empty-icon">📋</div>Los resultados aparecerán aquí.</div>
+    </div>
+  </div>
+</main>
+
+<div class="tech-footer">
+  <span class="tech-pill">LangGraph StateGraph</span>
+  <span class="tech-pill">FastAPI</span>
+  <span class="tech-pill">7 nodos</span>
+  <span class="tech-pill">1 router condicional</span>
+  <span class="tech-pill">NDJSON streaming</span>
+  <span class="tech-pill">DEMO / LIVE</span>
+  <span class="tech-pill">Puerto 8005</span>
+  <span class="tech-pill">MemorySaver</span>
+</div>
+
+<script>
+  const PORT = window.location.port || '8005';
+  const BASE  = `${window.location.protocol}//${window.location.hostname}:${PORT}`;
+
+  // ── Detectar modo al cargar ──
+  async function detectMode() {
+    try {
+      const r = await fetch(`${BASE}/health`);
+      const d = await r.json();
+      const badge = document.getElementById('mode-badge');
+      const isLive = d.mode === 'LIVE';
+      badge.textContent = isLive ? 'LIVE' : 'DEMO';
+      badge.className = `pill ${isLive ? 'pill-live' : 'pill-demo'}`;
+    } catch { /* silencioso */ }
+  }
+  detectMode();
+
+  // ── Helpers ──
+  function riskClass(level) {
+    return { alto: 'risk-alto', medio: 'risk-medio', bajo: 'risk-bajo' }[level] || 'risk-empty';
+  }
+  function riskIcon(level) {
+    return { alto: '🔴', medio: '🟡', bajo: '🟢' }[level] || '⚪';
+  }
+
+  function addTimelineItem(nodeType, detail) {
+    const tl = document.getElementById('timeline');
+    // Limpiar el empty state si existe
+    const empty = tl.querySelector('.empty');
+    if (empty) empty.remove();
+
+    const item = document.createElement('div');
+    item.className = 'tl-item';
+
+    const labels = {
+      'documento_ingestado': 'ingesta_texto',
+      'secciones_segmentadas': 'segmentar_secciones',
+      'clausulas_extraidas': 'extraer_clausulas',
+      'riesgo_clasificado': 'clasificar_riesgos',
+      'escalacion_generada': 'escalar_revision_legal',
+      'checklist_generado': 'generar_checklist',
+      'resumen_generado': 'producir_resumen_ejecutivo',
+    };
+
+    item.innerHTML = `
+      <div class="tl-dot"></div>
+      <div>
+        <div class="tl-node">${labels[nodeType] || nodeType}</div>
+        <div class="tl-detail">${detail}</div>
+      </div>`;
+    tl.appendChild(item);
+  }
+
+  function describeEvent(ev) {
+    if (!ev) return '';
+    const t = ev.type || '';
+    if (t === 'documento_ingestado')   return `${ev.titulo || ''} · ${ev.longitud_chars || 0} chars`;
+    if (t === 'secciones_segmentadas') return `${ev.total_secciones || 0} secciones detectadas`;
+    if (t === 'clausulas_extraidas')   return `${ev.total || 0} cláusulas: ${(ev.tipos || []).join(', ') || 'ninguna'}`;
+    if (t === 'riesgo_clasificado')    return `Score ${ev.score}/100 · nivel ${(ev.nivel||'').toUpperCase()} · alto:${ev.clausulas_alto} medio:${ev.clausulas_medio} bajo:${ev.clausulas_bajo}`;
+    if (t === 'escalacion_generada')   return `Escalación: ${(ev.clausulas_criticas||[]).join(', ')}`;
+    if (t === 'checklist_generado')    return `${ev.total_items || 0} ítems · riesgo ${ev.riesgo || ''}`;
+    if (t === 'resumen_generado')      return `Análisis completo · ${ev.total_clausulas || 0} cláusulas`;
+    return JSON.stringify(ev).slice(0, 80);
+  }
+
+  let _lastEventsLen = 0;
+
+  function applySnapshot(snap) {
+    if (!snap) return;
+
+    // Risk header
+    const level = snap.risk_level || '';
+    const score = snap.risk_score || 0;
+    const badge = document.getElementById('risk-badge');
+    const scoreEl = document.getElementById('risk-score');
+    const docInfo = document.getElementById('doc-info');
+
+    if (level) {
+      badge.className = `risk-badge ${riskClass(level)}`;
+      badge.textContent = `${riskIcon(level)} ${level.toUpperCase()}`;
+      scoreEl.textContent = score;
+      docInfo.textContent = `${snap.doc_title || snap.doc_id} · ${snap.sections_count || 0} secciones`;
+    }
+
+    // Timeline: solo nuevos eventos
+    const events = snap.events || [];
+    const newEvents = events.slice(_lastEventsLen);
+    newEvents.forEach(ev => addTimelineItem(ev.type, describeEvent(ev)));
+    _lastEventsLen = events.length;
+
+    // Resultados finales
+    if (snap.done) renderResults(snap);
+  }
+
+  function renderResults(snap) {
+    const body = document.getElementById('results-body');
+    const clauses = snap.clauses || [];
+    const checklist = snap.checklist || [];
+    const summary = snap.executive_summary || '';
+    const escalation = snap.escalation_notes || '';
+
+    let html = '';
+
+    // Escalación (solo si hay)
+    if (escalation) {
+      html += `<div class="section-label">⚠️ Escalación requerida</div>
+               <div class="escalation-box">${escapeHtml(escalation)}</div>`;
+    }
+
+    // Cláusulas
+    html += `<div class="section-label">🔍 Cláusulas identificadas (${clauses.length})</div>`;
+    if (clauses.length === 0) {
+      html += `<div class="clause-list"><div class="empty">No se detectaron cláusulas relevantes.</div></div>`;
+    } else {
+      html += `<div class="clause-list">`;
+      clauses.forEach(c => {
+        html += `
+          <div class="clause-item">
+            <div class="clause-item-header">
+              <span class="clause-type" style="color:${riskColor(c.risk)}">${c.type}</span>
+              <span class="risk-badge ${riskClass(c.risk)}" style="font-size:.65rem;padding:2px 7px">${c.risk}</span>
+              <span class="clause-section">${c.section}</span>
+            </div>
+            <div class="clause-desc">${escapeHtml(c.description)}</div>
+            <div class="clause-kw">keywords: ${(c.matched_keywords||[]).join(', ')}</div>
+          </div>`;
+      });
+      html += `</div>`;
+    }
+
+    // Checklist
+    html += `<div class="section-label" style="margin-top:20px">✅ Checklist de cumplimiento</div>
+             <div class="checklist-list">`;
+    checklist.forEach(item => {
+      const borderColor = item.startsWith('🔴') ? 'var(--alto)'
+                        : item.startsWith('🟡') ? 'var(--medio)'
+                        : 'var(--bajo)';
+      html += `<div class="checklist-item" style="border-left-color:${borderColor}">${escapeHtml(item)}</div>`;
+    });
+    html += `</div>`;
+
+    // Resumen ejecutivo
+    if (summary) {
+      html += `<div class="section-label" style="margin-top:20px">📝 Resumen ejecutivo</div>
+               <div class="summary-box">${escapeHtml(summary)}</div>`;
+    }
+
+    body.innerHTML = html;
+  }
+
+  function riskColor(level) {
+    return { alto: 'var(--alto)', medio: 'var(--medio)', bajo: 'var(--bajo)' }[level] || 'var(--muted)';
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  // ── Iniciar análisis via streaming ──
+  async function iniciarAnalisis() {
+    const docId    = document.getElementById('doc-select').value;
+    const btn      = document.getElementById('btn-analizar');
+    const timeline = document.getElementById('timeline');
+    const body     = document.getElementById('results-body');
+
+    // Reset UI
+    btn.disabled = true;
+    btn.textContent = 'Analizando…';
+    timeline.innerHTML = '';
+    body.innerHTML = '<div class="empty"><div class="empty-icon">⚙️</div>Procesando documento…</div>';
+    _lastEventsLen = 0;
+
+    // Reset risk header
+    document.getElementById('risk-badge').className = 'risk-badge risk-empty';
+    document.getElementById('risk-badge').textContent = '—';
+    document.getElementById('risk-score').textContent = '—';
+    document.getElementById('doc-info').textContent = 'Analizando…';
+
+    const threadId = `doc-${docId}-${Date.now()}`;
+    const url = `${BASE}/api/stream?thread_id=${encodeURIComponent(threadId)}&doc_id=${encodeURIComponent(docId)}`;
+
+    try {
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop();
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          try {
+            const msg = JSON.parse(line);
+            if (msg.type === 'snapshot') applySnapshot(msg.snapshot);
+            if (msg.type === 'error') {
+              body.innerHTML = `<div class="empty" style="color:var(--alto)">Error: ${escapeHtml(msg.detail)}</div>`;
+            }
+          } catch { /* línea incompleta */ }
+        }
+      }
+    } catch (err) {
+      body.innerHTML = `<div class="empty" style="color:var(--alto)">Error de conexión: ${escapeHtml(err.message)}</div>`;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Analizar documento →';
+    }
+  }
+</script>
+</body>
+</html>
