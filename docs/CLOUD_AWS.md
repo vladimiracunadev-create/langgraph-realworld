@@ -262,7 +262,7 @@ aws s3 sync cases/01-soporte-cliente-omnicanal/data/ \
 # Crear secreto OpenAI
 aws secretsmanager create-secret \
   --name lgr/prod/openai \
-  --secret-string '{"OPENAI_API_KEY":"sk-...","OPENAI_MODEL":"gpt-4o-mini"}' \
+  --secret-string '{"OPENAI_API_KEY":"<TU_KEY_AQUI>","OPENAI_MODEL":"gpt-4o-mini"}' \
   --kms-key-id alias/lgr-secrets
 
 # DynamoDB para checkpoints
