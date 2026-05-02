@@ -111,6 +111,7 @@ El estándar actual del repositorio se apoya en estos pilares:
 | [docs/REQUIREMENTS.md](docs/REQUIREMENTS.md) | Requisitos: Git, Python, Docker, APIs opcionales |
 | [docs/HUB.md](docs/HUB.md) | Hub CLI — comandos, guardrails, estado de casos |
 | [docs/AGENTS_AND_SKILLS.md](docs/AGENTS_AND_SKILLS.md) | Skills de agentes, estándar de un caso completo, orden de trabajo |
+| [docs/CLOUD_AWS.md](docs/CLOUD_AWS.md) | ☁️ Migración a AWS — 3 estrategias (PoC ~25 USD · Producción ~180 USD · Enterprise ~650 USD), mapeo Docker→AWS, paso a paso, costos y FinOps |
 
 ### Wiki (publicada en GitHub)
 
