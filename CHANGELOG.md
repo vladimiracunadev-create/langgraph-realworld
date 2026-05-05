@@ -5,6 +5,31 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/1.0.0/).
 
 ---
 
+## v4.6.0 — 2026-05-05
+
+### Agregado
+
+- **Caso 06 — Compliance & Auditorías elevado a OPERATIVO**: backend FastAPI + LangGraph completo con modo DEMO/LIVE.
+  - `StateGraph` con 8 nodos: `parsear_alcance → mapear_controles → recopilar_evidencias → {router severidad: escalar_responsable | validar_evidencias} → generar_expediente → log_trazabilidad → producir_resumen`. Router condicional ramifica por severidad de faltantes; el camino "alta" pasa por `escalar_responsable` antes de validar.
+  - Cadena de custodia SHA-256 encadenada (append-only): cada acción del agente queda registrada con `seq`, `ts` UTC ISO-8601, `accion`, `detalle` canonicalizado, `prev_hash` y `hash`. La primera entrada usa `prev_hash="GENESIS"`. Modificar cualquier `detalle` rompe la cadena en todas las entradas posteriores.
+  - 3 marcos regulatorios soportados: ISO 27001:2022 (4 controles A.5.1, A.5.15, A.8.16, A.8.28), SOC 2 Type II (CC6.1, CC7.2, CC8.1, A1.2) y GDPR (Art.30 ROPA, Art.32, Art.33, Art.35 DPIA). Catálogo extensible en `data/marcos.json` con título, fuente (documentacion/iam/siem/git/monitoring/ticketing), owner por email y criticidad alta/media.
+  - Score de cumplimiento 0-100: controles completos cuentan 100, parciales 50, sin evidencia 0. Indicador verde/amarillo/rojo según umbrales (verde ≥95 sin sin_evidencia, amarillo ≥75, rojo <75).
+  - Validación de evidencias determinista: campos obligatorios, sistemas válidos, antigüedad máxima 365d, alerta a 180d, fechas dentro de período (acepta `YYYY-Qn`, `YYYY-MM` y `YYYY`).
+  - Modo DEMO: 3 escenarios calibrados (`AUD-001` ISO limpio score 100 riesgo verde, `AUD-002` SOC 2 con faltantes en CC6.1/CC7.2 escala a IAM y SOC, `AUD-003` GDPR con ROPA Nov-2024 y DPIA Ago-2024 vencidas → evidencias inválidas y escalación al DPO). Funciona sin OPENAI_API_KEY.
+  - Modo LIVE: GPT-4o-mini redacta resumen ejecutivo para comité de auditoría.
+  - 26 tests (15 graph flow + 11 API) — todos verdes. Cubren: hash chain encadenamiento, periodo bounds, router severidad, end-to-end por escenario, consistencia de métricas y eventos.
+  - Docker: Dockerfile non-root + compose.yml aislado (puerto 8006). Imagen Python 3.11-slim con curl para healthcheck.
+  - UI dark theme acento índigo (#818cf8) con selector de auditoría, vista previa de marco/periodo/resultado esperado, badge DEMO/LIVE, timeline streaming NDJSON, KPIs (controles OK/parciales/sin/evidencias inválidas), tabla índice por control con estado coloreado (verde/amarillo/rojo), tarjetas por faltante y por evidencia inválida, panel de escalaciones con cuerpo de email, visor de cadena de custodia con seq/timestamp/acción/hash y resumen ejecutivo.
+- **ROADMAP v4.6.0**: caso 06 movido de scaffold a operativos (14 casos totales). Pendientes Ola 2: caso 21 (Documentación Automática).
+
+### Modificado
+
+- `README.md`: badge de versión → 4.6.0, contador de operativos 13 → 14, caso 06 movido de scaffold a OPERATIVO en ambas tablas.
+- `ROADMAP.md`: versión → 4.6.0, caso 06 marcado como completado, scaffolds 12 → 11.
+- `index.html` portal: tarjeta de caso 06 actualizada de LEGACY → OPERATIVO con enlace al backend `http://localhost:8006/`.
+
+---
+
 ## v4.5.0 — 2026-05-04
 
 ### Agregado

@@ -117,9 +117,15 @@ services:
 
   case06:
     build:
-      context: cases/06-compliance-auditorias/demo
+      context: cases/06-compliance-auditorias/backend
     ports:
-      - "127.0.0.1:9006:80"
+      - "127.0.0.1:8006:8006"
+    environment:
+      - DATA_DIR=/app/data
+      - WEB_DIR=/app/web
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+    volumes:
+      - ./cases/06-compliance-auditorias/data:/app/data:ro
 
   case07:
     build:

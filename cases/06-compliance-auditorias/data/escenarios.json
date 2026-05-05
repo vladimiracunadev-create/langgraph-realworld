@@ -1,0 +1,209 @@
+[
+  {
+    "id": "AUD-001",
+    "marco": "ISO27001",
+    "periodo": "2026-Q1",
+    "descripcion": "Auditoría de mantención ISO 27001 — periodo limpio, todos los controles con evidencia válida.",
+    "controles_en_scope": ["A.5.1", "A.5.15", "A.8.16", "A.8.28"],
+    "evidencias": [
+      {
+        "control": "A.5.1",
+        "tipo": "politica_aprobada",
+        "sistema": "documentacion",
+        "fuente": "Confluence/Políticas",
+        "fecha": "2026-01-15",
+        "owner": "ciso@empresa.cl",
+        "ref": "POL-SI-2026-01",
+        "contenido": "Política de Seguridad de la Información v3.2 aprobada por Comité Directivo."
+      },
+      {
+        "control": "A.5.1",
+        "tipo": "registro_revision_anual",
+        "sistema": "documentacion",
+        "fuente": "Confluence/Actas",
+        "fecha": "2026-02-10",
+        "owner": "ciso@empresa.cl",
+        "ref": "ACTA-CISO-2026-02",
+        "contenido": "Acta de revisión anual de políticas de seguridad — sin observaciones materiales."
+      },
+      {
+        "control": "A.5.15",
+        "tipo": "matriz_roles",
+        "sistema": "iam",
+        "fuente": "Okta/Reports",
+        "fecha": "2026-03-01",
+        "owner": "iam@empresa.cl",
+        "ref": "OKTA-RBAC-MARZO",
+        "contenido": "Matriz RBAC exportada — 412 usuarios, 28 roles, segregación de funciones validada."
+      },
+      {
+        "control": "A.5.15",
+        "tipo": "revision_accesos_trimestral",
+        "sistema": "iam",
+        "fuente": "Okta/Access Review",
+        "fecha": "2026-03-20",
+        "owner": "iam@empresa.cl",
+        "ref": "AR-2026-Q1",
+        "contenido": "Revisión Q1 completa: 412 usuarios revisados, 7 accesos revocados, 0 hallazgos críticos."
+      },
+      {
+        "control": "A.8.16",
+        "tipo": "logs_consolidados",
+        "sistema": "siem",
+        "fuente": "Splunk/Indexes",
+        "fecha": "2026-03-31",
+        "owner": "soc@empresa.cl",
+        "ref": "SPLUNK-Q1",
+        "contenido": "Retención 90 días, 14 fuentes activas, ingestión 142 GB/día."
+      },
+      {
+        "control": "A.8.16",
+        "tipo": "alertas_resueltas",
+        "sistema": "siem",
+        "fuente": "Splunk/Cases",
+        "fecha": "2026-03-30",
+        "owner": "soc@empresa.cl",
+        "ref": "SOC-CASES-Q1",
+        "contenido": "238 alertas Q1: 232 cerradas, 6 escaladas, MTTR 41 min."
+      },
+      {
+        "control": "A.8.28",
+        "tipo": "scan_sast",
+        "sistema": "git",
+        "fuente": "GitHub Advanced Security",
+        "fecha": "2026-03-28",
+        "owner": "appsec@empresa.cl",
+        "ref": "GHAS-Q1",
+        "contenido": "SAST sobre 18 repos: 0 críticos, 4 altos en remediación, 31 medios."
+      },
+      {
+        "control": "A.8.28",
+        "tipo": "code_review_evidencia",
+        "sistema": "git",
+        "fuente": "GitHub PR API",
+        "fecha": "2026-03-30",
+        "owner": "appsec@empresa.cl",
+        "ref": "PR-REVIEWS-Q1",
+        "contenido": "100% de PRs a main con al menos 1 reviewer. 1.247 PRs auditados."
+      }
+    ]
+  },
+  {
+    "id": "AUD-002",
+    "marco": "SOC2",
+    "periodo": "2026-Q1",
+    "descripcion": "SOC 2 Type II con faltantes: revisión trimestral de accesos no completada y alertas SIEM sin cierre.",
+    "controles_en_scope": ["CC6.1", "CC7.2", "CC8.1", "A1.2"],
+    "evidencias": [
+      {
+        "control": "CC6.1",
+        "tipo": "matriz_roles",
+        "sistema": "iam",
+        "fuente": "Okta/Reports",
+        "fecha": "2026-03-05",
+        "owner": "iam@empresa.cl",
+        "ref": "OKTA-RBAC-MARZO",
+        "contenido": "Matriz RBAC vigente: 412 usuarios, 28 roles."
+      },
+      {
+        "control": "CC7.2",
+        "tipo": "logs_consolidados",
+        "sistema": "siem",
+        "fuente": "Splunk/Indexes",
+        "fecha": "2026-03-31",
+        "owner": "soc@empresa.cl",
+        "ref": "SPLUNK-Q1",
+        "contenido": "Retención 90 días, 14 fuentes activas."
+      },
+      {
+        "control": "CC8.1",
+        "tipo": "registro_cambios",
+        "sistema": "git",
+        "fuente": "GitHub/Releases",
+        "fecha": "2026-03-30",
+        "owner": "devops@empresa.cl",
+        "ref": "REL-Q1-2026",
+        "contenido": "47 releases productivos Q1, 100% etiquetados y firmados."
+      },
+      {
+        "control": "CC8.1",
+        "tipo": "aprobaciones_cab",
+        "sistema": "git",
+        "fuente": "Jira/CAB",
+        "fecha": "2026-03-29",
+        "owner": "devops@empresa.cl",
+        "ref": "CAB-Q1-2026",
+        "contenido": "47/47 cambios mayores aprobados por CAB con registro de minuta."
+      },
+      {
+        "control": "A1.2",
+        "tipo": "sla_reporte_mensual",
+        "sistema": "monitoring",
+        "fuente": "Datadog/SLO",
+        "fecha": "2026-03-31",
+        "owner": "sre@empresa.cl",
+        "ref": "SLO-Q1",
+        "contenido": "Disponibilidad 99.94% Q1 (objetivo 99.9%). Ningún incidente Sev1."
+      }
+    ]
+  },
+  {
+    "id": "AUD-003",
+    "marco": "GDPR",
+    "periodo": "2026-Q1",
+    "descripcion": "GDPR con violaciones: ROPA desactualizado y DPIA vencida. Riesgo regulatorio crítico.",
+    "controles_en_scope": ["Art.30", "Art.32", "Art.33", "Art.35"],
+    "evidencias": [
+      {
+        "control": "Art.30",
+        "tipo": "ropa_actualizado",
+        "sistema": "documentacion",
+        "fuente": "Confluence/DPO",
+        "fecha": "2024-11-10",
+        "owner": "dpo@empresa.cl",
+        "ref": "ROPA-2024-11",
+        "contenido": "Registro de actividades de tratamiento — última versión disponible."
+      },
+      {
+        "control": "Art.32",
+        "tipo": "controles_cifrado",
+        "sistema": "iam",
+        "fuente": "AWS KMS / Vault",
+        "fecha": "2026-03-15",
+        "owner": "ciso@empresa.cl",
+        "ref": "KMS-INV-2026-03",
+        "contenido": "Inventario de claves KMS: 22 keys gestionadas, rotación automática 90d."
+      },
+      {
+        "control": "Art.32",
+        "tipo": "matriz_roles",
+        "sistema": "iam",
+        "fuente": "Okta/Reports",
+        "fecha": "2026-03-05",
+        "owner": "iam@empresa.cl",
+        "ref": "OKTA-RBAC-MARZO",
+        "contenido": "Matriz RBAC vigente."
+      },
+      {
+        "control": "Art.33",
+        "tipo": "registro_brechas",
+        "sistema": "ticketing",
+        "fuente": "Jira/Security",
+        "fecha": "2026-02-22",
+        "owner": "dpo@empresa.cl",
+        "ref": "BREACH-2026-001",
+        "contenido": "1 incidente Q1: exfiltración de logs sin datos personales — clasificado no notificable."
+      },
+      {
+        "control": "Art.35",
+        "tipo": "dpia_vigente",
+        "sistema": "documentacion",
+        "fuente": "Confluence/DPO",
+        "fecha": "2024-08-01",
+        "owner": "dpo@empresa.cl",
+        "ref": "DPIA-2024-08",
+        "contenido": "DPIA del producto principal — vencida desde agosto 2025."
+      }
+    ]
+  }
+]

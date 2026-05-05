@@ -1,0 +1,104 @@
+{
+  "ISO27001": {
+    "nombre": "ISO/IEC 27001:2022",
+    "descripcion": "Sistema de gestión de seguridad de la información",
+    "controles": {
+      "A.5.1": {
+        "titulo": "Políticas de seguridad de la información",
+        "fuente": "documentacion",
+        "owner": "ciso@empresa.cl",
+        "evidencia_requerida": ["politica_aprobada", "registro_revision_anual"],
+        "criticidad": "alta"
+      },
+      "A.5.15": {
+        "titulo": "Control de acceso",
+        "fuente": "iam",
+        "owner": "iam@empresa.cl",
+        "evidencia_requerida": ["matriz_roles", "revision_accesos_trimestral"],
+        "criticidad": "alta"
+      },
+      "A.8.16": {
+        "titulo": "Monitoreo de actividades",
+        "fuente": "siem",
+        "owner": "soc@empresa.cl",
+        "evidencia_requerida": ["logs_consolidados", "alertas_resueltas"],
+        "criticidad": "media"
+      },
+      "A.8.28": {
+        "titulo": "Codificación segura",
+        "fuente": "git",
+        "owner": "appsec@empresa.cl",
+        "evidencia_requerida": ["scan_sast", "code_review_evidencia"],
+        "criticidad": "media"
+      }
+    }
+  },
+  "SOC2": {
+    "nombre": "SOC 2 Type II",
+    "descripcion": "Trust Services Criteria (Security, Availability, Confidentiality)",
+    "controles": {
+      "CC6.1": {
+        "titulo": "Restricciones de acceso lógico",
+        "fuente": "iam",
+        "owner": "iam@empresa.cl",
+        "evidencia_requerida": ["matriz_roles", "revision_accesos_trimestral"],
+        "criticidad": "alta"
+      },
+      "CC7.2": {
+        "titulo": "Monitoreo continuo de infraestructura",
+        "fuente": "siem",
+        "owner": "soc@empresa.cl",
+        "evidencia_requerida": ["logs_consolidados", "alertas_resueltas"],
+        "criticidad": "alta"
+      },
+      "CC8.1": {
+        "titulo": "Gestión de cambios",
+        "fuente": "git",
+        "owner": "devops@empresa.cl",
+        "evidencia_requerida": ["registro_cambios", "aprobaciones_cab"],
+        "criticidad": "media"
+      },
+      "A1.2": {
+        "titulo": "Capacidad y disponibilidad",
+        "fuente": "monitoring",
+        "owner": "sre@empresa.cl",
+        "evidencia_requerida": ["sla_reporte_mensual"],
+        "criticidad": "media"
+      }
+    }
+  },
+  "GDPR": {
+    "nombre": "Reglamento General de Protección de Datos (UE)",
+    "descripcion": "GDPR — Tratamiento de datos personales",
+    "controles": {
+      "Art.30": {
+        "titulo": "Registro de actividades de tratamiento (ROPA)",
+        "fuente": "documentacion",
+        "owner": "dpo@empresa.cl",
+        "evidencia_requerida": ["ropa_actualizado"],
+        "criticidad": "alta"
+      },
+      "Art.32": {
+        "titulo": "Seguridad del tratamiento",
+        "fuente": "iam",
+        "owner": "ciso@empresa.cl",
+        "evidencia_requerida": ["controles_cifrado", "matriz_roles"],
+        "criticidad": "alta"
+      },
+      "Art.33": {
+        "titulo": "Notificación de brechas",
+        "fuente": "ticketing",
+        "owner": "dpo@empresa.cl",
+        "evidencia_requerida": ["registro_brechas", "notificaciones_aepd"],
+        "criticidad": "alta"
+      },
+      "Art.35": {
+        "titulo": "Evaluación de impacto (DPIA)",
+        "fuente": "documentacion",
+        "owner": "dpo@empresa.cl",
+        "evidencia_requerida": ["dpia_vigente"],
+        "criticidad": "media"
+      }
+    }
+  }
+}

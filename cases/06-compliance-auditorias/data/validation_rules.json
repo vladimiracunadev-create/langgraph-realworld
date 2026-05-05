@@ -1,0 +1,10 @@
+{
+  "max_antiguedad_dias": 365,
+  "antiguedad_alerta_dias": 180,
+  "campos_obligatorios": ["control", "tipo", "sistema", "fecha", "owner", "ref"],
+  "sistemas_validos": ["documentacion", "iam", "siem", "git", "monitoring", "ticketing"],
+  "umbral_riesgo": {
+    "verde_min_score": 95,
+    "amarillo_min_score": 75
+  }
+}

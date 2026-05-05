@@ -3,24 +3,24 @@
 [![CI](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml)
 [![Security Scan](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml/badge.svg?branch=main)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-4.5.0-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-4.6.0-blue.svg)](CHANGELOG.md)
 [![Python](https://img.shields.io/badge/python-3.11-informational.svg)](https://www.python.org/)
 [![LangGraph](https://img.shields.io/badge/LangGraph-latest-green.svg)](https://github.com/langchain-ai/langgraph)
 
 > Portafolio de **25 casos de uso empresariales** construidos con **LangGraph** y **FastAPI**:
-> **13 backends completamente operativos** (casos 01, 02, 03, 04, 05, 08, 09, 10, 13, 14, 17, 19 y 25) con streaming, OAuth2/OIDC opt-in, observabilidad LangSmith, `/metrics` por servicio, logging JSON estructurado y reverse proxy nginx + TLS.
-> Los 12 casos restantes son scaffolds documentados listos para elevar al siguiente nivel.
+> **14 backends completamente operativos** (casos 01, 02, 03, 04, 05, 06, 08, 09, 10, 13, 14, 17, 19 y 25) con streaming, OAuth2/OIDC opt-in, observabilidad LangSmith, `/metrics` por servicio, logging JSON estructurado y reverse proxy nginx + TLS.
+> Los 11 casos restantes son scaffolds documentados listos para elevar al siguiente nivel.
 
 ---
 
-## 🏗️ Implementación Industrial — v4.5.0
+## 🏗️ Implementación Industrial — v4.6.0
 
 El estándar actual del repositorio se apoya en estos pilares:
 
 | # | Pilar | Descripción |
 |:-:|:---|:---|
 | 1 | 🌐 **Portal unificado** | `index.html` como entrada principal para navegar el portafolio |
-| 2 | ⚙️ **Casos de referencia reales** | Backends FastAPI y UIs activas en los casos 01, 02, 03, 04, 05, 08, 09, 10, 13, 14, 17, 19 y 25 |
+| 2 | ⚙️ **Casos de referencia reales** | Backends FastAPI y UIs activas en los casos 01, 02, 03, 04, 05, 06, 08, 09, 10, 13, 14, 17, 19 y 25 |
 | 3 | 📐 **Estado tipado** | Contratos explícitos con `TypedDict` y flujos compatibles con LangGraph |
 | 4 | 🔭 **Observabilidad** | `/health`, `/ready`, `/metrics` con latencia, errores y modo; LangSmith opt-in |
 | 5 | 🔀 **Modo dual** | Demos offline + ruta clara para activar integraciones reales |
@@ -45,6 +45,7 @@ El estándar actual del repositorio se apoya en estos pilares:
 | **03** | [🚨 Incident Response SRE](cases/03-incident-response-sre/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · HITL · Runbooks P1/P2/P3 |
 | **04** | [🔐 SOC Triage de Alertas](cases/04-soc-triage-alertas/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · Threat Intel · Router de riesgo |
 | **05** | [📄 Analista de Documentos](cases/05-analista-documentos/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · Keyword extraction · Router de riesgo |
+| **06** | [🛡️ Compliance & Auditorías](cases/06-compliance-auditorias/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · ISO/SOC/GDPR · Cadena de custodia SHA-256 |
 | **08** | [💼 Ventas B2B + CRM](cases/08-ventas-b2b-crm/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · ICP scoring · CRM stage automático |
 | **09** | [👥 RRHH Screening & Agenda](cases/09-rrhh-screening-agenda/README.md) | `🏭 INDUSTRIAL` | FastAPI · LangGraph · MemorySaver · Resilience |
 | **10** | [🚀 Onboarding de Empleados](cases/10-onboarding-empleados/README.md) | `🏭 INDUSTRIAL` | FastAPI · LangGraph · RBAC · Integrations |
@@ -58,7 +59,6 @@ El estándar actual del repositorio se apoya en estos pilares:
 
 | ID | Nombre | Dominio |
 |:---:|:---|:---|
-| 06 | [⚖️ Compliance & Auditorías](cases/06-compliance-auditorias/README.md) | Gobernanza |
 | 07 | [🛒 Compras y Abastecimiento](cases/07-compras-abastecimiento/README.md) | Procurement |
 | 11 | [🎓 Tutor Adaptativo](cases/11-educacion-tutor-adaptativo/README.md) | Educación |
 | 12 | [🧠 Psicometría y Evaluaciones](cases/12-psicometria-evaluaciones/README.md) | RRHH / Evaluación |
@@ -187,7 +187,7 @@ TRUST_PROXY_HEADERS=false
 
 ## 🛡️ Seguridad
 
-Este repositorio ha sido auditado por **8 capas de seguridad** (v4.5.0):
+Este repositorio ha sido auditado por **8 capas de seguridad** (v4.6.0):
 
 | Capa | Control | Estado |
 |:---|:---|:---:|
