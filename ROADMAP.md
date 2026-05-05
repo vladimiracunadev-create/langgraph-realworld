@@ -1,6 +1,6 @@
 # Hoja de Ruta
 
-> **Versión**: 4.6.0 | **Estado**: Industrial | **Rama principal**: `main`
+> **Versión**: 4.7.0 | **Estado**: Industrial | **Rama principal**: `main`
 
 El estándar técnico del repositorio ya está definido. Antes de crear o modificar un caso, leer el skill directamente — no se rediseña lo que ya existe:
 
@@ -12,7 +12,7 @@ El estándar técnico del repositorio ya está definido. Antes de crear o modifi
 
 ## Estado de los 25 casos
 
-### Operativos e industriales (14)
+### Operativos e industriales (15)
 
 | ID | Caso | Nivel | UI web | Integraciones LIVE |
 |:---:|:---|:---:|:---:|:---|
@@ -29,13 +29,13 @@ El estándar técnico del repositorio ya está definido. Antes de crear o modifi
 | 14 | [Finanzas: Conciliación](cases/14-finanzas-conciliacion/README.md) | OPERATIVO | ✅ | LLM opt-in, z-score outliers, 3 escenarios DEMO |
 | 17 | [Legal Intake](cases/17-legal-intake/README.md) | OPERATIVO | ✅ | LLM opt-in (OpenAI), 3 especialidades, 3 plantillas |
 | 19 | [DevEx: PR Review](cases/19-devex-pr-review/README.md) | OPERATIVO | ✅ | GitHub API (DEMO) |
+| 21 | [Documentación Automática](cases/21-docs-auto/README.md) | OPERATIVO | ✅ | LLM opt-in, outline adaptativo, loop QA |
 | 25 | [Supervisor + Workers](cases/25-supervisor-workers/README.md) | OPERATIVO | ✅ | 4 workers especializados (DEMO) |
 
-### Scaffold — listos para elevar (11)
+### Scaffold — listos para elevar (10)
 
 | ID | Caso | Dominio | Prioridad |
 |:---:|:---|:---|:---:|
-| 21 | [Documentación Automática](cases/21-docs-auto/README.md) | DevOps | 🟠 Ola 2 |
 | 07 | [Compras y Abastecimiento](cases/07-compras-abastecimiento/README.md) | Procurement | 🟡 Ola 3 |
 | 11 | [Tutor Adaptativo](cases/11-educacion-tutor-adaptativo/README.md) | Educación | 🟡 Ola 3 |
 | 12 | [Psicometría y Evaluaciones](cases/12-psicometria-evaluaciones/README.md) | RRHH / Evaluación | 🟡 Ola 3 |
@@ -70,7 +70,7 @@ SCAFFOLD  →  (seguir SKILL.md)  →  OPERATIVO  →  (observabilidad + hardeni
 | ~~**08 — Ventas B2B + CRM**~~ | ✅ **COMPLETADO v4.4.0** — Pipeline outbound: ICP scoring, outreach por industria, CRM stage automático | 10 nodos, 2 routers (ICP / señal), 4 cuentas DEMO, asignación de AE |
 | ~~**14 — Finanzas: Conciliación**~~ | ✅ **COMPLETADO v4.5.0** — Cierre mensual: matching multi-criterio, detección z-score, 3 tipos de discrepancia, indicador verde/amarillo/rojo | 9 nodos, 3 escenarios DEMO, sin dependencias numéricas externas |
 | ~~**06 — Compliance**~~ | ✅ **COMPLETADO v4.6.0** — Preparación de auditoría ISO 27001/SOC 2/GDPR: mapeo de controles, recopilación, escalación, validación, cadena de custodia SHA-256 encadenada (append-only) | 8 nodos, 1 router de severidad, 3 escenarios DEMO, hash chain inmutable |
-| **21 — Docs Automática** | Código → documentación estructurada. Relevante para el propio repo. |
+| ~~**21 — Docs Automática**~~ | ✅ **COMPLETADO v4.7.0** — Pipeline LangGraph con loop QA condicional: escaneo de repo, extracción de artefactos, outline adaptativo, redacción determinista, score por sección, revisión iterativa (tope 3), publicación Markdown | 9 nodos, router + loop QA, 3 escenarios DEMO |
 
 ### Ola 3 — Dominio especializado
 

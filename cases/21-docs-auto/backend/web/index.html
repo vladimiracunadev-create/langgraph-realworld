@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Caso 21 — Documentación Automática</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07111f;
+      --surface: rgba(20, 30, 48, 0.85);
+      --border: rgba(180, 200, 230, 0.1);
+      --accent: #f472b6;
+      --accent-2: #ec4899;
+      --accent-dim: rgba(244, 114, 182, 0.15);
+      --text: #e6edf3;
+      --muted: #8b9cb3;
+      --verde: #34d399;
+      --amarillo: #fbbf24;
+      --rojo: #f87171;
+      font-family: 'Inter', system-ui, sans-serif;
+      color-scheme: dark;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    header {
+      padding: 12px 20px; border-bottom: 1px solid var(--border);
+      display: flex; gap: 12px; align-items: center;
+      background: rgba(7,17,31,.85); backdrop-filter: blur(10px);
+      position: sticky; top: 0; z-index: 10;
+    }
+    header .back-link { font-family: 'JetBrains Mono', monospace; font-size: 12px;
+      color: var(--accent); text-decoration: none; opacity: .85; }
+    header .back-link:hover { opacity: 1; }
+    header .sep { color: var(--border); font-size: 18px; }
+    header .title { font-weight: 800; letter-spacing: -.4px; font-size: 1rem; flex: 1; }
+    .pill {
+      font-family: 'JetBrains Mono', monospace;
+      padding: 4px 10px; border-radius: 999px; font-size: 10px;
+      font-weight: 600; text-transform: uppercase; letter-spacing: .5px;
+      border: 1px solid var(--border);
+    }
+    .pill-demo { color: var(--amarillo); border-color: rgba(251,191,36,.3); background: rgba(251,191,36,.1); }
+    .pill-live { color: var(--verde); border-color: rgba(52,211,153,.3); background: rgba(52,211,153,.1); }
+
+    .hero { max-width: 920px; margin: 28px auto 0; padding: 0 24px; }
+    .hero h2 { font-size: 1.55rem; font-weight: 800; margin-bottom: 10px; }
+    .hero p { color: var(--muted); line-height: 1.65; font-size: .92rem; }
+    .badge-row { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+    .hero-pill {
+      font-family: 'JetBrains Mono', monospace; font-size: .68rem;
+      padding: 4px 9px; border-radius: 999px;
+      border: 1px solid var(--border); color: var(--muted); background: var(--accent-dim);
+    }
+
+    main {
+      max-width: 1320px; margin: 22px auto;
+      padding: 0 24px 40px;
+      display: grid; grid-template-columns: 1fr 1.35fr; gap: 18px;
+    }
+    @media (max-width: 880px) { main { grid-template-columns: 1fr; } }
+
+    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+    .panel-header {
+      padding: 14px 18px; border-bottom: 1px solid var(--border);
+      font-weight: 700; font-size: .85rem;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .panel-body { padding: 18px; }
+
+    label { font-size: .8rem; color: var(--muted); display: block; margin-bottom: 6px; }
+    select, button {
+      width: 100%; padding: 10px 14px; border-radius: 8px;
+      border: 1px solid var(--border); font-size: .88rem; font-family: inherit;
+    }
+    select { background: rgba(20,30,48,.95); color: var(--text); cursor: pointer; margin-bottom: 14px; }
+    select:focus { outline: 2px solid var(--accent); }
+    button {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #07111f; font-weight: 700; cursor: pointer; border: none;
+      transition: opacity .15s, transform .1s;
+    }
+    button:hover:not(:disabled) { opacity: .92; transform: translateY(-1px); }
+    button:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+
+    .scenario-preview {
+      margin-top: 14px; padding: 12px;
+      background: rgba(244,114,182,.05);
+      border: 1px solid rgba(244,114,182,.15);
+      border-radius: 8px;
+      font-size: .8rem; color: var(--muted);
+      max-height: 220px; overflow-y: auto; line-height: 1.55;
+    }
+    .scenario-preview strong { color: var(--text); }
+
+    .timeline { margin-top: 6px; }
+    .tl-item {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 9px 0; border-bottom: 1px solid var(--border);
+      animation: fadeIn .25s ease;
+    }
+    .tl-item:last-child { border-bottom: none; }
+    .tl-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent); margin-top: 5px; flex-shrink: 0;
+    }
+    .tl-node {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem; color: var(--accent); font-weight: 600;
+    }
+    .tl-detail { font-size: .78rem; color: var(--muted); margin-top: 2px; line-height: 1.55; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; } }
+
+    .risk-header {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 18px; border-bottom: 1px solid var(--border);
+    }
+    .risk-badge {
+      padding: 6px 14px; border-radius: 999px;
+      font-weight: 700; font-size: .78rem;
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase; letter-spacing: .5px;
+    }
+    .risk-verde { background: rgba(52,211,153,.15); color: var(--verde); border: 1px solid rgba(52,211,153,.3); }
+    .risk-amarillo { background: rgba(251,191,36,.15); color: var(--amarillo); border: 1px solid rgba(251,191,36,.3); }
+    .risk-rojo { background: rgba(248,113,113,.15); color: var(--rojo); border: 1px solid rgba(248,113,113,.3); }
+    .risk-empty { background: rgba(139,156,179,.1); color: var(--muted); border: 1px solid var(--border); }
+
+    .pct-score {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.6rem; font-weight: 700;
+    }
+    .case-meta { flex: 1; }
+    .case-title { font-weight: 700; font-size: .92rem; margin-bottom: 2px; }
+    .case-sub { font-size: .76rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+
+    .section-label {
+      font-size: .72rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .5px;
+      font-weight: 600; margin: 16px 0 8px;
+    }
+
+    .kpi-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+    }
+    @media (max-width: 700px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+    .kpi {
+      padding: 10px; background: rgba(20,30,48,.5);
+      border: 1px solid var(--border); border-radius: 8px;
+      text-align: center;
+    }
+    .kpi-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.1rem; font-weight: 700; color: var(--text);
+    }
+    .kpi-label {
+      font-size: .65rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .3px;
+      margin-top: 3px;
+    }
+
+    .item-card {
+      padding: 10px 12px; border-radius: 8px;
+      background: rgba(20,30,48,.5);
+      border-left: 3px solid var(--accent);
+      margin-bottom: 6px;
+    }
+    .item-card.alta { border-left-color: var(--rojo); background: rgba(248,113,113,.06); }
+    .item-card.media { border-left-color: var(--amarillo); background: rgba(251,191,36,.05); }
+    .item-card.baja { border-left-color: var(--verde); background: rgba(52,211,153,.05); }
+    .item-head {
+      display: flex; gap: 8px; align-items: center;
+      font-size: .76rem; margin-bottom: 4px;
+    }
+    .item-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .62rem; font-weight: 700;
+      padding: 2px 7px; border-radius: 4px;
+      text-transform: uppercase; letter-spacing: .5px;
+      background: rgba(244,114,182,.18); color: var(--accent);
+    }
+    .item-body { font-size: .8rem; color: var(--muted); line-height: 1.55; }
+    .item-meta { font-family: 'JetBrains Mono', monospace; font-size: .7rem; color: var(--muted); margin-top: 4px; }
+
+    .seccion-box {
+      background: rgba(20,30,48,.5); border: 1px solid var(--border);
+      border-radius: 8px; padding: 10px 12px; margin-bottom: 8px;
+    }
+    .seccion-head { display: flex; gap: 8px; align-items: center; font-size: .82rem; margin-bottom: 4px; }
+    .seccion-score { font-family: 'JetBrains Mono', monospace; font-size: .75rem; }
+    .seccion-aprobada { color: var(--verde); }
+    .seccion-revisada { color: var(--amarillo); }
+    .seccion-pendiente { color: var(--rojo); }
+
+    .doc-box {
+      background: #0a1424; border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .76rem; line-height: 1.65;
+      white-space: pre-wrap; color: #cdd9e5;
+      max-height: 420px; overflow-y: auto;
+    }
+    .resumen-box {
+      background: rgba(244,114,182,.05);
+      border: 1px solid rgba(244,114,182,.15);
+      border-radius: 10px; padding: 14px 16px;
+      font-size: .83rem; line-height: 1.7;
+      white-space: pre-wrap; color: #cdd9e5;
+    }
+
+    .tech-footer {
+      max-width: 1320px; margin: 0 auto;
+      padding: 0 24px 32px;
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .tech-pill {
+      font-family: 'JetBrains Mono', monospace; font-size: .7rem;
+      padding: 4px 10px; border-radius: 999px;
+      border: 1px solid var(--border); color: var(--muted); background: var(--surface);
+    }
+
+    .empty {
+      text-align: center; padding: 32px 16px;
+      color: var(--muted); font-size: .85rem;
+    }
+    .empty-icon { font-size: 2rem; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="http://localhost:8080/" class="back-link">← VOLVER AL HUB</a>
+  <span class="sep">|</span>
+  <span class="title">Caso 21 — Documentación Automática</span>
+  <span class="pill" id="mode-badge">…</span>
+</header>
+
+<div class="hero">
+  <h2>Generación y mantenimiento de documentación técnica con QA en loop</h2>
+  <p>
+    La documentación técnica suele desactualizarse antes que el siguiente release.
+    Este agente LangGraph escanea el repositorio, extrae artefactos (endpoints,
+    schemas, funciones, tests, changelog), genera un outline adaptado al tipo de
+    proyecto, redacta cada sección con datos reales del código y aplica un ciclo
+    de QA con loop condicional (tope de 3 iteraciones) para corregir secciones
+    que no superan el umbral de score. Publica el documento final en Markdown
+    con el diff de cambios. Determinista en DEMO; resumen narrativo opt-in con LLM.
+  </p>
+  <div class="badge-row">
+    <span class="hero-pill">9 nodos LangGraph</span>
+    <span class="hero-pill">Router + loop QA</span>
+    <span class="hero-pill">Score por sección</span>
+    <span class="hero-pill">Outline adaptativo</span>
+    <span class="hero-pill">DEMO + LIVE (GPT-4o-mini)</span>
+  </div>
+</div>
+
+<main>
+  <div>
+    <div class="panel">
+      <div class="panel-header"><span>📚</span> Repositorio a documentar</div>
+      <div class="panel-body">
+        <label for="repo-select">Seleccionar repositorio</label>
+        <select id="repo-select" onchange="renderPreview()">
+          <option value="DOC-001">DOC-001 — fastapi-orders · API limpia</option>
+          <option value="DOC-002">DOC-002 — billing-service · docstrings parciales</option>
+          <option value="DOC-003">DOC-003 — legacy-erp-bridge · sin docs ni README</option>
+        </select>
+        <div class="scenario-preview" id="repo-preview">…</div>
+        <button id="btn-procesar" onclick="iniciarDocs()" style="margin-top:12px;">
+          Generar documentación →
+        </button>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-header"><span>⏱</span> Timeline del agente</div>
+      <div class="panel-body">
+        <div class="timeline" id="timeline">
+          <div class="empty"><div class="empty-icon">📝</div>Selecciona un repo y pulsa Generar.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="results-panel">
+    <div class="risk-header">
+      <div class="risk-badge risk-empty" id="risk-badge">— riesgo</div>
+      <div class="case-meta">
+        <div class="case-title" id="case-title">Esperando ejecución…</div>
+        <div class="case-sub" id="case-sub">— · —</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="pct-score" id="pct-score">—</div>
+        <div style="font-size:.7rem; color:var(--muted);">score / 100</div>
+      </div>
+    </div>
+    <div class="panel-body" id="results-body">
+      <div class="empty"><div class="empty-icon">📑</div>El documento aparecerá aquí.</div>
+    </div>
+  </div>
+</main>
+
+<div class="tech-footer">
+  <span class="tech-pill">LangGraph StateGraph</span>
+  <span class="tech-pill">FastAPI</span>
+  <span class="tech-pill">9 nodos</span>
+  <span class="tech-pill">Router + loop QA</span>
+  <span class="tech-pill">NDJSON streaming</span>
+  <span class="tech-pill">DEMO / LIVE</span>
+  <span class="tech-pill">Puerto 8021</span>
+  <span class="tech-pill">MemorySaver</span>
+</div>
+
+<script>
+  const PORT = window.location.port || '8021';
+  const BASE = `${window.location.protocol}//${window.location.hostname}:${PORT}`;
+
+  const PREVIEWS = {
+    'DOC-001': {
+      tipo: 'API REST', framework: 'FastAPI',
+      desc: 'Repo con docstrings completos en todos los módulos, 24 tests verdes, cobertura 92%, README + CI.',
+      esperado: '🟢 Score 90+ · 0 iteraciones de revisión · riesgo BAJO'
+    },
+    'DOC-002': {
+      tipo: 'API REST', framework: 'FastAPI',
+      desc: 'docstrings al ~50%, 2 endpoints sin documentar, 1 test fallando, cobertura 71%.',
+      esperado: '🟡 Score 70-90 · issues detectadas · puede ejecutar 1 iteración'
+    },
+    'DOC-003': {
+      tipo: 'Integración legacy', framework: 'Flask',
+      desc: 'Sin docstrings, sin README, sin CI, 4 tests fallando de 6, cobertura 18%.',
+      esperado: '🔴 Score bajo · 1-3 iteraciones de revisión · riesgo ALTO'
+    }
+  };
+
+  function renderPreview() {
+    const id = document.getElementById('repo-select').value;
+    const p = PREVIEWS[id];
+    if (!p) return;
+    document.getElementById('repo-preview').innerHTML = `
+      <div><strong>Tipo:</strong> ${escapeHtml(p.tipo)} · <strong>Framework:</strong> ${escapeHtml(p.framework)}</div>
+      <div style="margin-top:6px;">${escapeHtml(p.desc)}</div>
+      <div style="margin-top:8px; font-family:'JetBrains Mono',monospace; font-size:.72rem; color:var(--accent);">
+        Resultado esperado: ${escapeHtml(p.esperado)}
+      </div>`;
+  }
+
+  async function detectMode() {
+    try {
+      const r = await fetch(`${BASE}/health`);
+      const d = await r.json();
+      const badge = document.getElementById('mode-badge');
+      const isLive = d.mode === 'LIVE';
+      badge.textContent = isLive ? 'LIVE' : 'DEMO';
+      badge.className = `pill ${isLive ? 'pill-live' : 'pill-demo'}`;
+    } catch {}
+  }
+  detectMode(); renderPreview();
+
+  function riskClass(r) { return ({verde:'risk-verde', amarillo:'risk-amarillo', rojo:'risk-rojo'})[r] || 'risk-empty'; }
+  function riskIcon(r) { return ({verde:'🟢', amarillo:'🟡', rojo:'🔴'})[r] || '⚪'; }
+
+  const NODE_LABELS = {
+    'repositorio_escaneado': 'escanear_repositorio',
+    'artefactos_extraidos': 'extraer_artefactos',
+    'outline_generado': 'generar_outline',
+    'secciones_redactadas': 'redactar_secciones',
+    'qa_precision_completado': 'qa_precision_tecnica',
+    'secciones_revisadas': 'revisar_secciones',
+    'qa_global_completado': 'qa_coherencia_global',
+    'documentacion_publicada': 'publicar_documentacion',
+    'documentacion_completada': 'producir_resumen',
+  };
+
+  function describeEvent(ev) {
+    const t = ev.type || '';
+    if (t === 'repositorio_escaneado') return `${ev.nombre} · ${ev.tipo} · ${ev.total_modulos} módulos · ${ev.total_loc} LOC`;
+    if (t === 'artefactos_extraidos')  return `${ev.endpoints} endpoints · ${ev.funciones_publicas} funciones · ${ev.schemas} schemas · docstring=${ev.docstring_ratio_promedio}`;
+    if (t === 'outline_generado')      return `${ev.tipo_proyecto} · ${ev.total_secciones} secciones (${(ev.ids||[]).join(', ')})`;
+    if (t === 'secciones_redactadas')  return `${ev.total} secciones redactadas`;
+    if (t === 'qa_precision_completado') return `iter=${ev.iter} · ${ev.aprobadas}/${ev.total_secciones} aprobadas · ${ev.requieren_revision} pendientes · ${ev.total_issues} issues`;
+    if (t === 'secciones_revisadas')   return `iter=${ev.iter} · ${ev.revisadas} sección(es) revisada(s)`;
+    if (t === 'qa_global_completado')  return `score ${ev.score_global} · riesgo ${ev.riesgo}`;
+    if (t === 'documentacion_publicada') return `${ev.lineas} líneas · ${ev.secciones} secciones`;
+    if (t === 'documentacion_completada') return `Documento listo · ${ev.repo}`;
+    return JSON.stringify(ev).slice(0, 80);
+  }
+
+  function addTimelineItem(ev) {
+    const tl = document.getElementById('timeline');
+    const empty = tl.querySelector('.empty');
+    if (empty) empty.remove();
+    const item = document.createElement('div');
+    item.className = 'tl-item';
+    item.innerHTML = `<div class="tl-dot"></div><div>
+      <div class="tl-node">${NODE_LABELS[ev.type] || ev.type}</div>
+      <div class="tl-detail">${escapeHtml(describeEvent(ev))}</div>
+    </div>`;
+    tl.appendChild(item);
+  }
+
+  let _lastEventsLen = 0;
+
+  function applySnapshot(snap) {
+    if (!snap) return;
+    if (snap.riesgo) {
+      const badge = document.getElementById('risk-badge');
+      badge.className = `risk-badge ${riskClass(snap.riesgo)}`;
+      badge.textContent = `${riskIcon(snap.riesgo)} RIESGO ${snap.riesgo.toUpperCase()}`;
+    }
+    if (snap.repo && snap.repo.nombre) {
+      document.getElementById('case-title').textContent = `${snap.repo_id} — ${snap.repo.nombre}`;
+      document.getElementById('case-sub').textContent =
+        `${snap.repo.tipo || ''} · ${(snap.repo.modulos||[]).length} módulos · iter=${snap.iter_revision || 0}`;
+    }
+    if (snap.score_global !== undefined && snap.score_global !== 0) {
+      document.getElementById('pct-score').textContent = `${snap.score_global}`;
+    }
+
+    (snap.events || []).slice(_lastEventsLen).forEach(addTimelineItem);
+    _lastEventsLen = (snap.events || []).length;
+
+    if (snap.done) renderResults(snap);
+  }
+
+  function renderResults(snap) {
+    const m = snap.metricas || {};
+    const body = document.getElementById('results-body');
+    let html = '';
+
+    html += `<div class="kpi-grid">
+      <div class="kpi"><div class="kpi-value">${m.total_secciones || 0}</div><div class="kpi-label">Secciones</div></div>
+      <div class="kpi"><div class="kpi-value">${m.iteraciones_revision || 0}</div><div class="kpi-label">Iter. revisión</div></div>
+      <div class="kpi"><div class="kpi-value">${m.issues_detectadas || 0}</div><div class="kpi-label">Issues</div></div>
+      <div class="kpi"><div class="kpi-value">${m.lineas_documento || 0}</div><div class="kpi-label">Líneas .md</div></div>
+    </div>`;
+
+    // Secciones
+    if ((snap.secciones || []).length) {
+      html += `<div class="section-label">📑 Secciones generadas</div>`;
+      snap.secciones.forEach(s => {
+        const cls = s.estado === 'aprobada' ? 'seccion-aprobada'
+                  : s.estado === 'revisada' ? 'seccion-revisada' : 'seccion-pendiente';
+        html += `<div class="seccion-box">
+          <div class="seccion-head">
+            <strong>${escapeHtml(s.titulo)}</strong>
+            <span class="seccion-score ${cls}">[${escapeHtml(s.estado)} · score ${s.score}]</span>
+          </div>
+          <div class="item-body">${s.issues && s.issues.length ? `${s.issues.length} issue(s) · `+s.issues.map(i=>escapeHtml(i.tipo)).join(', ') : 'Sin issues.'}</div>
+        </div>`;
+      });
+    }
+
+    // Issues globales
+    if ((snap.issues || []).length) {
+      html += `<div class="section-label">⚠️ Issues detectadas (${snap.issues.length})</div>`;
+      snap.issues.forEach(i => {
+        html += `<div class="item-card alta">
+          <div class="item-head">
+            <span class="item-tag">${escapeHtml(i.tipo)}</span>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:.72rem;">${escapeHtml(i.seccion || '')} · ${escapeHtml(i.ref || '')}</span>
+          </div>
+          <div class="item-body">${escapeHtml(i.mensaje || '')}</div>
+        </div>`;
+      });
+    }
+
+    // Documento markdown
+    if (snap.documento_md) {
+      html += `<div class="section-label">📄 Documento Markdown generado</div>
+        <div class="doc-box">${escapeHtml(snap.documento_md)}</div>`;
+    }
+
+    // Resumen
+    if (snap.resumen) {
+      html += `<div class="section-label">📝 Resumen ejecutivo</div>
+        <div class="resumen-box">${escapeHtml(snap.resumen)}</div>`;
+    }
+
+    body.innerHTML = html;
+  }
+
+  function escapeHtml(s) {
+    return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  async function iniciarDocs() {
+    const rid = document.getElementById('repo-select').value;
+    const btn = document.getElementById('btn-procesar');
+    const tl = document.getElementById('timeline');
+    const body = document.getElementById('results-body');
+
+    btn.disabled = true; btn.textContent = 'Generando…';
+    tl.innerHTML = '';
+    body.innerHTML = '<div class="empty"><div class="empty-icon">⚙️</div>Escaneando repositorio…</div>';
+    _lastEventsLen = 0;
+    const rb = document.getElementById('risk-badge');
+    rb.className = 'risk-badge risk-empty'; rb.textContent = '— riesgo';
+    document.getElementById('case-title').textContent = 'Procesando…';
+    document.getElementById('case-sub').textContent = '— · —';
+    document.getElementById('pct-score').textContent = '—';
+
+    const threadId = `docs-${rid}-${Date.now()}`;
+    const url = `${BASE}/api/stream?thread_id=${encodeURIComponent(threadId)}&repo_id=${encodeURIComponent(rid)}`;
+
+    try {
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop();
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          try {
+            const msg = JSON.parse(line);
+            if (msg.type === 'snapshot') applySnapshot(msg.snapshot);
+            if (msg.type === 'error') body.innerHTML = `<div class="empty" style="color:var(--rojo)">Error: ${escapeHtml(msg.detail)}</div>`;
+          } catch {}
+        }
+      }
+    } catch (err) {
+      body.innerHTML = `<div class="empty" style="color:var(--rojo)">Error de conexión: ${escapeHtml(err.message)}</div>`;
+    } finally {
+      btn.disabled = false; btn.textContent = 'Generar documentación →';
+    }
+  }
+</script>
+</body>
+</html>

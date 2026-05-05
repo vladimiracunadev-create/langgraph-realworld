@@ -210,9 +210,15 @@ services:
 
   case21:
     build:
-      context: cases/21-docs-auto/demo
+      context: cases/21-docs-auto/backend
     ports:
-      - "127.0.0.1:9021:80"
+      - "127.0.0.1:8021:8021"
+    environment:
+      - DATA_DIR=/app/data
+      - WEB_DIR=/app/web
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+    volumes:
+      - ./cases/21-docs-auto/data:/app/data:ro
 
   case22:
     build:

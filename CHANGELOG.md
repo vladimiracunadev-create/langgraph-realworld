@@ -5,6 +5,32 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/1.0.0/).
 
 ---
 
+## v4.7.0 — 2026-05-05
+
+### Agregado
+
+- **Caso 21 — Documentación Automática elevado a OPERATIVO**: backend FastAPI + LangGraph completo con modo DEMO/LIVE.
+  - `StateGraph` con 9 nodos: `escanear_repositorio → extraer_artefactos → generar_outline → redactar_secciones → qa_precision_tecnica → {router calidad: revisar_secciones | qa_coherencia_global} → publicar_documentacion → producir_resumen`. El router `calidad_seccion_router` cierra un loop con `revisar_secciones → qa_precision_tecnica` con tope de 3 iteraciones (`max_iteraciones_revision` configurable en `quality_rules.json`).
+  - Outline adaptativo según tipo de proyecto: plantillas para `api_rest` (overview, instalación, uso, endpoints, modelo, tests, changelog) y `integration` (overview, instalación, endpoints, integraciones, tests, operación). Extensible vía `data/outline_template.json`.
+  - Redacción 100% determinista a partir de los artefactos extraídos del repo (endpoints, schemas, funciones públicas, tests, changelog, ratio docstring) — sin red, sin LLM en DEMO.
+  - QA por sección con score 0-100 y penalizaciones configurables: endpoint sin doc (8), función sin docstring (4), sin README (15), sin changelog (10), tests fallando (12), cobertura baja <60% (8), sin CI (6). Umbral de aprobación 80, umbrales de riesgo verde ≥90 / amarillo ≥70 / rojo <70.
+  - Modo DEMO: 3 escenarios calibrados (`DOC-001` fastapi-orders limpio score ≥90 0 iteraciones, `DOC-002` billing-service con docstrings parciales y test fallando issues detectadas, `DOC-003` legacy-erp-bridge sin README/CI/docstrings 1-3 iteraciones de revisión). Funciona sin OPENAI_API_KEY.
+  - Modo LIVE: GPT-4o-mini redacta resumen ejecutivo final.
+  - Publicación: documento Markdown completo con todas las secciones + diff (`secciones_agregadas`, `secciones_modificadas`, `secciones_intactas`, `lineas_totales`).
+  - 25 tests (15 graph flow + 10 API) — todos verdes. Cubren: render por tipo de sección, router de calidad en sus 3 ramas (loop con pendientes, sin pendientes, agotado), end-to-end por escenario, eventos completos, consistencia de métricas.
+  - Docker: Dockerfile non-root + compose.yml aislado (puerto 8021). Imagen Python 3.11-slim con curl para healthcheck.
+  - UI dark theme acento rosa (#f472b6) con selector de repositorio, vista previa de tipo/framework/resultado esperado, badge DEMO/LIVE, timeline streaming NDJSON, KPIs (secciones, iteraciones de revisión, issues, líneas .md), listado de secciones con estado coloreado (aprobada/revisada/pendiente), tarjetas por issue con tipo + sección + ref, visor de Markdown generado y resumen ejecutivo.
+- **ROADMAP v4.7.0**: caso 21 movido de scaffold a operativos (15 casos totales). Ola 2 cerrada — siguiente prioridad es Ola 3 (07, 11, 12, 15, 16, 18, 20, 22, 23, 24).
+
+### Modificado
+
+- `README.md`: badge de versión → 4.7.0, contador de operativos 14 → 15, caso 21 movido de scaffold a OPERATIVO en ambas tablas.
+- `ROADMAP.md`: versión → 4.7.0, caso 21 marcado como completado, scaffolds 11 → 10.
+- `index.html` portal: tarjeta de caso 21 actualizada de LEGACY → OPERATIVO con enlace al backend `http://localhost:8021/`.
+- `docker-compose.yml` raíz: servicio `case21` cambiado de demo nginx (puerto 9021) a backend real FastAPI (puerto 8021) con volúmenes `data/`.
+
+---
+
 ## v4.6.0 — 2026-05-05
 
 ### Agregado

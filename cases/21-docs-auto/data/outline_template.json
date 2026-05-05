@@ -1,0 +1,23 @@
+{
+  "api_rest": {
+    "secciones": [
+      {"id": "overview", "titulo": "Visión general", "descripcion": "Resumen del propósito y dominio del servicio."},
+      {"id": "instalacion", "titulo": "Instalación", "descripcion": "Cómo instalar y levantar el servicio en local."},
+      {"id": "uso", "titulo": "Uso rápido", "descripcion": "Ejemplo mínimo end-to-end."},
+      {"id": "endpoints", "titulo": "Endpoints", "descripcion": "Referencia completa de la API REST."},
+      {"id": "modelo", "titulo": "Modelo de datos", "descripcion": "Schemas y entidades principales."},
+      {"id": "tests", "titulo": "Tests y cobertura", "descripcion": "Cómo ejecutar tests y nivel de cobertura."},
+      {"id": "changelog", "titulo": "Changelog", "descripcion": "Historial de cambios relevantes."}
+    ]
+  },
+  "integration": {
+    "secciones": [
+      {"id": "overview", "titulo": "Visión general", "descripcion": "Propósito de la integración y sistemas involucrados."},
+      {"id": "instalacion", "titulo": "Instalación", "descripcion": "Cómo instalar y configurar el bridge."},
+      {"id": "endpoints", "titulo": "Endpoints", "descripcion": "Endpoints expuestos por el bridge."},
+      {"id": "integraciones", "titulo": "Integraciones externas", "descripcion": "Funciones que conectan al sistema externo."},
+      {"id": "tests", "titulo": "Tests y cobertura", "descripcion": "Estado de tests y cobertura."},
+      {"id": "operacion", "titulo": "Operación", "descripcion": "Cómo monitorear y resolver fallos comunes."}
+    ]
+  }
+}

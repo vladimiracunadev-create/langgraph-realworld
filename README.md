@@ -3,24 +3,24 @@
 [![CI](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml)
 [![Security Scan](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml/badge.svg?branch=main)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-4.6.0-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-4.7.0-blue.svg)](CHANGELOG.md)
 [![Python](https://img.shields.io/badge/python-3.11-informational.svg)](https://www.python.org/)
 [![LangGraph](https://img.shields.io/badge/LangGraph-latest-green.svg)](https://github.com/langchain-ai/langgraph)
 
 > Portafolio de **25 casos de uso empresariales** construidos con **LangGraph** y **FastAPI**:
-> **14 backends completamente operativos** (casos 01, 02, 03, 04, 05, 06, 08, 09, 10, 13, 14, 17, 19 y 25) con streaming, OAuth2/OIDC opt-in, observabilidad LangSmith, `/metrics` por servicio, logging JSON estructurado y reverse proxy nginx + TLS.
-> Los 11 casos restantes son scaffolds documentados listos para elevar al siguiente nivel.
+> **15 backends completamente operativos** (casos 01, 02, 03, 04, 05, 06, 08, 09, 10, 13, 14, 17, 19, 21 y 25) con streaming, OAuth2/OIDC opt-in, observabilidad LangSmith, `/metrics` por servicio, logging JSON estructurado y reverse proxy nginx + TLS.
+> Los 10 casos restantes son scaffolds documentados listos para elevar al siguiente nivel.
 
 ---
 
-## 🏗️ Implementación Industrial — v4.6.0
+## 🏗️ Implementación Industrial — v4.7.0
 
 El estándar actual del repositorio se apoya en estos pilares:
 
 | # | Pilar | Descripción |
 |:-:|:---|:---|
 | 1 | 🌐 **Portal unificado** | `index.html` como entrada principal para navegar el portafolio |
-| 2 | ⚙️ **Casos de referencia reales** | Backends FastAPI y UIs activas en los casos 01, 02, 03, 04, 05, 06, 08, 09, 10, 13, 14, 17, 19 y 25 |
+| 2 | ⚙️ **Casos de referencia reales** | Backends FastAPI y UIs activas en los casos 01, 02, 03, 04, 05, 06, 08, 09, 10, 13, 14, 17, 19, 21 y 25 |
 | 3 | 📐 **Estado tipado** | Contratos explícitos con `TypedDict` y flujos compatibles con LangGraph |
 | 4 | 🔭 **Observabilidad** | `/health`, `/ready`, `/metrics` con latencia, errores y modo; LangSmith opt-in |
 | 5 | 🔀 **Modo dual** | Demos offline + ruta clara para activar integraciones reales |
@@ -53,6 +53,7 @@ El estándar actual del repositorio se apoya en estos pilares:
 | **14** | [💰 Finanzas — Conciliación](cases/14-finanzas-conciliacion/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · matching multi-criterio · z-score outliers |
 | **17** | [⚖️ Legal Intake](cases/17-legal-intake/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · 3 especialidades · 3 plantillas · Asignación |
 | **19** | [🔍 DevEx: PR Review](cases/19-devex-pr-review/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · Security Analysis · Changelog |
+| **21** | [📝 Documentación Automática](cases/21-docs-auto/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · Outline adaptativo · Loop QA condicional |
 | **25** | [🤝 Supervisor + Workers](cases/25-supervisor-workers/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · Multi-agente · Due Diligence |
 
 ### 🔧 Casos scaffold — listos para elevar
@@ -66,7 +67,6 @@ El estándar actual del repositorio se apoya en estos pilares:
 | 16 | [✈️ Planificador de Viajes](cases/16-viajes-planificador/README.md) | Travel |
 | 18 | [📣 Marketing con QA](cases/18-marketing-contenido-qa/README.md) | Marketing |
 | 20 | [🏛️ Migración Legacy](cases/20-migracion-legacy/README.md) | Arquitectura |
-| 21 | [📝 Documentación Automática](cases/21-docs-auto/README.md) | DevOps |
 | 22 | [🏢 Backoffice: Automatización](cases/22-backoffice-automatizacion/README.md) | Operaciones |
 | 23 | [🏥 Salud: Pre-triage](cases/23-salud-pretriage/README.md) | Salud |
 | 24 | [📋 Asistente PM](cases/24-pm-assistant/README.md) | Gestión de proyectos |
@@ -188,7 +188,7 @@ TRUST_PROXY_HEADERS=false
 
 ## 🛡️ Seguridad
 
-Este repositorio ha sido auditado por **8 capas de seguridad** (v4.6.0):
+Este repositorio ha sido auditado por **8 capas de seguridad** (v4.7.0):
 
 | Capa | Control | Estado |
 |:---|:---|:---:|

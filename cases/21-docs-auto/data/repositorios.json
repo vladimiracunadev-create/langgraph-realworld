@@ -1,0 +1,136 @@
+[
+  {
+    "id": "DOC-001",
+    "nombre": "fastapi-orders",
+    "descripcion": "API de pedidos en FastAPI bien estructurada y con docstrings completos.",
+    "tipo": "api_rest",
+    "lenguaje": "python",
+    "framework": "fastapi",
+    "version": "1.4.0",
+    "modulos": [
+      {
+        "path": "src/api.py",
+        "tipo": "router",
+        "loc": 142,
+        "docstring_ratio": 1.0,
+        "endpoints": [
+          {"method": "GET", "path": "/orders", "handler": "list_orders", "doc": "Lista todos los pedidos paginados."},
+          {"method": "POST", "path": "/orders", "handler": "create_order", "doc": "Crea un pedido nuevo y emite evento OrderCreated."},
+          {"method": "GET", "path": "/orders/{id}", "handler": "get_order", "doc": "Obtiene el detalle de un pedido."},
+          {"method": "DELETE", "path": "/orders/{id}", "handler": "cancel_order", "doc": "Cancela un pedido pendiente."}
+        ]
+      },
+      {
+        "path": "src/models.py",
+        "tipo": "schemas",
+        "loc": 78,
+        "docstring_ratio": 1.0,
+        "schemas": ["OrderIn", "OrderOut", "OrderStatus"]
+      },
+      {
+        "path": "src/db.py",
+        "tipo": "data",
+        "loc": 96,
+        "docstring_ratio": 1.0,
+        "funciones_publicas": ["get_session", "init_engine", "save_order", "load_order"]
+      }
+    ],
+    "tests": {
+      "total": 24,
+      "passing": 24,
+      "cobertura_pct": 92
+    },
+    "changelog_entries": 12,
+    "readme_existente": true,
+    "ci_configurado": true
+  },
+  {
+    "id": "DOC-002",
+    "nombre": "billing-service",
+    "descripcion": "Servicio de facturación con docstrings parciales y un par de endpoints sin documentar.",
+    "tipo": "api_rest",
+    "lenguaje": "python",
+    "framework": "fastapi",
+    "version": "0.9.3",
+    "modulos": [
+      {
+        "path": "src/api.py",
+        "tipo": "router",
+        "loc": 210,
+        "docstring_ratio": 0.6,
+        "endpoints": [
+          {"method": "POST", "path": "/invoices", "handler": "create_invoice", "doc": "Genera una factura a partir de los items recibidos."},
+          {"method": "GET", "path": "/invoices/{id}", "handler": "get_invoice", "doc": ""},
+          {"method": "POST", "path": "/invoices/{id}/pay", "handler": "pay_invoice", "doc": "Marca la factura como pagada y dispara webhook."},
+          {"method": "GET", "path": "/reports/monthly", "handler": "monthly_report", "doc": ""}
+        ]
+      },
+      {
+        "path": "src/billing.py",
+        "tipo": "domain",
+        "loc": 320,
+        "docstring_ratio": 0.5,
+        "funciones_publicas": ["calculate_total", "apply_taxes", "issue_invoice", "send_to_dgi"]
+      },
+      {
+        "path": "src/webhooks.py",
+        "tipo": "integrations",
+        "loc": 88,
+        "docstring_ratio": 0.4,
+        "funciones_publicas": ["dispatch_webhook", "retry_failed"]
+      }
+    ],
+    "tests": {
+      "total": 18,
+      "passing": 17,
+      "cobertura_pct": 71
+    },
+    "changelog_entries": 4,
+    "readme_existente": true,
+    "ci_configurado": true
+  },
+  {
+    "id": "DOC-003",
+    "nombre": "legacy-erp-bridge",
+    "descripcion": "Bridge legacy hacia ERP, sin docstrings, sin README y con tests rotos.",
+    "tipo": "integration",
+    "lenguaje": "python",
+    "framework": "flask",
+    "version": "0.2.1",
+    "modulos": [
+      {
+        "path": "app.py",
+        "tipo": "router",
+        "loc": 540,
+        "docstring_ratio": 0.05,
+        "endpoints": [
+          {"method": "POST", "path": "/sync", "handler": "do_sync", "doc": ""},
+          {"method": "GET", "path": "/status", "handler": "status", "doc": ""},
+          {"method": "POST", "path": "/reset", "handler": "reset_cache", "doc": ""}
+        ]
+      },
+      {
+        "path": "erp_client.py",
+        "tipo": "integrations",
+        "loc": 410,
+        "docstring_ratio": 0.0,
+        "funciones_publicas": ["connect", "fetch_orders", "push_inventory", "logout"]
+      },
+      {
+        "path": "queue.py",
+        "tipo": "domain",
+        "loc": 180,
+        "docstring_ratio": 0.0,
+        "funciones_publicas": ["enqueue", "drain"]
+      }
+    ],
+    "tests": {
+      "total": 6,
+      "passing": 2,
+      "cobertura_pct": 18
+    },
+    "changelog_entries": 0,
+    "readme_existente": false,
+    "ci_configurado": false
+  }
+]

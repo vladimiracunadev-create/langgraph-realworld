@@ -1,68 +1,125 @@
 # Caso 21: Documentación Automática
 
 > [!NOTE]
-> **Estado**: `SCAFFOLD` | **Versión repo**: 4.0.0 | **Tipo**: Agente con estado y pipeline de escritura
+> **Estado**: `OPERATIVO` | **Versión repo**: 4.7.0 | **Tipo**: Pipeline con loop QA condicional | **Puerto**: 8021
 
-Automatiza la generación y mantenimiento de documentación técnica escaneando el repositorio, generando el outline estructurado, redactando cada sección con contexto del código real y aplicando un ciclo de QA para verificar precisión, completitud y legibilidad antes de publicar. Elimina la documentación desactualizada y reduce el costo de mantener docs al día a medida que el código evoluciona.
+Genera documentación técnica desde el código real: escanea el repositorio, extrae artefactos (endpoints, schemas, funciones, tests, changelog), produce un outline adaptado al tipo de proyecto, redacta cada sección con datos del repo, aplica un ciclo de QA con **loop condicional** (tope 3 iteraciones) que corrige las secciones bajo umbral, calcula score global y publica el documento Markdown final con diff.
 
 ---
 
 ## Objetivo de negocio
 
-La documentación técnica es críticamente importante pero crónicamente desactualizada: los equipos de ingeniería priorizan el código sobre las docs, y mantenerlas al día requiere un esfuerzo continuo que rara vez se prioriza. Este agente escanea el repositorio completo (código fuente, comentarios, tests, changelogs, arquitectura), infiere la estructura óptima de documentación para el proyecto, redacta cada sección del outline con información extraída directamente del código y los artefactos del repo, aplica un ciclo de QA que verifica coherencia interna, precisión técnica y legibilidad, y publica o actualiza la documentación en la plataforma configurada (MkDocs, Confluence, Notion).
+La documentación técnica se desactualiza más rápido que el código. Este agente reduce el costo de mantenerla al día reescribiendo cada sección desde la fuente única de verdad (el repo) y verificando con QA que las referencias citadas existen realmente. Sirve como pipeline reutilizable en CI o como herramienta on-demand para preparar docs antes de un release.
 
-## Flujo propuesto (LangGraph)
+## Flujo LangGraph
 
 ```mermaid
 graph TD
-    A[Repositorio de código / Trigger CI] --> B[Nodo: escanear_repositorio]
-    B --> C[Nodo: extraer_artefactos]
-    C --> D[Nodo: generar_outline]
-    D --> E[Nodo: redactar_seccion]
-    E --> F[Nodo: qa_precision_tecnica]
-    F --> G{Router: calidad_seccion}
-    G -->|Imprecisa o incompleta| H[Nodo: revisar_seccion]
-    H --> E
-    G -->|Aprobada| I[Nodo: marcar_seccion_lista]
-    I --> J{Router: outline_completo}
-    J -->|Quedan secciones| E
-    J -->|Completo| K[Nodo: qa_coherencia_global]
-    K --> L[Nodo: publicar_documentacion]
-    L --> M[Salida: docs_publicadas_y_diff]
+    A[Trigger / repo_id] --> B[escanear_repositorio]
+    B --> C[extraer_artefactos]
+    C --> D[generar_outline]
+    D --> E[redactar_secciones]
+    E --> F[qa_precision_tecnica]
+    F --> G{router calidad}
+    G -->|pendientes y iter < max| H[revisar_secciones]
+    H --> F
+    G -->|ok / sin iter| I[qa_coherencia_global]
+    I --> J[publicar_documentacion]
+    J --> K[producir_resumen]
+    K --> L[Salida: documento .md + diff]
 ```
 
-### Nodos principales
+### Nodos
 
 | Nodo | Descripción |
 |---|---|
-| `escanear_repositorio` | Indexa archivos de código, configuración, tests, changelog y README existentes |
-| `extraer_artefactos` | Extrae docstrings, firmas de funciones, esquemas de API y diagramas existentes |
-| `generar_outline` | Propone la estructura de documentación adaptada al tipo de proyecto |
-| `redactar_seccion` | Escribe cada sección del outline con información del código real |
-| `qa_precision_tecnica` | Verifica que los ejemplos de código ejecuten y la información sea correcta |
-| `revisar_seccion` | Corrige imprecisiones y completa información faltante |
-| `qa_coherencia_global` | Verifica consistencia terminológica y coherencia entre secciones |
-| `publicar_documentacion` | Despliega las docs en la plataforma configurada y genera el diff de cambios |
+| `escanear_repositorio` | Carga snapshot del repo (módulos, LOC, tipo, framework) |
+| `extraer_artefactos` | Indexa endpoints, schemas, funciones públicas, tests, changelog, ratio docstring |
+| `generar_outline` | Selecciona plantilla de outline según tipo (`api_rest`, `integration`) |
+| `redactar_secciones` | Genera contenido determinista de cada sección desde los artefactos |
+| `qa_precision_tecnica` | Calcula score por sección con penalizaciones (endpoints sin doc, tests fallando, sin README, etc.) |
+| `calidad_seccion_router` | **Router**: pendientes y iter<max → revisar; si no → coherencia global |
+| `revisar_secciones` | Aplica nota de revisión y sube secciones a estado `revisada` |
+| `qa_coherencia_global` | Score global + métrica de coherencia + indicador verde/amarillo/rojo |
+| `publicar_documentacion` | Compone Markdown final + diff vs versión previa |
+| `producir_resumen` | Resumen ejecutivo (LLM opt-in) para el equipo |
 
-## Stack técnico previsto
+## Reglas de calidad
+
+Configurables en [`data/quality_rules.json`](data/quality_rules.json):
+
+- `max_iteraciones_revision`: 3
+- `umbral_score_seccion`: 80 (mínimo para marcar como aprobada)
+- Umbrales de riesgo: verde ≥90, amarillo ≥70, rojo <70
+- Penalizaciones: endpoint sin doc (8), función sin docstring (4), sin README (15), sin changelog (10), tests fallando (12), cobertura baja <60% (8), sin CI (6)
+
+## Escenarios DEMO
+
+| ID | Repo | Caracterización | Resultado esperado |
+|---|---|---|---|
+| `DOC-001` | fastapi-orders | API limpia, docstrings 100%, 24 tests OK, cobertura 92%, README + CI | 🟢 Score ≥90 · 0 iteraciones · riesgo BAJO |
+| `DOC-002` | billing-service | docstrings ~50%, 2 endpoints sin doc, 1 test fallando, cobertura 71% | 🟡 Score 70-90 · issues detectadas |
+| `DOC-003` | legacy-erp-bridge | sin docstrings, sin README, sin CI, 4/6 tests fallando, cobertura 18% | 🔴 Score bajo · 1-3 iteraciones · riesgo ALTO |
+
+## Stack
 
 | Capa | Tecnología |
 |---|---|
-| Orquestación | LangGraph `StateGraph` |
+| Orquestación | LangGraph `StateGraph` + `MemorySaver` |
 | API | FastAPI + uvicorn |
-| LLM | OpenAI GPT-4o-mini (modo LIVE) / respuestas mock (modo DEMO) |
-| Análisis de código | tree-sitter, ast (Python), GitHub API |
-| Publicación | MkDocs, Confluence API, Notion API |
-| Almacenamiento | PostgreSQL (outline, estado de secciones), Git (versionado de docs) |
+| LLM (opt-in) | OpenAI GPT-4o-mini para resumen ejecutivo |
+| Tracing (opt-in) | LangSmith |
+| Auth (opt-in) | OAuth2/OIDC con JWT (RS256/ES256) o `X-Demo-Token` |
 
-## Estado actual
+## Endpoints
 
-Este caso es un **scaffold**: la estructura de la demo estática existe,
-la implementación del backend con LangGraph está pendiente.
+| Método | Ruta | Descripción |
+|---|---|---|
+| `GET` | `/health` · `/healthz` | Estado y modo (DEMO/LIVE) |
+| `GET` | `/ready` | Readiness check (compila el grafo) |
+| `GET` | `/metrics` | Contadores y latencias |
+| `POST` | `/api/run` | Genera documentación completa |
+| `GET` | `/api/stream` | Stream NDJSON con snapshots por nodo |
+| `GET` | `/` | Interfaz web |
 
-Para contribuir o elevar este caso, consulta [CONTRIBUTING.md](../../CONTRIBUTING.md).
+## Cómo ejecutar
 
----
+### Local con uv (recomendado, ~10× más rápido)
+
+```bash
+make uv-install-case CASE=21
+source cases/21-docs-auto/backend/.venv/Scripts/activate  # o /bin/activate en Linux/macOS
+cd cases/21-docs-auto/backend
+uvicorn src.api:app --port 8021
+# http://localhost:8021/
+```
+
+### Local con pip
+
+```bash
+cd cases/21-docs-auto/backend
+pip install -r requirements.txt
+uvicorn src.api:app --host 0.0.0.0 --port 8021
+```
+
+### Docker
+
+```bash
+cd cases/21-docs-auto/backend
+docker compose up --build
+```
+
+### Tests
+
+```bash
+cd cases/21-docs-auto/backend
+pytest -q
+# 25 tests
+```
+
+## Modo LIVE
+
+Crear `backend/.env` con `OPENAI_API_KEY=sk-...` para activar narrativa LLM en el resumen ejecutivo. El pipeline (escaneo → extracción → outline → redacción → QA → publicación) **es 100% determinista y funciona idéntico en DEMO**.
 
 > [!TIP]
-> Ver los casos **09**, **10** y **13** como referencia de implementación industrial.
+> Casos de referencia para patrones industriales: **06**, **09**, **10**, **13**, **14**.

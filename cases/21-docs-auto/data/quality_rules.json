@@ -1,0 +1,20 @@
+{
+  "max_iteraciones_revision": 3,
+  "umbral_score_seccion": 80,
+  "umbral_score_global": 85,
+  "min_secciones_requeridas": 4,
+  "umbral_riesgo": {
+    "verde_min_score": 90,
+    "amarillo_min_score": 70
+  },
+  "penalizaciones": {
+    "endpoint_sin_doc": 8,
+    "funcion_sin_docstring": 4,
+    "sin_readme": 15,
+    "sin_changelog": 10,
+    "tests_fallando": 12,
+    "cobertura_baja": 8,
+    "sin_ci": 6
+  },
+  "umbral_cobertura_baja_pct": 60
+}
