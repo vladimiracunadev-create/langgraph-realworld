@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Caso 08 — Ventas B2B + CRM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07111f;
+      --surface: rgba(20, 30, 48, 0.85);
+      --border: rgba(180, 200, 230, 0.1);
+      --accent: #38bdf8;
+      --accent-2: #0ea5e9;
+      --accent-dim: rgba(56, 189, 248, 0.15);
+      --text: #e6edf3;
+      --muted: #8b9cb3;
+      --positivo: #34d399;
+      --neutro: #fbbf24;
+      --negativo: #f87171;
+      font-family: 'Inter', system-ui, sans-serif;
+      color-scheme: dark;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    header {
+      padding: 12px 20px; border-bottom: 1px solid var(--border);
+      display: flex; gap: 12px; align-items: center;
+      background: rgba(7,17,31,.85); backdrop-filter: blur(10px);
+      position: sticky; top: 0; z-index: 10;
+    }
+    header .back-link {
+      font-family: 'JetBrains Mono', monospace; font-size: 12px;
+      color: var(--accent); text-decoration: none; opacity: .85;
+    }
+    header .back-link:hover { opacity: 1; }
+    header .sep { color: var(--border); font-size: 18px; }
+    header .title { font-weight: 800; letter-spacing: -.4px; font-size: 1rem; flex: 1; }
+    .pill {
+      font-family: 'JetBrains Mono', monospace;
+      padding: 4px 10px; border-radius: 999px; font-size: 10px;
+      font-weight: 600; text-transform: uppercase; letter-spacing: .5px;
+      border: 1px solid var(--border);
+    }
+    .pill-demo { color: #fbbf24; border-color: rgba(251,191,36,.3); background: rgba(251,191,36,.1); }
+    .pill-live { color: #34d399; border-color: rgba(52,211,153,.3); background: rgba(52,211,153,.1); }
+
+    .hero { max-width: 920px; margin: 28px auto 0; padding: 0 24px; }
+    .hero h2 { font-size: 1.55rem; font-weight: 800; margin-bottom: 10px; }
+    .hero p { color: var(--muted); line-height: 1.65; font-size: .92rem; }
+    .badge-row { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+    .hero-pill {
+      font-family: 'JetBrains Mono', monospace; font-size: .68rem;
+      padding: 4px 9px; border-radius: 999px;
+      border: 1px solid var(--border); color: var(--muted);
+      background: var(--accent-dim);
+    }
+
+    main {
+      max-width: 1280px; margin: 22px auto;
+      padding: 0 24px 40px;
+      display: grid; grid-template-columns: 1fr 1.25fr; gap: 18px;
+    }
+    @media (max-width: 880px) { main { grid-template-columns: 1fr; } }
+
+    .panel {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; overflow: hidden;
+    }
+    .panel-header {
+      padding: 14px 18px; border-bottom: 1px solid var(--border);
+      font-weight: 700; font-size: .85rem;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .panel-body { padding: 18px; }
+
+    label { font-size: .8rem; color: var(--muted); display: block; margin-bottom: 6px; }
+    select, button {
+      width: 100%; padding: 10px 14px; border-radius: 8px;
+      border: 1px solid var(--border); font-size: .88rem; font-family: inherit;
+    }
+    select { background: rgba(20,30,48,.95); color: var(--text); cursor: pointer; margin-bottom: 14px; }
+    select:focus { outline: 2px solid var(--accent); }
+    button {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #07111f; font-weight: 700; cursor: pointer; border: none;
+      transition: opacity .15s, transform .1s;
+    }
+    button:hover:not(:disabled) { opacity: .92; transform: translateY(-1px); }
+    button:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+
+    .account-preview {
+      margin-top: 14px; padding: 12px;
+      background: rgba(56,189,248,.05);
+      border: 1px solid rgba(56,189,248,.15);
+      border-radius: 8px;
+      font-size: .8rem; color: var(--muted);
+      max-height: 220px; overflow-y: auto; line-height: 1.55;
+    }
+    .account-preview strong { color: var(--text); }
+    .account-preview ul { margin: 4px 0 0 18px; }
+    .account-preview li { margin-bottom: 2px; }
+
+    .timeline { margin-top: 6px; }
+    .tl-item {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 9px 0; border-bottom: 1px solid var(--border);
+      animation: fadeIn .25s ease;
+    }
+    .tl-item:last-child { border-bottom: none; }
+    .tl-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent); margin-top: 5px; flex-shrink: 0;
+    }
+    .tl-node {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem; color: var(--accent); font-weight: 600;
+    }
+    .tl-detail { font-size: .78rem; color: var(--muted); margin-top: 2px; line-height: 1.55; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; } }
+
+    .stage-header {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 18px; border-bottom: 1px solid var(--border);
+    }
+    .stage-badge {
+      padding: 6px 14px; border-radius: 999px;
+      font-weight: 700; font-size: .78rem;
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase; letter-spacing: .5px;
+    }
+    .stage-meeting    { background: rgba(52,211,153,.15); color: var(--positivo); border: 1px solid rgba(52,211,153,.3); }
+    .stage-nurturing  { background: rgba(251,191,36,.15); color: var(--neutro); border: 1px solid rgba(251,191,36,.3); }
+    .stage-lost,
+    .stage-disq       { background: rgba(248,113,113,.15); color: var(--negativo); border: 1px solid rgba(248,113,113,.3); }
+    .stage-empty      { background: rgba(139,156,179,.1); color: var(--muted); border: 1px solid var(--border); }
+
+    .icp-score {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.4rem; font-weight: 700;
+    }
+    .case-meta { flex: 1; }
+    .case-title { font-weight: 700; font-size: .92rem; margin-bottom: 2px; }
+    .case-sub { font-size: .76rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+
+    .section-label {
+      font-size: .72rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .5px;
+      font-weight: 600; margin: 16px 0 8px;
+    }
+
+    .razones-list { display: flex; flex-direction: column; gap: 4px; }
+    .razon-item {
+      font-size: .78rem; padding: 6px 9px;
+      background: rgba(20,30,48,.5);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 6px 6px 0;
+      line-height: 1.5;
+    }
+    .razon-positiva { border-left-color: var(--positivo); }
+    .razon-negativa { border-left-color: var(--negativo); }
+
+    .email-mock {
+      background: #0a1424; border: 1px solid var(--border);
+      border-radius: 10px; overflow: hidden;
+    }
+    .email-meta {
+      padding: 10px 14px; background: rgba(56,189,248,.07);
+      border-bottom: 1px solid var(--border);
+      font-size: .78rem;
+    }
+    .email-meta .from { color: var(--muted); }
+    .email-meta .to { color: var(--text); font-weight: 600; }
+    .email-meta .subject {
+      color: var(--accent); font-weight: 700; margin-top: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: .8rem;
+    }
+    .email-body {
+      padding: 12px 16px; font-size: .82rem; line-height: 1.7;
+      white-space: pre-wrap; color: #cdd9e5;
+      max-height: 280px; overflow-y: auto;
+    }
+    .email-cta {
+      padding: 8px 14px; background: rgba(56,189,248,.05);
+      border-top: 1px solid var(--border);
+      font-size: .76rem; color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .cadencia-list { display: flex; gap: 8px; flex-wrap: wrap; }
+    .cadencia-item {
+      font-family: 'JetBrains Mono', monospace; font-size: .72rem;
+      padding: 5px 10px; border-radius: 6px;
+      background: rgba(56,189,248,.08);
+      border: 1px solid rgba(56,189,248,.2); color: var(--accent);
+    }
+
+    .response-box {
+      padding: 12px; border-radius: 8px; font-size: .82rem;
+      line-height: 1.6; border-left: 4px solid var(--neutro);
+      background: rgba(251,191,36,.05);
+    }
+    .response-box.positivo { border-left-color: var(--positivo); background: rgba(52,211,153,.05); }
+    .response-box.negativo { border-left-color: var(--negativo); background: rgba(248,113,113,.05); }
+    .response-box.sin_respuesta { border-left-color: var(--neutro); background: rgba(251,191,36,.05); }
+    .response-tag {
+      display: inline-block; font-family: 'JetBrains Mono', monospace;
+      font-size: .65rem; font-weight: 700; padding: 2px 7px;
+      border-radius: 4px; margin-bottom: 6px; letter-spacing: .5px;
+      text-transform: uppercase;
+    }
+    .response-tag.positivo { background: rgba(52,211,153,.2); color: var(--positivo); }
+    .response-tag.negativo { background: rgba(248,113,113,.2); color: var(--negativo); }
+    .response-tag.sin_respuesta { background: rgba(251,191,36,.2); color: var(--neutro); }
+
+    .crm-card {
+      background: rgba(56,189,248,.05);
+      border: 1px solid rgba(56,189,248,.15);
+      border-radius: 10px; padding: 14px;
+      font-size: .8rem; line-height: 1.65;
+    }
+    .crm-card .row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px dashed var(--border); }
+    .crm-card .row:last-child { border-bottom: none; }
+    .crm-card .key { color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: .72rem; }
+    .crm-card .val { color: var(--text); font-weight: 600; text-align: right; max-width: 60%; }
+
+    .ae-card {
+      display: flex; gap: 12px; align-items: center;
+      padding: 12px 14px; margin-top: 8px;
+      background: rgba(52,211,153,.07);
+      border: 1px solid rgba(52,211,153,.18);
+      border-radius: 8px;
+    }
+    .ae-avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--positivo), #10b981);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; color: #07111f; flex-shrink: 0;
+    }
+    .ae-info { flex: 1; }
+    .ae-nombre { font-weight: 700; font-size: .85rem; }
+    .ae-meta { font-size: .72rem; color: var(--muted); margin-top: 2px; }
+
+    .resumen-box {
+      background: rgba(56,189,248,.05);
+      border: 1px solid rgba(56,189,248,.15);
+      border-radius: 10px; padding: 14px 16px;
+      font-size: .83rem; line-height: 1.7;
+      white-space: pre-wrap; color: #cdd9e5;
+    }
+
+    .tech-footer {
+      max-width: 1280px; margin: 0 auto;
+      padding: 0 24px 32px;
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .tech-pill {
+      font-family: 'JetBrains Mono', monospace; font-size: .7rem;
+      padding: 4px 10px; border-radius: 999px;
+      border: 1px solid var(--border); color: var(--muted);
+      background: var(--surface);
+    }
+
+    .empty {
+      text-align: center; padding: 32px 16px;
+      color: var(--muted); font-size: .85rem;
+    }
+    .empty-icon { font-size: 2rem; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="http://localhost:8080/" class="back-link">← VOLVER AL HUB</a>
+  <span class="sep">|</span>
+  <span class="title">Caso 08 — Ventas B2B + CRM</span>
+  <span class="pill" id="mode-badge">…</span>
+</header>
+
+<div class="hero">
+  <h2>Outbound B2B Automatizado con CRM Integrado</h2>
+  <p>
+    El equipo comercial recibe una lista de cuentas objetivo. Este agente LangGraph investiga
+    cada cuenta, calcula el score ICP, decide si califica, personaliza el mensaje de outreach
+    según la industria, selecciona canal y cadencia, simula el envío, registra la señal del
+    prospect, decide entre escalar al AE o programar follow-up, y persiste todo en el CRM con
+    un resumen ejecutivo del estado del deal. El AE solo ve cuentas calientes con contexto;
+    las descartadas y los nurturing quedan archivados con razón explícita.
+    Funciona sin LLM en modo DEMO.
+  </p>
+  <div class="badge-row">
+    <span class="hero-pill">10 nodos LangGraph</span>
+    <span class="hero-pill">2 routers (ICP + señal)</span>
+    <span class="hero-pill">3 plantillas por industria</span>
+    <span class="hero-pill">CRM stage automático</span>
+    <span class="hero-pill">DEMO + LIVE (GPT-4o-mini)</span>
+  </div>
+</div>
+
+<main>
+  <div>
+    <div class="panel">
+      <div class="panel-header"><span>🎯</span> Cuenta objetivo</div>
+      <div class="panel-body">
+        <label for="acc-select">Seleccionar cuenta del pipeline</label>
+        <select id="acc-select" onchange="renderPreview()">
+          <option value="ACC-001">ACC-001 — NorthPeak Logistics · Logística · mid-market</option>
+          <option value="ACC-002">ACC-002 — Synthwave Studios · Gaming · startup</option>
+          <option value="ACC-003">ACC-003 — Andina Comercializadora · Retail · small</option>
+          <option value="ACC-004">ACC-004 — FinSecure Bank · Banca · enterprise</option>
+        </select>
+        <div class="account-preview" id="acc-preview">…</div>
+        <button id="btn-procesar" onclick="iniciarPipeline()" style="margin-top:12px;">
+          Ejecutar pipeline B2B →
+        </button>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-header"><span>⏱</span> Timeline del agente</div>
+      <div class="panel-body">
+        <div class="timeline" id="timeline">
+          <div class="empty"><div class="empty-icon">📈</div>Selecciona una cuenta y pulsa Ejecutar.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="results-panel">
+    <div class="stage-header">
+      <div class="stage-badge stage-empty" id="stage-badge">— stage</div>
+      <div class="case-meta">
+        <div class="case-title" id="case-title">Esperando pipeline…</div>
+        <div class="case-sub" id="case-sub">— · —</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="icp-score" id="icp-score">—</div>
+        <div style="font-size:.7rem; color:var(--muted);">ICP / 100</div>
+      </div>
+    </div>
+    <div class="panel-body" id="results-body">
+      <div class="empty"><div class="empty-icon">📋</div>Los resultados aparecerán aquí.</div>
+    </div>
+  </div>
+</main>
+
+<div class="tech-footer">
+  <span class="tech-pill">LangGraph StateGraph</span>
+  <span class="tech-pill">FastAPI</span>
+  <span class="tech-pill">10 nodos</span>
+  <span class="tech-pill">2 routers</span>
+  <span class="tech-pill">NDJSON streaming</span>
+  <span class="tech-pill">DEMO / LIVE</span>
+  <span class="tech-pill">Puerto 8008</span>
+  <span class="tech-pill">MemorySaver</span>
+</div>
+
+<script>
+  const PORT = window.location.port || '8008';
+  const BASE = `${window.location.protocol}//${window.location.hostname}:${PORT}`;
+
+  const PREVIEWS = {
+    'ACC-001': {
+      empresa: 'NorthPeak Logistics', industria: 'Logística (mid-market, 850 empleados, Chile)',
+      contacto: 'Andrés Bustamante — Chief Operations Officer',
+      tech: 'SAP S/4HANA, Salesforce, AWS, Looker',
+      news: ['Expansión a Perú/Colombia con USD 22M (mar 2026)', 'RFP abierto para optimización de ruteo'],
+      esperado: 'ICP alto · respuesta positiva → ESCALAR AE'
+    },
+    'ACC-002': {
+      empresa: 'Synthwave Studios', industria: 'Gaming/Media (startup, 35 empleados, Argentina)',
+      contacto: 'Lucía Mendoza — Head of Growth',
+      tech: 'HubSpot, Mixpanel, Unity, Discord',
+      news: ['Ronda seed USD 1.8M (feb 2026)', 'Vacantes de performance marketing abiertas'],
+      esperado: 'ICP medio · sin respuesta → FOLLOW-UP'
+    },
+    'ACC-003': {
+      empresa: 'Andina Comercializadora del Sur', industria: 'Retail tradicional (50 emp., Bolivia)',
+      contacto: 'Mario Quintanilla — Gerente General',
+      tech: 'Excel, sistema contable local, WhatsApp Business',
+      news: ['Sin presencia digital en 12 meses'],
+      esperado: 'ICP fuera de target → DESCARTAR'
+    },
+    'ACC-004': {
+      empresa: 'FinSecure Bank', industria: 'Banca (enterprise, 12.000 emp., Brasil)',
+      contacto: 'Ricardo Almeida — Director de Innovación',
+      tech: 'Azure, Databricks, Snowflake, Salesforce, Kafka',
+      news: ['Freeze de vendors hasta Q3 2026', 'CFO con foco en optimización de costos'],
+      esperado: 'ICP medio · respuesta negativa → CLOSED LOST'
+    }
+  };
+
+  function renderPreview() {
+    const id = document.getElementById('acc-select').value;
+    const p = PREVIEWS[id];
+    if (!p) return;
+    document.getElementById('acc-preview').innerHTML = `
+      <div><strong>${escapeHtml(p.empresa)}</strong></div>
+      <div style="color:var(--muted)">${escapeHtml(p.industria)}</div>
+      <div style="margin-top:6px;"><strong>Contacto:</strong> ${escapeHtml(p.contacto)}</div>
+      <div><strong>Tech stack:</strong> ${escapeHtml(p.tech)}</div>
+      <div style="margin-top:4px;"><strong>Noticias / señales:</strong></div>
+      <ul>${p.news.map(n => `<li>${escapeHtml(n)}</li>`).join('')}</ul>
+      <div style="margin-top:6px; font-family:'JetBrains Mono',monospace; font-size:.72rem; color:var(--accent);">
+        Resultado esperado: ${escapeHtml(p.esperado)}
+      </div>`;
+  }
+
+  async function detectMode() {
+    try {
+      const r = await fetch(`${BASE}/health`);
+      const d = await r.json();
+      const badge = document.getElementById('mode-badge');
+      const isLive = d.mode === 'LIVE';
+      badge.textContent = isLive ? 'LIVE' : 'DEMO';
+      badge.className = `pill ${isLive ? 'pill-live' : 'pill-demo'}`;
+    } catch { /* silencioso */ }
+  }
+  detectMode(); renderPreview();
+
+  function stageClass(stage) {
+    const s = (stage || '').toLowerCase();
+    if (s === 'meeting scheduled') return 'stage-meeting';
+    if (s === 'nurturing') return 'stage-nurturing';
+    if (s === 'closed lost') return 'stage-lost';
+    if (s === 'disqualified') return 'stage-disq';
+    return 'stage-empty';
+  }
+  function senalClass(s) { return ({positivo:'positivo', negativo:'negativo', sin_respuesta:'sin_respuesta'})[s] || ''; }
+
+  const NODE_LABELS = {
+    'cuenta_investigada': 'investigar_cuenta',
+    'lead_calificado': 'calificar_lead',
+    'cuenta_descartada': 'descartar_y_registrar',
+    'outreach_personalizado': 'personalizar_outreach',
+    'canal_seleccionado': 'seleccionar_canal',
+    'envio_simulado': 'simular_envio',
+    'respuesta_monitoreada': 'monitorear_respuesta',
+    'followup_programado': 'programar_followup',
+    'ejecutivo_escalado': 'escalar_ejecutivo',
+    'crm_actualizado': 'actualizar_crm',
+    'resumen_generado': 'producir_resumen',
+  };
+
+  function describeEvent(ev) {
+    const t = ev.type || '';
+    if (t === 'cuenta_investigada')      return `${ev.company} · ${ev.industria} · ${ev.headcount} emp · ${ev.señales_compra} señales`;
+    if (t === 'lead_calificado')         return `Score ${ev.score}/100 · nivel ${(ev.nivel||'').toUpperCase()} · ${ev.califica ? 'CALIFICA' : 'NO CALIFICA'}`;
+    if (t === 'cuenta_descartada')       return `Motivo: ${ev.motivo}`;
+    if (t === 'outreach_personalizado')  return `Plantilla ${ev.template_usado} · ${ev.longitud_chars} chars`;
+    if (t === 'canal_seleccionado')      return `Canal ${ev.canal} · ${ev.total_steps} steps · ${ev.es_clevel ? 'C-level' : 'rol intermedio'}`;
+    if (t === 'envio_simulado')          return `${ev.canal} step ${ev.step} · status ${ev.status}`;
+    if (t === 'respuesta_monitoreada')   return `Señal ${ev.tipo} · intent ${ev.intent_score}/100`;
+    if (t === 'followup_programado')     return `Próximo toque ${ev.fecha_proximo_toque} · ${ev.canal} step ${ev.step}`;
+    if (t === 'ejecutivo_escalado')      return `${ev.ae} · ${ev.deals_activos} deals activos · carga ${ev.carga}`;
+    if (t === 'crm_actualizado')         return `Stage ${ev.deal_stage} · ICP ${ev.icp_nivel}`;
+    if (t === 'resumen_generado')        return `Pipeline cerrado · stage ${ev.deal_stage}`;
+    return JSON.stringify(ev).slice(0, 80);
+  }
+
+  function addTimelineItem(ev) {
+    const tl = document.getElementById('timeline');
+    const empty = tl.querySelector('.empty');
+    if (empty) empty.remove();
+    const item = document.createElement('div');
+    item.className = 'tl-item';
+    item.innerHTML = `<div class="tl-dot"></div><div>
+      <div class="tl-node">${NODE_LABELS[ev.type] || ev.type}</div>
+      <div class="tl-detail">${escapeHtml(describeEvent(ev))}</div>
+    </div>`;
+    tl.appendChild(item);
+  }
+
+  let _lastEventsLen = 0;
+
+  function applySnapshot(snap) {
+    if (!snap) return;
+    if (snap.crm_record && snap.crm_record.deal_stage) {
+      const stage = snap.crm_record.deal_stage;
+      const badge = document.getElementById('stage-badge');
+      badge.className = `stage-badge ${stageClass(stage)}`;
+      badge.textContent = stage;
+    }
+    if (snap.company_name) {
+      document.getElementById('case-title').textContent = snap.company_name;
+    }
+    document.getElementById('case-sub').textContent =
+      `${(snap.industria_tag || '—').toUpperCase()} · ${snap.tamano_empresa || '—'} · ${snap.pais || '—'}`;
+    if (snap.icp_score) document.getElementById('icp-score').textContent = snap.icp_score;
+
+    const events = snap.events || [];
+    events.slice(_lastEventsLen).forEach(addTimelineItem);
+    _lastEventsLen = events.length;
+
+    if (snap.done) renderResults(snap);
+  }
+
+  function renderResults(snap) {
+    const body = document.getElementById('results-body');
+    let html = '';
+
+    // ICP razones
+    if ((snap.icp_razones || []).length) {
+      html += `<div class="section-label">🎯 Análisis ICP — score ${snap.icp_score}/100 (${(snap.icp_nivel||'').toUpperCase()})</div>
+        <div class="razones-list">${snap.icp_razones.map(r => {
+          const cls = r.toLowerCase().includes('+') ? 'razon-positiva' : (r.toLowerCase().includes('insuficiente') || r.toLowerCase().includes('legacy') || r.toLowerCase().includes('no objetivo') || r.toLowerCase().includes('sin señales') || r.toLowerCase().includes('no procurement') ? 'razon-negativa' : '');
+          return `<div class="razon-item ${cls}">${escapeHtml(r)}</div>`;
+        }).join('')}</div>`;
+    }
+
+    // Outreach
+    const m = snap.mensaje_outreach || {};
+    if (m.cuerpo) {
+      const contacto = (snap.contacto_principal || {});
+      html += `<div class="section-label">✉️ Mensaje de outreach personalizado</div>
+        <div class="email-mock">
+          <div class="email-meta">
+            <div class="from">De: equipo@miempresa.com</div>
+            <div class="to">Para: ${escapeHtml(contacto.email || '')} (${escapeHtml(contacto.nombre || '')})</div>
+            <div class="subject">${escapeHtml(m.asunto || '')}</div>
+          </div>
+          <div class="email-body">${escapeHtml(m.cuerpo)}</div>
+          <div class="email-cta">CTA: ${escapeHtml(m.cta || '')}</div>
+        </div>`;
+    }
+
+    // Cadencia
+    if ((snap.cadencia || []).length) {
+      html += `<div class="section-label">📨 Cadencia (canal: ${escapeHtml(snap.canal || '')})</div>
+        <div class="cadencia-list">${snap.cadencia.map(c =>
+          `<span class="cadencia-item">step ${c.step} · ${c.canal} · día +${c.dias}</span>`
+        ).join('')}</div>`;
+    }
+
+    // Respuesta
+    const r = snap.respuesta_prospect || {};
+    if (r.tipo && r.tipo !== 'no_aplica') {
+      const cls = senalClass(snap.senal_interes);
+      html += `<div class="section-label">💬 Señal del prospect</div>
+        <div class="response-box ${cls}">
+          <div class="response-tag ${cls}">${escapeHtml(snap.senal_interes || '')} · intent ${r.intent_score || 0}/100</div>
+          <div>${escapeHtml(r.fragmento || '')}</div>
+        </div>`;
+    }
+
+    // Próxima acción / AE asignado
+    if (snap.siguiente_accion) {
+      html += `<div class="section-label">▶ Próxima acción</div>
+        <div class="razon-item" style="border-left-color: var(--accent); font-size:.85rem;">${escapeHtml(snap.siguiente_accion)}</div>`;
+    }
+
+    const ae = (snap.crm_record || {}).ae_assigned;
+    if (ae && ae.nombre) {
+      const initials = ae.nombre.split(' ').filter(s => s.length > 1).slice(-2).map(s => s[0]).join('');
+      html += `<div class="ae-card">
+        <div class="ae-avatar">${escapeHtml(initials)}</div>
+        <div class="ae-info">
+          <div class="ae-nombre">${escapeHtml(ae.nombre)} — ${escapeHtml(ae.rol || '')}</div>
+          <div class="ae-meta">${(ae.industrias||[]).join(', ')} · ${ae.deals_activos} deals · carga ${escapeHtml(ae.carga||'')} · quota ${ae.quota_pct}%</div>
+          <div class="ae-meta">📧 ${escapeHtml(ae.email || '')}</div>
+        </div>
+      </div>`;
+    }
+
+    // CRM record
+    const crm = snap.crm_record || {};
+    html += `<div class="section-label">💾 Registro CRM</div>
+      <div class="crm-card">
+        <div class="row"><span class="key">deal_stage</span><span class="val">${escapeHtml(crm.deal_stage || '—')}</span></div>
+        <div class="row"><span class="key">company</span><span class="val">${escapeHtml(crm.company || '')}</span></div>
+        <div class="row"><span class="key">contact_email</span><span class="val">${escapeHtml(crm.contact_email || '')}</span></div>
+        <div class="row"><span class="key">icp_score</span><span class="val">${crm.icp_score || 0}/100 (${escapeHtml(crm.icp_nivel||'')})</span></div>
+        <div class="row"><span class="key">industria</span><span class="val">${escapeHtml(crm.industria || '')}</span></div>
+        <div class="row"><span class="key">updated_at</span><span class="val">${escapeHtml(crm.updated_at || '')}</span></div>
+      </div>`;
+
+    // Resumen
+    if (snap.resumen_comercial) {
+      html += `<div class="section-label">📝 Resumen ejecutivo</div>
+        <div class="resumen-box">${escapeHtml(snap.resumen_comercial)}</div>`;
+    }
+
+    body.innerHTML = html;
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  async function iniciarPipeline() {
+    const accId = document.getElementById('acc-select').value;
+    const btn = document.getElementById('btn-procesar');
+    const tl = document.getElementById('timeline');
+    const body = document.getElementById('results-body');
+
+    btn.disabled = true; btn.textContent = 'Procesando…';
+    tl.innerHTML = '';
+    body.innerHTML = '<div class="empty"><div class="empty-icon">⚙️</div>Ejecutando pipeline B2B…</div>';
+    _lastEventsLen = 0;
+    const sb = document.getElementById('stage-badge');
+    sb.className = 'stage-badge stage-empty'; sb.textContent = '— stage';
+    document.getElementById('case-title').textContent = 'Procesando…';
+    document.getElementById('case-sub').textContent = '— · —';
+    document.getElementById('icp-score').textContent = '—';
+
+    const threadId = `b2b-${accId}-${Date.now()}`;
+    const url = `${BASE}/api/stream?thread_id=${encodeURIComponent(threadId)}&account_id=${encodeURIComponent(accId)}`;
+
+    try {
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop();
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          try {
+            const msg = JSON.parse(line);
+            if (msg.type === 'snapshot') applySnapshot(msg.snapshot);
+            if (msg.type === 'error') body.innerHTML = `<div class="empty" style="color:var(--negativo)">Error: ${escapeHtml(msg.detail)}</div>`;
+          } catch {}
+        }
+      }
+    } catch (err) {
+      body.innerHTML = `<div class="empty" style="color:var(--negativo)">Error de conexión: ${escapeHtml(err.message)}</div>`;
+    } finally {
+      btn.disabled = false; btn.textContent = 'Ejecutar pipeline B2B →';
+    }
+  }
+</script>
+</body>
+</html>

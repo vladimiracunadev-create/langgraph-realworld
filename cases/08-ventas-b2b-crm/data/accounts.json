@@ -1,0 +1,124 @@
+[
+  {
+    "id": "ACC-001",
+    "company_name": "NorthPeak Logistics",
+    "industria": "Logística y Supply Chain",
+    "industria_tag": "logistics",
+    "tamano_empresa": "mid-market",
+    "headcount": 850,
+    "revenue_estimado_usd": 145000000,
+    "pais": "Chile",
+    "web": "https://northpeak-logistics.example.com",
+    "contacto_principal": {
+      "nombre": "Andrés Bustamante",
+      "rol": "Chief Operations Officer",
+      "email": "abustamante@northpeak-logistics.example.com",
+      "linkedin": "linkedin.com/in/abustamante-coo"
+    },
+    "tecnologias_detectadas": ["SAP S/4HANA", "Salesforce", "AWS", "Looker"],
+    "noticias_recientes": [
+      "Anunció expansión a Perú y Colombia con USD 22M de inversión (mar 2026).",
+      "Reportó cuello de botella en visibilidad de última milla durante Q1.",
+      "RFP abierto para optimización de ruteo y track & trace."
+    ],
+    "pain_points_publicos": [
+      "visibilidad de la cadena de suministro extremo a extremo",
+      "optimización de ruteo de última milla",
+      "integración de datos entre WMS, TMS y ERP"
+    ],
+    "señales_compra": [
+      "Hiring de Head of Digital Supply Chain en LinkedIn",
+      "Búsqueda de 'control tower logística' en su blog corporativo"
+    ]
+  },
+  {
+    "id": "ACC-002",
+    "company_name": "Synthwave Studios",
+    "industria": "Gaming y Media Digital",
+    "industria_tag": "media",
+    "tamano_empresa": "startup",
+    "headcount": 35,
+    "revenue_estimado_usd": 4200000,
+    "pais": "Argentina",
+    "web": "https://synthwave-studios.example.com",
+    "contacto_principal": {
+      "nombre": "Lucía Mendoza",
+      "rol": "Head of Growth",
+      "email": "lucia@synthwave-studios.example.com",
+      "linkedin": "linkedin.com/in/luciamendoza-growth"
+    },
+    "tecnologias_detectadas": ["HubSpot", "Mixpanel", "Unity", "Discord"],
+    "noticias_recientes": [
+      "Lanzamiento de su segundo título indie con 180k descargas en su primer mes.",
+      "Levantó ronda seed por USD 1.8M (feb 2026).",
+      "Está armando equipo de marketing performance — 2 vacantes abiertas."
+    ],
+    "pain_points_publicos": [
+      "atribución multi-canal de campañas en redes",
+      "automatización de comunidades en Discord",
+      "pricing dinámico para in-game purchases"
+    ],
+    "señales_compra": [
+      "Búsqueda de Senior Performance Marketer",
+      "Integración reciente de HubSpot con Mixpanel"
+    ]
+  },
+  {
+    "id": "ACC-003",
+    "company_name": "Andina Comercializadora del Sur",
+    "industria": "Retail tradicional / mayorista",
+    "industria_tag": "retail_traditional",
+    "tamano_empresa": "small",
+    "headcount": 50,
+    "revenue_estimado_usd": 8500000,
+    "pais": "Bolivia",
+    "web": "https://andina-comercializadora.example.com",
+    "contacto_principal": {
+      "nombre": "Mario Quintanilla",
+      "rol": "Gerente General",
+      "email": "mquintanilla@andina-comercializadora.example.com",
+      "linkedin": "linkedin.com/in/mquintanilla-gg"
+    },
+    "tecnologias_detectadas": ["Excel", "Sistema contable local", "WhatsApp Business"],
+    "noticias_recientes": [
+      "Sin presencia digital relevante en los últimos 12 meses.",
+      "No reporta inversión en sistemas tecnológicos."
+    ],
+    "pain_points_publicos": [
+      "control de inventario en sucursales",
+      "rotación lenta de stock"
+    ],
+    "señales_compra": []
+  },
+  {
+    "id": "ACC-004",
+    "company_name": "FinSecure Bank",
+    "industria": "Banca y Servicios Financieros",
+    "industria_tag": "fintech",
+    "tamano_empresa": "enterprise",
+    "headcount": 12000,
+    "revenue_estimado_usd": 3800000000,
+    "pais": "Brasil",
+    "web": "https://finsecure-bank.example.com",
+    "contacto_principal": {
+      "nombre": "Ricardo Almeida",
+      "rol": "Director de Innovación",
+      "email": "ralmeida@finsecure-bank.example.com",
+      "linkedin": "linkedin.com/in/ricardoalmeida-innov"
+    },
+    "tecnologias_detectadas": ["Microsoft Azure", "Databricks", "Snowflake", "Salesforce", "Confluent Kafka"],
+    "noticias_recientes": [
+      "Anunció freeze de nuevos vendors hasta Q3 2026 por reorganización interna.",
+      "Reciente migración a Azure y consolidación de proveedores cloud.",
+      "CFO declaró foco en optimización de costos para 2026."
+    ],
+    "pain_points_publicos": [
+      "fraude en operaciones digitales",
+      "consolidación de stack analítico",
+      "reducción de costos de licenciamiento"
+    ],
+    "señales_compra": [
+      "Anunciado público de 'no procurement window' hasta Q3"
+    ]
+  }
+]

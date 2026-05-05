@@ -1,0 +1,56 @@
+[
+  {
+    "id": "AB-001",
+    "nombre": "Abog. Patricia Soto Henríquez",
+    "especialidad": "laboral",
+    "email": "psoto@estudiojuridico.cl",
+    "casos_activos": 12,
+    "carga": "media",
+    "experiencia_anos": 15
+  },
+  {
+    "id": "AB-002",
+    "nombre": "Abog. Cristián Mardones Vega",
+    "especialidad": "laboral",
+    "email": "cmardones@estudiojuridico.cl",
+    "casos_activos": 22,
+    "carga": "alta",
+    "experiencia_anos": 8
+  },
+  {
+    "id": "AB-003",
+    "nombre": "Abog. Renato Larraín Cabrera",
+    "especialidad": "mercantil",
+    "email": "rlarrain@estudiojuridico.cl",
+    "casos_activos": 9,
+    "carga": "baja",
+    "experiencia_anos": 18
+  },
+  {
+    "id": "AB-004",
+    "nombre": "Abog. Valentina Echeverría Ríos",
+    "especialidad": "mercantil",
+    "email": "vecheverria@estudiojuridico.cl",
+    "casos_activos": 14,
+    "carga": "media",
+    "experiencia_anos": 11
+  },
+  {
+    "id": "AB-005",
+    "nombre": "Abog. Eduardo Gallardo Pinto",
+    "especialidad": "civil",
+    "email": "egallardo@estudiojuridico.cl",
+    "casos_activos": 7,
+    "carga": "baja",
+    "experiencia_anos": 22
+  },
+  {
+    "id": "AB-006",
+    "nombre": "Abog. Natalia Bustos Carrasco",
+    "especialidad": "civil",
+    "email": "nbustos@estudiojuridico.cl",
+    "casos_activos": 16,
+    "carga": "media",
+    "experiencia_anos": 9
+  }
+]

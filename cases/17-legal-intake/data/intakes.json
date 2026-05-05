@@ -1,0 +1,39 @@
+[
+  {
+    "id": "INT-001",
+    "cliente_nombre": "María Fernanda Rojas Salazar",
+    "cliente_contacto": "maria.rojas@correo.cl · +56 9 5421 8830",
+    "fecha_solicitud": "2026-04-22",
+    "asunto_libre": "Trabajé como analista de cuentas en COMERCIAL PROGRESO SPA durante 4 años y 7 meses. El día 12 de abril de 2026 me llamaron a recursos humanos y me notificaron el despido verbalmente, alegando 'reestructuración de áreas'. Me entregaron carta el 14 de abril citando la causal del artículo 161 del Código del Trabajo (necesidades de la empresa). Sin embargo, mi puesto fue ocupado por otra persona contratada la semana siguiente. Mi último sueldo bruto fue de $1.840.000. Me pagaron solo el finiquito básico, sin indemnización por años de servicio. Tengo el contrato firmado, las últimas 12 liquidaciones de sueldo, la carta de despido y capturas de LinkedIn donde la empresa publicó la nueva vacante el 18 de abril. Necesito demandar pero no sé por dónde empezar.",
+    "documentos_aportados": [
+      "Contrato de trabajo indefinido firmado 2021-09-01",
+      "Liquidaciones de sueldo últimos 12 meses",
+      "Carta de despido del 2026-04-14",
+      "Captura LinkedIn vacante publicada 2026-04-18"
+    ]
+  },
+  {
+    "id": "INT-002",
+    "cliente_nombre": "DISTRIBUIDORA ANDINA DEL SUR S.A.",
+    "cliente_contacto": "Jorge Vargas (Gerente Legal) · jvargas@andinasur.com · +56 2 2745 1100",
+    "fecha_solicitud": "2026-04-25",
+    "asunto_libre": "Nuestra empresa firmó un contrato de suministro con LOGÍSTICA RÁPIDA LTDA. el 15 de octubre de 2025 por un valor mensual de $48.500.000, con una cláusula penal del 5% mensual por incumplimiento de plazos de entrega. Desde febrero de 2026 vienen incumpliendo sistemáticamente los SLA pactados: en febrero entregaron con 8 días de retraso, en marzo con 12 días y en abril aún no cumplen el cronograma del mes. Hemos enviado tres correos formales solicitando regularización (15 feb, 8 mar, 5 abr) y no han respondido. Necesitamos preparar un requerimiento extrajudicial formal, calcular la indemnización por cláusula penal acumulada y, si no responden en 30 días, iniciar acción judicial por incumplimiento contractual. Tenemos todos los correos, las guías de despacho con fechas reales y los reportes internos del área de operaciones.",
+    "documentos_aportados": [
+      "Contrato de suministro firmado 2025-10-15",
+      "Correos de reclamo (3) con acuse de recibo",
+      "Guías de despacho febrero, marzo, abril 2026",
+      "Reporte interno SLA Q1 2026"
+    ]
+  },
+  {
+    "id": "INT-003",
+    "cliente_nombre": "Hermanos Pérez Contreras (Luis, Carmen y Roberto)",
+    "cliente_contacto": "Luis Pérez · luis.perez.c@gmail.com · +56 9 8221 4477",
+    "fecha_solicitud": "2026-04-28",
+    "asunto_libre": "Mi padre, Eduardo Pérez Vergara, falleció hace algunos meses sin dejar testamento. Somos tres hermanos y tenemos que regularizar la sucesión. Hay una casa en La Reina (heredada de mi abuela), un departamento en Viña del Mar comprado por mi padre en 2008 y una cuenta bancaria con un saldo aproximado. Mi hermana Carmen vive actualmente en la casa de La Reina. No tenemos certificado de defunción a la mano, tampoco la posesión efectiva. Queremos saber qué pasos seguir para inscribir las propiedades a nombre de los herederos. Mi padre era viudo desde 2019 (mi madre falleció antes que él).",
+    "documentos_aportados": [
+      "Cédulas de identidad de los tres hermanos",
+      "Escritura casa La Reina (de la abuela paterna)"
+    ]
+  }
+]

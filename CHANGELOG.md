@@ -5,6 +5,89 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/1.0.0/).
 
 ---
 
+## v4.5.0 — 2026-05-04
+
+### Agregado
+
+- **Caso 14 — Finanzas: Conciliación elevado a OPERATIVO**: backend FastAPI + LangGraph completo con modo DEMO/LIVE.
+  - `StateGraph` con 9 nodos: `normalizar_transacciones → clasificar_transacciones → matching_automatico → detectar_outliers → proponer_ajuste → escalar_auditoria → marcar_partida_en_transito → generar_reporte_cuadre → producir_resumen`. Las 3 ramas de discrepancia se ejecutan en serie y filtran el array `outliers` por su `tipo`, evitando merge de estado por bifurcación.
+  - Matching automático multi-criterio con score 1.0/0.7/0.6: exact match (referencia + fecha ±1 día + monto), match amplio (fecha ±3 días + monto), match por contraparte (sin referencia). Tolerancia de monto configurable (`tolerancia_monto_pesos: 1000`).
+  - Detección de outliers determinista con z-score sobre histórico del propio escenario (umbral 2.5σ), implementado en Python puro (`math.sqrt`) sin pandas/numpy/scikit-learn — mantiene el caso ligero y consistente con los demás del repo.
+  - Clasificación de discrepancias en 3 tipos: (a) `error_contable` con asiento contable sugerido (cuenta origen → cuenta destino, débito/haber, monto absoluto), (b) `posible_fraude` que escala a auditoría interna con nota formal incluyendo motivo, severidad y acción requerida, (c) `partida_en_transito` para diferencias legítimas de timing (cheques emitidos no cobrados, depósitos en cola al cierre).
+  - Detección de fraude por señales combinadas: contraparte con keywords offshore (`llc`, `panamá`, `bvi`, `offshore`, `trust`), descripción atípica (`urgente`, `consultoría exterior`), monto mínimo configurable (20M CLP).
+  - Indicador de riesgo verde/amarillo/rojo según porcentaje de cuadre, presencia de ajustes y escalaciones.
+  - Modo DEMO: 3 escenarios calibrados (`SCN-001` cierre limpio 100% riesgo verde, `SCN-002` 91% con ajustes y partidas en tránsito riesgo amarillo, `SCN-003` 20% con transferencia offshore de 47.8M CLP a "Servicios Globales LLC (Panamá)" riesgo rojo). Funciona sin OPENAI_API_KEY.
+  - Modo LIVE: GPT-4o-mini redacta justificación contable formal de cada ajuste y resumen ejecutivo para el controller.
+  - Categorías contables predefinidas en `account_mapping.json` (remuneraciones, arriendo, servicios básicos, suministros, equipos, ventas, impuestos, comisiones bancarias, servicios profesionales, transferencias internacionales, otros) con cuenta + centro de costo + keywords de matching.
+  - 22 tests (13 graph flow + 9 API) — todos verdes.
+  - Docker: Dockerfile non-root + compose.yml aislado (puerto 8014).
+  - UI dark theme con selector de período, vista previa del escenario, badge DEMO/LIVE, timeline streaming NDJSON, KPIs en grilla (totales banco/contable/conciliado/pendiente), tabla de matches con score y criterio, tarjetas por outlier coloreadas según tipo (rojo fraude, amarillo error, verde tránsito), asientos contables sugeridos, notas de escalación a auditoría, reporte de cuadre tipográfico monoespaciado y resumen ejecutivo.
+- **ROADMAP v4.5.0**: caso 14 movido de Ola 2 a operativos (13 casos totales). Pendientes Ola 2: casos 06 (Compliance) y 21 (Documentación Automática).
+
+### Modificado
+
+- `README.md`: badge de versión → 4.5.0, contador de operativos 12 → 13, caso 14 movido de scaffold a OPERATIVO en ambas tablas.
+- `ROADMAP.md`: versión → 4.5.0, caso 14 marcado como completado, scaffolds 13 → 12.
+- `docker-compose.yml` raíz: servicio `case14` cambiado de demo nginx (puerto 9014) a backend real FastAPI (puerto 8014) con volúmenes `data/` y `web/`.
+- `index.html` portal: tarjeta de caso 14 actualizada de LEGACY → OPERATIVO con enlace al backend `http://localhost:8014/`.
+
+---
+
+## v4.4.0 — 2026-05-04
+
+### Agregado
+
+- **Caso 08 — Ventas B2B + CRM elevado a OPERATIVO**: backend FastAPI + LangGraph completo con modo DEMO/LIVE.
+  - `StateGraph` con 10 nodos y 2 routers condicionales: `investigar_cuenta → calificar_lead → [router score_icp → descartar | personalizar_outreach → seleccionar_canal → simular_envio → monitorear_respuesta → router señal_interes → {escalar_ejecutivo | programar_followup | descartar}] → actualizar_crm → producir_resumen`.
+  - Scoring ICP determinista (0-100) ponderando industria prioritaria, tamaño de empresa, modernidad del stack tecnológico, señales de compra activas y noticias recientes; configurable vía `icp.json`.
+  - Selección automática de canal y cadencia: C-level → email + LinkedIn (3 toques en días 0/4/8); roles intermedios → email solo (2 toques en días 0/5).
+  - Plantillas de outreach por industria (logistics, fintech, media, default) con sustitución de variables `{{company_name}}`, `{{contacto_nombre}}`, `{{benchmark}}`, `{{tech_observado}}`.
+  - Asignación de AE por industria + país + menor `deals_activos`, con 4 ejecutivos comerciales en `sales_reps.json`.
+  - Estados de CRM finales: `Meeting Scheduled`, `Nurturing`, `Closed Lost`, `Disqualified`. Notas y `next_step` consolidados en cada record.
+  - Modo DEMO: 4 cuentas (`ACC-001` Logistics mid-market positiva, `ACC-002` Gaming startup sin respuesta, `ACC-003` Retail tradicional fuera_icp, `ACC-004` Banca enterprise con freeze de vendors negativo) que ejercitan los 4 caminos del pipeline.
+  - Modo LIVE: GPT-4o-mini mejora la redacción del mensaje de outreach y genera el resumen ejecutivo si hay credenciales.
+  - 23 tests (14 graph flow + 9 API) — todos verdes.
+  - Docker: Dockerfile non-root + compose.yml aislado (puerto 8008).
+  - UI dark theme con selector de cuenta, vista previa de empresa/tech/noticias, badge DEMO/LIVE, timeline streaming NDJSON, panel de razones del scoring ICP, mock-up de email del outreach, cadencia visual, señal del prospect con color, ficha del AE asignado, registro CRM y resumen ejecutivo.
+- **ROADMAP v4.4.0**: caso 08 movido de Ola 2 a operativos (12 casos totales). Siguiente Ola 2: casos 14, 06, 21.
+
+### Modificado
+
+- `README.md`: badge de versión → 4.4.0, contador de operativos 11 → 12, caso 08 movido de scaffold a OPERATIVO en ambas tablas.
+- `ROADMAP.md`: versión → 4.4.0, caso 08 marcado como completado, scaffolds 14 → 13.
+- `docker-compose.yml` raíz: servicio `case08` cambiado de demo nginx (puerto 9008) a backend real FastAPI (puerto 8008) con volúmenes `data/` y `web/`.
+- `index.html` portal: tarjeta de caso 08 actualizada de LEGACY → OPERATIVO con enlace al backend `http://localhost:8008/`.
+
+---
+
+## v4.3.0 — 2026-05-04
+
+### Agregado
+
+- **Caso 17 — Legal Intake elevado a OPERATIVO**: backend FastAPI + LangGraph completo con modo DEMO/LIVE.
+  - `StateGraph` con 10 nodos y 2 routers condicionales: `recibir_solicitud → entrevista_inicial → clasificar_tipo_caso → [router especialidad → recopilar_hechos_{laboral|mercantil|civil}] → validar_informacion → [router completitud → solicitar_informacion_faltante] → evaluar_urgencia → generar_borrador_documento → asignar_abogado → producir_resumen_intake`.
+  - Clasificación por especialidad legal mediante keyword scoring sobre `specialty_keywords.json` (laboral, mercantil, civil) y detección de subtipo (despido injustificado, incumplimiento contractual, sucesión intestada, etc.).
+  - Extracción heurística DEMO de hechos estructurados desde el relato libre del cliente (montos, fechas, causales legales, partes, evidencia documental).
+  - Validación de completitud contra campos requeridos por subtipo (`required_fields.json`); branch separado para registrar preguntas pendientes al cliente sin bloquear la generación del borrador.
+  - Evaluación de urgencia procesal usando matriz de plazos legales típicos (60 días art. 168 CT, prescripción de títulos ejecutivos, etc.).
+  - Generación de borrador inicial con plantillas (`templates.json`): demanda laboral, requerimiento extrajudicial, posesión efectiva. Placeholders no resueltos quedan marcados como `{{PENDIENTE: campo}}` para el abogado revisor.
+  - Asignación automática del abogado responsable por especialidad y carga (`lawyers.json`, 6 abogados con casos activos simulados).
+  - Modo DEMO: 3 intakes realistas (`INT-001` despido, `INT-002` incumplimiento contractual con cláusula penal, `INT-003` sucesión intestada con info faltante). Funciona sin OPENAI_API_KEY.
+  - Modo LIVE: GPT-4o-mini mejora la redacción del borrador y el resumen ejecutivo si hay credenciales.
+  - 26 tests (16 graph flow + 10 API) — todos verdes.
+  - Docker: Dockerfile non-root + compose.yml aislado con volumen data/ read-only (puerto 8017).
+  - UI dark theme con selector de intake, vista previa de la solicitud, badge DEMO/LIVE, timeline streaming NDJSON, panel de hechos extraídos, preguntas pendientes, borrador con highlight de placeholders, ficha del abogado asignado y resumen ejecutivo.
+- **ROADMAP v4.3.0**: caso 17 movido de Ola 1 a operativos (11 casos totales). Siguiente Ola 2: casos 08, 14, 06, 21.
+
+### Modificado
+
+- `README.md`: badge de versión → 4.3.0, contador de operativos 10 → 11, caso 17 movido de scaffold a OPERATIVO en ambas tablas.
+- `ROADMAP.md`: versión → 4.3.0, caso 17 marcado como completado, scaffolds 15 → 14.
+- `docker-compose.yml` raíz: servicio `case17` cambiado de demo nginx (puerto 9017) a backend real FastAPI (puerto 8017) con volumen `data/` y `web/`.
+- `index.html` portal: tarjeta de caso 17 actualizada de LEGACY → OPERATIVO con enlace al backend `http://localhost:8017/`.
+
+---
+
 ## v4.2.0 — 2026-04-28
 
 ### Agregado

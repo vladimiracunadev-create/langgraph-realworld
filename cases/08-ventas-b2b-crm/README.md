@@ -1,68 +1,147 @@
-# Caso 08: Ventas B2B y CRM
+# Caso 08: Ventas B2B + CRM
 
 > [!NOTE]
-> **Estado**: `SCAFFOLD` | **Versión repo**: 4.0.0 | **Tipo**: Agente con estado y memoria conversacional
+> **Estado**: `OPERATIVO` | **Versión**: 4.4.0 | **Puerto**: 8008 | **Tipo**: Outbound automatizado con CRM integrado
 
-Automatiza el ciclo de prospección y seguimiento B2B identificando leads cualificados, personalizando el outreach en función del perfil de cada cuenta, registrando cada interacción en el CRM y proponiendo los siguientes pasos de seguimiento. Permite que los equipos comerciales multipliquen su capacidad de pipeline sin aumentar headcount, manteniendo la personalización que exige la venta consultiva.
+Automatiza el ciclo de prospección B2B: investiga la cuenta, calcula score ICP, decide si
+califica, personaliza el mensaje por industria, selecciona canal y cadencia, simula el envío,
+registra la señal del prospect, y decide entre escalar al AE, programar follow-up o
+descartar — persistiendo todo en el CRM con `deal_stage` automático.
+
+El AE solo ve cuentas calientes con contexto completo. Las descartadas y los nurturing
+quedan archivados con razón explícita.
 
 ---
 
 ## Objetivo de negocio
 
-Los equipos de ventas B2B dedican más de la mitad de su tiempo a tareas no comerciales: investigar cuentas, redactar correos, actualizar el CRM y planificar seguimientos. Este agente recibe una lista de cuentas objetivo, investiga cada empresa (industria, tamaño, noticias recientes, tecnologías usadas), personaliza secuencias de outreach multicanal (email, LinkedIn), registra respuestas y señales de intención en el CRM y orquesta el seguimiento automático con el mensaje correcto en el momento adecuado, escalando al ejecutivo comercial cuando detecta interés cualificado.
+Los equipos de ventas B2B dedican >50% de su tiempo a tareas no comerciales: investigar
+cuentas, redactar correos, actualizar CRM, planificar seguimientos. Este agente recibe la
+lista de cuentas objetivo y procesa cada una en segundos: enriquecimiento, scoring ICP
+contra criterios configurables, redacción del primer toque, simulación de envío y registro
+de la respuesta. Resultado: el AE recibe únicamente cuentas con respuesta positiva
+(`Meeting Scheduled`) o follow-ups con contexto, no 200 cuentas frías por día.
 
-## Flujo propuesto (LangGraph)
+## Flujo LangGraph
 
 ```mermaid
 graph TD
-    A[Lista de cuentas objetivo / ICP] --> B[Nodo: investigar_cuenta]
-    B --> C[Nodo: calificar_lead]
-    C --> D{Router: score_icp}
-    D -->|No califica| E[Nodo: descartar_y_registrar]
-    D -->|Califica| F[Nodo: personalizar_outreach]
-    F --> G[Nodo: enviar_secuencia]
-    G --> H[Nodo: monitorear_respuesta]
-    H --> I{Router: señal_de_interes}
-    I -->|Sin respuesta| J[Nodo: programar_followup]
-    J --> G
-    I -->|Respuesta positiva| K[Nodo: escalar_ejecutivo]
-    I -->|No interesado| E
-    K --> L[Nodo: actualizar_crm]
-    L --> M[Salida: oportunidad_CRM]
+    A[Cuenta objetivo] --> B[investigar_cuenta]
+    B --> C[calificar_lead]
+    C --> R1{router: score_icp}
+    R1 -->|no califica| D[descartar_y_registrar]
+    R1 -->|califica| E[personalizar_outreach]
+    E --> F[seleccionar_canal]
+    F --> G[simular_envio]
+    G --> H[monitorear_respuesta]
+    H --> R2{router: señal}
+    R2 -->|positivo| I[escalar_ejecutivo]
+    R2 -->|sin_respuesta| J[programar_followup]
+    R2 -->|negativo| D
+    D --> K[actualizar_crm]
+    I --> K
+    J --> K
+    K --> L[producir_resumen]
+    L --> END
 ```
 
-### Nodos principales
+**10 nodos · 2 routers (`score_icp`, `señal_interes`) · MemorySaver · streaming NDJSON.**
+
+### Nodos
 
 | Nodo | Descripción |
 |---|---|
-| `investigar_cuenta` | Enriquece datos de la cuenta con LinkedIn, web corporativa y noticias |
-| `calificar_lead` | Evalúa fit con el ICP según industria, tamaño, pain points y presupuesto |
-| `personalizar_outreach` | Genera mensajes personalizados por rol y contexto de la cuenta |
-| `enviar_secuencia` | Orquesta el envío por email y LinkedIn respetando cadencias y horarios |
-| `monitorear_respuesta` | Detecta aperturas, clics, respuestas y señales de intención |
-| `programar_followup` | Calcula el timing óptimo y el mensaje del siguiente toque |
-| `escalar_ejecutivo` | Notifica al AE con el resumen de la cuenta y el historial de interacciones |
-| `actualizar_crm` | Registra todas las actividades, notas y el stage del deal en el CRM |
+| `investigar_cuenta` | Carga + enriquecimiento (tech stack, noticias, señales, headcount) |
+| `calificar_lead` | Score ICP 0-100 ponderando industria, tamaño, stack moderno, señales, noticias |
+| `descartar_y_registrar` | Termina la cuenta con motivo (no_califica / respuesta negativa) |
+| `personalizar_outreach` | Mensaje con plantilla por industria (logistics, fintech, media, default) |
+| `seleccionar_canal` | C-level → email + LinkedIn (3 toques); otros → email solo (2 toques) |
+| `simular_envio` | Envío del primer toque con timestamp + tracking pixel |
+| `monitorear_respuesta` | Lee respuesta del prospect (intent_score, fragmento) |
+| `programar_followup` | Calcula próximo toque según cadencia |
+| `escalar_ejecutivo` | Asigna AE por industria/país y menor `deals_activos` |
+| `actualizar_crm` | Define `deal_stage` final + notas + next_step |
+| `producir_resumen` | Resumen ejecutivo para sales manager |
 
-## Stack técnico previsto
+### Datos DEMO — 4 cuentas que ejercitan los 4 caminos del pipeline
+
+| Cuenta | Industria | Tamaño | Resultado |
+|---|---|---|---|
+| `ACC-001` NorthPeak Logistics | Logística | mid-market 850 emp. | ICP 98 alto · positivo → **Meeting Scheduled** + AE asignado |
+| `ACC-002` Synthwave Studios | Gaming/Media | startup 35 emp. | ICP 68 medio · sin respuesta → **Nurturing** con next touch |
+| `ACC-003` Andina Comercializadora | Retail tradicional | small 50 emp. | ICP 18 fuera_icp → **Disqualified** sin enviar mail |
+| `ACC-004` FinSecure Bank | Banca | enterprise 12k emp. | ICP 65 medio · negativo → **Closed Lost** (freeze de vendors) |
+
+Datos completos en `data/`: `accounts.json`, `icp.json`, `outreach_templates.json`,
+`responses.json`, `sales_reps.json`.
+
+## Stack técnico
 
 | Capa | Tecnología |
 |---|---|
-| Orquestación | LangGraph `StateGraph` |
+| Orquestación | LangGraph `StateGraph` + `MemorySaver` |
 | API | FastAPI + uvicorn |
-| LLM | OpenAI GPT-4o-mini (modo LIVE) / respuestas mock (modo DEMO) |
-| CRM | Salesforce / HubSpot / Pipedrive (via API REST) |
-| Enriquecimiento | Apollo.io, Clearbit, LinkedIn Sales Navigator API |
-| Email | SendGrid / Microsoft Graph / Gmail API |
+| LLM (LIVE) | OpenAI GPT-4o-mini opt-in via `OPENAI_API_KEY` |
+| Auth | DEMO + OAuth2/OIDC opt-in |
+| CRM (LIVE) | Diseñado para HubSpot / Salesforce / Pipedrive |
+| Enriquecimiento (LIVE) | Diseñado para Apollo.io / Clearbit / LinkedIn Sales Navigator |
+| UI | HTML/CSS/JS vanilla, streaming NDJSON con email mock-up |
 
-## Estado actual
+## Ejecutar
 
-Este caso es un **scaffold**: la estructura de la demo estática existe,
-la implementación del backend con LangGraph está pendiente.
+### Local
+```bash
+cd cases/08-ventas-b2b-crm/backend
+pip install -r requirements.txt
+uvicorn src.api:app --reload --port 8008
+# UI: http://localhost:8008
+```
 
-Para contribuir o elevar este caso, consulta [CONTRIBUTING.md](../../CONTRIBUTING.md).
+### Docker (compose aislado)
+```bash
+cd cases/08-ventas-b2b-crm/backend
+docker compose up --build
+```
 
----
+### Docker (compose raíz, con portal)
+```bash
+docker compose up case08
+# Portal: http://localhost:8080  ·  Caso 08: http://localhost:8008
+```
 
-> [!TIP]
-> Ver los casos **09**, **10** y **13** como referencia de implementación industrial.
+### Modo LIVE
+```bash
+export OPENAI_API_KEY=sk-proj-...
+# Badge cambia a LIVE; personalizar_outreach y resumen usan GPT-4o-mini
+```
+
+## Endpoints
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| GET | `/` | UI |
+| GET | `/health`, `/healthz` | salud + modo |
+| GET | `/ready` | grafo compilado |
+| GET | `/metrics` | uptime, requests, errores, modo |
+| POST | `/api/run` | pipeline completo (snapshot final) |
+| GET | `/api/stream` | streaming NDJSON snapshot por nodo |
+
+```bash
+curl -X POST http://localhost:8008/api/run \
+  -H "Content-Type: application/json" \
+  -d '{"account_id":"ACC-001","thread_id":"t1"}' | jq .
+```
+
+## Tests
+
+```bash
+cd cases/08-ventas-b2b-crm/backend
+pytest -q
+# 23 tests: compilación + nodos + routers + 4 flujos end-to-end + API
+```
+
+## Referencias
+
+- Plan de elevación: [implementation_plan.md](implementation_plan.md)
+- Skill estándar: [`.agents/skills/crear_caso/SKILL.md`](../../.agents/skills/crear_caso/SKILL.md)
+- Casos referencia: 17 (legal intake), 09 (RRHH), 13 (BI)

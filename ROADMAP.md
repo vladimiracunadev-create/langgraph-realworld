@@ -1,6 +1,6 @@
 # Hoja de Ruta
 
-> **Versión**: 4.2.0 | **Estado**: Industrial | **Rama principal**: `main`
+> **Versión**: 4.5.0 | **Estado**: Industrial | **Rama principal**: `main`
 
 El estándar técnico del repositorio ya está definido. Antes de crear o modificar un caso, leer el skill directamente — no se rediseña lo que ya existe:
 
@@ -12,7 +12,7 @@ El estándar técnico del repositorio ya está definido. Antes de crear o modifi
 
 ## Estado de los 25 casos
 
-### Operativos e industriales (10)
+### Operativos e industriales (13)
 
 | ID | Caso | Nivel | UI web | Integraciones LIVE |
 |:---:|:---|:---:|:---:|:---|
@@ -21,19 +21,19 @@ El estándar técnico del repositorio ya está definido. Antes de crear o modifi
 | 03 | [Incident Response SRE](cases/03-incident-response-sre/README.md) | OPERATIVO | ✅ | PagerDuty, Datadog (DEMO) |
 | 04 | [SOC Triage de Alertas](cases/04-soc-triage-alertas/README.md) | OPERATIVO | ✅ | VirusTotal, AbuseIPDB, SIEM (DEMO) |
 | 05 | [Analista de Documentos](cases/05-analista-documentos/README.md) | OPERATIVO | ✅ | PDF/DOCX opt-in, LLM opt-in (OpenAI) |
+| 08 | [Ventas B2B + CRM](cases/08-ventas-b2b-crm/README.md) | OPERATIVO | ✅ | LLM opt-in, ICP scoring, 4 cuentas DEMO |
 | 09 | [RRHH Screening & Agenda](cases/09-rrhh-screening-agenda/README.md) | INDUSTRIAL | ✅ | LLM + MemorySaver |
 | 10 | [Onboarding de Empleados](cases/10-onboarding-empleados/README.md) | INDUSTRIAL | ✅ | HRIS, IAM, Slack (DEMO) |
 | 13 | [Analista de Datos BI](cases/13-bi-analista-datos/README.md) | INDUSTRIAL | ✅ | SQL + Chart.js + LLM opt-in |
+| 14 | [Finanzas: Conciliación](cases/14-finanzas-conciliacion/README.md) | OPERATIVO | ✅ | LLM opt-in, z-score outliers, 3 escenarios DEMO |
+| 17 | [Legal Intake](cases/17-legal-intake/README.md) | OPERATIVO | ✅ | LLM opt-in (OpenAI), 3 especialidades, 3 plantillas |
 | 19 | [DevEx: PR Review](cases/19-devex-pr-review/README.md) | OPERATIVO | ✅ | GitHub API (DEMO) |
 | 25 | [Supervisor + Workers](cases/25-supervisor-workers/README.md) | OPERATIVO | ✅ | 4 workers especializados (DEMO) |
 
-### Scaffold — listos para elevar (15)
+### Scaffold — listos para elevar (12)
 
 | ID | Caso | Dominio | Prioridad |
 |:---:|:---|:---|:---:|
-| 17 | [Legal Intake](cases/17-legal-intake/README.md) | Legal | 🔴 Ola 1 |
-| 08 | [Ventas B2B + CRM](cases/08-ventas-b2b-crm/README.md) | Comercial | 🟠 Ola 2 |
-| 14 | [Finanzas: Conciliación](cases/14-finanzas-conciliacion/README.md) | Finanzas | 🟠 Ola 2 |
 | 06 | [Compliance & Auditorías](cases/06-compliance-auditorias/README.md) | Gobernanza | 🟠 Ola 2 |
 | 21 | [Documentación Automática](cases/21-docs-auto/README.md) | DevOps | 🟠 Ola 2 |
 | 07 | [Compras y Abastecimiento](cases/07-compras-abastecimiento/README.md) | Procurement | 🟡 Ola 3 |
@@ -61,14 +61,14 @@ SCAFFOLD  →  (seguir SKILL.md)  →  OPERATIVO  →  (observabilidad + hardeni
 |:---|:---|:---|
 | ~~**04 — SOC Triage**~~ | ✅ **COMPLETADO v4.1.0** — Router de riesgo (3 vías), threat intel, SIEM context | Router por score, 2 routers condicionales, stubs LIVE |
 | ~~**05 — Analista de Documentos**~~ | ✅ **COMPLETADO v4.2.0** — Pipeline contractual, 7 nodos, router de riesgo, 3 docs DEMO | Pipeline secuencial, router condicional, keyword extraction, LLM opt-in |
-| **17 — Legal Intake** | Continuación natural del 05. Intake + clasificación + routing a especialistas. | Router condicional, HITL para escalada |
+| ~~**17 — Legal Intake**~~ | ✅ **COMPLETADO v4.3.0** — Intake + clasificación + 3 especialidades + 3 plantillas + asignación de abogado | 10 nodos, 2 routers (especialidad / completitud), MemorySaver, LLM opt-in |
 
 ### Ola 2 — Impacto comercial
 
 | Caso | Por qué |
 |:---|:---|
-| **08 — Ventas B2B + CRM** | Lead scoring + CRM automation. Integra con HubSpot/Salesforce en LIVE. |
-| **14 — Finanzas: Conciliación** | Reconciliación de transacciones. ROI claro. Patrón verificación + excepción. |
+| ~~**08 — Ventas B2B + CRM**~~ | ✅ **COMPLETADO v4.4.0** — Pipeline outbound: ICP scoring, outreach por industria, CRM stage automático | 10 nodos, 2 routers (ICP / señal), 4 cuentas DEMO, asignación de AE |
+| ~~**14 — Finanzas: Conciliación**~~ | ✅ **COMPLETADO v4.5.0** — Cierre mensual: matching multi-criterio, detección z-score, 3 tipos de discrepancia, indicador verde/amarillo/rojo | 9 nodos, 3 escenarios DEMO, sin dependencias numéricas externas |
 | **06 — Compliance** | Gobernanza + reportes. Complementa el hardening de seguridad del repo. |
 | **21 — Docs Automática** | Código → documentación estructurada. Relevante para el propio repo. |
 

@@ -1,0 +1,73 @@
+[
+  {
+    "id": "SCN-001",
+    "periodo": "2026-03",
+    "descripcion": "Cierre limpio — todas las transacciones cruzadas correctamente, sin discrepancias.",
+    "transacciones_bancarias": [
+      {"id": "BNK-001", "fecha": "2026-03-02", "monto": -2450000, "descripcion": "PAGO PROVEEDOR ALPHA SUMINISTROS", "referencia": "FAC-2026-0211", "contraparte": "Alpha Suministros SpA"},
+      {"id": "BNK-002", "fecha": "2026-03-05", "monto": 8900000, "descripcion": "ABONO CLIENTE BETA INDUSTRIAL", "referencia": "FAC-2026-0188", "contraparte": "Beta Industrial S.A."},
+      {"id": "BNK-003", "fecha": "2026-03-08", "monto": -1200000, "descripcion": "ARRIENDO OFICINA MARZO", "referencia": "ARR-MAR-2026", "contraparte": "Inmobiliaria Costanera"},
+      {"id": "BNK-004", "fecha": "2026-03-12", "monto": -650000, "descripcion": "ENERGIA ELECTRICA MARZO", "referencia": "EN-MAR-2026", "contraparte": "Enel Distribución"},
+      {"id": "BNK-005", "fecha": "2026-03-15", "monto": 4200000, "descripcion": "ABONO CLIENTE GAMMA RETAIL", "referencia": "FAC-2026-0193", "contraparte": "Gamma Retail Ltda."},
+      {"id": "BNK-006", "fecha": "2026-03-20", "monto": -18900000, "descripcion": "PAGO REMUNERACIONES MARZO", "referencia": "NOM-MAR-2026", "contraparte": "Planilla Remuneraciones"},
+      {"id": "BNK-007", "fecha": "2026-03-25", "monto": -3450000, "descripcion": "PAGO IVA MARZO F29", "referencia": "F29-MAR-2026", "contraparte": "Tesorería General"},
+      {"id": "BNK-008", "fecha": "2026-03-28", "monto": -85000, "descripcion": "COMISION MANTENCION CUENTA", "referencia": "COM-MAR-2026", "contraparte": "Banco"}
+    ],
+    "transacciones_contables": [
+      {"id": "ACC-001", "fecha": "2026-03-02", "monto": -2450000, "descripcion": "Compra suministros oficina", "referencia": "FAC-2026-0211", "contraparte": "Alpha Suministros SpA"},
+      {"id": "ACC-002", "fecha": "2026-03-05", "monto": 8900000, "descripcion": "Cobro factura Beta", "referencia": "FAC-2026-0188", "contraparte": "Beta Industrial S.A."},
+      {"id": "ACC-003", "fecha": "2026-03-08", "monto": -1200000, "descripcion": "Arriendo oficina marzo", "referencia": "ARR-MAR-2026", "contraparte": "Inmobiliaria Costanera"},
+      {"id": "ACC-004", "fecha": "2026-03-12", "monto": -650000, "descripcion": "Cuenta de luz marzo", "referencia": "EN-MAR-2026", "contraparte": "Enel Distribución"},
+      {"id": "ACC-005", "fecha": "2026-03-15", "monto": 4200000, "descripcion": "Cobro factura Gamma", "referencia": "FAC-2026-0193", "contraparte": "Gamma Retail Ltda."},
+      {"id": "ACC-006", "fecha": "2026-03-20", "monto": -18900000, "descripcion": "Remuneraciones marzo", "referencia": "NOM-MAR-2026", "contraparte": "Planilla Remuneraciones"},
+      {"id": "ACC-007", "fecha": "2026-03-25", "monto": -3450000, "descripcion": "Pago IVA F29 marzo", "referencia": "F29-MAR-2026", "contraparte": "Tesorería General"},
+      {"id": "ACC-008", "fecha": "2026-03-28", "monto": -85000, "descripcion": "Comisión bancaria", "referencia": "COM-MAR-2026", "contraparte": "Banco"}
+    ]
+  },
+  {
+    "id": "SCN-002",
+    "periodo": "2026-04",
+    "descripcion": "Cierre con timing differences y un error de digitación en monto.",
+    "transacciones_bancarias": [
+      {"id": "BNK-101", "fecha": "2026-04-02", "monto": -3120000, "descripcion": "PAGO PROVEEDOR DELTA", "referencia": "FAC-2026-0301", "contraparte": "Delta Tech S.A."},
+      {"id": "BNK-102", "fecha": "2026-04-05", "monto": 12500000, "descripcion": "ABONO CLIENTE OMEGA SA", "referencia": "FAC-2026-0287", "contraparte": "Omega S.A."},
+      {"id": "BNK-103", "fecha": "2026-04-08", "monto": -1200000, "descripcion": "ARRIENDO OFICINA ABRIL", "referencia": "ARR-ABR-2026", "contraparte": "Inmobiliaria Costanera"},
+      {"id": "BNK-104", "fecha": "2026-04-15", "monto": 5800000, "descripcion": "ABONO CLIENTE THETA", "referencia": "FAC-2026-0290", "contraparte": "Theta Logistics"},
+      {"id": "BNK-105", "fecha": "2026-04-20", "monto": -19200000, "descripcion": "PAGO REMUNERACIONES ABRIL", "referencia": "NOM-ABR-2026", "contraparte": "Planilla Remuneraciones"},
+      {"id": "BNK-106", "fecha": "2026-04-22", "monto": -780000, "descripcion": "PAGO PROVEEDOR EPSILON SERV", "referencia": "FAC-2026-0312", "contraparte": "Epsilon Servicios"},
+      {"id": "BNK-107", "fecha": "2026-04-28", "monto": -85000, "descripcion": "COMISION MANTENCION CUENTA", "referencia": "COM-ABR-2026", "contraparte": "Banco"}
+    ],
+    "transacciones_contables": [
+      {"id": "ACC-101", "fecha": "2026-04-02", "monto": -3120000, "descripcion": "Compra equipos", "referencia": "FAC-2026-0301", "contraparte": "Delta Tech S.A."},
+      {"id": "ACC-102", "fecha": "2026-04-05", "monto": 12500000, "descripcion": "Cobro Omega", "referencia": "FAC-2026-0287", "contraparte": "Omega S.A."},
+      {"id": "ACC-103", "fecha": "2026-04-08", "monto": -1200000, "descripcion": "Arriendo abril", "referencia": "ARR-ABR-2026", "contraparte": "Inmobiliaria Costanera"},
+      {"id": "ACC-104", "fecha": "2026-04-15", "monto": 5800000, "descripcion": "Cobro Theta", "referencia": "FAC-2026-0290", "contraparte": "Theta Logistics"},
+      {"id": "ACC-105", "fecha": "2026-04-20", "monto": -19200000, "descripcion": "Remuneraciones abril", "referencia": "NOM-ABR-2026", "contraparte": "Planilla Remuneraciones"},
+      {"id": "ACC-106", "fecha": "2026-04-22", "monto": -870000, "descripcion": "Compra servicios Epsilon", "referencia": "FAC-2026-0312", "contraparte": "Epsilon Servicios"},
+      {"id": "ACC-107", "fecha": "2026-04-30", "monto": -2300000, "descripcion": "Cheque emitido proveedor Zeta (no cobrado al cierre)", "referencia": "CHK-9821", "contraparte": "Zeta Distribuidora"},
+      {"id": "ACC-108", "fecha": "2026-04-30", "monto": 950000, "descripcion": "Depósito cliente Iota (en tránsito)", "referencia": "DEP-IOTA-2026", "contraparte": "Iota Comercial"}
+    ]
+  },
+  {
+    "id": "SCN-003",
+    "periodo": "2026-04",
+    "descripcion": "Cierre con anomalía sospechosa: transferencia atípica a contraparte desconocida fuera de patrón histórico.",
+    "transacciones_bancarias": [
+      {"id": "BNK-201", "fecha": "2026-04-02", "monto": -2800000, "descripcion": "PAGO PROVEEDOR ALPHA", "referencia": "FAC-2026-0401", "contraparte": "Alpha Suministros SpA"},
+      {"id": "BNK-202", "fecha": "2026-04-06", "monto": 9100000, "descripcion": "ABONO CLIENTE BETA", "referencia": "FAC-2026-0388", "contraparte": "Beta Industrial S.A."},
+      {"id": "BNK-203", "fecha": "2026-04-08", "monto": -1200000, "descripcion": "ARRIENDO OFICINA ABRIL", "referencia": "ARR-ABR-2026", "contraparte": "Inmobiliaria Costanera"},
+      {"id": "BNK-204", "fecha": "2026-04-14", "monto": -47800000, "descripcion": "TRANSF EXTERIOR CONSULTORIA URGENTE", "referencia": "TRF-EXT-99821", "contraparte": "Servicios Globales LLC (Panamá)"},
+      {"id": "BNK-205", "fecha": "2026-04-20", "monto": -18750000, "descripcion": "PAGO REMUNERACIONES ABRIL", "referencia": "NOM-ABR-2026", "contraparte": "Planilla Remuneraciones"},
+      {"id": "BNK-206", "fecha": "2026-04-25", "monto": -3500000, "descripcion": "PAGO IVA ABRIL F29", "referencia": "F29-ABR-2026", "contraparte": "Tesorería General"},
+      {"id": "BNK-207", "fecha": "2026-04-28", "monto": -85000, "descripcion": "COMISION MANTENCION CUENTA", "referencia": "COM-ABR-2026", "contraparte": "Banco"}
+    ],
+    "transacciones_contables": [
+      {"id": "ACC-201", "fecha": "2026-04-02", "monto": -2800000, "descripcion": "Compra suministros", "referencia": "FAC-2026-0401", "contraparte": "Alpha Suministros SpA"},
+      {"id": "ACC-202", "fecha": "2026-04-06", "monto": 9100000, "descripcion": "Cobro Beta", "referencia": "FAC-2026-0388", "contraparte": "Beta Industrial S.A."},
+      {"id": "ACC-203", "fecha": "2026-04-08", "monto": -1200000, "descripcion": "Arriendo abril", "referencia": "ARR-ABR-2026", "contraparte": "Inmobiliaria Costanera"},
+      {"id": "ACC-204", "fecha": "2026-04-20", "monto": -18570000, "descripcion": "Remuneraciones abril", "referencia": "NOM-ABR-2026", "contraparte": "Planilla Remuneraciones"},
+      {"id": "ACC-205", "fecha": "2026-04-25", "monto": -3500000, "descripcion": "Pago IVA F29", "referencia": "F29-ABR-2026", "contraparte": "Tesorería General"},
+      {"id": "ACC-206", "fecha": "2026-04-28", "monto": -85000, "descripcion": "Comisión bancaria", "referencia": "COM-ABR-2026", "contraparte": "Banco"}
+    ]
+  }
+]

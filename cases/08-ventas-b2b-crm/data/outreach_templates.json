@@ -1,0 +1,26 @@
+{
+  "logistics": {
+    "asunto": "Visibilidad de última milla en {{company_name}} — caso comparable a {{benchmark}}",
+    "cuerpo": "Hola {{contacto_nombre}},\n\nVi el anuncio de la expansión de {{company_name}} a Perú y Colombia, junto con la búsqueda de Head of Digital Supply Chain. Suelo trabajar con COOs de empresas de logística mid-market de la región y el patrón típico es el mismo: el control tower funciona bien para el long-haul, pero la última milla queda ciega — sobre todo cuando se mezclan flota propia con couriers tercerizados.\n\nDos clientes recientes ({{benchmark}} entre ellos) bajaron el lead time de incidencias en última milla un 40% conectando WMS/TMS/ERP en una capa de eventos común. Dejo el mini-caso por si suma.\n\n¿Tendrías 20 minutos esta semana o la próxima para conversarlo?\n\nSaludos,\n{{rep_nombre}}",
+    "cta": "Reunión de 20 min sobre control tower de última milla.",
+    "idioma": "es"
+  },
+  "fintech": {
+    "asunto": "Detección de fraude digital en {{company_name}} sin sumar vendors",
+    "cuerpo": "Hola {{contacto_nombre}},\n\nLeí la nota sobre la consolidación de stack analítico de {{company_name}} y el foco del CFO en optimización de costos. Trabajo con Direcciones de Innovación de bancos en Latam y veo que el dilema repetido es: cómo bajar fraude digital sin ampliar el zoo de vendors.\n\nLa propuesta que llevamos a {{benchmark}} fue exactamente al revés: reusar la capa de Kafka + Databricks que ya tienen para correr el motor de scoring nativamente, y consolidar 3 vendors legacy en uno. Resultado: -22% en falsos positivos y -18% en costo total el primer año.\n\n¿Te interesaría revisar el caso comparable en una llamada corta cuando se abra la ventana de Q3?\n\nSaludos,\n{{rep_nombre}}",
+    "cta": "Llamada corta cuando se abra la ventana de Q3.",
+    "idioma": "es"
+  },
+  "media": {
+    "asunto": "Atribución multi-canal en {{company_name}} sin armar otro stack",
+    "cuerpo": "Hola {{contacto_nombre}},\n\nFelicitaciones por el lanzamiento del segundo título y los 180k descargas del primer mes — número arriba de la media indie. Vi también la ronda seed reciente y las dos vacantes de performance marketing.\n\nEl patrón típico en growth de gaming a esta escala es: HubSpot + Mixpanel ya tienen casi todo, pero la atribución entre redes pagas, comunidad de Discord y conversiones in-game no cierra. Armamos con {{benchmark}} (también indie, también con HubSpot+Mixpanel) un modelo de atribución last-touch ponderado que les llevó 3 semanas de trabajo y movió ROAS en 27%.\n\n¿Te interesaría una llamada de 20 min para revisar si aplica?\n\nSaludos,\n{{rep_nombre}}",
+    "cta": "Llamada de 20 min sobre atribución multi-canal en gaming indie.",
+    "idioma": "es"
+  },
+  "default": {
+    "asunto": "Una idea para {{company_name}}",
+    "cuerpo": "Hola {{contacto_nombre}},\n\nTrabajo con empresas similares a {{company_name}} en {{industria}} y vi señales que sugieren que podría haber un fit interesante con lo que hacemos. ¿Te interesaría una llamada corta para evaluarlo?\n\nSaludos,\n{{rep_nombre}}",
+    "cta": "Llamada corta para evaluar fit.",
+    "idioma": "es"
+  }
+}

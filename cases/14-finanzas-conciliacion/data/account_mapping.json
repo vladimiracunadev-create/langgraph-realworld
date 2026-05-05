@@ -1,0 +1,59 @@
+{
+  "categorias": {
+    "remuneraciones": {
+      "cuenta": "5101 - Remuneraciones",
+      "centro_costo": "RRHH",
+      "keywords": ["remuneraciones", "nómina", "nomina", "sueldo", "planilla"]
+    },
+    "arriendo": {
+      "cuenta": "5202 - Arriendo de Oficinas",
+      "centro_costo": "ADM",
+      "keywords": ["arriendo", "alquiler", "renta inmobiliaria"]
+    },
+    "servicios_basicos": {
+      "cuenta": "5210 - Servicios Básicos",
+      "centro_costo": "ADM",
+      "keywords": ["energía", "energia", "agua", "gas", "luz", "electricidad", "enel"]
+    },
+    "compras_suministros": {
+      "cuenta": "1101 - Inventario / Suministros",
+      "centro_costo": "OPS",
+      "keywords": ["suministros", "compra de", "insumos", "papelería", "papeleria"]
+    },
+    "compras_equipos": {
+      "cuenta": "1305 - Activo Fijo / Equipos",
+      "centro_costo": "OPS",
+      "keywords": ["equipos", "computador", "laptop", "hardware"]
+    },
+    "ventas": {
+      "cuenta": "4101 - Ingresos por Ventas",
+      "centro_costo": "VEN",
+      "keywords": ["abono cliente", "cobro factura", "cobro cliente", "ingreso venta"]
+    },
+    "impuestos": {
+      "cuenta": "2305 - IVA por Pagar / Impuestos",
+      "centro_costo": "FIN",
+      "keywords": ["iva", "f29", "tesorería", "tesoreria", "impuesto"]
+    },
+    "comisiones_bancarias": {
+      "cuenta": "5305 - Comisiones y Gastos Bancarios",
+      "centro_costo": "FIN",
+      "keywords": ["comisión", "comision", "mantención cuenta", "mantencion cuenta"]
+    },
+    "servicios_profesionales": {
+      "cuenta": "5215 - Servicios Profesionales / Consultorías",
+      "centro_costo": "ADM",
+      "keywords": ["servicios", "consultoría", "consultoria", "asesoría", "asesoria", "honorarios"]
+    },
+    "transferencias_internacionales": {
+      "cuenta": "5901 - Transferencias al Exterior",
+      "centro_costo": "FIN",
+      "keywords": ["transf exterior", "swift", "international wire"]
+    },
+    "otros": {
+      "cuenta": "5999 - Otros Gastos",
+      "centro_costo": "ADM",
+      "keywords": []
+    }
+  }
+}

@@ -1,0 +1,46 @@
+[
+  {
+    "id": "AE-001",
+    "nombre": "Camila Saavedra",
+    "rol": "Senior Account Executive",
+    "email": "csaavedra@miempresa.com",
+    "industrias": ["logistics", "manufacturing"],
+    "paises": ["Chile", "Perú", "Colombia"],
+    "deals_activos": 11,
+    "carga": "media",
+    "quota_pct": 78
+  },
+  {
+    "id": "AE-002",
+    "nombre": "Tomás Iturra",
+    "rol": "Senior Account Executive",
+    "email": "titurra@miempresa.com",
+    "industrias": ["fintech", "saas"],
+    "paises": ["Brasil", "México"],
+    "deals_activos": 18,
+    "carga": "alta",
+    "quota_pct": 64
+  },
+  {
+    "id": "AE-003",
+    "nombre": "Renata Pizarro",
+    "rol": "Account Executive",
+    "email": "rpizarro@miempresa.com",
+    "industrias": ["media", "saas", "startup"],
+    "paises": ["Argentina", "Uruguay", "Chile"],
+    "deals_activos": 7,
+    "carga": "baja",
+    "quota_pct": 92
+  },
+  {
+    "id": "AE-004",
+    "nombre": "Diego Halabi",
+    "rol": "Enterprise Account Executive",
+    "email": "dhalabi@miempresa.com",
+    "industrias": ["fintech", "manufacturing", "logistics"],
+    "paises": ["Brasil", "México", "Colombia"],
+    "deals_activos": 5,
+    "carga": "baja",
+    "quota_pct": 105
+  }
+]

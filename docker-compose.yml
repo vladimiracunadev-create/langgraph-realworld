@@ -129,9 +129,16 @@ services:
 
   case08:
     build:
-      context: cases/08-ventas-b2b-crm/demo
+      context: cases/08-ventas-b2b-crm/backend
     ports:
-      - "127.0.0.1:9008:80"
+      - "127.0.0.1:8008:8008"
+    volumes:
+      - ./cases/08-ventas-b2b-crm/data:/app/data:ro
+      - ./cases/08-ventas-b2b-crm/backend/web:/app/web:ro
+    environment:
+      - DATA_DIR=/app/data
+      - WEB_DIR=/app/web
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
 
   case11:
     build:
@@ -147,9 +154,16 @@ services:
 
   case14:
     build:
-      context: cases/14-finanzas-conciliacion/demo
+      context: cases/14-finanzas-conciliacion/backend
     ports:
-      - "127.0.0.1:9014:80"
+      - "127.0.0.1:8014:8014"
+    volumes:
+      - ./cases/14-finanzas-conciliacion/data:/app/data:ro
+      - ./cases/14-finanzas-conciliacion/backend/web:/app/web:ro
+    environment:
+      - DATA_DIR=/app/data
+      - WEB_DIR=/app/web
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
 
   case15:
     build:
@@ -165,9 +179,16 @@ services:
 
   case17:
     build:
-      context: cases/17-legal-intake/demo
+      context: cases/17-legal-intake/backend
     ports:
-      - "127.0.0.1:9017:80"
+      - "127.0.0.1:8017:8017"
+    volumes:
+      - ./cases/17-legal-intake/data:/app/data:ro
+      - ./cases/17-legal-intake/backend/web:/app/web:ro
+    environment:
+      - DATA_DIR=/app/data
+      - WEB_DIR=/app/web
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
 
   case18:
     build:

@@ -1,0 +1,48 @@
+{
+  "laboral": {
+    "description": "Derecho del trabajo y seguridad social",
+    "keywords": [
+      "despido", "finiquito", "indemnización por años", "código del trabajo",
+      "contrato de trabajo", "liquidación de sueldo", "sueldo", "remuneración",
+      "necesidades de la empresa", "artículo 161", "artículo 160",
+      "acoso laboral", "tutela", "vacaciones proporcionales", "horas extraordinarias",
+      "afp", "isapre", "fuero maternal", "subcontratación"
+    ],
+    "subtipos": {
+      "despido_injustificado": ["despido", "necesidades de la empresa", "artículo 161", "carta de despido", "reestructuración"],
+      "tutela_laboral": ["acoso", "discriminación", "vulneración", "fuero", "tutela"],
+      "cobranza_laboral": ["sueldo impago", "liquidación", "no pagaron", "remuneración adeudada"]
+    }
+  },
+  "mercantil": {
+    "description": "Derecho comercial, contratos entre empresas y sociedades",
+    "keywords": [
+      "contrato de suministro", "incumplimiento contractual", "cláusula penal",
+      "requerimiento extrajudicial", "factura", "pagaré", "letra de cambio",
+      "sociedad", "spa", "ltda", "s.a.", "directorio", "junta de accionistas",
+      "marca registrada", "competencia desleal", "distribución",
+      "sla", "indemnización contractual", "fuerza mayor", "cobranza judicial"
+    ],
+    "subtipos": {
+      "incumplimiento_contractual": ["incumplimiento", "cláusula penal", "sla", "retraso", "no cumplieron", "requerimiento"],
+      "cobranza_comercial": ["pagaré", "factura impaga", "deuda", "letra de cambio", "protestada"],
+      "conflicto_societario": ["socio", "directorio", "estatutos", "exclusión", "junta de accionistas"]
+    }
+  },
+  "civil": {
+    "description": "Derecho civil: familia, sucesiones, daños y propiedad",
+    "keywords": [
+      "sucesión", "herencia", "herederos", "testamento", "posesión efectiva",
+      "matrimonio", "divorcio", "compensación económica", "alimentos",
+      "tuición", "relación directa y regular", "filiación",
+      "indemnización de perjuicios", "responsabilidad civil", "daño moral",
+      "compraventa", "promesa de compraventa", "arrendamiento", "comodato",
+      "conservador de bienes raíces", "inscripción", "fallecido", "falleció"
+    ],
+    "subtipos": {
+      "sucesion_intestada": ["sucesión", "falleció", "fallecido", "herencia", "sin testamento", "posesión efectiva", "herederos"],
+      "divorcio": ["divorcio", "matrimonio", "compensación económica", "cese de convivencia"],
+      "responsabilidad_civil": ["daño", "perjuicio", "indemnización", "accidente", "responsabilidad civil"]
+    }
+  }
+}

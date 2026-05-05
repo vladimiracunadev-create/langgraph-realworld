@@ -1,0 +1,73 @@
+{
+  "despido_injustificado": {
+    "campos": [
+      {"key": "fecha_inicio_contrato", "label": "Fecha de inicio del contrato"},
+      {"key": "fecha_termino", "label": "Fecha del despido"},
+      {"key": "causal_invocada", "label": "Causal legal invocada por la empresa"},
+      {"key": "ultimo_sueldo_bruto", "label": "Última remuneración bruta"},
+      {"key": "documentos_clave", "label": "Documentos disponibles (contrato, liquidaciones, carta de despido)"}
+    ]
+  },
+  "tutela_laboral": {
+    "campos": [
+      {"key": "fecha_inicio_contrato", "label": "Fecha de inicio del contrato"},
+      {"key": "derecho_vulnerado", "label": "Derecho fundamental vulnerado"},
+      {"key": "hechos_concretos", "label": "Hechos concretos de vulneración"},
+      {"key": "testigos", "label": "Testigos disponibles"}
+    ]
+  },
+  "cobranza_laboral": {
+    "campos": [
+      {"key": "periodos_adeudados", "label": "Períodos adeudados"},
+      {"key": "monto_total", "label": "Monto total reclamado"},
+      {"key": "documentos_clave", "label": "Liquidaciones / contratos disponibles"}
+    ]
+  },
+  "incumplimiento_contractual": {
+    "campos": [
+      {"key": "fecha_contrato", "label": "Fecha de firma del contrato"},
+      {"key": "monto_contrato", "label": "Valor del contrato"},
+      {"key": "clausula_incumplida", "label": "Cláusula incumplida"},
+      {"key": "evidencia_incumplimiento", "label": "Evidencia del incumplimiento"},
+      {"key": "reclamos_previos", "label": "Reclamos previos enviados"}
+    ]
+  },
+  "cobranza_comercial": {
+    "campos": [
+      {"key": "monto_adeudado", "label": "Monto adeudado"},
+      {"key": "titulo_ejecutivo", "label": "Título ejecutivo (factura, pagaré, cheque)"},
+      {"key": "fecha_vencimiento", "label": "Fecha de vencimiento"}
+    ]
+  },
+  "conflicto_societario": {
+    "campos": [
+      {"key": "tipo_sociedad", "label": "Tipo de sociedad"},
+      {"key": "porcentaje_participacion", "label": "Porcentaje de participación"},
+      {"key": "controversia", "label": "Naturaleza de la controversia"}
+    ]
+  },
+  "sucesion_intestada": {
+    "campos": [
+      {"key": "fecha_fallecimiento", "label": "Fecha de fallecimiento"},
+      {"key": "certificado_defuncion", "label": "Certificado de defunción"},
+      {"key": "herederos_identificados", "label": "Lista de herederos identificados"},
+      {"key": "bienes_inventariados", "label": "Bienes a inventariar"},
+      {"key": "estado_civil_causante", "label": "Estado civil del causante al fallecer"}
+    ]
+  },
+  "divorcio": {
+    "campos": [
+      {"key": "fecha_matrimonio", "label": "Fecha de matrimonio"},
+      {"key": "regimen_patrimonial", "label": "Régimen patrimonial"},
+      {"key": "cese_convivencia", "label": "Fecha de cese de convivencia"},
+      {"key": "hijos_comunes", "label": "Hijos comunes"}
+    ]
+  },
+  "responsabilidad_civil": {
+    "campos": [
+      {"key": "fecha_hecho", "label": "Fecha del hecho dañoso"},
+      {"key": "danos_alegados", "label": "Daños alegados"},
+      {"key": "monto_pretendido", "label": "Monto pretendido"}
+    ]
+  }
+}

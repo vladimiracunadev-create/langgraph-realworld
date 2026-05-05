@@ -4,16 +4,16 @@
 [![Security Scan](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml/badge.svg?branch=main)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Portafolio de casos de uso con LangGraph, FastAPI y demos empresariales. El repositorio combina una capa documental fuerte con **10 casos operativos**: 01, 02, 03, 04, 05, 09, 10, 13, 19 y 25.
+Portafolio de casos de uso con LangGraph, FastAPI y demos empresariales. El repositorio combina una capa documental fuerte con **13 casos operativos**: 01, 02, 03, 04, 05, 08, 09, 10, 13, 14, 17, 19 y 25.
 
 ---
 
-## Implementacion Industrial (v4.2.0)
+## Implementacion Industrial (v4.5.0)
 
 El estandar actual del repositorio se apoya en estos pilares:
 
 1. **Portal unificado**: `index.html` como entrada principal para navegar el portafolio.
-2. **Casos de referencia reales**: backends FastAPI y UIs activas en los casos 01, 02, 03, 04, 05, 09, 10, 13, 19 y 25.
+2. **Casos de referencia reales**: backends FastAPI y UIs activas en los casos 01, 02, 03, 04, 05, 08, 09, 10, 13, 14, 17, 19 y 25.
 3. **Estado tipado**: contratos explicitos de estado con `TypedDict` y flujos compatibles con LangGraph.
 4. **Observabilidad**: endpoints `/health`, `/ready` y `/metrics`, ademas de trazabilidad por eventos o `trace_id` segun el caso.
 5. **Modo dual**: demos offline y ruta clara para activar integraciones reales mediante `.env.example`, `.env` y variables de entorno.
@@ -26,8 +26,8 @@ El estandar actual del repositorio se apoya en estos pilares:
 
 ### Taxonomia de Implementacion
 
-- **Operativo (v4.2.0)**: casos 01, 02, 03, 04, 05, 19 y 25 con backends reales, logicas condicionales robustas, modo DEMO/LIVE, UIs operativas e interactivas.
-- **Industrial (v4.2.0)**: casos 09, 10 y 13 con backend real, streaming, estado tipado, observabilidad y documentacion operativa completa.
+- **Operativo (v4.5.0)**: casos 01, 02, 03, 04, 05, 08, 14, 17, 19 y 25 con backends reales, logicas condicionales robustas, modo DEMO/LIVE, UIs operativas e interactivas.
+- **Industrial (v4.5.0)**: casos 09, 10 y 13 con backend real, streaming, estado tipado, observabilidad y documentacion operativa completa.
 - **Scaffold**: demos o plantillas documentadas listas para elevar al siguiente nivel.
 
 ### Estado de los Casos Clave

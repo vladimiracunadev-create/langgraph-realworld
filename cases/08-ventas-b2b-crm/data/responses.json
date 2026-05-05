@@ -1,0 +1,26 @@
+{
+  "ACC-001": {
+    "tipo": "positivo",
+    "fragmento": "Andrés Bustamante respondió: 'Coincide con lo que estamos buscando. ¿Pueden conectarme con alguien que ya implementó esto en logística mid-market? Tengo agenda esta semana jueves o viernes.'",
+    "intent_score": 88,
+    "tiempo_respuesta_horas": 6
+  },
+  "ACC-002": {
+    "tipo": "sin_respuesta",
+    "fragmento": "Sin respuesta tras 3 días. Apertura registrada (2 veces), 0 clics en CTA.",
+    "intent_score": 25,
+    "tiempo_respuesta_horas": null
+  },
+  "ACC-003": {
+    "tipo": "no_aplica",
+    "fragmento": "La cuenta no califica para el ICP — outreach no enviado.",
+    "intent_score": 0,
+    "tiempo_respuesta_horas": null
+  },
+  "ACC-004": {
+    "tipo": "negativo",
+    "fragmento": "Ricardo Almeida respondió: 'Gracias por el contacto. Tenemos congelados todos los nuevos vendors hasta Q3 2026. Por favor reescríbanme en agosto.'",
+    "intent_score": 12,
+    "tiempo_respuesta_horas": 18
+  }
+}

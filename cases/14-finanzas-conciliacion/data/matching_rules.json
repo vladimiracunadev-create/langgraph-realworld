@@ -1,0 +1,33 @@
+{
+  "umbral_match_aceptable": 0.6,
+  "tolerancia_monto_pesos": 1000,
+  "tolerancia_fecha_dias_exacto": 1,
+  "tolerancia_fecha_dias_amplia": 3,
+  "outlier_zscore_threshold": 2.5,
+  "outlier_amount_threshold_uf": 500,
+  "criterios": [
+    {
+      "id": "exact_match",
+      "descripcion": "Match exacto por monto + fecha (±1 día) + referencia",
+      "score": 1.0,
+      "requiere": ["monto_igual", "fecha_cercana", "referencia_igual"]
+    },
+    {
+      "id": "monto_fecha_amplia",
+      "descripcion": "Match por monto + fecha (±3 días) sin referencia",
+      "score": 0.7,
+      "requiere": ["monto_igual", "fecha_amplia"]
+    },
+    {
+      "id": "monto_contraparte",
+      "descripcion": "Match por monto + contraparte sin referencia",
+      "score": 0.6,
+      "requiere": ["monto_igual", "contraparte_igual"]
+    }
+  ],
+  "fraud_signals": {
+    "contraparte_desconocida_keywords": ["llc", "panamá", "panama", "bvi", "offshore", "trust"],
+    "monto_minimo_alerta": 20000000,
+    "descripcion_alerta_keywords": ["urgente", "consultoria exterior", "transf exterior"]
+  }
+}

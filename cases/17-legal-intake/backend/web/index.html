@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Caso 17 — Legal Intake</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07111f;
+      --surface: rgba(20, 30, 48, 0.85);
+      --border: rgba(180, 200, 230, 0.1);
+      --accent: #a78bfa;
+      --accent-2: #6366f1;
+      --accent-dim: rgba(167, 139, 250, 0.15);
+      --text: #e6edf3;
+      --muted: #8b9cb3;
+      --alta: #f87171;
+      --media: #fbbf24;
+      --baja: #34d399;
+      font-family: 'Inter', system-ui, sans-serif;
+      color-scheme: dark;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    header {
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex; gap: 12px; align-items: center;
+      background: rgba(7, 17, 31, 0.85);
+      backdrop-filter: blur(10px);
+      position: sticky; top: 0; z-index: 10;
+    }
+    header .back-link {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px; color: var(--accent);
+      text-decoration: none; opacity: 0.85;
+      transition: opacity .15s;
+    }
+    header .back-link:hover { opacity: 1; }
+    header .sep { color: var(--border); font-size: 18px; }
+    header .title { font-weight: 800; letter-spacing: -.4px; font-size: 1rem; flex: 1; }
+    .pill {
+      font-family: 'JetBrains Mono', monospace;
+      padding: 4px 10px; border-radius: 999px;
+      font-size: 10px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .5px;
+      border: 1px solid var(--border);
+    }
+    .pill-demo { color: #fbbf24; border-color: rgba(251,191,36,.3); background: rgba(251,191,36,.1); }
+    .pill-live { color: #34d399; border-color: rgba(52,211,153,.3); background: rgba(52,211,153,.1); }
+
+    .hero {
+      max-width: 920px; margin: 28px auto 0; padding: 0 24px;
+    }
+    .hero h2 { font-size: 1.55rem; font-weight: 800; margin-bottom: 10px; }
+    .hero p { color: var(--muted); line-height: 1.65; font-size: .92rem; }
+    .hero .badge-row { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+    .hero-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .68rem; padding: 4px 9px;
+      border-radius: 999px; border: 1px solid var(--border);
+      color: var(--muted); background: var(--accent-dim);
+    }
+
+    main {
+      max-width: 1280px; margin: 22px auto;
+      padding: 0 24px 40px;
+      display: grid;
+      grid-template-columns: 1fr 1.25fr;
+      gap: 18px;
+    }
+    @media (max-width: 880px) { main { grid-template-columns: 1fr; } }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px; overflow: hidden;
+    }
+    .panel-header {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      font-weight: 700; font-size: .85rem;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .panel-body { padding: 18px; }
+
+    label { font-size: .8rem; color: var(--muted); display: block; margin-bottom: 6px; }
+    select, button {
+      width: 100%; padding: 10px 14px; border-radius: 8px;
+      border: 1px solid var(--border); font-size: .88rem;
+      font-family: inherit;
+    }
+    select {
+      background: rgba(20,30,48,.95); color: var(--text);
+      cursor: pointer; margin-bottom: 14px;
+    }
+    select:focus { outline: 2px solid var(--accent); }
+    button {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff; font-weight: 700; cursor: pointer; border: none;
+      transition: opacity .15s, transform .1s;
+    }
+    button:hover:not(:disabled) { opacity: .92; transform: translateY(-1px); }
+    button:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+
+    .intake-preview {
+      margin-top: 14px; padding: 12px;
+      background: rgba(167,139,250,.05);
+      border: 1px solid rgba(167,139,250,.15);
+      border-radius: 8px;
+      font-size: .8rem; color: var(--muted);
+      max-height: 160px; overflow-y: auto;
+      line-height: 1.55;
+    }
+    .intake-preview strong { color: var(--text); }
+
+    .timeline { margin-top: 6px; }
+    .tl-item {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 9px 0; border-bottom: 1px solid var(--border);
+      animation: fadeIn .25s ease;
+    }
+    .tl-item:last-child { border-bottom: none; }
+    .tl-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent); margin-top: 5px; flex-shrink: 0;
+    }
+    .tl-node {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem; color: var(--accent); font-weight: 600;
+    }
+    .tl-detail { font-size: .78rem; color: var(--muted); margin-top: 2px; line-height: 1.55; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; } }
+
+    .urgencia-header {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 18px; border-bottom: 1px solid var(--border);
+    }
+    .urgencia-badge {
+      padding: 6px 14px; border-radius: 999px;
+      font-weight: 700; font-size: .78rem;
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase; letter-spacing: .5px;
+    }
+    .urg-alta  { background: rgba(248,113,113,.15); color: var(--alta); border: 1px solid rgba(248,113,113,.3); }
+    .urg-media { background: rgba(251,191,36,.15); color: var(--media); border: 1px solid rgba(251,191,36,.3); }
+    .urg-baja  { background: rgba(52,211,153,.15); color: var(--baja); border: 1px solid rgba(52,211,153,.3); }
+    .urg-empty { background: rgba(139,156,179,.1); color: var(--muted); border: 1px solid var(--border); }
+    .case-meta { flex: 1; }
+    .case-title { font-weight: 700; font-size: .92rem; margin-bottom: 2px; }
+    .case-sub { font-size: .76rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+
+    .section-label {
+      font-size: .72rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .5px;
+      font-weight: 600; margin: 16px 0 8px;
+    }
+
+    .info-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; }
+    .info-chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .7rem; padding: 3px 8px;
+      border-radius: 6px; background: rgba(20,30,48,.8);
+      border: 1px solid var(--border); color: var(--muted);
+    }
+    .info-chip strong { color: var(--text); }
+
+    .hechos-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+      font-size: .78rem;
+    }
+    @media (max-width: 600px) { .hechos-grid { grid-template-columns: 1fr; } }
+    .hecho-item {
+      padding: 6px 9px;
+      background: rgba(20,30,48,.5);
+      border: 1px solid var(--border); border-radius: 6px;
+    }
+    .hecho-key {
+      color: var(--muted); font-size: .68rem;
+      text-transform: uppercase; letter-spacing: .3px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .hecho-value { color: var(--text); margin-top: 2px; }
+    .hecho-pendiente { color: var(--alta); font-style: italic; }
+
+    .preguntas-list { display: flex; flex-direction: column; gap: 6px; }
+    .pregunta-item {
+      font-size: .78rem; padding: 7px 11px;
+      background: rgba(248,113,113,.07);
+      border-left: 3px solid var(--alta);
+      border-radius: 0 6px 6px 0;
+      color: #ffc4c0;
+      line-height: 1.5;
+    }
+
+    .borrador-box {
+      background: #0a1424; border: 1px solid var(--border);
+      border-radius: 8px; padding: 14px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .76rem; line-height: 1.65;
+      white-space: pre-wrap; color: #cdd9e5;
+      max-height: 360px; overflow-y: auto;
+    }
+    .borrador-box .pendiente {
+      background: rgba(248,113,113,.15);
+      color: var(--alta); padding: 1px 4px; border-radius: 3px;
+      font-weight: 600;
+    }
+    .doc-tipo-tag {
+      display: inline-block; padding: 2px 8px;
+      background: var(--accent-dim);
+      border: 1px solid rgba(167,139,250,.3);
+      border-radius: 6px; font-family: 'JetBrains Mono', monospace;
+      font-size: .7rem; color: var(--accent); margin-bottom: 8px;
+    }
+
+    .abogado-card {
+      display: flex; gap: 12px; align-items: center;
+      padding: 12px 14px;
+      background: rgba(167,139,250,.05);
+      border: 1px solid rgba(167,139,250,.15);
+      border-radius: 8px;
+    }
+    .abogado-avatar {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; color: #fff; flex-shrink: 0;
+    }
+    .abogado-info { flex: 1; }
+    .abogado-nombre { font-weight: 700; font-size: .85rem; }
+    .abogado-meta { font-size: .72rem; color: var(--muted); margin-top: 2px; }
+    .abogado-meta code { font-family: 'JetBrains Mono', monospace; color: var(--accent); }
+
+    .resumen-box {
+      background: rgba(167,139,250,.05);
+      border: 1px solid rgba(167,139,250,.15);
+      border-radius: 10px; padding: 14px 16px;
+      font-size: .83rem; line-height: 1.7;
+      white-space: pre-wrap; color: #cdd9e5;
+    }
+
+    .tech-footer {
+      max-width: 1280px; margin: 0 auto;
+      padding: 0 24px 32px;
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .tech-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .7rem; padding: 4px 10px;
+      border-radius: 999px; border: 1px solid var(--border);
+      color: var(--muted); background: var(--surface);
+    }
+
+    .empty {
+      text-align: center; padding: 32px 16px;
+      color: var(--muted); font-size: .85rem;
+    }
+    .empty-icon { font-size: 2rem; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="http://localhost:8080/" class="back-link">← VOLVER AL HUB</a>
+  <span class="sep">|</span>
+  <span class="title">Caso 17 — Legal Intake</span>
+  <span class="pill" id="mode-badge">…</span>
+</header>
+
+<div class="hero">
+  <h2>Admisión Automatizada de Casos Legales</h2>
+  <p>
+    El estudio jurídico recibe consultas de clientes en lenguaje libre. Este agente LangGraph
+    realiza la entrevista inicial, clasifica la especialidad (laboral / mercantil / civil),
+    extrae los hechos relevantes según el subtipo, valida la completitud, evalúa la urgencia
+    procesal y los plazos de prescripción, genera un borrador inicial de documento (demanda,
+    requerimiento, posesión efectiva) y lo asigna al abogado disponible con menor carga.
+    Reduce el intake típico de 1–2 horas de abogado a segundos de procesamiento + minutos de
+    revisión humana. Funciona sin LLM en modo DEMO.
+  </p>
+  <div class="badge-row">
+    <span class="hero-pill">10 nodos LangGraph</span>
+    <span class="hero-pill">2 routers condicionales</span>
+    <span class="hero-pill">3 especialidades legales</span>
+    <span class="hero-pill">3 plantillas de documentos</span>
+    <span class="hero-pill">DEMO + LIVE (GPT-4o-mini)</span>
+  </div>
+</div>
+
+<main>
+  <!-- ── PANEL IZQUIERDO: solicitud + timeline ── -->
+  <div>
+    <div class="panel">
+      <div class="panel-header"><span>📩</span> Solicitud del cliente</div>
+      <div class="panel-body">
+        <label for="intake-select">Seleccionar caso de intake</label>
+        <select id="intake-select" onchange="renderPreview()">
+          <option value="INT-001">INT-001 — María Rojas · Despido injustificado (laboral)</option>
+          <option value="INT-002">INT-002 — Distribuidora Andina · Incumplimiento contractual (mercantil)</option>
+          <option value="INT-003">INT-003 — Hermanos Pérez · Sucesión intestada (civil)</option>
+        </select>
+        <div class="intake-preview" id="intake-preview">Cargando vista previa…</div>
+        <button id="btn-procesar" onclick="iniciarIntake()" style="margin-top:12px;">
+          Procesar intake →
+        </button>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-header"><span>⏱</span> Timeline del agente</div>
+      <div class="panel-body">
+        <div class="timeline" id="timeline">
+          <div class="empty"><div class="empty-icon">⚖️</div>Selecciona un caso y pulsa Procesar.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PANEL DERECHO: resultados ── -->
+  <div class="panel" id="results-panel">
+    <div class="urgencia-header">
+      <div class="urgencia-badge urg-empty" id="urg-badge">— urgencia</div>
+      <div class="case-meta">
+        <div class="case-title" id="case-title">Esperando intake…</div>
+        <div class="case-sub" id="case-sub">— · —</div>
+      </div>
+    </div>
+
+    <div class="panel-body" id="results-body">
+      <div class="empty"><div class="empty-icon">📋</div>Los resultados aparecerán aquí.</div>
+    </div>
+  </div>
+</main>
+
+<div class="tech-footer">
+  <span class="tech-pill">LangGraph StateGraph</span>
+  <span class="tech-pill">FastAPI</span>
+  <span class="tech-pill">10 nodos</span>
+  <span class="tech-pill">2 routers condicionales</span>
+  <span class="tech-pill">NDJSON streaming</span>
+  <span class="tech-pill">DEMO / LIVE</span>
+  <span class="tech-pill">Puerto 8017</span>
+  <span class="tech-pill">MemorySaver</span>
+</div>
+
+<script>
+  const PORT = window.location.port || '8017';
+  const BASE = `${window.location.protocol}//${window.location.hostname}:${PORT}`;
+
+  const PREVIEWS = {
+    'INT-001': {
+      cliente: 'María Fernanda Rojas Salazar',
+      contacto: 'maria.rojas@correo.cl',
+      relato: 'Trabajé como analista de cuentas durante 4 años y 7 meses. Me despidieron el 12 de abril de 2026 invocando el artículo 161 (necesidades de la empresa), pero mi puesto fue ocupado por otra persona la semana siguiente. Último sueldo bruto: $1.840.000. Tengo contrato, 12 liquidaciones, carta de despido y captura de la nueva vacante.',
+      docs: 4
+    },
+    'INT-002': {
+      cliente: 'DISTRIBUIDORA ANDINA DEL SUR S.A.',
+      contacto: 'Jorge Vargas (Gerente Legal)',
+      relato: 'Contrato de suministro firmado en oct/2025 por $48.500.000 mensuales con cláusula penal del 5%. Desde feb/2026 el proveedor incumple SLA sistemáticamente: 8, 12 y +30 días de retraso. Tres reclamos formales sin respuesta. Necesitamos requerimiento extrajudicial y, si no responden en 30 días, demanda.',
+      docs: 4
+    },
+    'INT-003': {
+      cliente: 'Hermanos Pérez Contreras (Luis, Carmen y Roberto)',
+      contacto: 'Luis Pérez',
+      relato: 'Mi padre falleció sin testamento. Somos tres hermanos. Hay una casa en La Reina, un departamento en Viña del Mar y una cuenta bancaria. Mi padre era viudo desde 2019. No tenemos certificado de defunción ni posesión efectiva. Queremos regularizar.',
+      docs: 2
+    }
+  };
+
+  function renderPreview() {
+    const id = document.getElementById('intake-select').value;
+    const p = PREVIEWS[id];
+    if (!p) return;
+    document.getElementById('intake-preview').innerHTML = `
+      <div><strong>Cliente:</strong> ${escapeHtml(p.cliente)}</div>
+      <div><strong>Contacto:</strong> ${escapeHtml(p.contacto)}</div>
+      <div><strong>Documentos aportados:</strong> ${p.docs}</div>
+      <div style="margin-top:6px;">${escapeHtml(p.relato)}</div>
+    `;
+  }
+
+  async function detectMode() {
+    try {
+      const r = await fetch(`${BASE}/health`);
+      const d = await r.json();
+      const badge = document.getElementById('mode-badge');
+      const isLive = d.mode === 'LIVE';
+      badge.textContent = isLive ? 'LIVE' : 'DEMO';
+      badge.className = `pill ${isLive ? 'pill-live' : 'pill-demo'}`;
+    } catch { /* silencioso */ }
+  }
+  detectMode();
+  renderPreview();
+
+  function urgClass(u) {
+    return ({alta: 'urg-alta', media: 'urg-media', baja: 'urg-baja'})[u] || 'urg-empty';
+  }
+  function urgIcon(u) {
+    return ({alta: '🔴', media: '🟡', baja: '🟢'})[u] || '⚪';
+  }
+
+  const NODE_LABELS = {
+    'solicitud_recibida': 'recibir_solicitud',
+    'entrevista_realizada': 'entrevista_inicial',
+    'caso_clasificado': 'clasificar_tipo_caso',
+    'hechos_laboral_recopilados': 'recopilar_hechos_laboral',
+    'hechos_mercantil_recopilados': 'recopilar_hechos_mercantil',
+    'hechos_civil_recopilados': 'recopilar_hechos_civil',
+    'informacion_validada': 'validar_informacion',
+    'informacion_faltante_registrada': 'solicitar_informacion_faltante',
+    'urgencia_evaluada': 'evaluar_urgencia',
+    'borrador_generado': 'generar_borrador_documento',
+    'abogado_asignado': 'asignar_abogado',
+    'intake_completado': 'producir_resumen_intake',
+  };
+
+  function describeEvent(ev) {
+    if (!ev) return '';
+    const t = ev.type || '';
+    if (t === 'solicitud_recibida')        return `${ev.cliente} · ${ev.documentos_aportados} doc.`;
+    if (t === 'entrevista_realizada')      return `${ev.longitud_relato_chars} chars · ${(ev.montos_detectados||[]).length} montos · ${(ev.fechas_detectadas||[]).length} fechas`;
+    if (t === 'caso_clasificado')          return `${ev.tipo_caso.toUpperCase()} → ${ev.subtipo} (kw: ${(ev.keywords_match||[]).slice(0,3).join(', ')})`;
+    if (t.startsWith('hechos_'))           return `${ev.subtipo} · ${ev.campos_encontrados}/${ev.campos_requeridos} campos extraídos`;
+    if (t === 'informacion_validada')      return `${ev.completitud.toUpperCase()} · ${ev.campos_faltantes.length} faltantes · ${ev.total_preguntas} preguntas`;
+    if (t === 'informacion_faltante_registrada') return `${ev.total_preguntas} preguntas registradas para el cliente`;
+    if (t === 'urgencia_evaluada')         return `${(ev.urgencia||'').toUpperCase()} — ${ev.razon}`;
+    if (t === 'borrador_generado')         return `${ev.documento_tipo} · ${ev.longitud_chars} chars · ${ev.campos_pendientes_en_borrador} pendientes`;
+    if (t === 'abogado_asignado')          return `${ev.abogado} · ${ev.casos_activos} casos activos · carga ${ev.carga}`;
+    if (t === 'intake_completado')         return `Expediente listo para revisión`;
+    return JSON.stringify(ev).slice(0, 80);
+  }
+
+  function addTimelineItem(ev) {
+    const tl = document.getElementById('timeline');
+    const empty = tl.querySelector('.empty');
+    if (empty) empty.remove();
+
+    const item = document.createElement('div');
+    item.className = 'tl-item';
+    item.innerHTML = `
+      <div class="tl-dot"></div>
+      <div>
+        <div class="tl-node">${NODE_LABELS[ev.type] || ev.type}</div>
+        <div class="tl-detail">${escapeHtml(describeEvent(ev))}</div>
+      </div>`;
+    tl.appendChild(item);
+  }
+
+  let _lastEventsLen = 0;
+
+  function applySnapshot(snap) {
+    if (!snap) return;
+
+    // Header de urgencia + caso
+    const urg = snap.urgencia || '';
+    const badge = document.getElementById('urg-badge');
+    if (urg) {
+      badge.className = `urgencia-badge ${urgClass(urg)}`;
+      badge.textContent = `${urgIcon(urg)} URGENCIA ${urg.toUpperCase()}`;
+    }
+    if (snap.cliente_nombre) {
+      document.getElementById('case-title').textContent = snap.cliente_nombre;
+    }
+    const tipo = snap.tipo_caso || '—';
+    const subtipo = snap.subtipo || '—';
+    document.getElementById('case-sub').textContent = `${tipo.toUpperCase()} · ${subtipo}`;
+
+    // Timeline incremental
+    const events = snap.events || [];
+    const newEvents = events.slice(_lastEventsLen);
+    newEvents.forEach(ev => addTimelineItem(ev));
+    _lastEventsLen = events.length;
+
+    if (snap.done) renderResults(snap);
+  }
+
+  function renderResults(snap) {
+    const body = document.getElementById('results-body');
+    let html = '';
+
+    // Info chips
+    html += `<div class="info-row">
+      <span class="info-chip"><strong>Tipo:</strong> ${escapeHtml(snap.tipo_caso || '')}</span>
+      <span class="info-chip"><strong>Subtipo:</strong> ${escapeHtml(snap.subtipo || '')}</span>
+      <span class="info-chip"><strong>Estado:</strong> ${escapeHtml(snap.completitud || '')}</span>
+      ${snap.plazo_critico ? `<span class="info-chip"><strong>Plazo:</strong> ${escapeHtml(snap.plazo_critico)}</span>` : ''}
+    </div>
+    <div style="font-size:.78rem; color:var(--muted); margin-top:6px;">${escapeHtml(snap.razon_urgencia || '')}</div>`;
+
+    // Hechos extraídos
+    const hechos = snap.hechos || {};
+    const hechosKeys = Object.keys(hechos);
+    if (hechosKeys.length) {
+      html += `<div class="section-label">📑 Hechos estructurados extraídos</div><div class="hechos-grid">`;
+      hechosKeys.forEach(k => {
+        const v = hechos[k];
+        html += `<div class="hecho-item">
+          <div class="hecho-key">${escapeHtml(k)}</div>
+          <div class="hecho-value ${v ? '' : 'hecho-pendiente'}">${v ? escapeHtml(String(v)) : '⚠️ pendiente'}</div>
+        </div>`;
+      });
+      html += `</div>`;
+    }
+
+    // Preguntas pendientes
+    const preguntas = snap.preguntas_pendientes || [];
+    if (preguntas.length) {
+      html += `<div class="section-label">❓ Información a solicitar al cliente (${preguntas.length})</div><div class="preguntas-list">`;
+      preguntas.forEach(q => {
+        html += `<div class="pregunta-item">${escapeHtml(q)}</div>`;
+      });
+      html += `</div>`;
+    }
+
+    // Borrador del documento
+    if (snap.documento_borrador) {
+      html += `<div class="section-label">📄 Borrador inicial generado</div>
+        <div class="doc-tipo-tag">tipo: ${escapeHtml(snap.documento_tipo || '')}</div>
+        <div class="borrador-box">${highlightPendientes(snap.documento_borrador)}</div>`;
+    }
+
+    // Abogado asignado
+    const ab = snap.abogado_asignado || {};
+    if (ab.nombre) {
+      const initials = ab.nombre.split(' ').filter(s => s.length > 1).slice(-2).map(s => s[0]).join('');
+      html += `<div class="section-label">⚖️ Abogado responsable asignado</div>
+        <div class="abogado-card">
+          <div class="abogado-avatar">${escapeHtml(initials)}</div>
+          <div class="abogado-info">
+            <div class="abogado-nombre">${escapeHtml(ab.nombre)}</div>
+            <div class="abogado-meta">
+              Especialidad: <code>${escapeHtml(ab.especialidad || '')}</code> ·
+              ${ab.casos_activos} casos activos · carga ${escapeHtml(ab.carga || '')} ·
+              ${ab.experiencia_anos || 0} años exp.
+            </div>
+            <div class="abogado-meta">📧 ${escapeHtml(ab.email || '')}</div>
+          </div>
+        </div>`;
+    }
+
+    // Resumen ejecutivo
+    if (snap.resumen_intake) {
+      html += `<div class="section-label">📝 Resumen ejecutivo</div>
+        <div class="resumen-box">${escapeHtml(snap.resumen_intake)}</div>`;
+    }
+
+    body.innerHTML = html;
+  }
+
+  function highlightPendientes(text) {
+    return escapeHtml(text).replace(/\{\{PENDIENTE[^}]*\}\}/g, m => `<span class="pendiente">${m}</span>`);
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  async function iniciarIntake() {
+    const intakeId = document.getElementById('intake-select').value;
+    const btn = document.getElementById('btn-procesar');
+    const tl = document.getElementById('timeline');
+    const body = document.getElementById('results-body');
+
+    btn.disabled = true;
+    btn.textContent = 'Procesando…';
+    tl.innerHTML = '';
+    body.innerHTML = '<div class="empty"><div class="empty-icon">⚙️</div>Procesando intake…</div>';
+    _lastEventsLen = 0;
+
+    document.getElementById('urg-badge').className = 'urgencia-badge urg-empty';
+    document.getElementById('urg-badge').textContent = '— urgencia';
+    document.getElementById('case-title').textContent = 'Procesando…';
+    document.getElementById('case-sub').textContent = '— · —';
+
+    const threadId = `intake-${intakeId}-${Date.now()}`;
+    const url = `${BASE}/api/stream?thread_id=${encodeURIComponent(threadId)}&intake_id=${encodeURIComponent(intakeId)}`;
+
+    try {
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop();
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          try {
+            const msg = JSON.parse(line);
+            if (msg.type === 'snapshot') applySnapshot(msg.snapshot);
+            if (msg.type === 'error') {
+              body.innerHTML = `<div class="empty" style="color:var(--alta)">Error: ${escapeHtml(msg.detail)}</div>`;
+            }
+          } catch { /* línea incompleta */ }
+        }
+      }
+    } catch (err) {
+      body.innerHTML = `<div class="empty" style="color:var(--alta)">Error de conexión: ${escapeHtml(err.message)}</div>`;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Procesar intake →';
+    }
+  }
+</script>
+</body>
+</html>

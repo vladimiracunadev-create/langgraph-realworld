@@ -1,0 +1,39 @@
+{
+  "descripcion": "Ideal Customer Profile — empresas mid-market y enterprise con stack digital moderno y señales activas de compra.",
+  "industrias_prioritarias": {
+    "logistics": 30,
+    "fintech": 30,
+    "media": 25,
+    "saas": 25,
+    "manufacturing": 20,
+    "retail_traditional": 5
+  },
+  "tamano_minimo_empleados": 50,
+  "tamano_optimo": {
+    "mid-market": 25,
+    "enterprise": 25,
+    "startup": 15,
+    "small": 5
+  },
+  "tech_stack_modern": [
+    "Salesforce", "HubSpot", "Snowflake", "Databricks", "AWS",
+    "Azure", "GCP", "Kafka", "Looker", "Mixpanel", "Segment"
+  ],
+  "tech_stack_modern_score": 15,
+  "señales_compra_score_por_item": 8,
+  "noticias_relevantes_score_por_item": 4,
+  "max_noticias_score": 12,
+  "umbral_califica": 50,
+  "umbrales_nivel": {
+    "alto": 70,
+    "medio": 50,
+    "bajo": 30
+  },
+  "razones_descarte_comunes": {
+    "tamano_insuficiente": "Tamaño de la empresa por debajo del mínimo del ICP (50 empleados).",
+    "industria_no_objetivo": "La industria no está priorizada en el ICP actual del trimestre.",
+    "stack_legacy": "El stack tecnológico observado es legacy y sugiere baja madurez digital.",
+    "ventana_no_disponible": "La cuenta declaró públicamente una ventana de no procurement.",
+    "sin_señales": "No hay señales de compra activas (hiring, RFP, búsquedas)."
+  }
+}
