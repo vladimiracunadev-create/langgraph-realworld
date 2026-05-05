@@ -1,15 +1,56 @@
+<div align="center">
+
 # 🤖 LangGraph Realworld
 
+### **25 casos de uso empresariales · 15 backends operativos · 100% DEMO sin APIs**
+
+**LangGraph · FastAPI · Python 3.11 · Docker · OAuth2 · LangSmith · uv (opcional)**
+
+[![Version](https://img.shields.io/badge/version-4.7.0-1f6feb?style=for-the-badge)](CHANGELOG.md)
+[![Operativos](https://img.shields.io/badge/operativos-15%2F25-3fb950?style=for-the-badge)](ROADMAP.md)
+[![Tests](https://img.shields.io/badge/tests-passing-3fb950?style=for-the-badge&logo=pytest&logoColor=white)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml)
+[![License](https://img.shields.io/badge/license-MIT-yellow?style=for-the-badge)](LICENSE)
+
+[![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.135-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![LangGraph](https://img.shields.io/badge/LangGraph-1.1-FF6F00?style=flat-square&logo=langchain&logoColor=white)](https://github.com/langchain-ai/langgraph)
+[![Docker](https://img.shields.io/badge/Docker-ready-2496ED?style=flat-square&logo=docker&logoColor=white)](docker-compose.yml)
+[![uv](https://img.shields.io/badge/uv-opcional-7c3aed?style=flat-square&logo=astral&logoColor=white)](docs/UV.md)
+[![CodeQL](https://img.shields.io/badge/CodeQL-enabled-2f81f7?style=flat-square&logo=github&logoColor=white)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/codeql.yml)
+[![Security](https://img.shields.io/badge/security-8_capas-f87171?style=flat-square&logo=shield&logoColor=white)](SECURITY.md)
 [![CI](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml)
 [![Security Scan](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml/badge.svg?branch=main)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-4.7.0-blue.svg)](CHANGELOG.md)
-[![Python](https://img.shields.io/badge/python-3.11-informational.svg)](https://www.python.org/)
-[![LangGraph](https://img.shields.io/badge/LangGraph-latest-green.svg)](https://github.com/langchain-ai/langgraph)
+
+</div>
 
 > Portafolio de **25 casos de uso empresariales** construidos con **LangGraph** y **FastAPI**:
 > **15 backends completamente operativos** (casos 01, 02, 03, 04, 05, 06, 08, 09, 10, 13, 14, 17, 19, 21 y 25) con streaming, OAuth2/OIDC opt-in, observabilidad LangSmith, `/metrics` por servicio, logging JSON estructurado y reverse proxy nginx + TLS.
 > Los 10 casos restantes son scaffolds documentados listos para elevar al siguiente nivel.
+
+### 📊 Estado del portfolio
+
+| 🎯 | Métrica | Valor |
+|:-:|:---|:---|
+| 🟢 | Casos operativos | **15 / 25** (60%) |
+| 🏭 | Casos industriales | **3** (09, 10, 13) |
+| 📋 | Scaffolds restantes | **10** (Ola 3) |
+| 🧪 | Tests por caso | 18-30, todos verdes |
+| 🔌 | Modo DEMO | 100% sin APIs externas |
+| 🔑 | Modo LIVE | Opt-in con `OPENAI_API_KEY` |
+| 🛡️ | Auditoría seguridad | 8 capas (`SECURITY.md`) |
+| ⚡ | Tooling | `pip` + `pip-tools` (defecto), `uv` (~10× opcional) |
+
+### 🔥 Casos destacados
+
+| Caso | Tag | Por qué mirarlo |
+|:-:|:---|:---|
+| **04** | 🛡️ SOC | Router de riesgo (3 vías), threat intel, SIEM context |
+| **06** | 🛡️ Compliance | ISO/SOC2/GDPR + cadena de custodia SHA-256 encadenada |
+| **13** | 📊 BI | SQL agent endurecido + Chart.js + LLM opt-in |
+| **14** | 💰 Finanzas | Matching multi-criterio + z-score outliers determinista |
+| **17** | ⚖️ Legal | 3 especialidades + 3 plantillas + asignación de abogado |
+| **21** | 📝 Docs | Loop QA condicional (tope 3 iter) + outline adaptativo |
+| **25** | 🤝 Multi-agent | Supervisor + 4 workers especializados (DEMO) |
 
 ---
 
