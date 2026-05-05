@@ -13,8 +13,12 @@ Esta guia explica como levantar el repositorio completo y como ejecutar por sepa
 - Python 3.11+
 - Docker Desktop o Docker Engine recomendado
 - `pip` disponible en PATH
+- (Opcional) [`uv`](UV.md) — gestor Python ~10× más rápido que pip. **No es obligatorio** pero acelera notablemente la instalación local de los casos. Instálalo con `pip install uv` o `make uv-bootstrap`.
 
 Mas detalle en [REQUIREMENTS.md](REQUIREMENTS.md).
+
+> [!TIP]
+> ¿Prefieres `uv` en vez de `pip`? Lee [docs/UV.md](UV.md). Todos los `pip install -r requirements.txt` de esta guía pueden reemplazarse por `uv pip install -r requirements.txt` o, mejor aún, `make uv-install-case CASE=XX` que crea venv + instala dependencias en un solo paso.
 
 ---
 
@@ -147,6 +151,38 @@ uvicorn src.api:app --reload --port 8013
 ```
 
 UI del caso 13: `http://localhost:8013/web/`
+
+---
+
+## Opcion 4: Ejecucion local con `uv` (mas rapido)
+
+[`uv`](https://docs.astral.sh/uv/) reemplaza a pip y crea entornos virtuales 10× más rápido. **Es opcional** — los Dockerfiles, CI y lockfiles siguen funcionando con pip puro. Guía completa en [docs/UV.md](UV.md).
+
+```bash
+# 1. Instala uv una sola vez
+pip install uv          # o:  make uv-bootstrap
+
+# 2. Crea venv aislado + instala dependencias del caso (un comando)
+make uv-install-case CASE=06
+
+# 3. Activa el venv
+source cases/06-compliance-auditorias/backend/.venv/bin/activate
+# Windows (Git Bash):
+# source cases/06-compliance-auditorias/backend/.venv/Scripts/activate
+
+# 4. Ejecuta el caso
+cd cases/06-compliance-auditorias/backend
+uvicorn src.api:app --port 8006
+```
+
+Para regenerar los `requirements.txt` con uv en vez de pip-tools:
+
+```bash
+make uv-compile         # ~10× más rápido que make pip-compile
+make uv-compile-check   # drift check sin escribir
+```
+
+> Los lockfiles que produce `uv pip compile` son intercambiables con los de `pip-compile`: el equipo puede mezclar ambas herramientas sin conflicto.
 
 ---
 

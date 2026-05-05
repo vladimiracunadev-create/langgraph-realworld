@@ -107,7 +107,8 @@ El estándar actual del repositorio se apoya en estos pilares:
 |:---|:---|
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Estructura del monorepo, patrón DEMO/LIVE, compose y hub |
 | [docs/TECHNICAL_SPECS.md](docs/TECHNICAL_SPECS.md) | Stack, contratos de API, guardrails de seguridad |
-| [docs/INSTALL.md](docs/INSTALL.md) | Cómo levantar el repo: Docker, local, Hub CLI |
+| [docs/INSTALL.md](docs/INSTALL.md) | Cómo levantar el repo: Docker, local, Hub CLI, uv opt-in |
+| [docs/UV.md](docs/UV.md) | ⚡ Uso opcional de `uv` (Astral) — gestor Python ~10× más rápido que pip |
 | [docs/REQUIREMENTS.md](docs/REQUIREMENTS.md) | Requisitos: Git, Python, Docker, APIs opcionales |
 | [docs/HUB.md](docs/HUB.md) | Hub CLI — comandos, guardrails, estado de casos |
 | [docs/AGENTS_AND_SKILLS.md](docs/AGENTS_AND_SKILLS.md) | Skills de agentes, estándar de un caso completo, orden de trabajo |

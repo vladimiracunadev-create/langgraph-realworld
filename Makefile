@@ -1,7 +1,7 @@
 ﻿# LangGraph Real-World Cases - Developer shortcuts
 # Usage: make lint | make test-case09 | make up | make down
 
-.PHONY: help lint format test-case03 test-case09 test-case10 test-case13 test-case19 test-case25 compile-case13 up down hub-list hub-doctor hub-run case-up case-down k8s-apply pip-compile pip-compile-check
+.PHONY: help lint format test-case03 test-case09 test-case10 test-case13 test-case19 test-case25 compile-case13 up down hub-list hub-doctor hub-run case-up case-down k8s-apply pip-compile pip-compile-check uv-bootstrap uv-compile uv-compile-check uv-install-case
 
 help:
 	@echo "Targets:"
@@ -16,8 +16,12 @@ help:
 	@echo "  make compile-case13    - syntax check (Case 13 backend src)"
 	@echo "  make up                - docker compose up (todos los casos operativos)"
 	@echo "  make down              - docker compose down"
-	@echo "  make pip-compile       - regenerate requirements.txt lock files from requirements.in"
-	@echo "  make pip-compile-check - check for drift between requirements.in and requirements.txt"
+	@echo "  make pip-compile       - regenerate requirements.txt lock files from requirements.in (pip-tools)"
+	@echo "  make pip-compile-check - check for drift between requirements.in and requirements.txt (pip-tools)"
+	@echo "  make uv-bootstrap      - install uv (Astral) globally via pip"
+	@echo "  make uv-compile        - regenerate requirements.txt with uv (~10x faster than pip-tools)"
+	@echo "  make uv-compile-check  - drift check using uv pip compile"
+	@echo "  make uv-install-case CASE=xx - create venv + install case deps with uv pip sync"
 	@echo "  make hub-list          - List all cases via Hub CLI"
 	@echo "  make hub-doctor        - Check Hub CLI environment"
 	@echo "  make hub-run CASE=xx   - Run a case via Hub CLI"
@@ -29,6 +33,19 @@ pip-compile:
 
 pip-compile-check:
 	bash scripts/pip-compile-all.sh --check
+
+uv-bootstrap:
+	python -m pip install --upgrade uv
+
+uv-compile:
+	bash scripts/uv-compile-all.sh
+
+uv-compile-check:
+	bash scripts/uv-compile-all.sh --check
+
+uv-install-case:
+	@if [ -z "$(CASE)" ]; then echo "Error: CASE is required (e.g. make uv-install-case CASE=06)"; exit 1; fi
+	bash scripts/uv-install-case.sh $(CASE)
 
 lint:
 	ruff check cases/09-rrhh-screening-agenda/backend/src cases/10-onboarding-empleados/backend/src cases/13-bi-analista-datos/backend/src
