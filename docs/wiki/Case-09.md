@@ -1,4 +1,4 @@
-﻿# Caso 09: RRHH Screening + Agenda (Industrial v4.5.0)
+﻿# Caso 09: RRHH Screening + Agenda (Industrial v4.7.0)
 
 > [!IMPORTANT]
 > **Estado**: Industrial | **Version**: 4.2.0 | **Referencia**: Resiliencia y observabilidad

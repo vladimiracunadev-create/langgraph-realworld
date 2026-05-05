@@ -1,6 +1,6 @@
 # Hoja de Ruta
 
-> **Version**: 4.5.0 | **Estado**: Industrial
+> **Version**: 4.7.0 | **Estado**: Industrial
 
 El estandar tecnico del repositorio ya esta definido. Ver el [SKILL de creacion de casos](https://github.com/vladimiracunadev-create/langgraph-realworld/blob/main/.agents/skills/crear_caso/SKILL.md) antes de ejecutar cualquier tarea.
 
@@ -8,8 +8,8 @@ El estandar tecnico del repositorio ya esta definido. Ver el [SKILL de creacion 
 
 ## Estado actual
 
-13 casos operativos e industriales: 01, 02, 03, 04, 05, 08, 09, 10, 13, 14, 17, 19, 25.
-12 casos scaffold listos para elevar.
+15 casos operativos e industriales: 01, 02, 03, 04, 05, 06, 08, 09, 10, 13, 14, 17, 19, 21, 25.
+10 casos scaffold listos para elevar.
 
 ---
 
@@ -33,8 +33,8 @@ SCAFFOLD  →  (SKILL.md)  →  OPERATIVO  →  (observabilidad + hardening)  �
 |:---|:---|:---|
 | ~~08 — Ventas B2B + CRM~~ | Comercial | **COMPLETADO v4.4.0** — Pipeline outbound: ICP scoring, outreach por industria, CRM stage automatico |
 | ~~14 — Finanzas: Conciliacion~~ | Finanzas | **COMPLETADO v4.5.0** — Matching multi-criterio, z-score outliers, indicador verde/amarillo/rojo |
-| 06 — Compliance & Auditorias | Gobernanza | Pendiente |
-| 21 — Documentacion Automatica | DevOps | Pendiente |
+| ~~06 — Compliance & Auditorias~~ | Gobernanza | **COMPLETADO v4.6.0** — Mapeo de controles ISO 27001/SOC 2/GDPR, recopilacion, escalacion, validacion y cadena de custodia SHA-256 encadenada |
+| ~~21 — Documentacion Automatica~~ | DevOps | **COMPLETADO v4.7.0** — Pipeline LangGraph con loop QA condicional (tope 3 iter), outline adaptativo, score por seccion, publicacion Markdown |
 
 ### Ola 3 — Dominio especializado
 

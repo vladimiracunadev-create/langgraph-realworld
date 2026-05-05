@@ -4,16 +4,16 @@
 [![Security Scan](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml/badge.svg?branch=main)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Portafolio de casos de uso con LangGraph, FastAPI y demos empresariales. El repositorio combina una capa documental fuerte con **13 casos operativos**: 01, 02, 03, 04, 05, 08, 09, 10, 13, 14, 17, 19 y 25.
+Portafolio de casos de uso con LangGraph, FastAPI y demos empresariales. El repositorio combina una capa documental fuerte con **15 casos operativos**: 01, 02, 03, 04, 05, 06, 08, 09, 10, 13, 14, 17, 19, 21 y 25.
 
 ---
 
-## Implementacion Industrial (v4.5.0)
+## Implementacion Industrial (v4.7.0)
 
 El estandar actual del repositorio se apoya en estos pilares:
 
 1. **Portal unificado**: `index.html` como entrada principal para navegar el portafolio.
-2. **Casos de referencia reales**: backends FastAPI y UIs activas en los casos 01, 02, 03, 04, 05, 08, 09, 10, 13, 14, 17, 19 y 25.
+2. **Casos de referencia reales**: backends FastAPI y UIs activas en los casos 01, 02, 03, 04, 05, 06, 08, 09, 10, 13, 14, 17, 19, 21 y 25.
 3. **Estado tipado**: contratos explicitos de estado con `TypedDict` y flujos compatibles con LangGraph.
 4. **Observabilidad**: endpoints `/health`, `/ready` y `/metrics`, ademas de trazabilidad por eventos o `trace_id` segun el caso.
 5. **Modo dual**: demos offline y ruta clara para activar integraciones reales mediante `.env.example`, `.env` y variables de entorno.
@@ -26,8 +26,8 @@ El estandar actual del repositorio se apoya en estos pilares:
 
 ### Taxonomia de Implementacion
 
-- **Operativo (v4.5.0)**: casos 01, 02, 03, 04, 05, 08, 14, 17, 19 y 25 con backends reales, logicas condicionales robustas, modo DEMO/LIVE, UIs operativas e interactivas.
-- **Industrial (v4.5.0)**: casos 09, 10 y 13 con backend real, streaming, estado tipado, observabilidad y documentacion operativa completa.
+- **Operativo (v4.7.0)**: casos 01, 02, 03, 04, 05, 06, 08, 14, 17, 19, 21 y 25 con backends reales, logicas condicionales robustas, modo DEMO/LIVE, UIs operativas e interactivas.
+- **Industrial (v4.7.0)**: casos 09, 10 y 13 con backend real, streaming, estado tipado, observabilidad y documentacion operativa completa.
 - **Scaffold**: demos o plantillas documentadas listas para elevar al siguiente nivel.
 
 ### Estado de los Casos Clave
@@ -39,10 +39,15 @@ El estandar actual del repositorio se apoya en estos pilares:
 | **03** | [Incident Response SRE](cases/03-incident-response-sre/README.md) | `OPERATIVO` | FastAPI + LangGraph + PagerDuty DEMO |
 | **04** | [SOC Triage de Alertas](cases/04-soc-triage-alertas/README.md) | `OPERATIVO` | FastAPI + LangGraph + Router de riesgo + Threat Intel |
 | **05** | [Analista de Documentos](cases/05-analista-documentos/README.md) | `OPERATIVO` | FastAPI + LangGraph + 7 nodos + Router condicional |
+| **06** | [Compliance & Auditorías](cases/06-compliance-auditorias/README.md) | `OPERATIVO` | FastAPI + LangGraph + ISO/SOC2/GDPR + Cadena de custodia SHA-256 |
+| **08** | [Ventas B2B + CRM](cases/08-ventas-b2b-crm/README.md) | `OPERATIVO` | FastAPI + LangGraph + ICP scoring + CRM stage automático |
 | **09** | [RRHH Screening Agenda](cases/09-rrhh-screening-agenda/README.md) | `INDUSTRIAL` | FastAPI + LangGraph + MemorySaver + Resilience |
 | **10** | [Onboarding Empleados](cases/10-onboarding-empleados/README.md) | `INDUSTRIAL` | FastAPI + RBAC + Integrations + MemorySaver |
 | **13** | [BI Data Analyst](cases/13-bi-analista-datos/README.md) | `INDUSTRIAL` | FastAPI + SQL Agent + Chart.js + DEMO/LLM |
+| **14** | [Finanzas: Conciliación](cases/14-finanzas-conciliacion/README.md) | `OPERATIVO` | FastAPI + LangGraph + matching multi-criterio + z-score |
+| **17** | [Legal Intake](cases/17-legal-intake/README.md) | `OPERATIVO` | FastAPI + LangGraph + 3 especialidades + plantillas |
 | **19** | [DevEx: PR Review](cases/19-devex-pr-review/README.md) | `OPERATIVO` | FastAPI + LangGraph + GitHub API DEMO |
+| **21** | [Documentación Automática](cases/21-docs-auto/README.md) | `OPERATIVO` | FastAPI + LangGraph + Outline adaptativo + Loop QA |
 | **25** | [Supervisor + Workers](cases/25-supervisor-workers/README.md) | `OPERATIVO` | FastAPI + LangGraph + Multi-agent |
 
 ---

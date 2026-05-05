@@ -94,7 +94,7 @@ uvicorn src.api:app --port 8006
 | Operación | `pip` | `uv` |
 |---|---:|---:|
 | Instalar deps de un caso (~30 paquetes) | 35–60 s | 3–6 s |
-| `pip-compile` de los 14 casos operativos | 4–6 min | 25–40 s |
+| `pip-compile` de los 15 casos operativos | 4–6 min | 25–40 s |
 
 ---
 

@@ -192,8 +192,8 @@
     <div class="wrap" style="margin-top:12px;">
         <div
             style="border-radius:12px; padding:12px; border:1px solid rgba(255,255,255,.06); background: rgba(255,255,255,.02);">
-            <strong style="color:#ffd89b;">Estado del repositorio: Casos <b>01</b>, <b>02</b>, <b>03</b>, <b>04</b>, <b>09</b>, <b>10</b>, <b>13</b>, <b>19</b> y <b>25</b> son operativos</strong>
-            <div style="margin-top:8px; opacity:.9; font-size:13px;">Los demas casos siguen en scaffold y pueden requerir trabajo adicional para ejecutarse.</div>
+            <strong style="color:#ffd89b;">Estado del repositorio (v4.7.0): 15 backends operativos — Casos <b>01</b>, <b>02</b>, <b>03</b>, <b>04</b>, <b>05</b>, <b>06</b>, <b>08</b>, <b>09</b>, <b>10</b>, <b>13</b>, <b>14</b>, <b>17</b>, <b>19</b>, <b>21</b> y <b>25</b></strong>
+            <div style="margin-top:8px; opacity:.9; font-size:13px;">Los 10 casos restantes (07, 11, 12, 15, 16, 18, 20, 22, 23, 24) son scaffolds documentados, listos para elevar.</div>
             <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
                 <a href="docs/doc_viewer.html?file=docs/RECRUITER.md"
                     style="color:#000; font-weight:700; text-decoration:none; border-radius:8px; padding:6px 12px; border:1px solid #2f81f7; background: #2f81f7;">💼
@@ -485,11 +485,23 @@
     </main>
 
     <footer class="wrap">
-        <div>Ejecutar Caso 01: <code>cd cases/01-soporte-cliente-omnicanal/backend && uvicorn src.api:app --port 8001</code></div>
-        <div style="margin-top:5px;">Ejecutar Caso 02: <code>cd cases/02-mesa-ayuda-ti-runbooks/backend && uvicorn src.api:app --port 8002</code></div>
-        <div style="margin-top:5px;">Ejecutar Caso 09: <code>cd cases/09-rrhh-screening-agenda/backend && uvicorn src.api:app --port 8009</code></div>
-        <div style="margin-top:5px;">Ejecutar Caso 10: <code>cd cases/10-onboarding-empleados/backend && uvicorn src.api:app --port 8010</code></div>
-        <div style="margin-top:5px;">Ejecutar Caso 13: <code>cd cases/13-bi-analista-datos/backend && uvicorn src.api:app --port 8013</code></div>
+        <div style="margin-bottom:8px; font-weight:600; color:#ffd89b;">Levantar cualquier caso operativo (puerto = 8000 + case_id):</div>
+        <div style="margin-top:4px;">Caso 01 — Soporte: <code>cd cases/01-soporte-cliente-omnicanal/backend && uvicorn src.api:app --port 8001</code></div>
+        <div style="margin-top:4px;">Caso 02 — Mesa de Ayuda TI: <code>cd cases/02-mesa-ayuda-ti-runbooks/backend && uvicorn src.api:app --port 8002</code></div>
+        <div style="margin-top:4px;">Caso 03 — Incident Response: <code>cd cases/03-incident-response-sre/backend && uvicorn src.api:app --port 8003</code></div>
+        <div style="margin-top:4px;">Caso 04 — SOC Triage: <code>cd cases/04-soc-triage-alertas/backend && uvicorn src.api:app --port 8004</code></div>
+        <div style="margin-top:4px;">Caso 05 — Analista de Documentos: <code>cd cases/05-analista-documentos/backend && uvicorn src.api:app --port 8005</code></div>
+        <div style="margin-top:4px;">Caso 06 — Compliance & Auditorías: <code>cd cases/06-compliance-auditorias/backend && uvicorn src.api:app --port 8006</code></div>
+        <div style="margin-top:4px;">Caso 08 — Ventas B2B + CRM: <code>cd cases/08-ventas-b2b-crm/backend && uvicorn src.api:app --port 8008</code></div>
+        <div style="margin-top:4px;">Caso 09 — RRHH Screening: <code>cd cases/09-rrhh-screening-agenda/backend && uvicorn src.api:app --port 8009</code></div>
+        <div style="margin-top:4px;">Caso 10 — Onboarding: <code>cd cases/10-onboarding-empleados/backend && uvicorn src.api:app --port 8010</code></div>
+        <div style="margin-top:4px;">Caso 13 — BI Data Analyst: <code>cd cases/13-bi-analista-datos/backend && uvicorn src.api:app --port 8013</code></div>
+        <div style="margin-top:4px;">Caso 14 — Conciliación: <code>cd cases/14-finanzas-conciliacion/backend && uvicorn src.api:app --port 8014</code></div>
+        <div style="margin-top:4px;">Caso 17 — Legal Intake: <code>cd cases/17-legal-intake/backend && uvicorn src.api:app --port 8017</code></div>
+        <div style="margin-top:4px;">Caso 19 — DevEx PR Review: <code>cd cases/19-devex-pr-review/backend && uvicorn src.api:app --port 8019</code></div>
+        <div style="margin-top:4px;">Caso 21 — Docs Automática: <code>cd cases/21-docs-auto/backend && uvicorn src.api:app --port 8021</code></div>
+        <div style="margin-top:4px;">Caso 25 — Supervisor + Workers: <code>cd cases/25-supervisor-workers/backend && uvicorn src.api:app --port 8025</code></div>
+        <div style="margin-top:10px; opacity:.75;">Tip: usa <code>make uv-install-case CASE=06</code> para crear el venv aislado e instalar deps con uv (~10× más rápido que pip). Ver <code>docs/UV.md</code>.</div>
     </footer>
     <script src="assets/api-config.js"></script>
 </body>

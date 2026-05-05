@@ -1,5 +1,37 @@
 # Changelog
 
+## v4.7.0 - 2026-05-05
+
+### Added
+
+- Caso 21 — Documentacion Automatica elevado a OPERATIVO: 9 nodos LangGraph + router de calidad con loop condicional (tope 3 iter), outline adaptativo segun tipo de proyecto (api_rest / integration), redaccion 100% determinista desde artefactos del repo (endpoints, schemas, funciones, tests, changelog), QA por seccion con score 0-100 + penalizaciones configurables (endpoint sin doc, sin docstring, sin README, sin changelog, tests fallando, cobertura baja, sin CI), 3 escenarios DEMO (DOC-001 limpio score >=90, DOC-002 parcial, DOC-003 legacy con loop activo), publicacion Markdown completa + diff, puerto 8021.
+- Suite de tests del caso 21: 25 tests (15 de grafo + 10 de API) todos en verde.
+
+### Changed
+
+- Total de backends operativos: 15 (01, 02, 03, 04, 05, 06, 08, 09, 10, 13, 14, 17, 19, 21, 25).
+- Total de scaffolds: 10 (07, 11, 12, 15, 16, 18, 20, 22, 23, 24).
+- Version bumped a 4.7.0 en README, docs, wiki, pyproject.toml y case.yml del caso 21.
+- Ola 2 cerrada — proxima fase Ola 3.
+
+---
+
+## v4.6.0 - 2026-05-05
+
+### Added
+
+- Caso 06 — Compliance & Auditorias elevado a OPERATIVO: 8 nodos LangGraph + router de severidad, cadena de custodia SHA-256 encadenada (append-only) con seq + ts + accion + detalle + prev_hash + hash, 3 marcos regulatorios soportados (ISO 27001:2022, SOC 2 Type II, GDPR) con 4 controles cada uno, score de cumplimiento 0-100 con indicador verde/amarillo/rojo, 3 escenarios DEMO (AUD-001 ISO limpio, AUD-002 SOC 2 con faltantes, AUD-003 GDPR con ROPA y DPIA vencidas), validacion de evidencias por antiguedad y periodo, escalacion automatica por email a owners de controles con criticidad alta, puerto 8006.
+- Suite de tests del caso 06: 26 tests (15 de grafo + 11 de API) todos en verde.
+- Tooling opcional `uv` (Astral): scripts/uv-compile-all.sh, scripts/uv-install-case.sh, targets `make uv-bootstrap`, `make uv-compile`, `make uv-compile-check`, `make uv-install-case CASE=xx`. Guia completa en `docs/UV.md`. uv y pip/pip-tools coexisten sin conflicto — lockfiles intercambiables.
+
+### Changed
+
+- Total de backends operativos: 14.
+- Total de scaffolds: 11.
+- Version bumped a 4.6.0 en README, docs, wiki, pyproject.toml y case.yml del caso 06.
+
+---
+
 ## v4.5.0 - 2026-05-04
 
 ### Added

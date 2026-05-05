@@ -7,8 +7,8 @@ select = ["E", "F", "I"]
 
 [project]
 name = "langgraph-realworld"
-version = "4.5.0"
-description = "Portafolio de 25 casos de uso empresariales con LangGraph y FastAPI: 13 backends operativos con streaming, OAuth2 opt-in, observabilidad, modo DEMO/LIVE y portal unificado."
+version = "4.7.0"
+description = "Portafolio de 25 casos de uso empresariales con LangGraph y FastAPI: 15 backends operativos (01, 02, 03, 04, 05, 06, 08, 09, 10, 13, 14, 17, 19, 21, 25) con streaming, OAuth2 opt-in, observabilidad, modo DEMO/LIVE y portal unificado. Soporta uv (Astral) opcional."
 dependencies = [
     "PyYAML>=6.0.1",
 ]
