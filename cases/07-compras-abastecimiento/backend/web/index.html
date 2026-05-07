@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Caso 07 — Compras y Abastecimiento</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07111f;
+      --surface: rgba(20, 30, 48, 0.85);
+      --border: rgba(180, 200, 230, 0.1);
+      --accent: #f59e0b;
+      --accent-2: #d97706;
+      --accent-dim: rgba(245, 158, 11, 0.15);
+      --text: #e6edf3;
+      --muted: #8b9cb3;
+      --verde: #34d399;
+      --amarillo: #fbbf24;
+      --rojo: #f87171;
+      font-family: 'Inter', system-ui, sans-serif;
+      color-scheme: dark;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    header {
+      padding: 12px 20px; border-bottom: 1px solid var(--border);
+      display: flex; gap: 12px; align-items: center;
+      background: rgba(7,17,31,.85); backdrop-filter: blur(10px);
+      position: sticky; top: 0; z-index: 10;
+    }
+    header .back-link { font-family: 'JetBrains Mono', monospace; font-size: 12px;
+      color: var(--accent); text-decoration: none; opacity: .85; }
+    header .back-link:hover { opacity: 1; }
+    header .sep { color: var(--border); font-size: 18px; }
+    header .title { font-weight: 800; letter-spacing: -.4px; font-size: 1rem; flex: 1; }
+    .pill {
+      font-family: 'JetBrains Mono', monospace;
+      padding: 4px 10px; border-radius: 999px; font-size: 10px;
+      font-weight: 600; text-transform: uppercase; letter-spacing: .5px;
+      border: 1px solid var(--border);
+    }
+    .pill-demo { color: var(--amarillo); border-color: rgba(251,191,36,.3); background: rgba(251,191,36,.1); }
+    .pill-live { color: var(--verde); border-color: rgba(52,211,153,.3); background: rgba(52,211,153,.1); }
+
+    .hero { max-width: 920px; margin: 28px auto 0; padding: 0 24px; }
+    .hero h2 { font-size: 1.55rem; font-weight: 800; margin-bottom: 10px; }
+    .hero p { color: var(--muted); line-height: 1.65; font-size: .92rem; }
+    .badge-row { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+    .hero-pill {
+      font-family: 'JetBrains Mono', monospace; font-size: .68rem;
+      padding: 4px 9px; border-radius: 999px;
+      border: 1px solid var(--border); color: var(--muted); background: var(--accent-dim);
+    }
+
+    main {
+      max-width: 1320px; margin: 22px auto;
+      padding: 0 24px 40px;
+      display: grid; grid-template-columns: 1fr 1.35fr; gap: 18px;
+    }
+    @media (max-width: 880px) { main { grid-template-columns: 1fr; } }
+
+    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+    .panel-header {
+      padding: 14px 18px; border-bottom: 1px solid var(--border);
+      font-weight: 700; font-size: .85rem;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .panel-body { padding: 18px; }
+
+    label { font-size: .8rem; color: var(--muted); display: block; margin-bottom: 6px; }
+    select, button {
+      width: 100%; padding: 10px 14px; border-radius: 8px;
+      border: 1px solid var(--border); font-size: .88rem; font-family: inherit;
+    }
+    select { background: rgba(20,30,48,.95); color: var(--text); cursor: pointer; margin-bottom: 14px; }
+    select:focus { outline: 2px solid var(--accent); }
+    button {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #07111f; font-weight: 700; cursor: pointer; border: none;
+      transition: opacity .15s, transform .1s;
+    }
+    button:hover:not(:disabled) { opacity: .92; transform: translateY(-1px); }
+    button:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+
+    .scenario-preview {
+      margin-top: 14px; padding: 12px;
+      background: rgba(245,158,11,.05);
+      border: 1px solid rgba(245,158,11,.15);
+      border-radius: 8px;
+      font-size: .8rem; color: var(--muted);
+      max-height: 220px; overflow-y: auto; line-height: 1.55;
+    }
+    .scenario-preview strong { color: var(--text); }
+
+    .timeline { margin-top: 6px; }
+    .tl-item {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 9px 0; border-bottom: 1px solid var(--border);
+      animation: fadeIn .25s ease;
+    }
+    .tl-item:last-child { border-bottom: none; }
+    .tl-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent); margin-top: 5px; flex-shrink: 0;
+    }
+    .tl-node {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem; color: var(--accent); font-weight: 600;
+    }
+    .tl-detail { font-size: .78rem; color: var(--muted); margin-top: 2px; line-height: 1.55; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; } }
+
+    .risk-header {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 18px; border-bottom: 1px solid var(--border);
+    }
+    .risk-badge {
+      padding: 6px 14px; border-radius: 999px;
+      font-weight: 700; font-size: .78rem;
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase; letter-spacing: .5px;
+    }
+    .risk-aprobada { background: rgba(52,211,153,.15); color: var(--verde); border: 1px solid rgba(52,211,153,.3); }
+    .risk-condicional { background: rgba(251,191,36,.15); color: var(--amarillo); border: 1px solid rgba(251,191,36,.3); }
+    .risk-rechazada { background: rgba(248,113,113,.15); color: var(--rojo); border: 1px solid rgba(248,113,113,.3); }
+    .risk-empty { background: rgba(139,156,179,.1); color: var(--muted); border: 1px solid var(--border); }
+
+    .pct-score {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.6rem; font-weight: 700;
+    }
+    .case-meta { flex: 1; }
+    .case-title { font-weight: 700; font-size: .92rem; margin-bottom: 2px; }
+    .case-sub { font-size: .76rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+
+    .section-label {
+      font-size: .72rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .5px;
+      font-weight: 600; margin: 16px 0 8px;
+    }
+
+    .kpi-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+    }
+    @media (max-width: 700px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+    .kpi {
+      padding: 10px; background: rgba(20,30,48,.5);
+      border: 1px solid var(--border); border-radius: 8px;
+      text-align: center;
+    }
+    .kpi-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.05rem; font-weight: 700; color: var(--text);
+    }
+    .kpi-label {
+      font-size: .65rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .3px;
+      margin-top: 3px;
+    }
+
+    table.tx-table {
+      width: 100%; border-collapse: collapse;
+      font-size: .76rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    table.tx-table th {
+      padding: 6px 8px; text-align: left;
+      color: var(--muted); text-transform: uppercase;
+      font-size: .65rem; letter-spacing: .5px;
+      border-bottom: 1px solid var(--border);
+    }
+    table.tx-table td {
+      padding: 6px 8px; border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    table.tx-table .top-row { background: rgba(52,211,153,.07); }
+    table.tx-table .monto { text-align: right; }
+
+    .card-block {
+      padding: 10px 12px; border-radius: 8px;
+      background: rgba(20,30,48,.5);
+      border-left: 3px solid var(--accent);
+      margin-bottom: 6px;
+    }
+    .card-block.recom { border-left-color: var(--verde); background: rgba(52,211,153,.05); }
+    .card-block.escal { border-left-color: var(--amarillo); background: rgba(251,191,36,.05); }
+    .card-block.oc { border-left-color: var(--accent); background: rgba(245,158,11,.05); }
+    .tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .62rem; font-weight: 700;
+      padding: 2px 7px; border-radius: 4px;
+      text-transform: uppercase; letter-spacing: .5px;
+    }
+    .tag.preferido { background: rgba(52,211,153,.2); color: var(--verde); }
+    .tag.no-preferido { background: rgba(251,191,36,.2); color: var(--amarillo); }
+
+    .resumen-box {
+      background: rgba(245,158,11,.05);
+      border: 1px solid rgba(245,158,11,.15);
+      border-radius: 10px; padding: 14px 16px;
+      font-size: .83rem; line-height: 1.7;
+      white-space: pre-wrap; color: #cdd9e5;
+    }
+
+    .escalacion-nota {
+      background: #0a1424; border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .76rem; line-height: 1.65;
+      white-space: pre-wrap; color: #cdd9e5;
+    }
+
+    .tech-footer {
+      max-width: 1320px; margin: 0 auto;
+      padding: 0 24px 32px;
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .tech-pill {
+      font-family: 'JetBrains Mono', monospace; font-size: .7rem;
+      padding: 4px 10px; border-radius: 999px;
+      border: 1px solid var(--border); color: var(--muted); background: var(--surface);
+    }
+
+    .empty {
+      text-align: center; padding: 32px 16px;
+      color: var(--muted); font-size: .85rem;
+    }
+    .empty-icon { font-size: 2rem; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="http://localhost:8080/" class="back-link">← VOLVER AL HUB</a>
+  <span class="sep">|</span>
+  <span class="title">Caso 07 — Compras y Abastecimiento</span>
+  <span class="pill" id="mode-badge">…</span>
+</header>
+
+<div class="hero">
+  <h2>Adquisición Automatizada con Política de Compras</h2>
+  <p>
+    Cada solicitud de compra (PR) entra al agente y atraviesa el flujo end-to-end:
+    se valida la completitud, se filtra el catálogo de proveedores homologados por
+    categoría, se emiten RFQs determinísticas, se recopilan cotizaciones y se aplica un
+    score multi-criterio (precio 40% / plazo 30% / riesgo proveedor 30%). Un router decide
+    si la compra cae dentro de política o requiere comité (umbrales por monto y por
+    proveedor preferido). El agente recomienda al ganador con justificación, simula la
+    aprobación del responsable del centro de costo y emite la orden de compra con hash
+    SHA-256 de trazabilidad. Reduce el ciclo típico de adquisición de días a minutos.
+  </p>
+  <div class="badge-row">
+    <span class="hero-pill">10 nodos LangGraph</span>
+    <span class="hero-pill">Router política compras</span>
+    <span class="hero-pill">Score precio/plazo/riesgo</span>
+    <span class="hero-pill">OC con SHA-256</span>
+    <span class="hero-pill">DEMO + LIVE (GPT-4o-mini)</span>
+  </div>
+</div>
+
+<main>
+  <div>
+    <div class="panel">
+      <div class="panel-header"><span>🛒</span> Solicitud de compra</div>
+      <div class="panel-body">
+        <label for="pr-select">Seleccionar PR</label>
+        <select id="pr-select" onchange="renderPreview()">
+          <option value="PR-001">PR-001 — Insumos oficina · centro ADM-OFICINA · ~3M CLP</option>
+          <option value="PR-002">PR-002 — Renovación 25 notebooks · centro TI-INFRA · ~17M CLP</option>
+          <option value="PR-003">PR-003 — Estudio ingeniería 3 meses · centro ING-PROYECTOS · ~85M CLP</option>
+        </select>
+        <div class="scenario-preview" id="pr-preview">…</div>
+        <button id="btn-procesar" onclick="iniciarCompra()" style="margin-top:12px;">
+          Ejecutar adquisición →
+        </button>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-header"><span>⏱</span> Timeline del agente</div>
+      <div class="panel-body">
+        <div class="timeline" id="timeline">
+          <div class="empty"><div class="empty-icon">📦</div>Selecciona una PR y pulsa Ejecutar.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="results-panel">
+    <div class="risk-header">
+      <div class="risk-badge risk-empty" id="risk-badge">— estado</div>
+      <div class="case-meta">
+        <div class="case-title" id="case-title">Esperando adquisición…</div>
+        <div class="case-sub" id="case-sub">— · —</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="pct-score" id="pct-score">—</div>
+        <div style="font-size:.7rem; color:var(--muted);">score top</div>
+      </div>
+    </div>
+    <div class="panel-body" id="results-body">
+      <div class="empty"><div class="empty-icon">📋</div>Los resultados aparecerán aquí.</div>
+    </div>
+  </div>
+</main>
+
+<div class="tech-footer">
+  <span class="tech-pill">LangGraph StateGraph</span>
+  <span class="tech-pill">FastAPI</span>
+  <span class="tech-pill">10 nodos</span>
+  <span class="tech-pill">Router política</span>
+  <span class="tech-pill">SHA-256 OC</span>
+  <span class="tech-pill">NDJSON streaming</span>
+  <span class="tech-pill">DEMO / LIVE</span>
+  <span class="tech-pill">Puerto 8007</span>
+</div>
+
+<script>
+  const PORT = window.location.port || '8007';
+  const BASE = `${window.location.protocol}//${window.location.hostname}:${PORT}`;
+
+  const PREVIEWS = {
+    'PR-001': {
+      cc: 'ADM-OFICINA',
+      desc: 'Reposición trimestral de papelería e insumos para sede central. 3 cotizaciones de proveedores homologados de oficina.',
+      esperado: '🟢 APROBADA · proveedor preferido · OC emitida'
+    },
+    'PR-002': {
+      cc: 'TI-INFRA',
+      desc: 'Renovación parcial de 25 notebooks corporativos. 3 cotizaciones cerradas en rango ~3% — recomendación con justificación detallada.',
+      esperado: '🟢 APROBADA · comparativa cerrada · proveedor preferido por mejor plazo+riesgo'
+    },
+    'PR-003': {
+      cc: 'ING-PROYECTOS',
+      desc: 'Estudio de ingeniería conceptual 3 meses, monto ~87M CLP supera el umbral de comité (25M).',
+      esperado: '🟡 CONDICIONAL · escalación obligatoria a comité de compras · OC con estado PENDIENTE_COMITE'
+    }
+  };
+
+  function renderPreview() {
+    const id = document.getElementById('pr-select').value;
+    const p = PREVIEWS[id];
+    if (!p) return;
+    document.getElementById('pr-preview').innerHTML = `
+      <div><strong>Centro de costo:</strong> ${escapeHtml(p.cc)}</div>
+      <div style="margin-top:6px;">${escapeHtml(p.desc)}</div>
+      <div style="margin-top:8px; font-family:'JetBrains Mono',monospace; font-size:.72rem; color:var(--accent);">
+        Resultado esperado: ${escapeHtml(p.esperado)}
+      </div>`;
+  }
+
+  async function detectMode() {
+    try {
+      const r = await fetch(`${BASE}/health`);
+      const d = await r.json();
+      const badge = document.getElementById('mode-badge');
+      const isLive = d.mode === 'LIVE';
+      badge.textContent = isLive ? 'LIVE' : 'DEMO';
+      badge.className = `pill ${isLive ? 'pill-live' : 'pill-demo'}`;
+    } catch {}
+  }
+  detectMode(); renderPreview();
+
+  function estadoClass(e) {
+    if (e === 'APROBADA') return 'risk-aprobada';
+    if (e === 'CONDICIONAL') return 'risk-condicional';
+    if (e === 'RECHAZADA') return 'risk-rechazada';
+    return 'risk-empty';
+  }
+  function estadoIcon(e) {
+    return ({APROBADA:'🟢', CONDICIONAL:'🟡', RECHAZADA:'🔴'})[e] || '⚪';
+  }
+
+  const NODE_LABELS = {
+    'pr_validada': 'validar_solicitud',
+    'proveedores_buscados': 'buscar_proveedores',
+    'rfqs_emitidas': 'lanzar_rfq',
+    'cotizaciones_recibidas': 'recopilar_cotizaciones',
+    'comparativa_lista': 'comparar_ofertas',
+    'comite_escalado': 'escalar_comite',
+    'recomendacion_emitida': 'recomendar_proveedor',
+    'aprobacion_emitida': 'aprobacion_responsable',
+    'oc_emitida': 'generar_orden_compra',
+    'oc_no_emitida': 'generar_orden_compra',
+    'compra_completada': 'producir_resumen',
+  };
+
+  function describeEvent(ev) {
+    const t = ev.type || '';
+    if (t === 'pr_validada')           return `valida=${ev.valida} · monto estimado ${(ev.monto_estimado||0).toLocaleString('es-CL')} CLP${ev.faltantes?.length ? ' · faltantes: '+ev.faltantes.join(', ') : ''}`;
+    if (t === 'proveedores_buscados')  return `${ev.total_candidatos} candidatos para categoría ${ev.categoria}`;
+    if (t === 'rfqs_emitidas')         return `${ev.total} RFQs enviadas`;
+    if (t === 'cotizaciones_recibidas')return `${ev.total}/${ev.esperadas} cotizaciones · tasa respuesta ${ev.tasa_respuesta_pct}%`;
+    if (t === 'comparativa_lista')     return `top: ${ev.mejor_supplier} score=${ev.mejor_score}`;
+    if (t === 'comite_escalado')       return `escalado · ${ev.razones?.length||0} razones · monto ${(ev.monto||0).toLocaleString('es-CL')} CLP`;
+    if (t === 'recomendacion_emitida') return `${ev.supplier_id} score=${ev.score} · ventaja ${ev.diferencia_pct}%`;
+    if (t === 'aprobacion_emitida')    return `estado=${ev.estado} · monto ${(ev.monto||0).toLocaleString('es-CL')}`;
+    if (t === 'oc_emitida')            return `${ev.po_numero} · ${(ev.monto||0).toLocaleString('es-CL')} CLP · ${ev.estado} · hash=${ev.hash}`;
+    if (t === 'oc_no_emitida')         return `OC no emitida · estado ${ev.estado}`;
+    if (t === 'compra_completada')     return `Cierre · ${ev.solicitud_id} · ${ev.estado_aprobacion}`;
+    return JSON.stringify(ev).slice(0, 80);
+  }
+
+  function addTimelineItem(ev) {
+    const tl = document.getElementById('timeline');
+    const empty = tl.querySelector('.empty');
+    if (empty) empty.remove();
+    const item = document.createElement('div');
+    item.className = 'tl-item';
+    item.innerHTML = `<div class="tl-dot"></div><div>
+      <div class="tl-node">${NODE_LABELS[ev.type] || ev.type}</div>
+      <div class="tl-detail">${escapeHtml(describeEvent(ev))}</div>
+    </div>`;
+    tl.appendChild(item);
+  }
+
+  let _lastEventsLen = 0;
+
+  function applySnapshot(snap) {
+    if (!snap) return;
+    const aprob = snap.aprobacion || {};
+    const rec = snap.recomendacion || {};
+    const estado = aprob.estado;
+    if (estado) {
+      const badge = document.getElementById('risk-badge');
+      badge.className = `risk-badge ${estadoClass(estado)}`;
+      badge.textContent = `${estadoIcon(estado)} ${estado}`;
+    }
+    if (snap.solicitud_id) {
+      document.getElementById('case-title').textContent =
+        `${snap.solicitud_id} · ${snap.categoria || ''}`;
+      document.getElementById('case-sub').textContent =
+        `${snap.centro_costo || '—'} · presupuesto ${(snap.presupuesto_max||0).toLocaleString('es-CL')} CLP`;
+    }
+    if (rec.score_total !== undefined) {
+      document.getElementById('pct-score').textContent = rec.score_total;
+    }
+
+    (snap.events || []).slice(_lastEventsLen).forEach(addTimelineItem);
+    _lastEventsLen = (snap.events || []).length;
+
+    if (snap.done) renderResults(snap);
+  }
+
+  function fmt(n) {
+    if (n === undefined || n === null) return '—';
+    return Number(n).toLocaleString('es-CL');
+  }
+
+  function renderResults(snap) {
+    const rec = snap.recomendacion || {};
+    const aprob = snap.aprobacion || {};
+    const oc = snap.orden_compra || {};
+    const escal = snap.escalacion_comite || {};
+    const comp = snap.comparativa || [];
+    const body = document.getElementById('results-body');
+    let html = '';
+
+    // KPIs
+    html += `<div class="kpi-grid">
+      <div class="kpi"><div class="kpi-value">${comp.length}</div><div class="kpi-label">Cotizaciones</div></div>
+      <div class="kpi"><div class="kpi-value">${fmt(rec.precio_total)}</div><div class="kpi-label">Monto top CLP</div></div>
+      <div class="kpi"><div class="kpi-value">${rec.plazo_dias ?? '—'}d</div><div class="kpi-label">Plazo top</div></div>
+      <div class="kpi"><div class="kpi-value">${rec.score_total ?? '—'}</div><div class="kpi-label">Score top</div></div>
+    </div>`;
+
+    // Comparativa
+    if (comp.length) {
+      html += `<div class="section-label">📊 Comparativa de cotizaciones (ordenada por score)</div>
+        <table class="tx-table"><thead><tr>
+          <th>Proveedor</th><th>Tipo</th><th class="monto">Precio CLP</th><th>Plazo</th>
+          <th>Pago</th><th>Riesgo</th><th>Score</th>
+        </tr></thead><tbody>`;
+      comp.forEach((c, i) => {
+        const cls = i === 0 ? 'top-row' : '';
+        const tipo = c.preferido ? '<span class="tag preferido">PREFERIDO</span>' : '<span class="tag no-preferido">HOMOLOGADO</span>';
+        html += `<tr class="${cls}">
+          <td>${escapeHtml(c.supplier_nombre)}</td>
+          <td>${tipo}</td>
+          <td class="monto">${fmt(c.precio_total)}</td>
+          <td>${c.plazo_dias}d</td>
+          <td>${escapeHtml(c.condiciones_pago)}</td>
+          <td>${(c.riesgo*100).toFixed(0)}%</td>
+          <td><strong>${c.score_total}</strong></td>
+        </tr>`;
+      });
+      html += `</tbody></table>`;
+    }
+
+    // Recomendación
+    if (rec.recomendado) {
+      html += `<div class="section-label">🎯 Recomendación</div>
+        <div class="card-block recom">
+          <div style="margin-bottom:6px; font-weight:700;">${escapeHtml(rec.supplier_nombre)} · score ${rec.score_total} · ventaja ${rec.diferencia_pct_vs_segundo}%</div>
+          <div style="font-size:.85rem; color:var(--muted); line-height:1.6;">${escapeHtml(rec.justificacion)}</div>
+        </div>`;
+    }
+
+    // Escalación a comité
+    if (escal.requerida) {
+      html += `<div class="section-label">⚠️ Escalación a comité de compras</div>
+        <div class="escalacion-nota">${escapeHtml(escal.nota)}</div>`;
+    }
+
+    // Aprobación
+    if (aprob.estado) {
+      html += `<div class="section-label">✍️ Aprobación responsable</div>
+        <div class="card-block escal">
+          <div style="margin-bottom:4px;"><strong>${estadoIcon(aprob.estado)} ${aprob.estado}</strong> — ${escapeHtml(aprob.responsable || '—')}</div>
+          <div style="font-size:.82rem; color:var(--muted);">${escapeHtml(aprob.motivo || '')} · fecha ${escapeHtml(aprob.fecha || '')}</div>
+        </div>`;
+    }
+
+    // Orden de compra
+    if (oc.emitida) {
+      html += `<div class="section-label">📑 Orden de compra</div>
+        <div class="card-block oc">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:.78rem; margin-bottom:6px;">
+            <strong>${escapeHtml(oc.po_numero)}</strong> · ${escapeHtml(oc.estado)} · hash <span style="color:var(--accent);">${escapeHtml(oc.sha256)}</span>
+          </div>
+          <div style="font-size:.82rem; color:var(--muted);">
+            ${escapeHtml(oc.supplier_nombre)} · ${fmt(oc.monto_total)} CLP · ${oc.plazo_dias}d · ${escapeHtml(oc.condiciones_pago)}
+          </div>
+        </div>`;
+    }
+
+    // Resumen
+    if (snap.resumen) {
+      html += `<div class="section-label">📝 Resumen ejecutivo</div>
+        <div class="resumen-box">${escapeHtml(snap.resumen)}</div>`;
+    }
+
+    body.innerHTML = html;
+  }
+
+  function escapeHtml(s) {
+    return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  async function iniciarCompra() {
+    const sid = document.getElementById('pr-select').value;
+    const btn = document.getElementById('btn-procesar');
+    const tl = document.getElementById('timeline');
+    const body = document.getElementById('results-body');
+
+    btn.disabled = true; btn.textContent = 'Procesando…';
+    tl.innerHTML = '';
+    body.innerHTML = '<div class="empty"><div class="empty-icon">⚙️</div>Procesando adquisición…</div>';
+    _lastEventsLen = 0;
+    const rb = document.getElementById('risk-badge');
+    rb.className = 'risk-badge risk-empty'; rb.textContent = '— estado';
+    document.getElementById('case-title').textContent = 'Procesando…';
+    document.getElementById('case-sub').textContent = '— · —';
+    document.getElementById('pct-score').textContent = '—';
+
+    const threadId = `compra-${sid}-${Date.now()}`;
+    const url = `${BASE}/api/stream?thread_id=${encodeURIComponent(threadId)}&solicitud_id=${encodeURIComponent(sid)}`;
+
+    try {
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop();
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          try {
+            const msg = JSON.parse(line);
+            if (msg.type === 'snapshot') applySnapshot(msg.snapshot);
+            if (msg.type === 'error') body.innerHTML = `<div class="empty" style="color:var(--rojo)">Error: ${escapeHtml(msg.detail)}</div>`;
+          } catch {}
+        }
+      }
+    } catch (err) {
+      body.innerHTML = `<div class="empty" style="color:var(--rojo)">Error de conexión: ${escapeHtml(err.message)}</div>`;
+    } finally {
+      btn.disabled = false; btn.textContent = 'Ejecutar adquisición →';
+    }
+  }
+</script>
+</body>
+</html>

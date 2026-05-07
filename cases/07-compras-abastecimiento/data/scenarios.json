@@ -1,0 +1,58 @@
+[
+  {
+    "id": "PR-001",
+    "centro_costo": "ADM-OFICINA",
+    "presupuesto_max": 4500000,
+    "categoria": "oficina",
+    "descripcion": "Reposición trimestral de insumos de oficina y papelería para sede central.",
+    "items": [
+      {"sku": "PAP-A4-500", "descripcion": "Resmas papel A4 500 hojas", "cantidad": 200, "unidad": "resma", "precio_estimado": 4500},
+      {"sku": "TON-LJ-BLK", "descripcion": "Tóner LaserJet negro", "cantidad": 30, "unidad": "unidad", "precio_estimado": 38000},
+      {"sku": "BLG-COR-BX", "descripcion": "Bolígrafos corporativos caja x12", "cantidad": 50, "unidad": "caja", "precio_estimado": 6500},
+      {"sku": "ARC-FOL-3A", "descripcion": "Archivadores folio 3 anillos", "cantidad": 80, "unidad": "unidad", "precio_estimado": 4200}
+    ],
+    "fecha_requerida": "2026-06-15",
+    "responsable": "Carolina Rojas — Jefa Administración",
+    "cotizaciones": [
+      {"supplier_id": "SUP-001", "precio_total": 2950000, "plazo_dias": 5,  "moneda": "CLP", "condiciones_pago": "30 días", "validez_dias": 15, "incluye_iva": true},
+      {"supplier_id": "SUP-002", "precio_total": 3180000, "plazo_dias": 7,  "moneda": "CLP", "condiciones_pago": "30 días", "validez_dias": 15, "incluye_iva": true},
+      {"supplier_id": "SUP-003", "precio_total": 2820000, "plazo_dias": 10, "moneda": "CLP", "condiciones_pago": "Contado", "validez_dias": 15, "incluye_iva": true}
+    ]
+  },
+  {
+    "id": "PR-002",
+    "centro_costo": "TI-INFRA",
+    "presupuesto_max": 18000000,
+    "categoria": "hardware",
+    "descripcion": "Renovación parcial de equipos de cómputo: 25 notebooks corporativos para equipo de ingeniería.",
+    "items": [
+      {"sku": "NB-CORP-15", "descripcion": "Notebook corporativo 15\" i7 16GB 512GB SSD", "cantidad": 25, "unidad": "unidad", "precio_estimado": 580000},
+      {"sku": "DOCK-USBC", "descripcion": "Docking station USB-C dual monitor", "cantidad": 25, "unidad": "unidad", "precio_estimado": 95000},
+      {"sku": "MON-27-4K", "descripcion": "Monitor 27\" 4K IPS", "cantidad": 25, "unidad": "unidad", "precio_estimado": 280000}
+    ],
+    "fecha_requerida": "2026-07-30",
+    "responsable": "Diego Fernández — Gerente TI",
+    "cotizaciones": [
+      {"supplier_id": "SUP-101", "precio_total": 16800000, "plazo_dias": 14, "moneda": "CLP", "condiciones_pago": "30 días",  "validez_dias": 20, "incluye_iva": true},
+      {"supplier_id": "SUP-102", "precio_total": 16450000, "plazo_dias": 12, "moneda": "CLP", "condiciones_pago": "Contado",   "validez_dias": 20, "incluye_iva": true},
+      {"supplier_id": "SUP-103", "precio_total": 16980000, "plazo_dias": 9,  "moneda": "CLP", "condiciones_pago": "30 días",  "validez_dias": 20, "incluye_iva": true}
+    ]
+  },
+  {
+    "id": "PR-003",
+    "centro_costo": "ING-PROYECTOS",
+    "presupuesto_max": 95000000,
+    "categoria": "servicios_profesionales",
+    "descripcion": "Estudio de ingeniería conceptual para nueva planta — alcance multidisciplinario, 3 meses.",
+    "items": [
+      {"sku": "ING-CON-3M", "descripcion": "Estudio ingeniería conceptual 3 meses", "cantidad": 1, "unidad": "proyecto", "precio_estimado": 85000000}
+    ],
+    "fecha_requerida": "2026-09-01",
+    "responsable": "Andrés Pizarro — Director Operaciones",
+    "cotizaciones": [
+      {"supplier_id": "SUP-201", "precio_total": 89500000, "plazo_dias": 28, "moneda": "CLP", "condiciones_pago": "30 días",        "validez_dias": 30, "incluye_iva": true},
+      {"supplier_id": "SUP-202", "precio_total": 78900000, "plazo_dias": 25, "moneda": "CLP", "condiciones_pago": "50% anticipado", "validez_dias": 30, "incluye_iva": true},
+      {"supplier_id": "SUP-203", "precio_total": 87200000, "plazo_dias": 28, "moneda": "CLP", "condiciones_pago": "30 días",        "validez_dias": 30, "incluye_iva": true}
+    ]
+  }
+]

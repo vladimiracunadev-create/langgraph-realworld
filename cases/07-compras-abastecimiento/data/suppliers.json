@@ -1,0 +1,92 @@
+[
+  {
+    "id": "SUP-001",
+    "nombre": "Alpha Office Supplies SpA",
+    "rut": "76.123.456-7",
+    "categorias": ["oficina", "papeleria"],
+    "homologado": true,
+    "preferido": true,
+    "riesgo": 0.15,
+    "lead_time_promedio_dias": 5
+  },
+  {
+    "id": "SUP-002",
+    "nombre": "Beta Workplace Solutions Ltda.",
+    "rut": "77.234.567-8",
+    "categorias": ["oficina", "mobiliario"],
+    "homologado": true,
+    "preferido": true,
+    "riesgo": 0.20,
+    "lead_time_promedio_dias": 7
+  },
+  {
+    "id": "SUP-003",
+    "nombre": "Gamma Office Direct",
+    "rut": "78.345.678-9",
+    "categorias": ["oficina", "papeleria"],
+    "homologado": true,
+    "preferido": false,
+    "riesgo": 0.40,
+    "lead_time_promedio_dias": 10
+  },
+  {
+    "id": "SUP-101",
+    "nombre": "Delta IT Hardware S.A.",
+    "rut": "79.456.789-0",
+    "categorias": ["hardware", "ti"],
+    "homologado": true,
+    "preferido": true,
+    "riesgo": 0.18,
+    "lead_time_promedio_dias": 14
+  },
+  {
+    "id": "SUP-102",
+    "nombre": "Epsilon Tech Distribution",
+    "rut": "80.567.890-1",
+    "categorias": ["hardware", "ti"],
+    "homologado": true,
+    "preferido": false,
+    "riesgo": 0.32,
+    "lead_time_promedio_dias": 12
+  },
+  {
+    "id": "SUP-103",
+    "nombre": "Zeta Computing Group",
+    "rut": "81.678.901-2",
+    "categorias": ["hardware", "ti"],
+    "homologado": true,
+    "preferido": true,
+    "riesgo": 0.22,
+    "lead_time_promedio_dias": 9
+  },
+  {
+    "id": "SUP-201",
+    "nombre": "Theta Industrial Engineering Ltda.",
+    "rut": "82.789.012-3",
+    "categorias": ["servicios_profesionales", "ingenieria"],
+    "homologado": true,
+    "preferido": true,
+    "riesgo": 0.25,
+    "lead_time_promedio_dias": 30
+  },
+  {
+    "id": "SUP-202",
+    "nombre": "Iota Specialized Consulting LLC",
+    "rut": "83.890.123-4",
+    "categorias": ["servicios_profesionales", "ingenieria"],
+    "homologado": true,
+    "preferido": false,
+    "riesgo": 0.55,
+    "lead_time_promedio_dias": 25
+  },
+  {
+    "id": "SUP-203",
+    "nombre": "Kappa Engineering Partners SpA",
+    "rut": "84.901.234-5",
+    "categorias": ["servicios_profesionales", "ingenieria"],
+    "homologado": true,
+    "preferido": true,
+    "riesgo": 0.28,
+    "lead_time_promedio_dias": 28
+  }
+]

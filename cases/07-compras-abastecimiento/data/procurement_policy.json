@@ -1,0 +1,25 @@
+{
+  "umbral_comite_clp": 25000000,
+  "umbral_no_preferido_clp": 5000000,
+  "score_weights": {
+    "precio": 0.4,
+    "plazo": 0.3,
+    "riesgo": 0.3
+  },
+  "max_plazo_aceptable_dias": 30,
+  "minimo_cotizaciones_requeridas": 3,
+  "validez_cotizacion_dias": 15,
+  "comite_compras": {
+    "miembros": ["CFO", "Gerente Operaciones", "Jefe Compras"],
+    "quorum_minimo": 2
+  },
+  "categorias_aceptadas": [
+    "oficina",
+    "papeleria",
+    "mobiliario",
+    "hardware",
+    "ti",
+    "servicios_profesionales",
+    "ingenieria"
+  ]
+}

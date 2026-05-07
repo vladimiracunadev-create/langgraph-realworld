@@ -1,0 +1,11 @@
+services:
+  case07:
+    build: .
+    ports:
+      - "8007:8007"
+    environment:
+      - DATA_DIR=/app/data
+      - WEB_DIR=/app/web
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+    volumes:
+      - ../data:/app/data:ro
