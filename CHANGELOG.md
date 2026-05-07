@@ -5,6 +5,32 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/1.0.0/).
 
 ---
 
+## v4.8.0 — 2026-05-07
+
+### Agregado
+
+- **Caso 07 — Compras y Abastecimiento elevado a OPERATIVO**: backend FastAPI + LangGraph completo con modo DEMO/LIVE.
+  - `StateGraph` con 10 nodos: `validar_solicitud → buscar_proveedores → lanzar_rfq → recopilar_cotizaciones → comparar_ofertas → {router politica_compras: dentro_politica | requiere_comite → escalar_comite} → recomendar_proveedor → aprobacion_responsable → generar_orden_compra → producir_resumen`. El router activa el camino con comité cuando el monto supera el umbral configurable (25M CLP), cuando el mejor proveedor no es preferido y supera el umbral menor (5M CLP), o cuando la PR está incompleta.
+  - Score multi-criterio determinista 0-100 con pesos configurables (precio 40% / plazo 30% / riesgo proveedor 30%). Cada criterio se calcula con clamp 0-100 sobre presupuesto disponible, plazo máximo (30 días) y riesgo del proveedor (0-1). El score total ordena la comparativa para la recomendación.
+  - Trazabilidad SHA-256 sobre payload canonicalizado de la OC: `po_numero`, items, supplier, monto, plazo, condiciones de pago, fecha de emisión y estado de aprobación. Modificar cualquier campo cambia el hash.
+  - Catálogo de 9 proveedores homologados en 4 categorías (oficina, hardware, servicios profesionales, ingeniería) con flag `preferido`, score `riesgo` y lead time promedio. Política configurable en `data/procurement_policy.json` (umbrales, pesos, miembros del comité, quorum).
+  - Modo DEMO: 3 escenarios calibrados para los 3 caminos del router — `PR-001` insumos oficina ~3M CLP → APROBADA con OC emitida directamente; `PR-002` 25 notebooks ~17M CLP → APROBADA tras comparativa cerrada (~3% diferencia entre top y segundo); `PR-003` estudio ingeniería ~87M CLP → CONDICIONAL escalada a comité con OC en estado PENDIENTE_COMITE. Funciona sin OPENAI_API_KEY.
+  - Modo LIVE: GPT-4o-mini redacta justificación de la recomendación + resumen ejecutivo para el responsable del centro de costo.
+  - 25 tests (17 graph flow + 8 API) — todos verdes. Cubren: helpers (score con clamp, hash estable), validación PR, router en sus 4 ramas (preferido/no preferido × monto bajo/alto, PR inválida), 3 flujos end-to-end por escenario, eventos completos, consistencia recomendación↔comparativa, OC con hash y po_numero únicos.
+  - Docker: Dockerfile non-root + compose.yml aislado (puerto 8007). Imagen Python 3.11-slim con curl para healthcheck.
+  - UI dark theme acento ámbar (#f59e0b) con selector de PR, vista previa de centro de costo + resultado esperado, badge DEMO/LIVE, timeline streaming NDJSON, KPIs (cotizaciones, monto top, plazo, score), tabla de comparativa con tag preferido/homologado y resaltado del top, tarjetas de recomendación + escalación + aprobación + OC con hash, visor de resumen ejecutivo.
+- **`docs/COSTS.md`**: nuevo documento maestro de costos DEMO vs LIVE. Tabla por caso con proveedor, variables `.env`, pricing público y lo que desbloquea. Agrupación por dependencia: DEMO puro (7 casos), solo OpenAI (8 casos ~$5–20/mes), multi-integración enterprise (caso 10), stubs pendientes. Infraestructura transversal (LLM backbone, observabilidad, hosting, secretos, auth). Receta para activar LIVE en 4 pasos. Estimaciones por escenario (lab personal ~$5/mes, demo comercial ~$50/mes, productivo enterprise ~$600–1,200/mes). Enlazado desde README, ROADMAP y READMEs de casos.
+- **ROADMAP v4.8.0**: caso 07 movido de scaffold a operativos (16 casos totales). Iniciada Ola 3.
+
+### Modificado
+
+- `README.md`: badge de versión → 4.8.0, contador de operativos 15 → 16, caso 07 movido de scaffold a OPERATIVO en ambas tablas, fila destacada "Compras" agregada, link a `docs/COSTS.md` en sección de documentación técnica, taxonomía actualizada.
+- `ROADMAP.md`: versión → 4.8.0, caso 07 marcado como completado en Ola 3, scaffolds 10 → 9.
+- `index.html` portal: tarjeta de caso 07 actualizada de LEGACY → OPERATIVO con enlace al backend `http://localhost:8007/`.
+- `docker-compose.yml` raíz: servicio `case07` cambiado de demo nginx (puerto 9007) a backend real FastAPI (puerto 8007) con volúmenes `data/` y `web/`.
+
+---
+
 ## v4.7.0 — 2026-05-05
 
 ### Agregado

@@ -2,12 +2,12 @@
 
 # 🤖 LangGraph Realworld
 
-### **25 casos de uso empresariales · 15 backends operativos · 100% DEMO sin APIs**
+### **25 casos de uso empresariales · 16 backends operativos · 100% DEMO sin APIs**
 
 **LangGraph · FastAPI · Python 3.11 · Docker · OAuth2 · LangSmith · uv (opcional)**
 
-[![Version](https://img.shields.io/badge/version-4.7.0-1f6feb?style=for-the-badge)](CHANGELOG.md)
-[![Operativos](https://img.shields.io/badge/operativos-15%2F25-3fb950?style=for-the-badge)](ROADMAP.md)
+[![Version](https://img.shields.io/badge/version-4.8.0-1f6feb?style=for-the-badge)](CHANGELOG.md)
+[![Operativos](https://img.shields.io/badge/operativos-16%2F25-3fb950?style=for-the-badge)](ROADMAP.md)
 [![Tests](https://img.shields.io/badge/tests-passing-3fb950?style=for-the-badge&logo=pytest&logoColor=white)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-MIT-yellow?style=for-the-badge)](LICENSE)
 
@@ -24,16 +24,16 @@
 </div>
 
 > Portafolio de **25 casos de uso empresariales** construidos con **LangGraph** y **FastAPI**:
-> **15 backends completamente operativos** (casos 01, 02, 03, 04, 05, 06, 08, 09, 10, 13, 14, 17, 19, 21 y 25) con streaming, OAuth2/OIDC opt-in, observabilidad LangSmith, `/metrics` por servicio, logging JSON estructurado y reverse proxy nginx + TLS.
-> Los 10 casos restantes son scaffolds documentados listos para elevar al siguiente nivel.
+> **16 backends completamente operativos** (casos 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 13, 14, 17, 19, 21 y 25) con streaming, OAuth2/OIDC opt-in, observabilidad LangSmith, `/metrics` por servicio, logging JSON estructurado y reverse proxy nginx + TLS.
+> Los 9 casos restantes son scaffolds documentados listos para elevar al siguiente nivel.
 
 ### 📊 Estado del portfolio
 
 | 🎯 | Métrica | Valor |
 |:-:|:---|:---|
-| 🟢 | Casos operativos | **15 / 25** (60%) |
+| 🟢 | Casos operativos | **16 / 25** (64%) |
 | 🏭 | Casos industriales | **3** (09, 10, 13) |
-| 📋 | Scaffolds restantes | **10** (Ola 3) |
+| 📋 | Scaffolds restantes | **9** (Ola 3) |
 | 🧪 | Tests por caso | 18-30, todos verdes |
 | 🔌 | Modo DEMO | 100% sin APIs externas |
 | 🔑 | Modo LIVE | Opt-in con `OPENAI_API_KEY` |
@@ -46,6 +46,7 @@
 |:-:|:---|:---|
 | **04** | 🛡️ SOC | Router de riesgo (3 vías), threat intel, SIEM context |
 | **06** | 🛡️ Compliance | ISO/SOC2/GDPR + cadena de custodia SHA-256 encadenada |
+| **07** | 🛒 Compras | Score multi-criterio (precio/plazo/riesgo) + router política comité + OC con SHA-256 |
 | **13** | 📊 BI | SQL agent endurecido + Chart.js + LLM opt-in |
 | **14** | 💰 Finanzas | Matching multi-criterio + z-score outliers determinista |
 | **17** | ⚖️ Legal | 3 especialidades + 3 plantillas + asignación de abogado |
@@ -54,14 +55,14 @@
 
 ---
 
-## 🏗️ Implementación Industrial — v4.7.0
+## 🏗️ Implementación Industrial — v4.8.0
 
 El estándar actual del repositorio se apoya en estos pilares:
 
 | # | Pilar | Descripción |
 |:-:|:---|:---|
 | 1 | 🌐 **Portal unificado** | `index.html` como entrada principal para navegar el portafolio |
-| 2 | ⚙️ **Casos de referencia reales** | Backends FastAPI y UIs activas en los casos 01, 02, 03, 04, 05, 06, 08, 09, 10, 13, 14, 17, 19, 21 y 25 |
+| 2 | ⚙️ **Casos de referencia reales** | Backends FastAPI y UIs activas en los casos 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 13, 14, 17, 19, 21 y 25 |
 | 3 | 📐 **Estado tipado** | Contratos explícitos con `TypedDict` y flujos compatibles con LangGraph |
 | 4 | 🔭 **Observabilidad** | `/health`, `/ready`, `/metrics` con latencia, errores y modo; LangSmith opt-in |
 | 5 | 🔀 **Modo dual** | Demos offline + ruta clara para activar integraciones reales |
@@ -87,6 +88,7 @@ El estándar actual del repositorio se apoya en estos pilares:
 | **04** | [🔐 SOC Triage de Alertas](cases/04-soc-triage-alertas/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · Threat Intel · Router de riesgo |
 | **05** | [📄 Analista de Documentos](cases/05-analista-documentos/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · Keyword extraction · Router de riesgo |
 | **06** | [🛡️ Compliance & Auditorías](cases/06-compliance-auditorias/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · ISO/SOC/GDPR · Cadena de custodia SHA-256 |
+| **07** | [🛒 Compras y Abastecimiento](cases/07-compras-abastecimiento/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · Score multi-criterio · Router política comité · OC SHA-256 |
 | **08** | [💼 Ventas B2B + CRM](cases/08-ventas-b2b-crm/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · ICP scoring · CRM stage automático |
 | **09** | [👥 RRHH Screening & Agenda](cases/09-rrhh-screening-agenda/README.md) | `🏭 INDUSTRIAL` | FastAPI · LangGraph · MemorySaver · Resilience |
 | **10** | [🚀 Onboarding de Empleados](cases/10-onboarding-empleados/README.md) | `🏭 INDUSTRIAL` | FastAPI · LangGraph · RBAC · Integrations |
@@ -101,7 +103,6 @@ El estándar actual del repositorio se apoya en estos pilares:
 
 | ID | Nombre | Dominio |
 |:---:|:---|:---|
-| 07 | [🛒 Compras y Abastecimiento](cases/07-compras-abastecimiento/README.md) | Procurement |
 | 11 | [🎓 Tutor Adaptativo](cases/11-educacion-tutor-adaptativo/README.md) | Educación |
 | 12 | [🧠 Psicometría y Evaluaciones](cases/12-psicometria-evaluaciones/README.md) | RRHH / Evaluación |
 | 15 | [🛍️ E-commerce Postventa](cases/15-ecommerce-postventa/README.md) | Comercio electrónico |
@@ -154,6 +155,7 @@ El estándar actual del repositorio se apoya en estos pilares:
 | [docs/HUB.md](docs/HUB.md) | Hub CLI — comandos, guardrails, estado de casos |
 | [docs/AGENTS_AND_SKILLS.md](docs/AGENTS_AND_SKILLS.md) | Skills de agentes, estándar de un caso completo, orden de trabajo |
 | [docs/CLOUD_AWS.md](docs/CLOUD_AWS.md) | ☁️ Migración a AWS — 3 estrategias (PoC ~25 USD · Producción ~180 USD · Enterprise ~650 USD), mapeo Docker→AWS, paso a paso, costos y FinOps |
+| [docs/COSTS.md](docs/COSTS.md) | 💰 Costos DEMO vs LIVE — APIs requeridas por caso, pricing público OpenAI/SaaS, recetas para activar LIVE |
 
 ### Wiki (publicada en GitHub)
 
@@ -221,15 +223,15 @@ TRUST_PROXY_HEADERS=false
 
 | Nivel | Criterios | Casos |
 |:---|:---|:---|
-| ✅ **OPERATIVO** | Backend real, DEMO/LIVE, CI, tests, hardening, OAuth2 opt-in | 01, 02, 03, 04, 05, 19, 25 |
+| ✅ **OPERATIVO** | Backend real, DEMO/LIVE, CI, tests, hardening, OAuth2 opt-in | 01, 02, 03, 04, 05, 06, 07, 08, 14, 17, 19, 21, 25 |
 | 🏭 **INDUSTRIAL** | Backend real, streaming, observabilidad, docs completas | 09, 10, 13 |
-| 🔧 **SCAFFOLD** | Demo estática lista para evolucionar | 06, 07, 11, 12, 15, 16, 18, 20, 21, 22, 23, 24 |
+| 🔧 **SCAFFOLD** | Demo estática lista para evolucionar | 11, 12, 15, 16, 18, 20, 22, 23, 24 |
 
 ---
 
 ## 🛡️ Seguridad
 
-Este repositorio ha sido auditado por **8 capas de seguridad** (v4.7.0):
+Este repositorio ha sido auditado por **8 capas de seguridad** (v4.8.0):
 
 | Capa | Control | Estado |
 |:---|:---|:---:|

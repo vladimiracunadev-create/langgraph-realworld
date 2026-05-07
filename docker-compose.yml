@@ -129,9 +129,16 @@ services:
 
   case07:
     build:
-      context: cases/07-compras-abastecimiento/demo
+      context: cases/07-compras-abastecimiento/backend
     ports:
-      - "127.0.0.1:9007:80"
+      - "127.0.0.1:8007:8007"
+    volumes:
+      - ./cases/07-compras-abastecimiento/data:/app/data:ro
+      - ./cases/07-compras-abastecimiento/backend/web:/app/web:ro
+    environment:
+      - DATA_DIR=/app/data
+      - WEB_DIR=/app/web
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
 
   case08:
     build:

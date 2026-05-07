@@ -1,6 +1,6 @@
 # Hoja de Ruta
 
-> **Versión**: 4.7.0 | **Estado**: Industrial | **Rama principal**: `main`
+> **Versión**: 4.8.0 | **Estado**: Industrial | **Rama principal**: `main`
 
 El estándar técnico del repositorio ya está definido. Antes de crear o modificar un caso, leer el skill directamente — no se rediseña lo que ya existe:
 
@@ -12,7 +12,7 @@ El estándar técnico del repositorio ya está definido. Antes de crear o modifi
 
 ## Estado de los 25 casos
 
-### Operativos e industriales (15)
+### Operativos e industriales (16)
 
 | ID | Caso | Nivel | UI web | Integraciones LIVE |
 |:---:|:---|:---:|:---:|:---|
@@ -22,6 +22,7 @@ El estándar técnico del repositorio ya está definido. Antes de crear o modifi
 | 04 | [SOC Triage de Alertas](cases/04-soc-triage-alertas/README.md) | OPERATIVO | ✅ | VirusTotal, AbuseIPDB, SIEM (DEMO) |
 | 05 | [Analista de Documentos](cases/05-analista-documentos/README.md) | OPERATIVO | ✅ | PDF/DOCX opt-in, LLM opt-in (OpenAI) |
 | 06 | [Compliance & Auditorías](cases/06-compliance-auditorias/README.md) | OPERATIVO | ✅ | LLM opt-in, ISO 27001/SOC 2/GDPR, cadena de custodia SHA-256 |
+| 07 | [Compras y Abastecimiento](cases/07-compras-abastecimiento/README.md) | OPERATIVO | ✅ | LLM opt-in, score multi-criterio, router política comité, OC SHA-256 |
 | 08 | [Ventas B2B + CRM](cases/08-ventas-b2b-crm/README.md) | OPERATIVO | ✅ | LLM opt-in, ICP scoring, 4 cuentas DEMO |
 | 09 | [RRHH Screening & Agenda](cases/09-rrhh-screening-agenda/README.md) | INDUSTRIAL | ✅ | LLM + MemorySaver |
 | 10 | [Onboarding de Empleados](cases/10-onboarding-empleados/README.md) | INDUSTRIAL | ✅ | HRIS, IAM, Slack (DEMO) |
@@ -32,11 +33,10 @@ El estándar técnico del repositorio ya está definido. Antes de crear o modifi
 | 21 | [Documentación Automática](cases/21-docs-auto/README.md) | OPERATIVO | ✅ | LLM opt-in, outline adaptativo, loop QA |
 | 25 | [Supervisor + Workers](cases/25-supervisor-workers/README.md) | OPERATIVO | ✅ | 4 workers especializados (DEMO) |
 
-### Scaffold — listos para elevar (10)
+### Scaffold — listos para elevar (9)
 
 | ID | Caso | Dominio | Prioridad |
 |:---:|:---|:---|:---:|
-| 07 | [Compras y Abastecimiento](cases/07-compras-abastecimiento/README.md) | Procurement | 🟡 Ola 3 |
 | 11 | [Tutor Adaptativo](cases/11-educacion-tutor-adaptativo/README.md) | Educación | 🟡 Ola 3 |
 | 12 | [Psicometría y Evaluaciones](cases/12-psicometria-evaluaciones/README.md) | RRHH / Evaluación | 🟡 Ola 3 |
 | 15 | [E-commerce Postventa](cases/15-ecommerce-postventa/README.md) | Comercio electrónico | 🟡 Ola 3 |
@@ -74,7 +74,11 @@ SCAFFOLD  →  (seguir SKILL.md)  →  OPERATIVO  →  (observabilidad + hardeni
 
 ### Ola 3 — Dominio especializado
 
-Elevar según disponibilidad y demanda: 07, 11, 12, 15, 18, 22, 24, 16, 20, 23.
+| Caso | Por qué | Núcleo LangGraph |
+|:---|:---|:---|
+| ~~**07 — Compras y Abastecimiento**~~ | ✅ **COMPLETADO v4.8.0** — Pipeline procurement: validación PR → catálogo homologado → RFQs → cotizaciones → score multi-criterio (precio 40 / plazo 30 / riesgo 30) → router política (umbral comité 25M / no preferido 5M) → recomendación → aprobación → OC con SHA-256 | 10 nodos, 1 router (política), 3 escenarios DEMO, OC con hash inmutable |
+
+Elevar según disponibilidad y demanda: 11, 12, 15, 18, 22, 24, 16, 20, 23.
 
 ---
 
