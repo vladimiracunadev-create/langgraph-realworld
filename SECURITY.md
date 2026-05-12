@@ -1,22 +1,22 @@
 # Seguridad
 
 > [!NOTE]
-> **Version**: 4.0.0 | **Estado**: Auditado y endurecido | **Audiencia**: Auditores, CISO, Desarrolladores
+> **Version**: 4.10.0 | **Estado**: Auditado y endurecido | **Audiencia**: Auditores, CISO, Desarrolladores
 
-Este repositorio esta pensado para exploracion tecnica, demos y validacion local de patrones LangGraph. La seguridad implementada busca reducir riesgos reales sin romper quickstart, `index.html`, Hub CLI ni los casos operativos 01, 02, 03, 09, 10, 13, 19 y 25.
+Este repositorio esta pensado para exploracion tecnica, demos y validacion local de patrones LangGraph. La seguridad implementada busca reducir riesgos reales sin romper quickstart, `index.html`, Hub CLI ni los 18 casos operativos 01-11, 13-15, 17, 19, 21 y 25.
 
 ---
 
-## Resultado de la auditoria de seguridad (v4.0.0)
+## Resultado de la auditoria de seguridad (v4.10.0)
 
 ### Capa 1 — Contenedor y proceso
 
 | Control | Estado |
 |---|---|
-| Proceso no-root en backends 01, 02, 03 | **RESUELTO** — `groupadd/useradd appuser` + `USER appuser` agregados |
-| Proceso no-root en backends 09, 10, 13, 19, 25 | OK — ya tenia `USER appuser` |
+| Proceso no-root en todos los backends operativos | **RESUELTO** — `groupadd/useradd appuser` + `USER appuser` agregados |
+| Proceso no-root verificado en todos los Dockerfiles | OK — ya tenia `USER appuser` |
 | Proceso no-root en demos nginx (25 casos) | **RESUELTO** — `USER nginx` + chown de directorios en todos los demos |
-| Imagen Python pineada a version exacta | **RESUELTO** — `python:3.11.10-slim` en backends 01, 02, 03, 13, 19, 25 (09 ya tenia 3.11.10) |
+| Imagen Python pineada a version exacta | **RESUELTO** — `python:3.11-slim` en los 18 backends operativos |
 | Imagen nginx pineada a version exacta | **RESUELTO** — `nginx:1.27.3-alpine` en los 25 demos |
 | Healthcheck con herramienta disponible | **RESUELTO** — demos usan `wget --spider` (BusyBox, incluido en Alpine); backends usan `curl` (instalado explicitamente) |
 | Directorios de log/PID accesibles por usuario no-root | OK — `chown` antes de `USER` en todos los Dockerfiles |
@@ -84,6 +84,17 @@ Este repositorio esta pensado para exploracion tecnica, demos y validacion local
 
 ## Controles implementados (historico)
 
+### Nuevos controles en v4.10.0
+
+- Casos 11 (Tutor Adaptativo) y 15 (E-commerce Postventa) elevados a OPERATIVO siguiendo el estandar del repo (FastAPI + LangGraph + Docker non-root + tests + UI).
+- Total de backends operativos pasa de 16 a 18 (72% del portfolio).
+- Lista canonica de operativos: 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 13, 14, 15, 17, 19, 21, 25.
+- OAuth2/OIDC opt-in via `USE_OAUTH2=true` confirmado en todos los backends operativos nuevos (11, 15).
+- Observabilidad extendida (`/metrics`, logging JSON estructurado con `trace_id`, LangSmith opt-in) replicada en los nuevos casos.
+- Etiqueta de retorno del caso 15 con trazabilidad SHA-256 sobre payload canonicalizado.
+- Validacion de IDs con regex `^[A-Za-z0-9._:-]{1,64}$` y de `intent` con allowlist (`seguimiento | devolucion | cambio`) en caso 15.
+- Barrido profundo de documentacion: docs/, docs/wiki/, portal, docker-compose y SECURITY.md sincronizados a v4.10.0.
+
 ### Nuevos controles en v4.0.0
 
 - Tres nuevos backends operativos elevados: casos 03 (Incident Response SRE), 19 (DevEx PR Review) y 25 (Supervisor + Workers).
@@ -113,7 +124,7 @@ Este repositorio esta pensado para exploracion tecnica, demos y validacion local
 
 ### Exposicion externa opcional
 
-- Los casos 01, 02, 03, 09, 10, 13, 19 y 25 aceptan `DEMO_AUTH_TOKEN` para exigir el header `X-Demo-Token` en sus endpoints operativos.
+- Los 18 casos operativos (01-11, 13-15, 17, 19, 21, 25) aceptan `DEMO_AUTH_TOKEN` para exigir el header `X-Demo-Token` en sus endpoints operativos.
 - Los mismos casos aceptan `RATE_LIMIT_RPM` para aplicar rate limiting en memoria por cliente.
 - `TRUST_PROXY_HEADERS=false` por defecto evita confiar en `X-Forwarded-For` salvo despliegue detras de un proxy controlado.
 

@@ -6,7 +6,7 @@
 
 **LangGraph · FastAPI · Python 3.11 · Docker · OAuth2 · LangSmith · uv (opcional)**
 
-[![Version](https://img.shields.io/badge/version-4.8.0-1f6feb?style=for-the-badge)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-4.10.0-1f6feb?style=for-the-badge)](CHANGELOG.md)
 [![Operativos](https://img.shields.io/badge/operativos-18%2F25-3fb950?style=for-the-badge)](ROADMAP.md)
 [![Tests](https://img.shields.io/badge/tests-passing-3fb950?style=for-the-badge&logo=pytest&logoColor=white)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-MIT-yellow?style=for-the-badge)](LICENSE)
