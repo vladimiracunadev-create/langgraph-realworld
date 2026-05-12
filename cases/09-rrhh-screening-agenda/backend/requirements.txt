@@ -104,7 +104,7 @@ jsonpatch==1.33
     # via langchain-core
 jsonpointer==3.1.1
     # via jsonpatch
-langchain-core==1.3.0
+langchain-core==1.3.3
     # via
     #   -r cases/09-rrhh-screening-agenda/backend/requirements.in
     #   langchain-openai
@@ -280,7 +280,7 @@ tzlocal==5.3.1
     # via dateparser
 uritemplate==4.2.0
     # via google-api-python-client
-urllib3==2.6.3
+urllib3==2.7.0
     # via
     #   botocore
     #   requests
