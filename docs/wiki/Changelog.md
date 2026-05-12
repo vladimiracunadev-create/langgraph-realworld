@@ -1,5 +1,52 @@
 # Changelog
 
+## v4.10.0 - 2026-05-11
+
+### Added
+
+- Caso 15 — E-commerce Postventa elevado a OPERATIVO: 11 nodos LangGraph + 3 routers (intencion · elegibilidad · stock) + nodo de convergencia derivar_humano, etiqueta de retorno con SHA-256 sobre payload canonicalizado, politica configurable (plazo 30d devolucion / 15d cambio, categorias bloqueadas, carrier), verificacion de stock real por SKU destino, 5 escenarios DEMO (ORD-001 seguimiento, ORD-002 devolucion elegible, ORD-003 vencida + categoria bloqueada, ORD-004 cambio con stock, ORD-005 cambio sin stock), respuesta empatica LIVE opt-in, puerto 8015.
+- Suite de tests del caso 15: 33 tests (23 de grafo + 10 de API) todos en verde.
+- Barrido profundo de documentacion: docs/ y docs/wiki/ sincronizados a v4.10.0 con la lista canonica de 18 operativos.
+
+### Changed
+
+- Total de backends operativos: 18 (01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 13, 14, 15, 17, 19, 21, 25).
+- Total de scaffolds: 7 (12, 16, 18, 20, 22, 23, 24).
+- Version bumped a 4.10.0 en README, ROADMAP, CHANGELOG, portal, docs y wiki.
+
+---
+
+## v4.9.0 - 2026-05-11
+
+### Added
+
+- Caso 11 — Tutor Adaptativo elevado a OPERATIVO: 10 nodos LangGraph + 3 routers (diagnostico · desempeno 3 vias · continuar/loop) con simulador IRT determinista por seed, escala habilidad 1.0–10.0, banco de 15 items de fracciones y porcentajes (dificultad 1.5–8.5), 3 estudiantes DEMO (STU-001 sin diagnostico, STU-002 nivel medio, STU-003 nivel bajo), politica configurable (deltas adaptacion, umbrales gap, tope sesion), perfil actualizado con metricas y recomendacion para proxima sesion, reporte ejecutivo LIVE opt-in, puerto 8011.
+- Suite de tests del caso 11: 30 tests (22 de grafo + 8 de API) todos en verde.
+
+### Changed
+
+- Total de backends operativos: 17 (incorpora caso 11).
+- Total de scaffolds: 8.
+- Version bumped a 4.9.0.
+
+---
+
+## v4.8.0 - 2026-05-07
+
+### Added
+
+- Caso 07 — Compras y Abastecimiento elevado a OPERATIVO: 10 nodos LangGraph + router de politica de compras (umbral comite 25M CLP / no preferido 5M CLP), score multi-criterio determinista (precio 40 / plazo 30 / riesgo proveedor 30) con clamp 0-100, trazabilidad SHA-256 sobre OC, catalogo 9 proveedores homologados en 4 categorias, 3 escenarios DEMO (PR-001 oficina aprobada, PR-002 notebooks comparativa cerrada, PR-003 ingenieria escalada a comite), justificacion + resumen ejecutivo LIVE opt-in, puerto 8007.
+- Suite de tests del caso 07: 25 tests (17 de grafo + 8 de API) todos en verde.
+- docs/COSTS.md: inventario maestro de costos DEMO vs LIVE por caso y por escenario (lab personal, demo comercial, productivo enterprise).
+
+### Changed
+
+- Total de backends operativos: 16 (incorpora caso 07).
+- Total de scaffolds: 9.
+- Version bumped a 4.8.0.
+
+---
+
 ## v4.7.0 - 2026-05-05
 
 ### Added

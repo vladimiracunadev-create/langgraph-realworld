@@ -1,0 +1,83 @@
+[
+  {
+    "id": "ORD-001",
+    "cliente": "Carolina Vergara",
+    "email": "carolina@example.cl",
+    "intent": "seguimiento",
+    "fecha_compra": "2026-04-28",
+    "estado": "en_transito",
+    "monto_total": 89990,
+    "items": [
+      {"sku": "ZAP-RUN-42", "nombre": "Zapatillas running talla 42", "cantidad": 1, "precio": 89990, "categoria": "calzado"}
+    ],
+    "carrier": "BlueExpress",
+    "tracking": {
+      "codigo": "BX-987654321",
+      "ultima_actualizacion": "2026-05-10",
+      "ubicacion": "Centro de distribución Quilicura",
+      "eta": "2026-05-12",
+      "hitos": [
+        {"fecha": "2026-04-29", "evento": "Pedido recibido"},
+        {"fecha": "2026-04-30", "evento": "En preparación"},
+        {"fecha": "2026-05-02", "evento": "Despachado"},
+        {"fecha": "2026-05-10", "evento": "En centro de distribución"}
+      ]
+    }
+  },
+  {
+    "id": "ORD-002",
+    "cliente": "Felipe Morales",
+    "email": "felipe@example.cl",
+    "intent": "devolucion",
+    "fecha_compra": "2026-04-25",
+    "fecha_entrega": "2026-05-04",
+    "estado": "entregado",
+    "monto_total": 54990,
+    "motivo_devolucion": "Talla incorrecta",
+    "items": [
+      {"sku": "POL-XL-AZ", "nombre": "Polera oversize azul talla XL", "cantidad": 1, "precio": 54990, "categoria": "vestuario"}
+    ]
+  },
+  {
+    "id": "ORD-003",
+    "cliente": "Patricia Sandoval",
+    "email": "patricia@example.cl",
+    "intent": "devolucion",
+    "fecha_compra": "2026-02-10",
+    "fecha_entrega": "2026-02-18",
+    "estado": "entregado",
+    "monto_total": 32990,
+    "motivo_devolucion": "Cambié de opinión",
+    "items": [
+      {"sku": "ROP-INT-S", "nombre": "Set de ropa interior talla S", "cantidad": 2, "precio": 16495, "categoria": "ropa_intima"}
+    ]
+  },
+  {
+    "id": "ORD-004",
+    "cliente": "Javier Tapia",
+    "email": "javier@example.cl",
+    "intent": "cambio",
+    "fecha_compra": "2026-04-30",
+    "fecha_entrega": "2026-05-06",
+    "estado": "entregado",
+    "monto_total": 69990,
+    "motivo_cambio": "Necesita talla 44 (compró 42)",
+    "items": [
+      {"sku": "ZAP-CAS-42", "nombre": "Zapato casual talla 42", "cantidad": 1, "precio": 69990, "categoria": "calzado", "sku_destino": "ZAP-CAS-44"}
+    ]
+  },
+  {
+    "id": "ORD-005",
+    "cliente": "Andrea Bustos",
+    "email": "andrea@example.cl",
+    "intent": "cambio",
+    "fecha_compra": "2026-04-22",
+    "fecha_entrega": "2026-05-02",
+    "estado": "entregado",
+    "monto_total": 119990,
+    "motivo_cambio": "Quiere otro color (negro → azul)",
+    "items": [
+      {"sku": "CHA-LANA-NEG-M", "nombre": "Chaqueta lana negra talla M", "cantidad": 1, "precio": 119990, "categoria": "vestuario", "sku_destino": "CHA-LANA-AZU-M"}
+    ]
+  }
+]

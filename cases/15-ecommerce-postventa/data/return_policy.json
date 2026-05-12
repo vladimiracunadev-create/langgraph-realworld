@@ -1,0 +1,10 @@
+{
+  "plazo_devolucion_dias": 30,
+  "plazo_cambio_dias": 15,
+  "categorias_no_devolvibles": ["ropa_intima", "alimentos_perecibles", "personalizado"],
+  "requiere_etiqueta_original": true,
+  "carrier_devolucion": "BlueExpress",
+  "etiqueta_prefix": "RET",
+  "monto_minimo_nota_credito": 5000,
+  "max_dias_procesamiento": 5
+}

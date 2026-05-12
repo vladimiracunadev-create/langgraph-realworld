@@ -5,6 +5,60 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/1.0.0/).
 
 ---
 
+## v4.10.0 — 2026-05-11
+
+### Agregado
+
+- **Caso 15 — E-commerce Postventa elevado a OPERATIVO**: backend FastAPI + LangGraph completo con modo DEMO/LIVE.
+  - `StateGraph` con 11 nodos: `recibir_solicitud → lookup_pedido → clasificar_intencion → {router intención: seguimiento | devolucion | cambio}`. Camino seguimiento → `consultar_tracking`. Camino devolución → `verificar_elegibilidad → {router elegibilidad: elegible → generar_etiqueta | no_elegible → derivar_humano}`. Camino cambio → `verificar_stock → {router stock: disponible → procesar_cambio | agotado → derivar_humano}`. Todos los caminos convergen en `redactar_respuesta → producir_resumen → END`.
+  - Tres routers condicionales (intención · elegibilidad · stock) y un nodo de convergencia `derivar_humano` que captura los casos no automatizables (plazo excedido, categoría no devolvible, SKU destino sin stock).
+  - Etiqueta de retorno con trazabilidad SHA-256 sobre payload canonicalizado: `etiqueta_id`, `order_id`, `cliente`, `carrier`, `monto_a_reembolsar`, `items_a_retornar`, `fecha_emision`, `max_dias_procesamiento`. Modificar cualquier campo cambia el hash.
+  - Política de postventa configurable en `data/return_policy.json`: plazo devolución (30d), plazo cambio (15d), categorías no devolvibles (`ropa_intima`, `alimentos_perecibles`, `personalizado`), carrier por defecto, prefijo de etiqueta, monto mínimo de nota de crédito, días máximos de procesamiento.
+  - Inventario en `data/inventory.json` con stock real por SKU para verificación de cambios (5 SKUs DEMO con stock variable).
+  - Modo DEMO: 5 escenarios calibrados para los 5 caminos del grafo — `ORD-001` seguimiento con tracking activo en BlueExpress; `ORD-002` devolución dentro de plazo → etiqueta `RET-ORD-002-...` emitida con hash; `ORD-003` devolución vencida (83 días) + categoría ropa_intima bloqueada → 2 razones de rechazo y derivación; `ORD-004` cambio talla con stock disponible (12 unidades) → reserva BlueExpress; `ORD-005` cambio color con SKU destino sin stock (0 unidades) → derivación. Funciona sin OPENAI_API_KEY.
+  - Modo LIVE: GPT-4o-mini redacta la respuesta empática al cliente. La lógica de elegibilidad, stock y emisión de etiqueta sigue siendo determinista para reproducibilidad.
+  - 33 tests (23 graph flow + 10 API) — todos verdes. Cubren: helpers (`_label_hash`, `_parse_date`), 3 routers en todas sus ramas, clasificación de intención (input cliente / pedido / default), 5 flujos end-to-end por escenario, override de intención vía input, eventos completos por camino, respuestas y resúmenes no vacíos.
+  - `FECHA_HOY` env var permite override determinista de la fecha para tests reproducibles.
+  - Docker: Dockerfile non-root + compose.yml aislado (puerto 8015). Misma plantilla observable que casos 04/05/06/07/11/14 (8 capas de seguridad).
+  - UI dark theme acento rosa (#f472b6) con selector de pedido y selector independiente de intención (override), vista previa por escenario con resultado esperado, badge DEMO/LIVE, timeline streaming NDJSON con dot coloreado, KPIs (intención · ítems · monto · derivado), tabla de hitos de tracking, tarjetas de elegibilidad / etiqueta / stock / cambio / derivación, visor de respuesta al cliente y resumen ejecutivo.
+- **ROADMAP v4.10.0**: caso 15 movido de scaffold a operativos (18 casos totales). Scaffolds Ola 3 reducidos a 7.
+- **Barrido profundo de documentación**: sincronización completa de `docs/` y `docs/wiki/` con la versión 4.10.0 — listas canónicas de operativos (01–11, 13–14, 15, 17, 19, 21, 25), contadores actualizados en badges, sidebar, RECRUITER, ARCHITECTURE, TECHNICAL_SPECS, INSTALL, HUB, COSTS, CLOUD_AWS, UV, BEGINNERS_GUIDE, REQUIREMENTS, Roadmap wiki, Changelog wiki, Home wiki y todos los espejos en español/inglés.
+
+### Modificado
+
+- `README.md`: badge de versión → 4.10.0, contador de operativos 17 → 18 (72%), caso 15 agregado en tabla de operativos, scaffolds 8 → 7.
+- `ROADMAP.md`: versión → 4.10.0, caso 15 marcado como completado en Ola 3, scaffolds 8 → 7.
+- `index.html` portal: tarjeta de caso 15 actualizada de LEGACY → OPERATIVO con enlace al backend `http://localhost:8015/`, contadores y lista de operativos actualizados.
+- `docker-compose.yml` raíz: servicio `case15` migrado de demo nginx (puerto 9015) a backend real FastAPI (puerto 8015) con volúmenes `data/` y `web/`.
+- Versión bumped a 4.10.0 en README, ROADMAP, CHANGELOG, portal y toda la documentación de `docs/` y `docs/wiki/`.
+
+---
+
+## v4.9.0 — 2026-05-11
+
+### Agregado
+
+- **Caso 11 — Tutor Adaptativo elevado a OPERATIVO**: backend FastAPI + LangGraph completo con modo DEMO/LIVE.
+  - `StateGraph` con 10 nodos: `cargar_perfil → {router diagnostico: sin → aplicar_diagnostico} → seleccionar_item → presentar_actividad → evaluar_respuesta → {router desempeño: domina | error_conceptual | frustracion} → {aumentar_dificultad | remediar_concepto | reducir_dificultad} → {router continuar: loop | finalizar} → actualizar_perfil → producir_reporte`. Tres routers condicionales y un loop adaptativo con tope `max_items_sesion`.
+  - Simulador IRT determinista (per-student seed): `gap = dificultad − habilidad` clasifica entre `correcto` (gap ≤ 0), `error_conceptual` (umbral_error ≤ gap < umbral_frustracion), `frustracion` (gap ≥ umbral_frustracion o racha ≥ N), con zona borderline resuelta por rng con seed.
+  - Adaptación dinámica de habilidad en escala 1.0–10.0 con deltas configurables (`delta_aumento = +0.4`, `delta_remediar = −0.3`, `delta_reducir = −0.6`) y clamp a `[habilidad_min, habilidad_max]`.
+  - Banco de 15 ítems de fracciones y porcentajes (dificultad 1.5–8.5, 9 conceptos), cada uno con `prompt`, `respuesta_correcta`, `retroalimentacion` y `formato` (explicación / ejemplo / práctica). Selección adaptativa prefiere el formato del estudiante en empates de dificultad.
+  - Política de tutoría configurable en `data/tutor_policy.json`: items por sesión, items de diagnóstico, umbrales, deltas, criterio de promoción (`min_aciertos_promocion = 0.6`).
+  - Modo DEMO: 3 estudiantes calibrados para ejercitar las 3 vías del router de desempeño — `STU-001` Marta sin diagnóstico (aplica pretest, avance con errores), `STU-002` Diego nivel medio (promociona con 1 remediación), `STU-003` Ana nivel bajo (progresa consolidando fundamentos). Funciona sin OPENAI_API_KEY.
+  - Modo LIVE: GPT-4o-mini redacta el reporte ejecutivo para docente / apoderado. El simulador sigue siendo determinista para reproducibilidad pedagógica.
+  - 30 tests (22 graph flow + 8 API) — todos verdes. Cubren: helpers (`_clamp`, `_simulate_response` en sus 4 ramas), 3 routers, 7 flujos end-to-end por estudiante (incluyendo diagnóstico opcional, tope de ítems, no-repetición, métricas consistentes, habilidad acotada, reporte no vacío, eventos completos).
+  - Docker: Dockerfile non-root + compose.yml aislado (puerto 8011). Misma plantilla observable que casos 04/05/06/07/14 (8 capas de seguridad: TraceID, OAuth2 opt-in, rate limit, validación Pydantic, regex en IDs, X-Demo-Token, X-Trace-ID, HSTS implícito via uvicorn).
+  - UI dark theme acento índigo (#818cf8) con selector de estudiante, vista previa de perfil + resultado esperado, badge DEMO/LIVE, timeline streaming NDJSON con dot coloreado por resultado, KPIs (ítems, acierto, habilidad final, Δ habilidad), barra de progreso de habilidad, tabla de ítems aplicados con tag de resultado, tarjetas de conceptos dominados / a remediar, recomendación próxima sesión, visor del reporte ejecutivo.
+- **ROADMAP v4.9.0**: caso 11 movido de scaffold a operativos (17 casos totales). Scaffolds Ola 3 reducidos a 8.
+
+### Modificado
+
+- `README.md`: badge de versión → 4.9.0, contador de operativos 16 → 17.
+- `ROADMAP.md`: versión → 4.9.0, caso 11 marcado como completado en Ola 3, scaffolds 9 → 8.
+- `index.html` portal: tarjeta de caso 11 actualizada de LEGACY → OPERATIVO con enlace al backend `http://localhost:8011/`, contador de operativos 15 → 16, scaffolds 10 → 9, lista de operativos actualizada con 07 y 11.
+
+---
+
 ## v4.8.0 — 2026-05-07
 
 ### Agregado

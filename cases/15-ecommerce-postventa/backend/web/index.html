@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Caso 15 — E-commerce Postventa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07111f;
+      --surface: rgba(20, 30, 48, 0.85);
+      --border: rgba(180, 200, 230, 0.1);
+      --accent: #f472b6;
+      --accent-2: #db2777;
+      --accent-dim: rgba(244, 114, 182, 0.15);
+      --text: #e6edf3;
+      --muted: #8b9cb3;
+      --verde: #34d399;
+      --amarillo: #fbbf24;
+      --rojo: #f87171;
+      font-family: 'Inter', system-ui, sans-serif;
+      color-scheme: dark;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    header {
+      padding: 12px 20px; border-bottom: 1px solid var(--border);
+      display: flex; gap: 12px; align-items: center;
+      background: rgba(7,17,31,.85); backdrop-filter: blur(10px);
+      position: sticky; top: 0; z-index: 10;
+    }
+    header .back-link { font-family: 'JetBrains Mono', monospace; font-size: 12px;
+      color: var(--accent); text-decoration: none; opacity: .85; }
+    header .back-link:hover { opacity: 1; }
+    header .sep { color: var(--border); font-size: 18px; }
+    header .title { font-weight: 800; letter-spacing: -.4px; font-size: 1rem; flex: 1; }
+    .pill {
+      font-family: 'JetBrains Mono', monospace;
+      padding: 4px 10px; border-radius: 999px; font-size: 10px;
+      font-weight: 600; text-transform: uppercase; letter-spacing: .5px;
+      border: 1px solid var(--border);
+    }
+    .pill-demo { color: var(--amarillo); border-color: rgba(251,191,36,.3); background: rgba(251,191,36,.1); }
+    .pill-live { color: var(--verde); border-color: rgba(52,211,153,.3); background: rgba(52,211,153,.1); }
+
+    .hero { max-width: 920px; margin: 28px auto 0; padding: 0 24px; }
+    .hero h2 { font-size: 1.55rem; font-weight: 800; margin-bottom: 10px; }
+    .hero p { color: var(--muted); line-height: 1.65; font-size: .92rem; }
+    .badge-row { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+    .hero-pill {
+      font-family: 'JetBrains Mono', monospace; font-size: .68rem;
+      padding: 4px 9px; border-radius: 999px;
+      border: 1px solid var(--border); color: var(--muted); background: var(--accent-dim);
+    }
+
+    main {
+      max-width: 1320px; margin: 22px auto;
+      padding: 0 24px 40px;
+      display: grid; grid-template-columns: 1fr 1.35fr; gap: 18px;
+    }
+    @media (max-width: 880px) { main { grid-template-columns: 1fr; } }
+
+    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+    .panel-header {
+      padding: 14px 18px; border-bottom: 1px solid var(--border);
+      font-weight: 700; font-size: .85rem;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .panel-body { padding: 18px; }
+
+    label { font-size: .8rem; color: var(--muted); display: block; margin-bottom: 6px; }
+    select, button {
+      width: 100%; padding: 10px 14px; border-radius: 8px;
+      border: 1px solid var(--border); font-size: .88rem; font-family: inherit;
+    }
+    select { background: rgba(20,30,48,.95); color: var(--text); cursor: pointer; margin-bottom: 14px; }
+    select:focus { outline: 2px solid var(--accent); }
+    button {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #07111f; font-weight: 700; cursor: pointer; border: none;
+      transition: opacity .15s, transform .1s;
+    }
+    button:hover:not(:disabled) { opacity: .92; transform: translateY(-1px); }
+    button:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+
+    .scenario-preview {
+      margin-top: 14px; padding: 12px;
+      background: rgba(244,114,182,.05);
+      border: 1px solid rgba(244,114,182,.15);
+      border-radius: 8px;
+      font-size: .8rem; color: var(--muted);
+      max-height: 240px; overflow-y: auto; line-height: 1.55;
+    }
+    .scenario-preview strong { color: var(--text); }
+
+    .timeline { margin-top: 6px; }
+    .tl-item {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 9px 0; border-bottom: 1px solid var(--border);
+      animation: fadeIn .25s ease;
+    }
+    .tl-item:last-child { border-bottom: none; }
+    .tl-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent); margin-top: 5px; flex-shrink: 0;
+    }
+    .tl-dot.ok { background: var(--verde); }
+    .tl-dot.warn { background: var(--amarillo); }
+    .tl-dot.bad { background: var(--rojo); }
+    .tl-node {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem; color: var(--accent); font-weight: 600;
+    }
+    .tl-detail { font-size: .78rem; color: var(--muted); margin-top: 2px; line-height: 1.55; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; } }
+
+    .risk-header {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 18px; border-bottom: 1px solid var(--border);
+    }
+    .risk-badge {
+      padding: 6px 14px; border-radius: 999px;
+      font-weight: 700; font-size: .78rem;
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase; letter-spacing: .5px;
+    }
+    .risk-resuelto { background: rgba(52,211,153,.15); color: var(--verde); border: 1px solid rgba(52,211,153,.3); }
+    .risk-derivado { background: rgba(251,191,36,.15); color: var(--amarillo); border: 1px solid rgba(251,191,36,.3); }
+    .risk-incompleto { background: rgba(248,113,113,.15); color: var(--rojo); border: 1px solid rgba(248,113,113,.3); }
+    .risk-empty { background: rgba(139,156,179,.1); color: var(--muted); border: 1px solid var(--border); }
+
+    .pct-score {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.05rem; font-weight: 700;
+    }
+    .case-meta { flex: 1; }
+    .case-title { font-weight: 700; font-size: .92rem; margin-bottom: 2px; }
+    .case-sub { font-size: .76rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+
+    .section-label {
+      font-size: .72rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .5px;
+      font-weight: 600; margin: 16px 0 8px;
+    }
+
+    .kpi-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+    }
+    @media (max-width: 700px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+    .kpi {
+      padding: 10px; background: rgba(20,30,48,.5);
+      border: 1px solid var(--border); border-radius: 8px;
+      text-align: center;
+    }
+    .kpi-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1rem; font-weight: 700; color: var(--text);
+    }
+    .kpi-label {
+      font-size: .65rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .3px;
+      margin-top: 3px;
+    }
+
+    .card-block {
+      padding: 10px 12px; border-radius: 8px;
+      background: rgba(20,30,48,.5);
+      border-left: 3px solid var(--accent);
+      margin-bottom: 6px;
+      font-size: .82rem; line-height: 1.55;
+    }
+    .card-block.ok { border-left-color: var(--verde); background: rgba(52,211,153,.05); }
+    .card-block.warn { border-left-color: var(--amarillo); background: rgba(251,191,36,.05); }
+    .card-block.bad { border-left-color: var(--rojo); background: rgba(248,113,113,.05); }
+
+    .tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .62rem; font-weight: 700;
+      padding: 2px 7px; border-radius: 4px;
+      text-transform: uppercase; letter-spacing: .5px;
+    }
+    .tag.seguimiento { background: rgba(129,140,248,.2); color: #818cf8; }
+    .tag.devolucion { background: rgba(244,114,182,.2); color: var(--accent); }
+    .tag.cambio { background: rgba(52,211,153,.2); color: var(--verde); }
+
+    .respuesta-box {
+      background: rgba(244,114,182,.05);
+      border: 1px solid rgba(244,114,182,.15);
+      border-radius: 10px; padding: 14px 16px;
+      font-size: .85rem; line-height: 1.7;
+      white-space: pre-wrap; color: #cdd9e5;
+    }
+
+    .resumen-box {
+      background: #0a1424; border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .76rem; line-height: 1.65;
+      white-space: pre-wrap; color: #cdd9e5;
+    }
+
+    .hitos {
+      list-style: none; padding-left: 0; margin-top: 4px;
+      border-left: 2px solid rgba(244,114,182,.3);
+      padding-left: 12px;
+    }
+    .hitos li {
+      font-size: .76rem; color: var(--muted);
+      padding: 3px 0;
+    }
+    .hitos li strong { color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: .72rem; }
+
+    .tech-footer {
+      max-width: 1320px; margin: 0 auto;
+      padding: 0 24px 32px;
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .tech-pill {
+      font-family: 'JetBrains Mono', monospace; font-size: .7rem;
+      padding: 4px 10px; border-radius: 999px;
+      border: 1px solid var(--border); color: var(--muted); background: var(--surface);
+    }
+
+    .empty {
+      text-align: center; padding: 32px 16px;
+      color: var(--muted); font-size: .85rem;
+    }
+    .empty-icon { font-size: 2rem; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="http://localhost:8080/" class="back-link">← VOLVER AL HUB</a>
+  <span class="sep">|</span>
+  <span class="title">Caso 15 — E-commerce Postventa</span>
+  <span class="pill" id="mode-badge">…</span>
+</header>
+
+<div class="hero">
+  <h2>Postventa Automatizada para E-commerce</h2>
+  <p>
+    El agente recibe la solicitud postventa del cliente, identifica el pedido en el OMS y
+    clasifica la intención: seguimiento, devolución o cambio. Para devolución verifica
+    elegibilidad contra la política (plazo, categoría), genera la etiqueta de retorno con
+    hash SHA-256 si procede o deriva a un agente humano. Para cambio verifica stock real del
+    SKU destino, procesa la reserva o escala. Cierra con respuesta empática redactada para
+    el cliente y resumen ejecutivo del caso. Reduce el 40% del tiempo del equipo dedicado a
+    consultas repetitivas.
+  </p>
+  <div class="badge-row">
+    <span class="hero-pill">11 nodos LangGraph</span>
+    <span class="hero-pill">3 routers (intención · elegibilidad · stock)</span>
+    <span class="hero-pill">Etiqueta retorno con SHA-256</span>
+    <span class="hero-pill">Convergencia a humano</span>
+    <span class="hero-pill">DEMO + LIVE (GPT-4o-mini)</span>
+  </div>
+</div>
+
+<main>
+  <div>
+    <div class="panel">
+      <div class="panel-header"><span>📦</span> Caso postventa</div>
+      <div class="panel-body">
+        <label for="ord-select">Pedido del cliente</label>
+        <select id="ord-select" onchange="renderPreview()">
+          <option value="ORD-001">ORD-001 — Carolina V. · seguimiento (en tránsito)</option>
+          <option value="ORD-002">ORD-002 — Felipe M. · devolución dentro de plazo</option>
+          <option value="ORD-003">ORD-003 — Patricia S. · devolución vencida + categoría bloqueada</option>
+          <option value="ORD-004">ORD-004 — Javier T. · cambio talla con stock</option>
+          <option value="ORD-005">ORD-005 — Andrea B. · cambio color sin stock</option>
+        </select>
+        <label for="intent-select">Intención (opcional — override del pedido)</label>
+        <select id="intent-select">
+          <option value="">(usar la del pedido)</option>
+          <option value="seguimiento">seguimiento</option>
+          <option value="devolucion">devolucion</option>
+          <option value="cambio">cambio</option>
+        </select>
+        <div class="scenario-preview" id="ord-preview">…</div>
+        <button id="btn-procesar" onclick="iniciarCaso()" style="margin-top:12px;">
+          Procesar caso postventa →
+        </button>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-header"><span>⏱</span> Timeline del agente</div>
+      <div class="panel-body">
+        <div class="timeline" id="timeline">
+          <div class="empty"><div class="empty-icon">📨</div>Selecciona un pedido y pulsa Procesar.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="results-panel">
+    <div class="risk-header">
+      <div class="risk-badge risk-empty" id="risk-badge">— estado</div>
+      <div class="case-meta">
+        <div class="case-title" id="case-title">Esperando caso…</div>
+        <div class="case-sub" id="case-sub">— · —</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="pct-score" id="pct-score">—</div>
+        <div style="font-size:.7rem; color:var(--muted);">intención</div>
+      </div>
+    </div>
+    <div class="panel-body" id="results-body">
+      <div class="empty"><div class="empty-icon">📋</div>Los resultados aparecerán aquí.</div>
+    </div>
+  </div>
+</main>
+
+<div class="tech-footer">
+  <span class="tech-pill">LangGraph StateGraph</span>
+  <span class="tech-pill">FastAPI</span>
+  <span class="tech-pill">11 nodos</span>
+  <span class="tech-pill">3 routers</span>
+  <span class="tech-pill">Etiqueta SHA-256</span>
+  <span class="tech-pill">NDJSON streaming</span>
+  <span class="tech-pill">DEMO / LIVE</span>
+  <span class="tech-pill">Puerto 8015</span>
+</div>
+
+<script>
+  const PORT = window.location.port || '8015';
+  const BASE = `${window.location.protocol}//${window.location.hostname}:${PORT}`;
+
+  const PREVIEWS = {
+    'ORD-001': {
+      cliente: 'Carolina Vergara · en tránsito',
+      desc: 'Zapatillas running talla 42, BlueExpress BX-987654321. ETA 2026-05-12.',
+      esperado: '🟢 RESUELTO · tracking entregado con hitos y ETA'
+    },
+    'ORD-002': {
+      cliente: 'Felipe Morales · entregado 2026-05-04',
+      desc: 'Polera oversize XL, motivo: talla incorrecta. 7 días desde entrega — dentro de plazo (30 días).',
+      esperado: '🟢 RESUELTO · devolución aprobada · etiqueta RET-ORD-002 con hash SHA-256'
+    },
+    'ORD-003': {
+      cliente: 'Patricia Sandoval · entregado 2026-02-18',
+      desc: 'Set ropa interior S. 83 días (excede plazo 30) + categoría ropa_intima bloqueada.',
+      esperado: '🟡 DERIVADO · 2 razones de rechazo · escalado a postventa L2 (SLA 24h)'
+    },
+    'ORD-004': {
+      cliente: 'Javier Tapia · entregado 2026-05-06',
+      desc: 'Cambio zapato talla 42 → 44. 5 días desde entrega. Stock ZAP-CAS-44 = 12 unidades.',
+      esperado: '🟢 RESUELTO · cambio procesado · reserva BlueExpress · ETA 3 días'
+    },
+    'ORD-005': {
+      cliente: 'Andrea Bustos · entregado 2026-05-02',
+      desc: 'Cambio chaqueta lana negra → azul talla M. Stock CHA-LANA-AZU-M = 0.',
+      esperado: '🟡 DERIVADO · sin stock del SKU destino · escalado a postventa L2'
+    }
+  };
+
+  function renderPreview() {
+    const id = document.getElementById('ord-select').value;
+    const p = PREVIEWS[id];
+    if (!p) return;
+    document.getElementById('ord-preview').innerHTML = `
+      <div><strong>Cliente:</strong> ${escapeHtml(p.cliente)}</div>
+      <div style="margin-top:6px;">${escapeHtml(p.desc)}</div>
+      <div style="margin-top:8px; font-family:'JetBrains Mono',monospace; font-size:.72rem; color:var(--accent);">
+        Resultado esperado: ${escapeHtml(p.esperado)}
+      </div>`;
+  }
+
+  async function detectMode() {
+    try {
+      const r = await fetch(`${BASE}/health`);
+      const d = await r.json();
+      const badge = document.getElementById('mode-badge');
+      const isLive = d.mode === 'LIVE';
+      badge.textContent = isLive ? 'LIVE' : 'DEMO';
+      badge.className = `pill ${isLive ? 'pill-live' : 'pill-demo'}`;
+    } catch {}
+  }
+  detectMode(); renderPreview();
+
+  const NODE_LABELS = {
+    'solicitud_recibida': 'recibir_solicitud',
+    'pedido_consultado': 'lookup_pedido',
+    'intencion_clasificada': 'clasificar_intencion',
+    'tracking_consultado': 'consultar_tracking',
+    'elegibilidad_evaluada': 'verificar_elegibilidad',
+    'etiqueta_emitida': 'generar_etiqueta',
+    'stock_verificado': 'verificar_stock',
+    'cambio_procesado': 'procesar_cambio',
+    'escalado_humano': 'derivar_humano',
+    'respuesta_redactada': 'redactar_respuesta',
+    'caso_completado': 'producir_resumen',
+  };
+
+  function dotClass(ev) {
+    const t = ev.type;
+    if (t === 'etiqueta_emitida' || t === 'cambio_procesado' || t === 'tracking_consultado') return 'ok';
+    if (t === 'escalado_humano') return 'warn';
+    if (t === 'elegibilidad_evaluada' && !ev.elegible) return 'warn';
+    if (t === 'stock_verificado' && !ev.todos_disponibles) return 'warn';
+    return '';
+  }
+
+  function describeEvent(ev) {
+    const t = ev.type || '';
+    if (t === 'solicitud_recibida')      return `${ev.order_id}${ev.intent_input ? ' · intent=' + ev.intent_input : ''}`;
+    if (t === 'pedido_consultado')       return `${ev.cliente || '—'} · estado ${ev.estado} · ${ev.items} item(s)`;
+    if (t === 'intencion_clasificada')   return `→ ${ev.intencion} (fuente: ${ev.fuente})`;
+    if (t === 'tracking_consultado')     return `${ev.codigo || '—'} · ${ev.estado_pedido} · ETA ${ev.eta || '—'} · ${ev.hitos} hitos`;
+    if (t === 'elegibilidad_evaluada')   return `elegible=${ev.elegible} · ${ev.dias}d desde entrega${ev.razones?.length ? ' · razones: ' + ev.razones.join(' | ') : ''}`;
+    if (t === 'etiqueta_emitida')        return `${ev.etiqueta_id} · ${ev.carrier} · reembolso $${(ev.monto_reembolso||0).toLocaleString('es-CL')} · hash=${ev.hash}`;
+    if (t === 'stock_verificado')        return `${ev.items_ok}/${ev.items_total} SKUs disponibles${ev.fuera_plazo ? ' · fuera de plazo' : ''}`;
+    if (t === 'cambio_procesado')        return `${ev.reservas} reserva(s) · ${ev.order_id}`;
+    if (t === 'escalado_humano')         return `${ev.intencion} · ${ev.razones?.length || 0} razones · SLA ${ev.sla_horas}h`;
+    if (t === 'respuesta_redactada')     return `respuesta lista · ${ev.len} caracteres`;
+    if (t === 'caso_completado')         return `${ev.order_id} · intención ${ev.intencion} · ${ev.resultado}`;
+    return JSON.stringify(ev).slice(0, 80);
+  }
+
+  function addTimelineItem(ev) {
+    const tl = document.getElementById('timeline');
+    const empty = tl.querySelector('.empty');
+    if (empty) empty.remove();
+    const item = document.createElement('div');
+    item.className = 'tl-item';
+    const cls = dotClass(ev);
+    item.innerHTML = `<div class="tl-dot ${cls}"></div><div>
+      <div class="tl-node">${NODE_LABELS[ev.type] || ev.type}</div>
+      <div class="tl-detail">${escapeHtml(describeEvent(ev))}</div>
+    </div>`;
+    tl.appendChild(item);
+  }
+
+  let _lastEventsLen = 0;
+
+  function resultadoClass(r) {
+    if (r === 'RESUELTO') return 'risk-resuelto';
+    if (r === 'DERIVADO') return 'risk-derivado';
+    if (r === 'INCOMPLETO') return 'risk-incompleto';
+    return 'risk-empty';
+  }
+  function resultadoIcon(r) {
+    return ({RESUELTO:'🟢', DERIVADO:'🟡', INCOMPLETO:'🔴'})[r] || '⚪';
+  }
+
+  function applySnapshot(snap) {
+    if (!snap) return;
+    const pedido = snap.pedido || {};
+
+    if (pedido.id) {
+      document.getElementById('case-title').textContent =
+        `${pedido.id} · ${pedido.cliente || '—'}`;
+      document.getElementById('case-sub').textContent =
+        `${pedido.estado || '—'} · $${(pedido.monto_total||0).toLocaleString('es-CL')} CLP`;
+    }
+    if (snap.intencion) {
+      document.getElementById('pct-score').textContent = snap.intencion;
+    }
+    if (snap.done) {
+      const escal = snap.escalacion || {};
+      const exito = snap.etiqueta?.emitida || snap.cambio_resultado?.exitoso || snap.tracking?.encontrado;
+      let resultado = 'INCOMPLETO';
+      if (escal.requerida) resultado = 'DERIVADO';
+      else if (exito) resultado = 'RESUELTO';
+      const badge = document.getElementById('risk-badge');
+      badge.className = `risk-badge ${resultadoClass(resultado)}`;
+      badge.textContent = `${resultadoIcon(resultado)} ${resultado}`;
+    }
+
+    (snap.events || []).slice(_lastEventsLen).forEach(addTimelineItem);
+    _lastEventsLen = (snap.events || []).length;
+
+    if (snap.done) renderResults(snap);
+  }
+
+  function fmt(n) {
+    if (n === undefined || n === null) return '—';
+    return Number(n).toLocaleString('es-CL');
+  }
+
+  function renderResults(snap) {
+    const pedido = snap.pedido || {};
+    const tracking = snap.tracking || {};
+    const elegib = snap.elegibilidad || {};
+    const etiqueta = snap.etiqueta || {};
+    const stock = snap.stock || {};
+    const cambio = snap.cambio_resultado || {};
+    const escal = snap.escalacion || {};
+    const body = document.getElementById('results-body');
+    let html = '';
+
+    // KPIs
+    html += `<div class="kpi-grid">
+      <div class="kpi"><div class="kpi-value"><span class="tag ${snap.intencion}">${snap.intencion || '—'}</span></div><div class="kpi-label">Intención</div></div>
+      <div class="kpi"><div class="kpi-value">${(pedido.items || []).length}</div><div class="kpi-label">Ítems</div></div>
+      <div class="kpi"><div class="kpi-value">$${fmt(pedido.monto_total)}</div><div class="kpi-label">Monto CLP</div></div>
+      <div class="kpi"><div class="kpi-value">${escal.requerida ? 'Sí' : 'No'}</div><div class="kpi-label">Derivado</div></div>
+    </div>`;
+
+    // Tracking
+    if (tracking.encontrado) {
+      html += `<div class="section-label">📍 Tracking</div>
+        <div class="card-block ok">
+          <div><strong>${escapeHtml(tracking.codigo || '—')}</strong> · ${escapeHtml(tracking.carrier || pedido.carrier || '—')}</div>
+          <div style="font-size:.78rem; color:var(--muted); margin-top:4px;">
+            Ubicación: ${escapeHtml(tracking.ubicacion || '—')} · Última: ${escapeHtml(tracking.ultima_actualizacion || '—')} · ETA: <strong style="color:var(--text);">${escapeHtml(tracking.eta || '—')}</strong>
+          </div>`;
+      if ((tracking.hitos || []).length) {
+        html += `<ul class="hitos">`;
+        tracking.hitos.forEach(h => {
+          html += `<li><strong>${escapeHtml(h.fecha)}</strong> · ${escapeHtml(h.evento)}</li>`;
+        });
+        html += `</ul>`;
+      }
+      html += `</div>`;
+    }
+
+    // Elegibilidad / etiqueta
+    if (snap.intencion === 'devolucion') {
+      const cls = elegib.elegible ? 'ok' : 'warn';
+      html += `<div class="section-label">📋 Elegibilidad de devolución</div>
+        <div class="card-block ${cls}">
+          <div><strong>${elegib.elegible ? '✅ Elegible' : '⚠️ No elegible'}</strong> · ${elegib.dias_desde_entrega ?? '—'} días desde entrega (plazo ${elegib.plazo_permitido ?? '—'})</div>
+          ${(elegib.razones || []).length ? `<div style="font-size:.78rem; color:var(--muted); margin-top:4px;">Razones: ${elegib.razones.map(escapeHtml).join(' · ')}</div>` : ''}
+        </div>`;
+      if (etiqueta.emitida) {
+        html += `<div class="section-label">🏷️ Etiqueta de retorno</div>
+          <div class="card-block ok">
+            <div style="font-family:'JetBrains Mono',monospace;"><strong>${escapeHtml(etiqueta.etiqueta_id)}</strong> · ${escapeHtml(etiqueta.carrier)} · hash <span style="color:var(--accent);">${escapeHtml(etiqueta.sha256)}</span></div>
+            <div style="font-size:.78rem; color:var(--muted); margin-top:4px;">
+              Reembolso $${fmt(etiqueta.monto_a_reembolsar)} CLP · procesamiento hasta ${etiqueta.max_dias_procesamiento} días
+            </div>
+          </div>`;
+      }
+    }
+
+    // Stock / cambio
+    if (snap.intencion === 'cambio') {
+      const cls = stock.todos_disponibles ? 'ok' : 'warn';
+      html += `<div class="section-label">📦 Stock del SKU destino</div>
+        <div class="card-block ${cls}">`;
+      (stock.detalle || []).forEach(d => {
+        html += `<div style="font-family:'JetBrains Mono',monospace; font-size:.78rem;">
+          ${escapeHtml(d.sku_origen)} → ${escapeHtml(d.sku_destino)} · solicitado ${d.cantidad_solicitada} · disponible ${d.stock_disponible} ${d.ok ? '✅' : '❌'}
+        </div>`;
+      });
+      if (stock.fuera_plazo) {
+        html += `<div style="margin-top:6px; font-size:.78rem; color:var(--amarillo);">⚠️ Fuera de plazo: ${stock.dias_desde_entrega} días (máx ${stock.plazo_permitido})</div>`;
+      }
+      html += `</div>`;
+      if (cambio.exitoso) {
+        html += `<div class="section-label">🔄 Cambio procesado</div>
+          <div class="card-block ok">
+            <div>${cambio.reservas.length} reserva(s) · envío vía ${escapeHtml(cambio.carrier_envio)} · ETA ${cambio.eta_envio_dias} días</div>
+          </div>`;
+      }
+    }
+
+    // Escalación
+    if (escal.requerida) {
+      html += `<div class="section-label">⚠️ Derivación a humano</div>
+        <div class="card-block warn">
+          <div><strong>${escapeHtml(escal.motivo)}</strong> — asignado a ${escapeHtml(escal.asignado_a)} (SLA ${escal.sla_horas}h)</div>
+          ${(escal.razones || []).length ? `<div style="font-size:.78rem; color:var(--muted); margin-top:4px;">${escal.razones.map(escapeHtml).join(' · ')}</div>` : ''}
+        </div>`;
+    }
+
+    // Respuesta al cliente
+    if (snap.respuesta) {
+      html += `<div class="section-label">💬 Respuesta al cliente</div>
+        <div class="respuesta-box">${escapeHtml(snap.respuesta)}</div>`;
+    }
+
+    // Resumen
+    if (snap.resumen) {
+      html += `<div class="section-label">📝 Resumen del caso</div>
+        <div class="resumen-box">${escapeHtml(snap.resumen)}</div>`;
+    }
+
+    body.innerHTML = html;
+  }
+
+  function escapeHtml(s) {
+    return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  async function iniciarCaso() {
+    const oid = document.getElementById('ord-select').value;
+    const intent = document.getElementById('intent-select').value;
+    const btn = document.getElementById('btn-procesar');
+    const tl = document.getElementById('timeline');
+    const body = document.getElementById('results-body');
+
+    btn.disabled = true; btn.textContent = 'Procesando…';
+    tl.innerHTML = '';
+    body.innerHTML = '<div class="empty"><div class="empty-icon">⚙️</div>Procesando caso postventa…</div>';
+    _lastEventsLen = 0;
+    const rb = document.getElementById('risk-badge');
+    rb.className = 'risk-badge risk-empty'; rb.textContent = '— estado';
+    document.getElementById('case-title').textContent = 'Procesando…';
+    document.getElementById('case-sub').textContent = '— · —';
+    document.getElementById('pct-score').textContent = '—';
+
+    const threadId = `postventa-${oid}-${Date.now()}`;
+    const params = new URLSearchParams({thread_id: threadId, order_id: oid});
+    if (intent) params.set('intent', intent);
+    const url = `${BASE}/api/stream?${params.toString()}`;
+
+    try {
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop();
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          try {
+            const msg = JSON.parse(line);
+            if (msg.type === 'snapshot') applySnapshot(msg.snapshot);
+            if (msg.type === 'error') body.innerHTML = `<div class="empty" style="color:var(--rojo)">Error: ${escapeHtml(msg.detail)}</div>`;
+          } catch {}
+        }
+      }
+    } catch (err) {
+      body.innerHTML = `<div class="empty" style="color:var(--rojo)">Error de conexión: ${escapeHtml(err.message)}</div>`;
+    } finally {
+      btn.disabled = false; btn.textContent = 'Procesar caso postventa →';
+    }
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "max_items_sesion": 6,
+  "diagnostico_items": 3,
+  "habilidad_inicial_default": 4.0,
+  "habilidad_min": 1.0,
+  "habilidad_max": 10.0,
+  "delta_aumento": 0.4,
+  "delta_remediar": -0.3,
+  "delta_reducir": -0.6,
+  "tolerancia_dominio": 0.0,
+  "umbral_error_conceptual": 1.2,
+  "umbral_frustracion": 3.0,
+  "errores_consecutivos_frustracion": 2,
+  "min_aciertos_promocion": 0.6
+}

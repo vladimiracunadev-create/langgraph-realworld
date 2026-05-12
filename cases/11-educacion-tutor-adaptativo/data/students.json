@@ -1,0 +1,35 @@
+[
+  {
+    "id": "STU-001",
+    "nombre": "Marta Riquelme",
+    "curso": "8° básico",
+    "dominio": "fracciones_porcentajes",
+    "habilidad_inicial": null,
+    "objetivo_sesion": "Diagnóstico inicial y primera ruta personalizada",
+    "preferencia_formato": "ejemplo",
+    "intentos_max_por_concepto": 2,
+    "seed": 11001
+  },
+  {
+    "id": "STU-002",
+    "nombre": "Diego Sánchez",
+    "curso": "1° medio",
+    "dominio": "fracciones_porcentajes",
+    "habilidad_inicial": 5.5,
+    "objetivo_sesion": "Profundizar en porcentajes compuestos",
+    "preferencia_formato": "practica",
+    "intentos_max_por_concepto": 2,
+    "seed": 11002
+  },
+  {
+    "id": "STU-003",
+    "nombre": "Ana Pizarro",
+    "curso": "7° básico",
+    "dominio": "fracciones_porcentajes",
+    "habilidad_inicial": 2.5,
+    "objetivo_sesion": "Reforzar fundamentos de fracciones",
+    "preferencia_formato": "explicacion",
+    "intentos_max_por_concepto": 3,
+    "seed": 11003
+  }
+]
