@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Caso 11 — Tutor Adaptativo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07111f;
+      --surface: rgba(20, 30, 48, 0.85);
+      --border: rgba(180, 200, 230, 0.1);
+      --accent: #818cf8;
+      --accent-2: #6366f1;
+      --accent-dim: rgba(129, 140, 248, 0.15);
+      --text: #e6edf3;
+      --muted: #8b9cb3;
+      --verde: #34d399;
+      --amarillo: #fbbf24;
+      --rojo: #f87171;
+      font-family: 'Inter', system-ui, sans-serif;
+      color-scheme: dark;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    header {
+      padding: 12px 20px; border-bottom: 1px solid var(--border);
+      display: flex; gap: 12px; align-items: center;
+      background: rgba(7,17,31,.85); backdrop-filter: blur(10px);
+      position: sticky; top: 0; z-index: 10;
+    }
+    header .back-link { font-family: 'JetBrains Mono', monospace; font-size: 12px;
+      color: var(--accent); text-decoration: none; opacity: .85; }
+    header .back-link:hover { opacity: 1; }
+    header .sep { color: var(--border); font-size: 18px; }
+    header .title { font-weight: 800; letter-spacing: -.4px; font-size: 1rem; flex: 1; }
+    .pill {
+      font-family: 'JetBrains Mono', monospace;
+      padding: 4px 10px; border-radius: 999px; font-size: 10px;
+      font-weight: 600; text-transform: uppercase; letter-spacing: .5px;
+      border: 1px solid var(--border);
+    }
+    .pill-demo { color: var(--amarillo); border-color: rgba(251,191,36,.3); background: rgba(251,191,36,.1); }
+    .pill-live { color: var(--verde); border-color: rgba(52,211,153,.3); background: rgba(52,211,153,.1); }
+
+    .hero { max-width: 920px; margin: 28px auto 0; padding: 0 24px; }
+    .hero h2 { font-size: 1.55rem; font-weight: 800; margin-bottom: 10px; }
+    .hero p { color: var(--muted); line-height: 1.65; font-size: .92rem; }
+    .badge-row { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+    .hero-pill {
+      font-family: 'JetBrains Mono', monospace; font-size: .68rem;
+      padding: 4px 9px; border-radius: 999px;
+      border: 1px solid var(--border); color: var(--muted); background: var(--accent-dim);
+    }
+
+    main {
+      max-width: 1320px; margin: 22px auto;
+      padding: 0 24px 40px;
+      display: grid; grid-template-columns: 1fr 1.35fr; gap: 18px;
+    }
+    @media (max-width: 880px) { main { grid-template-columns: 1fr; } }
+
+    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+    .panel-header {
+      padding: 14px 18px; border-bottom: 1px solid var(--border);
+      font-weight: 700; font-size: .85rem;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .panel-body { padding: 18px; }
+
+    label { font-size: .8rem; color: var(--muted); display: block; margin-bottom: 6px; }
+    select, button {
+      width: 100%; padding: 10px 14px; border-radius: 8px;
+      border: 1px solid var(--border); font-size: .88rem; font-family: inherit;
+    }
+    select { background: rgba(20,30,48,.95); color: var(--text); cursor: pointer; margin-bottom: 14px; }
+    select:focus { outline: 2px solid var(--accent); }
+    button {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #07111f; font-weight: 700; cursor: pointer; border: none;
+      transition: opacity .15s, transform .1s;
+    }
+    button:hover:not(:disabled) { opacity: .92; transform: translateY(-1px); }
+    button:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+
+    .scenario-preview {
+      margin-top: 14px; padding: 12px;
+      background: rgba(129,140,248,.05);
+      border: 1px solid rgba(129,140,248,.15);
+      border-radius: 8px;
+      font-size: .8rem; color: var(--muted);
+      max-height: 220px; overflow-y: auto; line-height: 1.55;
+    }
+    .scenario-preview strong { color: var(--text); }
+
+    .timeline { margin-top: 6px; }
+    .tl-item {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 9px 0; border-bottom: 1px solid var(--border);
+      animation: fadeIn .25s ease;
+    }
+    .tl-item:last-child { border-bottom: none; }
+    .tl-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent); margin-top: 5px; flex-shrink: 0;
+    }
+    .tl-dot.correcto { background: var(--verde); }
+    .tl-dot.error { background: var(--amarillo); }
+    .tl-dot.frustracion { background: var(--rojo); }
+    .tl-node {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem; color: var(--accent); font-weight: 600;
+    }
+    .tl-detail { font-size: .78rem; color: var(--muted); margin-top: 2px; line-height: 1.55; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; } }
+
+    .risk-header {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 18px; border-bottom: 1px solid var(--border);
+    }
+    .risk-badge {
+      padding: 6px 14px; border-radius: 999px;
+      font-weight: 700; font-size: .78rem;
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase; letter-spacing: .5px;
+    }
+    .risk-promociona { background: rgba(52,211,153,.15); color: var(--verde); border: 1px solid rgba(52,211,153,.3); }
+    .risk-consolida { background: rgba(251,191,36,.15); color: var(--amarillo); border: 1px solid rgba(251,191,36,.3); }
+    .risk-empty { background: rgba(139,156,179,.1); color: var(--muted); border: 1px solid var(--border); }
+
+    .pct-score {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.6rem; font-weight: 700;
+    }
+    .case-meta { flex: 1; }
+    .case-title { font-weight: 700; font-size: .92rem; margin-bottom: 2px; }
+    .case-sub { font-size: .76rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+
+    .section-label {
+      font-size: .72rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .5px;
+      font-weight: 600; margin: 16px 0 8px;
+    }
+
+    .kpi-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+    }
+    @media (max-width: 700px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+    .kpi {
+      padding: 10px; background: rgba(20,30,48,.5);
+      border: 1px solid var(--border); border-radius: 8px;
+      text-align: center;
+    }
+    .kpi-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.05rem; font-weight: 700; color: var(--text);
+    }
+    .kpi-label {
+      font-size: .65rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .3px;
+      margin-top: 3px;
+    }
+
+    table.tx-table {
+      width: 100%; border-collapse: collapse;
+      font-size: .76rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    table.tx-table th {
+      padding: 6px 8px; text-align: left;
+      color: var(--muted); text-transform: uppercase;
+      font-size: .65rem; letter-spacing: .5px;
+      border-bottom: 1px solid var(--border);
+    }
+    table.tx-table td {
+      padding: 6px 8px; border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    table.tx-table .monto { text-align: right; }
+
+    .tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .62rem; font-weight: 700;
+      padding: 2px 7px; border-radius: 4px;
+      text-transform: uppercase; letter-spacing: .5px;
+    }
+    .tag.correcto { background: rgba(52,211,153,.2); color: var(--verde); }
+    .tag.error_conceptual { background: rgba(251,191,36,.2); color: var(--amarillo); }
+    .tag.frustracion { background: rgba(248,113,113,.2); color: var(--rojo); }
+
+    .card-block {
+      padding: 10px 12px; border-radius: 8px;
+      background: rgba(20,30,48,.5);
+      border-left: 3px solid var(--accent);
+      margin-bottom: 6px;
+    }
+    .card-block.dom { border-left-color: var(--verde); background: rgba(52,211,153,.05); }
+    .card-block.rem { border-left-color: var(--amarillo); background: rgba(251,191,36,.05); }
+    .card-block.rec { border-left-color: var(--accent); background: rgba(129,140,248,.05); }
+
+    .resumen-box {
+      background: rgba(129,140,248,.05);
+      border: 1px solid rgba(129,140,248,.15);
+      border-radius: 10px; padding: 14px 16px;
+      font-size: .83rem; line-height: 1.7;
+      white-space: pre-wrap; color: #cdd9e5;
+    }
+
+    .progress-bar {
+      width: 100%; height: 8px;
+      background: rgba(20,30,48,.5);
+      border-radius: 999px; overflow: hidden;
+      border: 1px solid var(--border);
+      margin-top: 6px;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      transition: width .3s ease;
+    }
+
+    .tech-footer {
+      max-width: 1320px; margin: 0 auto;
+      padding: 0 24px 32px;
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .tech-pill {
+      font-family: 'JetBrains Mono', monospace; font-size: .7rem;
+      padding: 4px 10px; border-radius: 999px;
+      border: 1px solid var(--border); color: var(--muted); background: var(--surface);
+    }
+
+    .empty {
+      text-align: center; padding: 32px 16px;
+      color: var(--muted); font-size: .85rem;
+    }
+    .empty-icon { font-size: 2rem; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="http://localhost:8080/" class="back-link">← VOLVER AL HUB</a>
+  <span class="sep">|</span>
+  <span class="title">Caso 11 — Tutor Adaptativo</span>
+  <span class="pill" id="mode-badge">…</span>
+</header>
+
+<div class="hero">
+  <h2>Tutoría Personalizada con IRT Adaptativo</h2>
+  <p>
+    El agente carga el perfil del estudiante, aplica un diagnóstico si no existe,
+    selecciona ítems del banco calibrados a la zona de desarrollo próximo y simula
+    su respuesta de forma determinista. Un router de desempeño decide entre
+    <em>aumentar dificultad</em>, <em>remediar concepto</em> o <em>reducir dificultad</em>
+    en función del gap habilidad‑ítem y la racha de errores. Al cerrar la sesión actualiza el
+    perfil con métricas (tasa de acierto, conceptos dominados, conceptos a remediar) y emite un
+    reporte ejecutivo para docente e institución. Democratiza el acceso a tutoría individual
+    en plataformas EdTech con miles de estudiantes simultáneos.
+  </p>
+  <div class="badge-row">
+    <span class="hero-pill">10 nodos LangGraph</span>
+    <span class="hero-pill">3 routers (diagnóstico · desempeño · continuar)</span>
+    <span class="hero-pill">Simulador IRT determinista</span>
+    <span class="hero-pill">Loop adaptativo con tope</span>
+    <span class="hero-pill">DEMO + LIVE (GPT-4o-mini)</span>
+  </div>
+</div>
+
+<main>
+  <div>
+    <div class="panel">
+      <div class="panel-header"><span>🎓</span> Estudiante de la sesión</div>
+      <div class="panel-body">
+        <label for="stu-select">Seleccionar estudiante</label>
+        <select id="stu-select" onchange="renderPreview()">
+          <option value="STU-001">STU-001 — Marta Riquelme · 8° básico · sin diagnóstico</option>
+          <option value="STU-002">STU-002 — Diego Sánchez · 1° medio · habilidad 5.5</option>
+          <option value="STU-003">STU-003 — Ana Pizarro · 7° básico · habilidad 2.5</option>
+        </select>
+        <div class="scenario-preview" id="stu-preview">…</div>
+        <button id="btn-procesar" onclick="iniciarSesion()" style="margin-top:12px;">
+          Iniciar sesión de tutoría →
+        </button>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-header"><span>⏱</span> Timeline del agente</div>
+      <div class="panel-body">
+        <div class="timeline" id="timeline">
+          <div class="empty"><div class="empty-icon">📚</div>Selecciona un estudiante y pulsa Iniciar.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="results-panel">
+    <div class="risk-header">
+      <div class="risk-badge risk-empty" id="risk-badge">— sesión</div>
+      <div class="case-meta">
+        <div class="case-title" id="case-title">Esperando sesión…</div>
+        <div class="case-sub" id="case-sub">— · —</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="pct-score" id="pct-score">—</div>
+        <div style="font-size:.7rem; color:var(--muted);">habilidad</div>
+      </div>
+    </div>
+    <div class="panel-body" id="results-body">
+      <div class="empty"><div class="empty-icon">📋</div>Los resultados aparecerán aquí.</div>
+    </div>
+  </div>
+</main>
+
+<div class="tech-footer">
+  <span class="tech-pill">LangGraph StateGraph</span>
+  <span class="tech-pill">FastAPI</span>
+  <span class="tech-pill">10 nodos</span>
+  <span class="tech-pill">Router desempeño 3 vías</span>
+  <span class="tech-pill">Simulador IRT</span>
+  <span class="tech-pill">NDJSON streaming</span>
+  <span class="tech-pill">DEMO / LIVE</span>
+  <span class="tech-pill">Puerto 8011</span>
+</div>
+
+<script>
+  const PORT = window.location.port || '8011';
+  const BASE = `${window.location.protocol}//${window.location.hostname}:${PORT}`;
+
+  const PREVIEWS = {
+    'STU-001': {
+      curso: '8° básico',
+      desc: 'Estudiante nueva sin diagnóstico previo. El agente aplica un pretest de 3 ítems para estimar habilidad antes de iniciar el loop adaptativo.',
+      esperado: '🟡 CONSOLIDA · diagnóstico inicial · varios errores conceptuales por avance rápido'
+    },
+    'STU-002': {
+      curso: '1° medio',
+      desc: 'Habilidad inicial 5.5 (nivel medio). Diagnóstico omitido. Preferencia: práctica directa.',
+      esperado: '🟢 PROMOCIONA · mayoría aciertos · al menos un concepto a remediar'
+    },
+    'STU-003': {
+      curso: '7° básico',
+      desc: 'Habilidad inicial 2.5 (nivel bajo). Preferencia: explicación. Sesión enfocada en fundamentos.',
+      esperado: '🟢 PROMOCIONA · progreso constante · 1-2 errores conceptuales'
+    }
+  };
+
+  function renderPreview() {
+    const id = document.getElementById('stu-select').value;
+    const p = PREVIEWS[id];
+    if (!p) return;
+    document.getElementById('stu-preview').innerHTML = `
+      <div><strong>Curso:</strong> ${escapeHtml(p.curso)}</div>
+      <div style="margin-top:6px;">${escapeHtml(p.desc)}</div>
+      <div style="margin-top:8px; font-family:'JetBrains Mono',monospace; font-size:.72rem; color:var(--accent);">
+        Resultado esperado: ${escapeHtml(p.esperado)}
+      </div>`;
+  }
+
+  async function detectMode() {
+    try {
+      const r = await fetch(`${BASE}/health`);
+      const d = await r.json();
+      const badge = document.getElementById('mode-badge');
+      const isLive = d.mode === 'LIVE';
+      badge.textContent = isLive ? 'LIVE' : 'DEMO';
+      badge.className = `pill ${isLive ? 'pill-live' : 'pill-demo'}`;
+    } catch {}
+  }
+  detectMode(); renderPreview();
+
+  const NODE_LABELS = {
+    'perfil_cargado': 'cargar_perfil',
+    'diagnostico_aplicado': 'aplicar_diagnostico',
+    'diagnostico_omitido': 'aplicar_diagnostico',
+    'item_seleccionado': 'seleccionar_item',
+    'actividad_presentada': 'presentar_actividad',
+    'respuesta_evaluada': 'evaluar_respuesta',
+    'dificultad_aumentada': 'aumentar_dificultad',
+    'concepto_remediado': 'remediar_concepto',
+    'dificultad_reducida': 'reducir_dificultad',
+    'perfil_actualizado': 'actualizar_perfil',
+    'sesion_completada': 'producir_reporte',
+    'sin_items_disponibles': 'seleccionar_item',
+  };
+
+  function dotClass(ev) {
+    if (ev.type === 'respuesta_evaluada') {
+      if (ev.resultado === 'correcto') return 'correcto';
+      if (ev.resultado === 'error_conceptual') return 'error';
+      if (ev.resultado === 'frustracion') return 'frustracion';
+    }
+    return '';
+  }
+
+  function describeEvent(ev) {
+    const t = ev.type || '';
+    if (t === 'perfil_cargado')        return `${ev.nombre} · ${ev.curso} · habilidad inicial ${ev.habilidad_inicial} · diagnóstico previo: ${ev.diagnostico_previo ? 'sí' : 'no'}`;
+    if (t === 'diagnostico_aplicado')  return `${ev.items.length} ítems → habilidad estimada ${ev.habilidad_estimada} · resultados: ${ev.resultados.join(', ')}`;
+    if (t === 'diagnostico_omitido')   return `${ev.razon}`;
+    if (t === 'item_seleccionado')     return `#${ev.indice} · ${ev.item_id} · concepto ${ev.concepto} · dif ${ev.dificultad} · formato ${ev.formato}`;
+    if (t === 'actividad_presentada')  return `${escapeHtml(ev.prompt || '')}`;
+    if (t === 'respuesta_evaluada')    return `${ev.item_id} · resultado=${ev.resultado} · gap=${ev.gap} · hab_pre=${ev.habilidad_pre}`;
+    if (t === 'dificultad_aumentada')  return `habilidad → ${ev.habilidad} · concepto dominado: ${ev.concepto_dominado || '—'}`;
+    if (t === 'concepto_remediado')    return `habilidad → ${ev.habilidad} · remediar: ${ev.concepto || '—'}`;
+    if (t === 'dificultad_reducida')   return `habilidad → ${ev.habilidad} · ${ev.razon}`;
+    if (t === 'perfil_actualizado')    return `tasa acierto ${(ev.tasa_acierto*100).toFixed(0)}% · habilidad final ${ev.habilidad_final} (Δ ${ev.delta_habilidad.toFixed(2)}) · promoción ${ev.promocion ? 'sí' : 'no'}`;
+    if (t === 'sesion_completada')     return `Cierre · ${ev.student_id} · ${ev.items} ítems · tasa ${(ev.tasa_acierto*100).toFixed(0)}%`;
+    if (t === 'sin_items_disponibles') return `Banco agotado en el rango actual`;
+    return JSON.stringify(ev).slice(0, 80);
+  }
+
+  function addTimelineItem(ev) {
+    const tl = document.getElementById('timeline');
+    const empty = tl.querySelector('.empty');
+    if (empty) empty.remove();
+    const item = document.createElement('div');
+    item.className = 'tl-item';
+    const cls = dotClass(ev);
+    item.innerHTML = `<div class="tl-dot ${cls}"></div><div>
+      <div class="tl-node">${NODE_LABELS[ev.type] || ev.type}</div>
+      <div class="tl-detail">${escapeHtml(describeEvent(ev))}</div>
+    </div>`;
+    tl.appendChild(item);
+  }
+
+  let _lastEventsLen = 0;
+
+  function applySnapshot(snap) {
+    if (!snap) return;
+    const perfil = snap.perfil_final || {};
+    const stu = snap.student || {};
+    const promociona = perfil.promocion;
+
+    if (stu.nombre) {
+      document.getElementById('case-title').textContent =
+        `${stu.nombre} · ${stu.id || ''}`;
+      document.getElementById('case-sub').textContent =
+        `${stu.curso || '—'} · ${stu.dominio || ''} · ${stu.preferencia_formato || ''}`;
+    }
+    if (snap.habilidad !== undefined && snap.habilidad !== 0) {
+      document.getElementById('pct-score').textContent = Number(snap.habilidad).toFixed(1);
+    }
+    if (snap.done) {
+      const badge = document.getElementById('risk-badge');
+      if (promociona) {
+        badge.className = 'risk-badge risk-promociona';
+        badge.textContent = '🟢 PROMOCIONA';
+      } else {
+        badge.className = 'risk-badge risk-consolida';
+        badge.textContent = '🟡 CONSOLIDA';
+      }
+    }
+
+    (snap.events || []).slice(_lastEventsLen).forEach(addTimelineItem);
+    _lastEventsLen = (snap.events || []).length;
+
+    if (snap.done) renderResults(snap);
+  }
+
+  function renderResults(snap) {
+    const perfil = snap.perfil_final || {};
+    const evals = snap.evaluaciones || [];
+    const body = document.getElementById('results-body');
+    let html = '';
+
+    // KPIs
+    html += `<div class="kpi-grid">
+      <div class="kpi"><div class="kpi-value">${perfil.items_resueltos ?? 0}</div><div class="kpi-label">Ítems</div></div>
+      <div class="kpi"><div class="kpi-value">${((perfil.tasa_acierto ?? 0) * 100).toFixed(0)}%</div><div class="kpi-label">Acierto</div></div>
+      <div class="kpi"><div class="kpi-value">${perfil.habilidad_final ?? '—'}</div><div class="kpi-label">Habilidad final</div></div>
+      <div class="kpi"><div class="kpi-value">${(perfil.delta_habilidad ?? 0) >= 0 ? '+' : ''}${(perfil.delta_habilidad ?? 0).toFixed(2)}</div><div class="kpi-label">Δ habilidad</div></div>
+    </div>`;
+
+    // Progreso de habilidad
+    const habMax = 10, habMin = 1;
+    const pct = Math.max(0, Math.min(100, ((perfil.habilidad_final - habMin) / (habMax - habMin)) * 100));
+    html += `<div class="section-label">📈 Trayectoria de habilidad</div>
+      <div style="font-size:.78rem; color:var(--muted); display:flex; justify-content:space-between;">
+        <span>inicial ${perfil.habilidad_inicial ?? '—'}</span>
+        <span>final <strong style="color:var(--text);">${perfil.habilidad_final ?? '—'}</strong></span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>`;
+
+    // Tabla de ítems
+    if (evals.length) {
+      html += `<div class="section-label">📊 Ítems aplicados</div>
+        <table class="tx-table"><thead><tr>
+          <th>#</th><th>Ítem</th><th>Concepto</th><th>Dificultad</th>
+          <th>Habilidad pre</th><th>Gap</th><th>Resultado</th>
+        </tr></thead><tbody>`;
+      evals.forEach((e, i) => {
+        html += `<tr>
+          <td>${i + 1}</td>
+          <td>${escapeHtml(e.item_id)}</td>
+          <td>${escapeHtml(e.concepto)}</td>
+          <td>${e.dificultad_item}</td>
+          <td>${e.habilidad_pre}</td>
+          <td>${e.gap > 0 ? '+' : ''}${e.gap}</td>
+          <td><span class="tag ${e.resultado}">${e.resultado}</span></td>
+        </tr>`;
+      });
+      html += `</tbody></table>`;
+    }
+
+    // Conceptos dominados
+    if ((perfil.conceptos_dominados || []).length) {
+      html += `<div class="section-label">✅ Conceptos dominados</div>
+        <div class="card-block dom">${perfil.conceptos_dominados.map(c => escapeHtml(c)).join(' · ')}</div>`;
+    }
+
+    // Conceptos a remediar
+    if ((perfil.conceptos_a_remediar || []).length) {
+      html += `<div class="section-label">🔁 Conceptos a remediar</div>
+        <div class="card-block rem">${perfil.conceptos_a_remediar.map(c => escapeHtml(c)).join(' · ')}</div>`;
+    }
+
+    // Recomendación
+    if (perfil.recomendacion_proxima) {
+      html += `<div class="section-label">🎯 Recomendación próxima sesión</div>
+        <div class="card-block rec">${escapeHtml(perfil.recomendacion_proxima)}</div>`;
+    }
+
+    // Reporte
+    if (snap.reporte) {
+      html += `<div class="section-label">📝 Reporte ejecutivo</div>
+        <div class="resumen-box">${escapeHtml(snap.reporte)}</div>`;
+    }
+
+    body.innerHTML = html;
+  }
+
+  function escapeHtml(s) {
+    return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  async function iniciarSesion() {
+    const sid = document.getElementById('stu-select').value;
+    const btn = document.getElementById('btn-procesar');
+    const tl = document.getElementById('timeline');
+    const body = document.getElementById('results-body');
+
+    btn.disabled = true; btn.textContent = 'Procesando…';
+    tl.innerHTML = '';
+    body.innerHTML = '<div class="empty"><div class="empty-icon">⚙️</div>Procesando sesión adaptativa…</div>';
+    _lastEventsLen = 0;
+    const rb = document.getElementById('risk-badge');
+    rb.className = 'risk-badge risk-empty'; rb.textContent = '— sesión';
+    document.getElementById('case-title').textContent = 'Procesando…';
+    document.getElementById('case-sub').textContent = '— · —';
+    document.getElementById('pct-score').textContent = '—';
+
+    const threadId = `tutor-${sid}-${Date.now()}`;
+    const url = `${BASE}/api/stream?thread_id=${encodeURIComponent(threadId)}&student_id=${encodeURIComponent(sid)}`;
+
+    try {
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop();
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          try {
+            const msg = JSON.parse(line);
+            if (msg.type === 'snapshot') applySnapshot(msg.snapshot);
+            if (msg.type === 'error') body.innerHTML = `<div class="empty" style="color:var(--rojo)">Error: ${escapeHtml(msg.detail)}</div>`;
+          } catch {}
+        }
+      }
+    } catch (err) {
+      body.innerHTML = `<div class="empty" style="color:var(--rojo)">Error de conexión: ${escapeHtml(err.message)}</div>`;
+    } finally {
+      btn.disabled = false; btn.textContent = 'Iniciar sesión de tutoría →';
+    }
+  }
+</script>
+</body>
+</html>

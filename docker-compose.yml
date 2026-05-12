@@ -155,9 +155,16 @@ services:
 
   case11:
     build:
-      context: cases/11-educacion-tutor-adaptativo/demo
+      context: cases/11-educacion-tutor-adaptativo/backend
     ports:
-      - "127.0.0.1:9011:80"
+      - "127.0.0.1:8011:8011"
+    volumes:
+      - ./cases/11-educacion-tutor-adaptativo/data:/app/data:ro
+      - ./cases/11-educacion-tutor-adaptativo/backend/web:/app/web:ro
+    environment:
+      - DATA_DIR=/app/data
+      - WEB_DIR=/app/web
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
 
   case12:
     build:
@@ -180,9 +187,16 @@ services:
 
   case15:
     build:
-      context: cases/15-ecommerce-postventa/demo
+      context: cases/15-ecommerce-postventa/backend
     ports:
-      - "127.0.0.1:9015:80"
+      - "127.0.0.1:8015:8015"
+    volumes:
+      - ./cases/15-ecommerce-postventa/data:/app/data:ro
+      - ./cases/15-ecommerce-postventa/backend/web:/app/web:ro
+    environment:
+      - DATA_DIR=/app/data
+      - WEB_DIR=/app/web
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
 
   case16:
     build:

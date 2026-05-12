@@ -1,8 +1,8 @@
 # ☁️ Migración a la Nube — AWS
 
 > [!NOTE]
-> **Versión**: 4.7.0 | **Estado**: Guía estratégica | **Audiencia**: Arquitectos Cloud, DevOps, CTO/Tech Leads, FinOps
-> **Alcance**: portar el portfolio (15 backends FastAPI + 10 demos estáticas + portal) desde Docker local a AWS, con análisis técnico, paso a paso, costos y trade-offs.
+> **Versión**: 4.10.0 | **Estado**: Guía estratégica | **Audiencia**: Arquitectos Cloud, DevOps, CTO/Tech Leads, FinOps
+> **Alcance**: portar el portfolio (18 backends FastAPI + 10 demos estáticas + portal) desde Docker local a AWS, con análisis técnico, paso a paso, costos y trade-offs.
 
 ---
 
@@ -222,8 +222,8 @@ aws ecr get-login-password --region us-east-1 \
   | docker login --username AWS --password-stdin <acct>.dkr.ecr.us-east-1.amazonaws.com
 
 docker build -t lgr/case01 cases/01-soporte-cliente-omnicanal/backend
-docker tag lgr/case01:latest <acct>.dkr.ecr.us-east-1.amazonaws.com/lgr/case01:v4.7.0
-docker push <acct>.dkr.ecr.us-east-1.amazonaws.com/lgr/case01:v4.7.0
+docker tag lgr/case01:latest <acct>.dkr.ecr.us-east-1.amazonaws.com/lgr/case01:v4.10.0
+docker push <acct>.dkr.ecr.us-east-1.amazonaws.com/lgr/case01:v4.10.0
 ```
 
 > [!TIP]
@@ -292,7 +292,7 @@ Task definition por caso (extracto JSON):
   "taskRoleArn": "arn:aws:iam::<acct>:role/lgr-case01-task",
   "containerDefinitions": [{
     "name": "case01",
-    "image": "<acct>.dkr.ecr.us-east-1.amazonaws.com/lgr/case01:v4.7.0",
+    "image": "<acct>.dkr.ecr.us-east-1.amazonaws.com/lgr/case01:v4.10.0",
     "portMappings": [{"containerPort": 8001, "protocol": "tcp"}],
     "secrets": [
       {"name": "OPENAI_API_KEY", "valueFrom": "arn:aws:secretsmanager:...:lgr/prod/openai:OPENAI_API_KEY::"}
@@ -387,7 +387,7 @@ jobs:
 
 ## 🛡️ Mapeo de las 8 capas de seguridad → AWS
 
-| Capa local (v4.7.0) | Equivalente AWS | Mejora cloud |
+| Capa local (v4.10.0) | Equivalente AWS | Mejora cloud |
 |:---|:---|:---|
 | 🐳 Non-root, imágenes pineadas | Fargate + `readonlyRootFilesystem=true` + ECR scan | + Inspector v2 runtime |
 | 🌐 `127.0.0.1` | Tasks en subnet privada, ALB único punto público | + WAF + Shield Standard |

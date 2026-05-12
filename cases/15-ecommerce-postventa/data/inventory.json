@@ -1,0 +1,7 @@
+{
+  "ZAP-CAS-44": {"nombre": "Zapato casual talla 44", "stock_disponible": 12, "precio": 69990, "ubicacion": "CD-Quilicura"},
+  "ZAP-CAS-42": {"nombre": "Zapato casual talla 42", "stock_disponible": 8, "precio": 69990, "ubicacion": "CD-Quilicura"},
+  "CHA-LANA-AZU-M": {"nombre": "Chaqueta lana azul talla M", "stock_disponible": 0, "precio": 119990, "ubicacion": "CD-Quilicura"},
+  "CHA-LANA-NEG-M": {"nombre": "Chaqueta lana negra talla M", "stock_disponible": 4, "precio": 119990, "ubicacion": "CD-Quilicura"},
+  "POL-XL-AZ": {"nombre": "Polera oversize azul talla XL", "stock_disponible": 23, "precio": 54990, "ubicacion": "CD-Pudahuel"}
+}

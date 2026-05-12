@@ -1,6 +1,6 @@
 # Costos de operación — DEMO vs LIVE
 
-> **Versión**: 4.8.0 | **Filosofía**: DEMO-first. Todos los casos funcionan sin claves externas. LIVE es **opt-in caso por caso**.
+> **Versión**: 4.10.0 | **Filosofía**: DEMO-first. Todos los casos funcionan sin claves externas. LIVE es **opt-in caso por caso**.
 
 Este documento responde a una pregunta concreta: *"el repo está operativo por DEMOs — ¿qué hace falta y cuánto cuesta para llevarlo a producción real?"*. La respuesta corta: la mayoría de casos cruza a LIVE con solo `OPENAI_API_KEY`. Hay tres casos con stubs de proveedores SaaS que requieren contratos enterprise.
 
@@ -104,7 +104,7 @@ Ver guía dedicada en [CLOUD_AWS.md](CLOUD_AWS.md): PoC ~25 USD · Producción ~
 ## 6. Lo que **no** cuesta
 
 - Todos los stubs DEMO funcionan sin internet — útil para demos en cliente, talleres y CI.
-- El portfolio completo en local consume **~600 MB RAM** con todos los servicios levantados (medido v4.7.0).
+- El portfolio completo en local consume **~600 MB RAM** con todos los servicios levantados (medido v4.10.0).
 - No hay vendor lock-in: el cliente OpenAI se puede sustituir por un provider local (Ollama, vLLM, Anthropic, Mistral) cambiando 4 líneas en `_llm_invoke()` de cada caso.
 - No hay licencias propietarias: stack es Apache 2.0 / MIT (FastAPI, LangGraph, Pydantic).
 

@@ -1,10 +1,10 @@
 id: "15"
 slug: "15-ecommerce-postventa"
-name: "Ecommerce Postventa"
-status: "scaffold"
-version: "4.0.0"
-working_dir: demo
+name: "E-commerce Postventa"
+status: "operativo"
+version: "4.10.0"
+working_dir: backend
 ports:
-  - 9015
-compose: demo/compose.yml
-dockerfile: demo/Dockerfile
+  - 8015
+compose: backend/compose.yml
+dockerfile: backend/Dockerfile
