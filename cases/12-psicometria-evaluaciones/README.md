@@ -1,69 +1,131 @@
-# Caso 12: Psicometría y Evaluaciones
+# Caso 12 — Psicometría y Evaluaciones
 
 > [!NOTE]
-> **Estado**: `SCAFFOLD` | **Versión repo**: 4.0.0 | **Tipo**: Agente con estado y validación experta
+> **Estado**: `OPERATIVO` | **Versión repo**: 4.11.0 | **Tipo**: Validador psicométrico de instrumentos con loop de revisión
 
-Automatiza la generación, validación psicométrica y aplicación de instrumentos de evaluación (tests, cuestionarios, baterías de selección) produciendo ítems calibrados, análisis de resultados con métricas de confiabilidad y validez, e informes individuales y grupales. Permite a los equipos de recursos humanos, psicólogos educativos e investigadores escalar la producción de evaluaciones de alta calidad técnica.
+Construcción, validación y baremación de instrumentos de evaluación (tests de selección, escalas de clima). El agente toma la especificación del instrumento, revisa el banco de ítems candidatos, ensambla la versión final, simula su aplicación a la cohorte piloto y produce un análisis psicométrico completo con métricas clásicas (α de Cronbach, dificultad, discriminación, DIF entre grupos), baremos por percentiles, informes individuales con banda de desempeño e informe grupal ejecutivo.
 
 ---
 
 ## Objetivo de negocio
 
-Las áreas de RRHH, selección de talento e instituciones educativas necesitan instrumentos de evaluación válidos y confiables, pero su construcción manual requiere expertos en psicometría y semanas de trabajo. Este agente recibe las especificaciones del instrumento (constructo, población objetivo, número de ítems, formato de respuesta), genera ítems candidatos aplicando buenas prácticas psicométricas, ejecuta análisis de sesgo y dificultad sobre datos piloto, calibra el instrumento y produce los informes individuales con interpretación de resultados en lenguaje no técnico para el evaluado y en lenguaje técnico para el evaluador.
+Las áreas de selección de talento, evaluación educativa y clima organizacional necesitan instrumentos válidos y confiables, pero su construcción manual requiere expertos en psicometría y semanas de trabajo. Este agente recibe las especificaciones (constructo, formato, n_items, población, grupos a comparar), aplica criterios técnicos sobre los ítems candidatos, ejecuta el pilotaje simulado, mide la calidad psicométrica del instrumento, itera excluyendo ítems problemáticos hasta lograr una confiabilidad aceptable o agotar el presupuesto de iteraciones, y entrega tres productos: baremos, informes individuales interpretados y un informe ejecutivo para el comité técnico.
 
-## Flujo propuesto (LangGraph)
+## Flujo (LangGraph)
 
 ```mermaid
 graph TD
-    A[Especificación del instrumento] --> B[Nodo: definir_constructo]
-    B --> C[Nodo: generar_items_candidatos]
-    C --> D[Nodo: revision_experto]
-    D --> E{Router: calidad_items}
-    E -->|Ítems rechazados| C
-    E -->|Aprobados| F[Nodo: ensamblar_instrumento]
-    F --> G[Nodo: aplicar_evaluacion]
-    G --> H[Nodo: analisis_psicometrico]
-    H --> I{Router: validez_instrumento}
-    I -->|Baja confiabilidad| J[Nodo: revisar_items_problematicos]
-    J --> C
-    I -->|Válido| K[Nodo: generar_informe_individual]
-    K --> L[Nodo: generar_informe_grupal]
-    L --> M[Salida: reportes_y_base_de_datos]
+    A[Especificación + banco ítems] --> B[cargar_especificacion]
+    B --> C[revisar_items]
+    C --> D[ensamblar_instrumento]
+    D --> E[aplicar_evaluacion]
+    E --> F[analisis_psicometrico]
+    F --> G{Router validez}
+    G -->|alpha ≥ umbral o tope| H[calibrar_baremos]
+    G -->|alpha < umbral & iter < tope| I[revisar_items_problematicos]
+    I --> F
+    H --> J[generar_informe_individual]
+    J --> K[generar_informe_grupal]
+    K --> END[Reporte ejecutivo]
 ```
 
-### Nodos principales
+**10 nodos · 1 router (validez) · 1 loop con tope (`max_iteraciones_validez = 2`).**
+
+### Nodos
 
 | Nodo | Descripción |
 |---|---|
-| `definir_constructo` | Estructura la tabla de especificaciones y los dominios del instrumento |
-| `generar_items_candidatos` | Produce ítems variados respetando niveles cognitivos y formatos |
-| `revision_experto` | Aplica criterios técnicos de claridad, sesgo y representatividad |
-| `ensamblar_instrumento` | Selecciona y ordena los ítems aprobados, balancea la dificultad |
-| `aplicar_evaluacion` | Administra el instrumento con lógica adaptativa si corresponde |
-| `analisis_psicometrico` | Calcula alpha de Cronbach, índices de dificultad y discriminación (IRT) |
-| `revisar_items_problematicos` | Identifica y excluye ítems que degradan la confiabilidad |
-| `generar_informe_individual` | Produce perfil del evaluado con percentiles e interpretación |
-| `generar_informe_grupal` | Sintetiza resultados del grupo con distribuciones y tendencias |
+| `cargar_especificacion` | Carga instrumento, política, banco de ítems candidatos y cohorte declarada |
+| `revisar_items` | Revisión experta determinista: excluye por claridad, representatividad o sesgo estimado |
+| `ensamblar_instrumento` | Selecciona hasta `n_items_objetivo` balanceando conceptos |
+| `aplicar_evaluacion` | Simula la matriz de respuestas piloto (modelo Rasch‐like dicotómico o Likert) |
+| `analisis_psicometrico` | Calcula α de Cronbach, dificultad `p`, discriminación item-total y DIF entre grupos |
+| `revisar_items_problematicos` | Excluye ítems con dificultad fuera de rango, discriminación baja o DIF alto |
+| `calibrar_baremos` | Calcula media, mediana, P25/P50/P75 sobre los puntajes totales |
+| `generar_informe_individual` | Asigna percentil + banda interpretativa por evaluado |
+| `generar_informe_grupal` | Distribución por banda, medias por grupo, reporte ejecutivo (LLM opt-in) |
 
-## Stack técnico previsto
+## Stack técnico
 
 | Capa | Tecnología |
 |---|---|
-| Orquestación | LangGraph `StateGraph` |
+| Orquestación | LangGraph `StateGraph` + `MemorySaver` |
 | API | FastAPI + uvicorn |
-| LLM | OpenAI GPT-4o-mini (modo LIVE) / respuestas mock (modo DEMO) |
-| Análisis estadístico | Python (scipy, pingouin, py-irt) |
-| Almacenamiento | PostgreSQL (ítems, aplicaciones, resultados) |
-| Reportes | Jinja2 + WeasyPrint (PDF) |
+| Streaming | `GET /api/stream` (NDJSON, `stream_mode="values"`) |
+| Psicometría | Cálculos puros en `statistics` + `math` (sin scipy) |
+| LLM | OpenAI (LIVE opt-in vía `OPENAI_API_KEY`) — reporte ejecutivo enriquecido |
+| Auth | DEMO sin token · OAuth2/OIDC opt-in (`USE_OAUTH2=true`) |
+| Observabilidad | Logging JSON estructurado con `trace_id`, `/metrics` |
 
-## Estado actual
+## Endpoints
 
-Este caso es un **scaffold**: la estructura de la demo estática existe,
-la implementación del backend con LangGraph está pendiente.
+| Método | Ruta | Propósito |
+|---|---|---|
+| `GET` | `/` | UI web embebida |
+| `GET` | `/web/` | Recursos estáticos |
+| `GET` | `/health`, `/healthz` | Liveness + modo DEMO/LIVE |
+| `GET` | `/ready` | Readiness (compila el grafo) |
+| `GET` | `/metrics` | Latencias, requests, errores |
+| `POST` | `/api/run` | Ejecuta el flujo completo y devuelve el snapshot final |
+| `GET` | `/api/stream` | Streaming NDJSON con snapshots por paso |
 
-Para contribuir o elevar este caso, consulta [CONTRIBUTING.md](../../CONTRIBUTING.md).
+## Modo DEMO / LIVE
+
+- **DEMO** (sin `OPENAI_API_KEY`): pipeline 100% funcional — revisión, pilotaje simulado, métricas, baremos, informes y reporte ejecutivo fallback. Determinista por cohorte y por id de ítem (crc32).
+- **LIVE** (con `OPENAI_API_KEY`): el reporte ejecutivo grupal se redacta con GPT-4o-mini bajo prompt acotado (≤ 220 palabras, español).
+
+Modo visible en `GET /health.mode` y como badge en la UI.
+
+## Datos DEMO (`data/`)
+
+| Archivo | Contenido |
+|---|---|
+| [`instruments.json`](data/instruments.json) | 3 instrumentos: 2 dicotómicos + 1 Likert |
+| [`item_banks.json`](data/item_banks.json) | Bancos de ítems candidatos por instrumento (12, 10, 8 ítems) |
+| [`policy.json`](data/policy.json) | Umbrales transversales: tope iteraciones, bandas de percentil |
+
+### Escenarios cubiertos
+
+| Instrumento | Formato | Cohorte | Caso de uso |
+|---|---|---:|---|
+| `INST-COMP-DIG-01` | Dicotómico | 40 | Competencias digitales — selección admin |
+| `INST-RAZ-LOG-02` | Dicotómico | 35 | Razonamiento lógico — admisión técnica (loop psicométrico activado por DIF) |
+| `INST-ESC-BIE-03` | Likert 5 pts | 50 | Bienestar laboral — clima por área |
+
+## Ejecutar
+
+### Local
+
+```bash
+cd cases/12-psicometria-evaluaciones/backend
+pip install -r requirements.txt
+uvicorn src.api:app --host 0.0.0.0 --port 8012
+# Abrir http://localhost:8012/
+```
+
+### Docker (caso aislado)
+
+```bash
+cd cases/12-psicometria-evaluaciones/backend
+docker compose up --build
+```
+
+### Compose raíz
+
+```bash
+docker compose up --build case12
+```
+
+## Tests
+
+```bash
+cd cases/12-psicometria-evaluaciones/backend
+python -m pytest tests/ -q
+```
+
+**29 tests** — 19 de grafo (helpers psicométricos + routers + flujos e2e por instrumento) + 10 de API.
 
 ---
 
 > [!TIP]
-> Ver los casos **09**, **10** y **13** como referencia de implementación industrial.
+> Ver casos **09**, **10** y **13** como referencia técnica viva. Este caso reutiliza el patrón de auth/middleware/metrics de los casos 04, 05, 07, 11 y 14.

@@ -5,6 +5,41 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/1.0.0/).
 
 ---
 
+## v4.11.0 — 2026-05-15
+
+### Agregado
+
+- **Caso 12 — Psicometría y Evaluaciones elevado a OPERATIVO**: backend FastAPI + LangGraph completo con modo DEMO/LIVE.
+  - `StateGraph` con 10 nodos: `cargar_especificacion → revisar_items → ensamblar_instrumento → aplicar_evaluacion → analisis_psicometrico → {router validez: valido | requiere_revision}`. Rama `valido` o tope alcanzado → `calibrar_baremos → generar_informe_individual → generar_informe_grupal → END`. Rama `requiere_revision` → `revisar_items_problematicos → analisis_psicometrico` (loop con tope `max_iteraciones_validez = 2`).
+  - Router único de validez con loop psicométrico: si α de Cronbach < `umbral_alpha` del instrumento, se re-ingresa al análisis tras excluir ítems problemáticos (dificultad fuera de rango, discriminación item-total baja o DIF entre grupos sobre umbral). Tope evita ciclos infinitos.
+  - Helpers psicométricos deterministas, puros en `statistics` + `math` (sin scipy ni pingouin): `alpha_cronbach` (K/(K-1) · (1 − Σvar_item / var_total)), `indice_dificultad` (p para dicotómico, media para Likert), `indice_discriminacion` (Pearson item‑total corregido), `dif_entre_grupos` (|p_grupo_a − p_grupo_b|).
+  - Simulador de pilotaje determinista (`integrations.generate_responses`) — modelo Rasch‐like dicotómico (sigmoide sobre habilidad − dificultad + sesgo direccional por grupo) y modelo aditivo Likert 1‑5 con ítems inversos. Dificultad efectiva por ítem combina claridad/representatividad + spread por `crc32` del id (estable entre procesos, no usa `hash()` que está randomizado por PYTHONHASHSEED).
+  - Modo DEMO: 3 instrumentos calibrados —
+    - `INST-COMP-DIG-01` (Competencias Digitales, dicotómico, banco 12 → objetivo 10, cohorte 40, 2 grupos interno/externo): CD-12 rechazado en revisión por sesgo (0.18 > umbral 0.15).
+    - `INST-RAZ-LOG-02` (Razonamiento Lógico, dicotómico, banco 10 → objetivo 8, cohorte 35, 2 modalidades): RL-07 y RL-09 rechazados en revisión; loop psicométrico activado por DIF residual.
+    - `INST-ESC-BIE-03` (Bienestar Laboral, Likert 5, banco 8 = objetivo 8, cohorte 50, 3 áreas): 2 ítems inversos (BL-03 estrés, BL-06 desconexión) recodeados antes de generar respuestas.
+  - Modo LIVE: GPT-4o-mini redacta el informe ejecutivo grupal con prompt acotado (≤ 220 palabras, español). El análisis psicométrico sigue siendo determinista en LIVE; sólo cambia la redacción del reporte.
+  - Calibración baremos por percentiles (P25/P50/P75) sobre puntajes totales. Bandas por defecto: bajo (≤P25), medio_bajo (≤P50), medio_alto (≤P75), alto (>P75). Etiquetas configurables en `policy.json`.
+  - 29 tests (19 graph flow + 10 API) — todos verdes. Cubren: helpers (`alpha_cronbach` con datos consistentes vs azarosos, dificultad dicotómica/Likert, discriminación positiva e invertida, DIF con y sin diferencia), router de validez en sus 3 estados, 3 flujos end-to-end por instrumento, baremos ordenados, percentiles 0–100, distribución de bandas, eventos del pipeline completos.
+  - Docker: `Dockerfile` non-root + `compose.yml` aislado (puerto 8012). Misma plantilla observable que casos 04/05/06/07/11/14/15 (8 capas de seguridad: rate limit, OAuth2/OIDC opt-in, trace IDs, JSON structured logging, `/metrics`, healthchecks, validación Pydantic, CORS controlado).
+  - UI dark theme acento teal (#14b8a6) con selector de instrumento, vista previa por escenario con resultado esperado, badge DEMO/LIVE, timeline streaming NDJSON con dots coloreados por severidad, KPIs (α · ítems activos · evaluados · iteraciones), distribución por banda, tabla de métricas por ítem (dificultad / discriminación / DIF / estado), medias por grupo, tabla de informes individuales (primeros 10) e informe ejecutivo Markdown.
+- **`docker-compose.yml` raíz**: reemplazo del bloque legacy `case12` (demo estática Nginx en :9012) por el backend operativo en :8012 con volúmenes para data y web, env `OPENAI_API_KEY` opt-in.
+- **Portal raíz (`index.html`)**: card de caso 12 reemplazada de `LEGACY` → `OPERATIVO` apuntando a `http://localhost:8012/web/`; contador `18/25` → `19/25`, scaffolds `7` → `6`, lista canónica de operativos actualizada, banner principal → v4.11.0.
+- **ROADMAP v4.11.0**: caso 12 movido de scaffold a operativos (19 casos totales). Scaffolds Ola 3 reducidos a 6.
+
+### Modificado
+
+- `README.md`: badge de versión → 4.11.0, contador de operativos 18 → 19 (76%), caso 12 agregado en tabla de operativos, scaffolds 7 → 6.
+- `ROADMAP.md`: versión → 4.11.0, caso 12 marcado como completado en Ola 3, scaffolds 7 → 6.
+- `cases/12-psicometria-evaluaciones/case.yml`: `status: scaffold` → `operativo`, `version: 4.0.0` → `4.11.0`, `working_dir: demo` → `backend`, puerto `9012` → `8012`, compose/dockerfile apuntan a `backend/`.
+- `cases/12-psicometria-evaluaciones/README.md`: reescrito completo siguiendo el estándar (estado OPERATIVO, flujo Mermaid, tabla de nodos, stack técnico, endpoints, modo DEMO/LIVE, datos DEMO, 3 escenarios, comandos local/Docker/compose, tests).
+
+### Eliminado
+
+- `cases/12-psicometria-evaluaciones/demo/` (legacy nginx + index estático): reemplazado por backend real con LangGraph, FastAPI y UI dinámica.
+
+---
+
 ## v4.10.0 — 2026-05-11
 
 ### Agregado

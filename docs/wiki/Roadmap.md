@@ -1,6 +1,6 @@
 # Hoja de Ruta
 
-> **Version**: 4.10.0 | **Estado**: Industrial
+> **Version**: 4.11.0 | **Estado**: Industrial
 
 El estandar tecnico del repositorio ya esta definido. Ver el [SKILL de creacion de casos](https://github.com/vladimiracunadev-create/langgraph-realworld/blob/main/.agents/skills/crear_caso/SKILL.md) antes de ejecutar cualquier tarea.
 
@@ -8,8 +8,8 @@ El estandar tecnico del repositorio ya esta definido. Ver el [SKILL de creacion 
 
 ## Estado actual
 
-18 casos operativos e industriales: 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 13, 14, 15, 17, 19, 21, 25.
-10 casos scaffold listos para elevar.
+19 casos operativos e industriales: 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15, 17, 19, 21, 25.
+6 casos scaffold listos para elevar.
 
 ---
 

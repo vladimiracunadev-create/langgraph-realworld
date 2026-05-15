@@ -1,9 +1,9 @@
 ﻿# Guia de Instalacion y Despliegue
 
 > [!NOTE]
-> **Version**: 4.10.0 | **Estado**: Estable | **Audiencia**: Desarrolladores, DevOps
+> **Version**: 4.11.0 | **Estado**: Estable | **Audiencia**: Desarrolladores, DevOps
 
-Esta guia explica como levantar el repositorio completo y como ejecutar por separado los casos operativos 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 13, 14, 15, 17, 19, 21 y 25.
+Esta guia explica como levantar el repositorio completo y como ejecutar por separado los casos operativos 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15, 17, 19, 21 y 25.
 
 ---
 

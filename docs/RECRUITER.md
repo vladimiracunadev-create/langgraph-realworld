@@ -1,13 +1,13 @@
 ﻿# Guia para Recruiters, Hiring Managers y Tech Leads
 
 > [!NOTE]
-> **Version**: 4.10.0 | **Estado**: Industrial | **Audiencia**: Recruiters, Lideres de Ingenieria y Evaluadores de Talento
+> **Version**: 4.11.0 | **Estado**: Industrial | **Audiencia**: Recruiters, Lideres de Ingenieria y Evaluadores de Talento
 
-Este repositorio no es solo una coleccion de prompts o demos triviales. Muestra como construir 25 casos de IA aplicada con arquitectura clara, **18 backends operativos** con flujos LangGraph, APIs reales, operacion portable y una postura de seguridad compatible con el uso local y la revision tecnica seria.
+Este repositorio no es solo una coleccion de prompts o demos triviales. Muestra como construir 25 casos de IA aplicada con arquitectura clara, **19 backends operativos** con flujos LangGraph, APIs reales, operacion portable y una postura de seguridad compatible con el uso local y la revision tecnica seria.
 
 ## Lo que demuestra
 
-- Backend AI-first con FastAPI y LangGraph (18 backends operativos en `cases/01..25`).
+- Backend AI-first con FastAPI y LangGraph (19 backends operativos en `cases/01..25`).
 - Casos de negocio operables y no solo maquetas visuales.
 - Degradacion DEMO/LIVE pensada para demos, evaluacion tecnica y quickstart.
 - Capacidad de endurecer CI/CD, secretos, herramientas y APIs sin romper la experiencia del repo.

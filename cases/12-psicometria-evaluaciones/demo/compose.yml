@@ -1,5 +1,0 @@
-services:
-  demo:
-    build: .
-    ports:
-      - "9012:80"

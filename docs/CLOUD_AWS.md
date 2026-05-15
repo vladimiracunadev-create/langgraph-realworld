@@ -1,8 +1,8 @@
 # ☁️ Migración a la Nube — AWS
 
 > [!NOTE]
-> **Versión**: 4.10.0 | **Estado**: Guía estratégica | **Audiencia**: Arquitectos Cloud, DevOps, CTO/Tech Leads, FinOps
-> **Alcance**: portar el portfolio (18 backends FastAPI + 10 demos estáticas + portal) desde Docker local a AWS, con análisis técnico, paso a paso, costos y trade-offs.
+> **Versión**: 4.11.0 | **Estado**: Guía estratégica | **Audiencia**: Arquitectos Cloud, DevOps, CTO/Tech Leads, FinOps
+> **Alcance**: portar el portfolio (19 backends FastAPI + 9 demos estáticas + portal) desde Docker local a AWS, con análisis técnico, paso a paso, costos y trade-offs.
 
 ---
 
@@ -387,7 +387,7 @@ jobs:
 
 ## 🛡️ Mapeo de las 8 capas de seguridad → AWS
 
-| Capa local (v4.10.0) | Equivalente AWS | Mejora cloud |
+| Capa local (v4.11.0) | Equivalente AWS | Mejora cloud |
 |:---|:---|:---|
 | 🐳 Non-root, imágenes pineadas | Fargate + `readonlyRootFilesystem=true` + ECR scan | + Inspector v2 runtime |
 | 🌐 `127.0.0.1` | Tasks en subnet privada, ALB único punto público | + WAF + Shield Standard |
