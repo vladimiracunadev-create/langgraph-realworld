@@ -1,0 +1,38 @@
+{
+  "INST-COMP-DIG-01": [
+    {"id": "CD-01", "concepto": "ofimatica", "prompt": "¿Qué atajo de teclado guarda un archivo en la mayoría de aplicaciones de escritorio?", "respuesta_correcta": "Ctrl+S", "claridad": 0.95, "representatividad": 0.90, "sesgo_estimado": 0.05},
+    {"id": "CD-02", "concepto": "ofimatica", "prompt": "En una hoja de cálculo, ¿qué función suma un rango de celdas?", "respuesta_correcta": "SUMA / SUM", "claridad": 0.92, "representatividad": 0.88, "sesgo_estimado": 0.04},
+    {"id": "CD-03", "concepto": "navegacion_web", "prompt": "¿Qué indica el candado verde en la barra de direcciones del navegador?", "respuesta_correcta": "Conexion HTTPS / cifrada", "claridad": 0.88, "representatividad": 0.85, "sesgo_estimado": 0.06},
+    {"id": "CD-04", "concepto": "seguridad", "prompt": "¿Qué práctica reduce el riesgo de robo de contraseñas?", "respuesta_correcta": "Usar autenticacion en dos pasos", "claridad": 0.90, "representatividad": 0.92, "sesgo_estimado": 0.05},
+    {"id": "CD-05", "concepto": "ofimatica", "prompt": "Para enviar un correo a varias personas sin que vean entre sí los destinatarios se usa el campo:", "respuesta_correcta": "CCO / BCC", "claridad": 0.85, "representatividad": 0.80, "sesgo_estimado": 0.07},
+    {"id": "CD-06", "concepto": "navegacion_web", "prompt": "¿Qué archivo describe la estructura de un sitio web servida al navegador?", "respuesta_correcta": "HTML", "claridad": 0.90, "representatividad": 0.85, "sesgo_estimado": 0.06},
+    {"id": "CD-07", "concepto": "seguridad", "prompt": "Una contraseña robusta debería tener mínimo:", "respuesta_correcta": "12+ caracteres con mezcla de tipos", "claridad": 0.88, "representatividad": 0.90, "sesgo_estimado": 0.05},
+    {"id": "CD-08", "concepto": "ofimatica", "prompt": "Para fijar una columna al desplazarse en una hoja de cálculo se usa:", "respuesta_correcta": "Inmovilizar paneles", "claridad": 0.78, "representatividad": 0.82, "sesgo_estimado": 0.08},
+    {"id": "CD-09", "concepto": "navegacion_web", "prompt": "Las cookies se utilizan para:", "respuesta_correcta": "Mantener sesion y preferencias", "claridad": 0.82, "representatividad": 0.85, "sesgo_estimado": 0.07},
+    {"id": "CD-10", "concepto": "seguridad", "prompt": "Un correo con un enlace urgente pidiendo claves es típicamente:", "respuesta_correcta": "Phishing", "claridad": 0.92, "representatividad": 0.92, "sesgo_estimado": 0.04},
+    {"id": "CD-11", "concepto": "ofimatica", "prompt": "Para convertir un .docx a .pdf se usa:", "respuesta_correcta": "Exportar / Guardar como PDF", "claridad": 0.86, "representatividad": 0.78, "sesgo_estimado": 0.06},
+    {"id": "CD-12", "concepto": "navegacion_web", "prompt": "El protocolo predeterminado para resolver dominios a IP es:", "respuesta_correcta": "DNS", "claridad": 0.70, "representatividad": 0.65, "sesgo_estimado": 0.18}
+  ],
+  "INST-RAZ-LOG-02": [
+    {"id": "RL-01", "concepto": "series", "prompt": "Continúa la serie: 2, 4, 8, 16, ___", "respuesta_correcta": "32", "claridad": 0.95, "representatividad": 0.92, "sesgo_estimado": 0.05},
+    {"id": "RL-02", "concepto": "analogias", "prompt": "Médico es a Hospital como Profesor es a:", "respuesta_correcta": "Escuela", "claridad": 0.90, "representatividad": 0.88, "sesgo_estimado": 0.08},
+    {"id": "RL-03", "concepto": "proporciones", "prompt": "Si 3 obreros tardan 6 horas, ¿cuánto tardan 6 obreros al mismo ritmo?", "respuesta_correcta": "3 horas", "claridad": 0.88, "representatividad": 0.90, "sesgo_estimado": 0.10},
+    {"id": "RL-04", "concepto": "series", "prompt": "Continúa: 1, 4, 9, 16, ___", "respuesta_correcta": "25", "claridad": 0.92, "representatividad": 0.90, "sesgo_estimado": 0.06},
+    {"id": "RL-05", "concepto": "analogias", "prompt": "Pluma es a Escribir como Tijera es a:", "respuesta_correcta": "Cortar", "claridad": 0.94, "representatividad": 0.88, "sesgo_estimado": 0.05},
+    {"id": "RL-06", "concepto": "proporciones", "prompt": "El 20% de 250 es:", "respuesta_correcta": "50", "claridad": 0.90, "representatividad": 0.90, "sesgo_estimado": 0.07},
+    {"id": "RL-07", "concepto": "series", "prompt": "Continúa: 100, 81, 64, 49, ___", "respuesta_correcta": "36", "claridad": 0.65, "representatividad": 0.70, "sesgo_estimado": 0.25},
+    {"id": "RL-08", "concepto": "analogias", "prompt": "Frío es a Calor como Día es a:", "respuesta_correcta": "Noche", "claridad": 0.96, "representatividad": 0.92, "sesgo_estimado": 0.04},
+    {"id": "RL-09", "concepto": "proporciones", "prompt": "Si A es a B como 3 es a 5, y B = 25, ¿cuánto es A?", "respuesta_correcta": "15", "claridad": 0.75, "representatividad": 0.80, "sesgo_estimado": 0.22},
+    {"id": "RL-10", "concepto": "series", "prompt": "Continúa: 2, 3, 5, 8, 13, ___", "respuesta_correcta": "21", "claridad": 0.85, "representatividad": 0.85, "sesgo_estimado": 0.09}
+  ],
+  "INST-ESC-BIE-03": [
+    {"id": "BL-01", "concepto": "satisfaccion", "prompt": "Me siento valorado(a) por mi equipo de trabajo", "claridad": 0.92, "representatividad": 0.90, "sesgo_estimado": 0.06, "inverso": false},
+    {"id": "BL-02", "concepto": "satisfaccion", "prompt": "Tengo los recursos necesarios para hacer bien mi trabajo", "claridad": 0.90, "representatividad": 0.88, "sesgo_estimado": 0.05, "inverso": false},
+    {"id": "BL-03", "concepto": "estres", "prompt": "Termino la jornada física o emocionalmente agotado(a)", "claridad": 0.88, "representatividad": 0.92, "sesgo_estimado": 0.07, "inverso": true},
+    {"id": "BL-04", "concepto": "compromiso", "prompt": "Recomendaría a un amigo cercano trabajar en esta organización", "claridad": 0.94, "representatividad": 0.90, "sesgo_estimado": 0.04, "inverso": false},
+    {"id": "BL-05", "concepto": "balance", "prompt": "Logro mantener un balance saludable entre trabajo y vida personal", "claridad": 0.90, "representatividad": 0.90, "sesgo_estimado": 0.06, "inverso": false},
+    {"id": "BL-06", "concepto": "estres", "prompt": "Pienso en problemas del trabajo fuera del horario laboral", "claridad": 0.85, "representatividad": 0.88, "sesgo_estimado": 0.08, "inverso": true},
+    {"id": "BL-07", "concepto": "compromiso", "prompt": "Me visualizo trabajando aquí en los próximos 2 años", "claridad": 0.89, "representatividad": 0.86, "sesgo_estimado": 0.06, "inverso": false},
+    {"id": "BL-08", "concepto": "satisfaccion", "prompt": "Mi jefatura directa me apoya cuando necesito hacer mi trabajo", "claridad": 0.91, "representatividad": 0.92, "sesgo_estimado": 0.05, "inverso": false}
+  ]
+}

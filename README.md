@@ -2,12 +2,12 @@
 
 # 🤖 LangGraph Realworld
 
-### **25 casos de uso empresariales · 18 backends operativos · 100% DEMO sin APIs**
+### **25 casos de uso empresariales · 19 backends operativos · 100% DEMO sin APIs**
 
 **LangGraph · FastAPI · Python 3.11 · Docker · OAuth2 · LangSmith · uv (opcional)**
 
-[![Version](https://img.shields.io/badge/version-4.10.0-1f6feb?style=for-the-badge)](CHANGELOG.md)
-[![Operativos](https://img.shields.io/badge/operativos-18%2F25-3fb950?style=for-the-badge)](ROADMAP.md)
+[![Version](https://img.shields.io/badge/version-4.11.0-1f6feb?style=for-the-badge)](CHANGELOG.md)
+[![Operativos](https://img.shields.io/badge/operativos-19%2F25-3fb950?style=for-the-badge)](ROADMAP.md)
 [![Tests](https://img.shields.io/badge/tests-passing-3fb950?style=for-the-badge&logo=pytest&logoColor=white)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-MIT-yellow?style=for-the-badge)](LICENSE)
 
@@ -24,14 +24,14 @@
 </div>
 
 > Portafolio de **25 casos de uso empresariales** construidos con **LangGraph** y **FastAPI**:
-> **18 backends completamente operativos** (casos 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 13, 14, 15, 17, 19, 21 y 25) con streaming, OAuth2/OIDC opt-in, observabilidad LangSmith, `/metrics` por servicio, logging JSON estructurado y reverse proxy nginx + TLS.
+> **19 backends completamente operativos** (casos 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15, 17, 19, 21 y 25) con streaming, OAuth2/OIDC opt-in, observabilidad LangSmith, `/metrics` por servicio, logging JSON estructurado y reverse proxy nginx + TLS.
 > Los 9 casos restantes son scaffolds documentados listos para elevar al siguiente nivel.
 
 ### 📊 Estado del portfolio
 
 | 🎯 | Métrica | Valor |
 |:-:|:---|:---|
-| 🟢 | Casos operativos | **18 / 25** (72%) |
+| 🟢 | Casos operativos | **19 / 25** (76%) |
 | 🏭 | Casos industriales | **3** (09, 10, 13) |
 | 📋 | Scaffolds restantes | **9** (Ola 3) |
 | 🧪 | Tests por caso | 18-30, todos verdes |
@@ -55,7 +55,7 @@
 
 ---
 
-## 🏗️ Implementación Industrial — v4.10.0
+## 🏗️ Implementación Industrial — v4.11.0
 
 El estándar actual del repositorio se apoya en estos pilares:
 
@@ -93,6 +93,7 @@ El estándar actual del repositorio se apoya en estos pilares:
 | **09** | [👥 RRHH Screening & Agenda](cases/09-rrhh-screening-agenda/README.md) | `🏭 INDUSTRIAL` | FastAPI · LangGraph · MemorySaver · Resilience |
 | **10** | [🚀 Onboarding de Empleados](cases/10-onboarding-empleados/README.md) | `🏭 INDUSTRIAL` | FastAPI · LangGraph · RBAC · Integrations |
 | **11** | [🎓 Tutor Adaptativo](cases/11-educacion-tutor-adaptativo/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · Simulador IRT · 3 routers · Loop adaptativo |
+| **12** | [🧠 Psicometría y Evaluaciones](cases/12-psicometria-evaluaciones/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · α Cronbach · Discriminación · DIF · Loop validez |
 | **13** | [📊 Analista de Datos BI](cases/13-bi-analista-datos/README.md) | `🏭 INDUSTRIAL` | FastAPI · SQL Agent · Chart.js · DEMO/LLM |
 | **14** | [💰 Finanzas — Conciliación](cases/14-finanzas-conciliacion/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · matching multi-criterio · z-score outliers |
 | **15** | [🛍️ E-commerce Postventa](cases/15-ecommerce-postventa/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · 3 routers · Etiqueta SHA-256 · Convergencia humano |
@@ -105,7 +106,6 @@ El estándar actual del repositorio se apoya en estos pilares:
 
 | ID | Nombre | Dominio |
 |:---:|:---|:---|
-| 12 | [🧠 Psicometría y Evaluaciones](cases/12-psicometria-evaluaciones/README.md) | RRHH / Evaluación |
 | 16 | [✈️ Planificador de Viajes](cases/16-viajes-planificador/README.md) | Travel |
 | 18 | [📣 Marketing con QA](cases/18-marketing-contenido-qa/README.md) | Marketing |
 | 20 | [🏛️ Migración Legacy](cases/20-migracion-legacy/README.md) | Arquitectura |
@@ -225,13 +225,13 @@ TRUST_PROXY_HEADERS=false
 |:---|:---|:---|
 | ✅ **OPERATIVO** | Backend real, DEMO/LIVE, CI, tests, hardening, OAuth2 opt-in | 01, 02, 03, 04, 05, 06, 07, 08, 14, 17, 19, 21, 25 |
 | 🏭 **INDUSTRIAL** | Backend real, streaming, observabilidad, docs completas | 09, 10, 13 |
-| 🔧 **SCAFFOLD** | Demo estática lista para evolucionar | 11, 12, 15, 16, 18, 20, 22, 23, 24 |
+| 🔧 **SCAFFOLD** | Demo estática lista para evolucionar | 16, 18, 20, 22, 23, 24 |
 
 ---
 
 ## 🛡️ Seguridad
 
-Este repositorio ha sido auditado por **8 capas de seguridad** (v4.10.0):
+Este repositorio ha sido auditado por **8 capas de seguridad** (v4.11.0):
 
 | Capa | Control | Estado |
 |:---|:---|:---:|

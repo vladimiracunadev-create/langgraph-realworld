@@ -1,5 +1,22 @@
 # Changelog
 
+## v4.11.0 - 2026-05-15
+
+### Added
+
+- Caso 12 — Psicometria y Evaluaciones elevado a OPERATIVO: 10 nodos LangGraph + 1 router (validez) con loop psicometrico (tope 2 iteraciones), helpers deterministas alpha de Cronbach, indice de dificultad (p / Likert), discriminacion item-total (Pearson corregido) y DIF entre grupos. Simulador de pilotaje Rasch-like dicotomico y modelo aditivo Likert con items inversos. 3 instrumentos DEMO: INST-COMP-DIG-01 (Competencias Digitales, dicotomico, n=40), INST-RAZ-LOG-02 (Razonamiento Logico, dicotomico, n=35, gatilla loop), INST-ESC-BIE-03 (Bienestar Laboral, Likert 5, n=50). Calibracion de baremos por percentiles, informes individuales con banda interpretativa, informe grupal con LLM opt-in (GPT-4o-mini). Puerto 8012.
+- Suite de tests del caso 12: 29 tests (19 de grafo + 10 de API) todos en verde.
+- Reemplazo del demo legacy nginx por backend real LangGraph + FastAPI con UI dark theme acento teal.
+
+### Changed
+
+- Total de backends operativos: 19 (incorpora caso 12 — 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15, 17, 19, 21, 25).
+- Total de scaffolds: 6 (16, 18, 20, 22, 23, 24).
+- Version bumped a 4.11.0 en README, ROADMAP, CHANGELOG, portal, docs y wiki.
+- `docker-compose.yml` raiz: caso 12 movido de Nginx :9012 a backend :8012.
+
+---
+
 ## v4.10.0 - 2026-05-11
 
 ### Added

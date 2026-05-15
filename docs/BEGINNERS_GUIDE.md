@@ -1,7 +1,7 @@
 ﻿# Guia para Principiantes
 
 > [!NOTE]
-> **Version**: 4.10.0 | **Estado**: Estable | **Audiencia**: Nuevos usuarios
+> **Version**: 4.11.0 | **Estado**: Estable | **Audiencia**: Nuevos usuarios
 
 - No necesitas completar APIs para arrancar el repositorio.
 - Los casos operativos funcionan en DEMO cuando faltan credenciales.

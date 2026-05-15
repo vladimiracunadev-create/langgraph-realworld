@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Caso 12 — Psicometría y Evaluaciones</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07111f;
+      --surface: rgba(20, 30, 48, 0.85);
+      --border: rgba(180, 200, 230, 0.1);
+      --accent: #14b8a6;
+      --accent-2: #0d9488;
+      --accent-dim: rgba(20, 184, 166, 0.15);
+      --text: #e6edf3;
+      --muted: #8b9cb3;
+      --verde: #34d399;
+      --amarillo: #fbbf24;
+      --rojo: #f87171;
+      font-family: 'Inter', system-ui, sans-serif;
+      color-scheme: dark;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    header {
+      padding: 12px 20px; border-bottom: 1px solid var(--border);
+      display: flex; gap: 12px; align-items: center;
+      background: rgba(7,17,31,.85); backdrop-filter: blur(10px);
+      position: sticky; top: 0; z-index: 10;
+    }
+    header .back-link { font-family: 'JetBrains Mono', monospace; font-size: 12px;
+      color: var(--accent); text-decoration: none; opacity: .85; }
+    header .back-link:hover { opacity: 1; }
+    header .sep { color: var(--border); font-size: 18px; }
+    header .title { font-weight: 800; letter-spacing: -.4px; font-size: 1rem; flex: 1; }
+    .pill {
+      font-family: 'JetBrains Mono', monospace;
+      padding: 4px 10px; border-radius: 999px; font-size: 10px;
+      font-weight: 600; text-transform: uppercase; letter-spacing: .5px;
+      border: 1px solid var(--border);
+    }
+    .pill-demo { color: var(--amarillo); border-color: rgba(251,191,36,.3); background: rgba(251,191,36,.1); }
+    .pill-live { color: var(--verde); border-color: rgba(52,211,153,.3); background: rgba(52,211,153,.1); }
+
+    .hero { max-width: 920px; margin: 28px auto 0; padding: 0 24px; }
+    .hero h2 { font-size: 1.55rem; font-weight: 800; margin-bottom: 10px; }
+    .hero p { color: var(--muted); line-height: 1.65; font-size: .92rem; }
+    .badge-row { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+    .hero-pill {
+      font-family: 'JetBrains Mono', monospace; font-size: .68rem;
+      padding: 4px 9px; border-radius: 999px;
+      border: 1px solid var(--border); color: var(--muted); background: var(--accent-dim);
+    }
+
+    main {
+      max-width: 1320px; margin: 22px auto;
+      padding: 0 24px 40px;
+      display: grid; grid-template-columns: 1fr 1.35fr; gap: 18px;
+    }
+    @media (max-width: 880px) { main { grid-template-columns: 1fr; } }
+
+    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+    .panel-header {
+      padding: 14px 18px; border-bottom: 1px solid var(--border);
+      font-weight: 700; font-size: .85rem;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .panel-body { padding: 18px; }
+
+    label { font-size: .8rem; color: var(--muted); display: block; margin-bottom: 6px; }
+    select, button {
+      width: 100%; padding: 10px 14px; border-radius: 8px;
+      border: 1px solid var(--border); font-size: .88rem; font-family: inherit;
+    }
+    select { background: rgba(20,30,48,.95); color: var(--text); cursor: pointer; margin-bottom: 14px; }
+    select:focus { outline: 2px solid var(--accent); }
+    button {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #07111f; font-weight: 700; cursor: pointer; border: none;
+      transition: opacity .15s, transform .1s;
+    }
+    button:hover:not(:disabled) { opacity: .92; transform: translateY(-1px); }
+    button:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+
+    .scenario-preview {
+      margin-top: 14px; padding: 12px;
+      background: rgba(20,184,166,.05);
+      border: 1px solid rgba(20,184,166,.15);
+      border-radius: 8px;
+      font-size: .8rem; color: var(--muted);
+      max-height: 220px; overflow-y: auto; line-height: 1.55;
+    }
+    .scenario-preview strong { color: var(--text); }
+
+    .timeline { margin-top: 6px; }
+    .tl-item {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 9px 0; border-bottom: 1px solid var(--border);
+      animation: fadeIn .25s ease;
+    }
+    .tl-item:last-child { border-bottom: none; }
+    .tl-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent); margin-top: 5px; flex-shrink: 0;
+    }
+    .tl-dot.warn { background: var(--amarillo); }
+    .tl-dot.bad { background: var(--rojo); }
+    .tl-dot.ok { background: var(--verde); }
+    .tl-node {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem; color: var(--accent); font-weight: 600;
+    }
+    .tl-detail { font-size: .78rem; color: var(--muted); margin-top: 2px; line-height: 1.55; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; } }
+
+    .risk-header {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 18px; border-bottom: 1px solid var(--border);
+    }
+    .risk-badge {
+      padding: 6px 14px; border-radius: 999px;
+      font-weight: 700; font-size: .78rem;
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase; letter-spacing: .5px;
+    }
+    .risk-ok { background: rgba(52,211,153,.15); color: var(--verde); border: 1px solid rgba(52,211,153,.3); }
+    .risk-warn { background: rgba(251,191,36,.15); color: var(--amarillo); border: 1px solid rgba(251,191,36,.3); }
+    .risk-empty { background: rgba(139,156,179,.1); color: var(--muted); border: 1px solid var(--border); }
+
+    .pct-score {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.6rem; font-weight: 700;
+    }
+    .case-meta { flex: 1; }
+    .case-title { font-weight: 700; font-size: .92rem; margin-bottom: 2px; }
+    .case-sub { font-size: .76rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+
+    .section-label {
+      font-size: .72rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .5px;
+      font-weight: 600; margin: 16px 0 8px;
+    }
+
+    .kpi-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+    }
+    @media (max-width: 700px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+    .kpi {
+      padding: 10px; background: rgba(20,30,48,.5);
+      border: 1px solid var(--border); border-radius: 8px;
+      text-align: center;
+    }
+    .kpi-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.05rem; font-weight: 700; color: var(--text);
+    }
+    .kpi-label {
+      font-size: .65rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .3px;
+      margin-top: 3px;
+    }
+
+    table.tx-table {
+      width: 100%; border-collapse: collapse;
+      font-size: .76rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    table.tx-table th {
+      padding: 6px 8px; text-align: left;
+      color: var(--muted); text-transform: uppercase;
+      font-size: .65rem; letter-spacing: .5px;
+      border-bottom: 1px solid var(--border);
+    }
+    table.tx-table td {
+      padding: 6px 8px; border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .62rem; font-weight: 700;
+      padding: 2px 7px; border-radius: 4px;
+      text-transform: uppercase; letter-spacing: .5px;
+    }
+    .tag.ok { background: rgba(52,211,153,.2); color: var(--verde); }
+    .tag.warn { background: rgba(251,191,36,.2); color: var(--amarillo); }
+    .tag.bad { background: rgba(248,113,113,.2); color: var(--rojo); }
+
+    .card-block {
+      padding: 10px 12px; border-radius: 8px;
+      background: rgba(20,30,48,.5);
+      border-left: 3px solid var(--accent);
+      margin-bottom: 6px;
+    }
+    .card-block.ok { border-left-color: var(--verde); background: rgba(52,211,153,.05); }
+    .card-block.warn { border-left-color: var(--amarillo); background: rgba(251,191,36,.05); }
+
+    .resumen-box {
+      background: rgba(20,184,166,.05);
+      border: 1px solid rgba(20,184,166,.15);
+      border-radius: 10px; padding: 14px 16px;
+      font-size: .83rem; line-height: 1.7;
+      white-space: pre-wrap; color: #cdd9e5;
+    }
+
+    .bandas-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
+      margin-top: 6px;
+    }
+    .banda-cell {
+      padding: 8px; text-align: center; border-radius: 6px;
+      background: rgba(20,30,48,.5); border: 1px solid var(--border);
+    }
+    .banda-cell .v { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 1.1rem; }
+    .banda-cell .l { font-size: .6rem; color: var(--muted); text-transform: uppercase; }
+
+    .tech-footer {
+      max-width: 1320px; margin: 0 auto;
+      padding: 0 24px 32px;
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .tech-pill {
+      font-family: 'JetBrains Mono', monospace; font-size: .7rem;
+      padding: 4px 10px; border-radius: 999px;
+      border: 1px solid var(--border); color: var(--muted); background: var(--surface);
+    }
+
+    .empty {
+      text-align: center; padding: 32px 16px;
+      color: var(--muted); font-size: .85rem;
+    }
+    .empty-icon { font-size: 2rem; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="http://localhost:8080/" class="back-link">← VOLVER AL HUB</a>
+  <span class="sep">|</span>
+  <span class="title">Caso 12 — Psicometría y Evaluaciones</span>
+  <span class="pill" id="mode-badge">…</span>
+</header>
+
+<div class="hero">
+  <h2>Validación Psicométrica de Instrumentos</h2>
+  <p>
+    El agente carga la especificación de un instrumento (constructo, formato, cohorte),
+    aplica revisión experta sobre el banco de ítems candidatos, ensambla el instrumento
+    balanceando conceptos, simula el pilotaje sobre la cohorte y ejecuta un
+    análisis psicométrico: <em>α de Cronbach</em>, <em>índice de dificultad</em>,
+    <em>discriminación item-total</em> y <em>DIF entre grupos</em>. Si la confiabilidad
+    queda bajo umbral, un router activa una iteración de revisión psicométrica que
+    excluye los ítems problemáticos (loop con tope). Al cerrar, calibra baremos por
+    percentiles, genera puntajes individuales con interpretación y emite un informe
+    grupal ejecutivo. Soporta instrumentos dicotómicos y escalas Likert.
+  </p>
+  <div class="badge-row">
+    <span class="hero-pill">10 nodos LangGraph</span>
+    <span class="hero-pill">Router validez con loop tope</span>
+    <span class="hero-pill">α de Cronbach determinista</span>
+    <span class="hero-pill">Dificultad · Discriminación · DIF</span>
+    <span class="hero-pill">DEMO + LIVE (GPT-4o-mini)</span>
+  </div>
+</div>
+
+<main>
+  <div>
+    <div class="panel">
+      <div class="panel-header"><span>🧪</span> Instrumento a validar</div>
+      <div class="panel-body">
+        <label for="inst-select">Seleccionar instrumento</label>
+        <select id="inst-select" onchange="renderPreview()">
+          <option value="INST-COMP-DIG-01">INST-COMP-DIG-01 — Competencias Digitales · dicotómico · n=40</option>
+          <option value="INST-RAZ-LOG-02">INST-RAZ-LOG-02 — Razonamiento Lógico · dicotómico · n=35</option>
+          <option value="INST-ESC-BIE-03">INST-ESC-BIE-03 — Bienestar Laboral · Likert 5 · n=50</option>
+        </select>
+        <div class="scenario-preview" id="inst-preview">…</div>
+        <button id="btn-procesar" onclick="iniciarAnalisis()" style="margin-top:12px;">
+          Iniciar análisis psicométrico →
+        </button>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-header"><span>⏱</span> Timeline del agente</div>
+      <div class="panel-body">
+        <div class="timeline" id="timeline">
+          <div class="empty"><div class="empty-icon">🧠</div>Selecciona un instrumento y pulsa Iniciar.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="results-panel">
+    <div class="risk-header">
+      <div class="risk-badge risk-empty" id="risk-badge">— validez</div>
+      <div class="case-meta">
+        <div class="case-title" id="case-title">Esperando análisis…</div>
+        <div class="case-sub" id="case-sub">— · —</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="pct-score" id="pct-score">—</div>
+        <div style="font-size:.7rem; color:var(--muted);">α Cronbach</div>
+      </div>
+    </div>
+    <div class="panel-body" id="results-body">
+      <div class="empty"><div class="empty-icon">📋</div>Los resultados aparecerán aquí.</div>
+    </div>
+  </div>
+</main>
+
+<div class="tech-footer">
+  <span class="tech-pill">LangGraph StateGraph</span>
+  <span class="tech-pill">FastAPI</span>
+  <span class="tech-pill">10 nodos</span>
+  <span class="tech-pill">Router validez + loop tope</span>
+  <span class="tech-pill">α / p / rpb / DIF</span>
+  <span class="tech-pill">NDJSON streaming</span>
+  <span class="tech-pill">DEMO / LIVE</span>
+  <span class="tech-pill">Puerto 8012</span>
+</div>
+
+<script>
+  const PORT = window.location.port || '8012';
+  const BASE = `${window.location.protocol}//${window.location.hostname}:${PORT}`;
+
+  const PREVIEWS = {
+    'INST-COMP-DIG-01': {
+      uso: 'Selección de personal — posiciones administrativas',
+      desc: 'Instrumento dicotómico (correcto/incorrecto) de 10 ítems objetivo a partir de banco de 12. Cohorte piloto de 40 evaluados en dos grupos (interno/externo). Umbral α ≥ 0.70.',
+      esperado: '🟡 Confiabilidad cercana al umbral · 1 ítem excluido en revisión por sesgo (CD-12)'
+    },
+    'INST-RAZ-LOG-02': {
+      uso: 'Admisión a programa técnico',
+      desc: 'Instrumento dicotómico de 8 ítems objetivo a partir de 10 candidatos. Cohorte piloto de 35 con dos modalidades (diurna/vespertina). RL-07 y RL-09 tienen sesgo estimado alto → quedan fuera en revisión. Umbral α ≥ 0.75.',
+      esperado: '🟡 Loop psicométrico activado · iteración adicional excluye ítems con DIF entre grupos'
+    },
+    'INST-ESC-BIE-03': {
+      uso: 'Encuesta interna anual de clima',
+      desc: 'Escala Likert 1‑5 de 8 ítems sobre bienestar laboral. Cohorte piloto de 50 colaboradores en tres áreas (operaciones/administración/comercial). Incluye 2 ítems inversos. Umbral α ≥ 0.80.',
+      esperado: '🟡 Likert con discriminación variable · informes grupales por área'
+    }
+  };
+
+  function renderPreview() {
+    const id = document.getElementById('inst-select').value;
+    const p = PREVIEWS[id];
+    if (!p) return;
+    document.getElementById('inst-preview').innerHTML = `
+      <div><strong>Uso:</strong> ${escapeHtml(p.uso)}</div>
+      <div style="margin-top:6px;">${escapeHtml(p.desc)}</div>
+      <div style="margin-top:8px; font-family:'JetBrains Mono',monospace; font-size:.72rem; color:var(--accent);">
+        Resultado esperado: ${escapeHtml(p.esperado)}
+      </div>`;
+  }
+
+  async function detectMode() {
+    try {
+      const r = await fetch(`${BASE}/health`);
+      const d = await r.json();
+      const badge = document.getElementById('mode-badge');
+      const isLive = d.mode === 'LIVE';
+      badge.textContent = isLive ? 'LIVE' : 'DEMO';
+      badge.className = `pill ${isLive ? 'pill-live' : 'pill-demo'}`;
+    } catch {}
+  }
+  detectMode(); renderPreview();
+
+  const NODE_LABELS = {
+    'especificacion_cargada': 'cargar_especificacion',
+    'items_revisados': 'revisar_items',
+    'instrumento_ensamblado': 'ensamblar_instrumento',
+    'pilotaje_aplicado': 'aplicar_evaluacion',
+    'psicometria_calculada': 'analisis_psicometrico',
+    'items_problematicos_revisados': 'revisar_items_problematicos',
+    'baremos_calibrados': 'calibrar_baremos',
+    'baremos_omitidos': 'calibrar_baremos',
+    'informes_individuales_generados': 'generar_informe_individual',
+    'informe_grupal_generado': 'generar_informe_grupal',
+  };
+
+  function dotClass(ev) {
+    if (ev.type === 'items_problematicos_revisados') return 'warn';
+    if (ev.type === 'informe_grupal_generado') {
+      return ev.fiabilidad_aceptable ? 'ok' : 'warn';
+    }
+    if (ev.type === 'psicometria_calculada' && ev.alpha < 0.5) return 'warn';
+    return '';
+  }
+
+  function describeEvent(ev) {
+    const t = ev.type || '';
+    if (t === 'especificacion_cargada') return `${ev.nombre} · ${ev.constructo} · formato ${ev.formato} · ${ev.items_candidatos} candidatos · n_obj ${ev.n_objetivo}`;
+    if (t === 'items_revisados')        return `${ev.aprobados} aprobados / ${ev.rechazados} rechazados${ev.ids_rechazados.length ? ' → ' + ev.ids_rechazados.join(', ') : ''}`;
+    if (t === 'instrumento_ensamblado') return `${ev.n_items} ítems · conceptos: ${ev.conceptos.join(', ')}`;
+    if (t === 'pilotaje_aplicado')      return `${ev.n_evaluados} evaluados × ${ev.n_items} ítems · grupos: ${ev.grupos.join(', ')}`;
+    if (t === 'psicometria_calculada')  return `iter ${ev.iteracion} · α=${ev.alpha} · ${ev.n_items_activos} ítems activos`;
+    if (t === 'items_problematicos_revisados') return `+${ev.nuevos.length} excluidos (${ev.nuevos.join(', ') || '—'}) · total ${ev.total_excluidos}`;
+    if (t === 'baremos_calibrados')     return `media=${ev.media} · p25=${ev.p25} · p75=${ev.p75}`;
+    if (t === 'baremos_omitidos')       return `${ev.razon}`;
+    if (t === 'informes_individuales_generados') return `${ev.n} evaluados procesados`;
+    if (t === 'informe_grupal_generado') return `${ev.instrument_id} · α=${ev.alpha} · fiabilidad ${ev.fiabilidad_aceptable ? 'aceptable' : 'bajo umbral'}`;
+    return JSON.stringify(ev).slice(0, 80);
+  }
+
+  function addTimelineItem(ev) {
+    const tl = document.getElementById('timeline');
+    const empty = tl.querySelector('.empty');
+    if (empty) empty.remove();
+    const item = document.createElement('div');
+    item.className = 'tl-item';
+    const cls = dotClass(ev);
+    item.innerHTML = `<div class="tl-dot ${cls}"></div><div>
+      <div class="tl-node">${NODE_LABELS[ev.type] || ev.type}</div>
+      <div class="tl-detail">${escapeHtml(describeEvent(ev))}</div>
+    </div>`;
+    tl.appendChild(item);
+  }
+
+  let _lastEventsLen = 0;
+
+  function applySnapshot(snap) {
+    if (!snap) return;
+    const inst = snap.instrument || {};
+    const psi = snap.psicometria || {};
+
+    if (inst.nombre) {
+      document.getElementById('case-title').textContent = `${inst.nombre} · ${inst.id || ''}`;
+      document.getElementById('case-sub').textContent =
+        `${inst.formato || '—'} · ${snap.n_evaluados || 0} evaluados · umbral α ≥ ${inst.umbral_alpha ?? '—'}`;
+    }
+    if (psi.alpha_cronbach !== undefined && psi.alpha_cronbach !== 0) {
+      document.getElementById('pct-score').textContent = Number(psi.alpha_cronbach).toFixed(3);
+    }
+    if (snap.done) {
+      const badge = document.getElementById('risk-badge');
+      const fiable = (snap.informe_grupal || {}).fiabilidad_aceptable;
+      if (fiable) {
+        badge.className = 'risk-badge risk-ok'; badge.textContent = '🟢 FIABILIDAD ACEPTABLE';
+      } else {
+        badge.className = 'risk-badge risk-warn'; badge.textContent = '🟡 BAJO UMBRAL';
+      }
+    }
+
+    (snap.events || []).slice(_lastEventsLen).forEach(addTimelineItem);
+    _lastEventsLen = (snap.events || []).length;
+
+    if (snap.done) renderResults(snap);
+  }
+
+  function renderResults(snap) {
+    const psi = snap.psicometria || {};
+    const grupal = snap.informe_grupal || {};
+    const items = psi.items || [];
+    const ind = snap.puntajes_individuales || [];
+    const dist = grupal.distribucion_bandas || {};
+    const medias = grupal.medias_por_grupo || {};
+    const body = document.getElementById('results-body');
+    let html = '';
+
+    // KPIs
+    html += `<div class="kpi-grid">
+      <div class="kpi"><div class="kpi-value">${psi.alpha_cronbach ?? '—'}</div><div class="kpi-label">α Cronbach</div></div>
+      <div class="kpi"><div class="kpi-value">${psi.n_items_activos ?? 0}</div><div class="kpi-label">Ítems activos</div></div>
+      <div class="kpi"><div class="kpi-value">${psi.n_evaluados ?? 0}</div><div class="kpi-label">Evaluados</div></div>
+      <div class="kpi"><div class="kpi-value">${snap.iteracion_validez ?? 0}</div><div class="kpi-label">Iteraciones</div></div>
+    </div>`;
+
+    // Distribución por banda
+    html += `<div class="section-label">📊 Distribución por banda</div>
+      <div class="bandas-grid">
+        <div class="banda-cell"><div class="v">${dist.alto ?? 0}</div><div class="l">Alto</div></div>
+        <div class="banda-cell"><div class="v">${dist.medio_alto ?? 0}</div><div class="l">Medio-alto</div></div>
+        <div class="banda-cell"><div class="v">${dist.medio_bajo ?? 0}</div><div class="l">Medio-bajo</div></div>
+        <div class="banda-cell"><div class="v">${dist.bajo ?? 0}</div><div class="l">Bajo</div></div>
+      </div>`;
+
+    // Métricas por ítem
+    if (items.length) {
+      html += `<div class="section-label">🧪 Métricas por ítem</div>
+        <table class="tx-table"><thead><tr>
+          <th>Ítem</th><th>Concepto</th><th>Dificultad</th><th>Discrim.</th><th>DIF grupos</th><th>Estado</th>
+        </tr></thead><tbody>`;
+      items.forEach(m => {
+        const excluido = (snap.items_problematicos || []).includes(m.id);
+        const estado = excluido
+          ? '<span class="tag bad">excluido</span>'
+          : (m.discriminacion < 0.20 || m.dif_entre_grupos > 0.20
+              ? '<span class="tag warn">revisar</span>'
+              : '<span class="tag ok">ok</span>');
+        html += `<tr>
+          <td>${escapeHtml(m.id)}</td>
+          <td>${escapeHtml(m.concepto || '—')}</td>
+          <td>${m.dificultad}</td>
+          <td>${m.discriminacion}</td>
+          <td>${m.dif_entre_grupos}</td>
+          <td>${estado}</td>
+        </tr>`;
+      });
+      html += `</tbody></table>`;
+    }
+
+    // Medias por grupo
+    if (Object.keys(medias).length) {
+      html += `<div class="section-label">👥 Medias por grupo</div>
+        <div class="card-block">${Object.entries(medias).map(([g, m]) => `<b>${escapeHtml(g)}</b>: ${m}`).join(' · ')}</div>`;
+    }
+
+    // Ítems excluidos
+    const excRev = grupal.items_excluidos_revision || [];
+    const excPsi = grupal.items_excluidos_psicometria || [];
+    if (excRev.length || excPsi.length) {
+      html += `<div class="section-label">⚠️ Ítems excluidos</div>`;
+      if (excRev.length) {
+        html += `<div class="card-block warn">Revisión expertos: ${excRev.map(c => escapeHtml(c)).join(' · ')}</div>`;
+      }
+      if (excPsi.length) {
+        html += `<div class="card-block warn">Análisis psicométrico: ${excPsi.map(c => escapeHtml(c)).join(' · ')}</div>`;
+      }
+    }
+
+    // Top 10 informes individuales
+    if (ind.length) {
+      html += `<div class="section-label">👤 Informes individuales (primeros 10)</div>
+        <table class="tx-table"><thead><tr>
+          <th>Evaluado</th><th>Grupo</th><th>Puntaje</th><th>Percentil</th><th>Banda</th>
+        </tr></thead><tbody>`;
+      ind.slice(0, 10).forEach(r => {
+        html += `<tr>
+          <td>${escapeHtml(r.evaluado_id)}</td>
+          <td>${escapeHtml(r.grupo || '—')}</td>
+          <td>${r.puntaje_bruto}</td>
+          <td>${r.percentil}</td>
+          <td><span class="tag ok">${escapeHtml(r.interpretacion)}</span></td>
+        </tr>`;
+      });
+      html += `</tbody></table>`;
+      if (ind.length > 10) {
+        html += `<div style="font-size:.72rem; color:var(--muted); margin-top:6px;">… y ${ind.length - 10} evaluados más</div>`;
+      }
+    }
+
+    // Reporte
+    if (snap.reporte) {
+      html += `<div class="section-label">📝 Informe ejecutivo</div>
+        <div class="resumen-box">${escapeHtml(snap.reporte)}</div>`;
+    }
+
+    body.innerHTML = html;
+  }
+
+  function escapeHtml(s) {
+    return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  async function iniciarAnalisis() {
+    const inst = document.getElementById('inst-select').value;
+    const btn = document.getElementById('btn-procesar');
+    const tl = document.getElementById('timeline');
+    const body = document.getElementById('results-body');
+
+    btn.disabled = true; btn.textContent = 'Procesando…';
+    tl.innerHTML = '';
+    body.innerHTML = '<div class="empty"><div class="empty-icon">⚙️</div>Procesando análisis psicométrico…</div>';
+    _lastEventsLen = 0;
+    const rb = document.getElementById('risk-badge');
+    rb.className = 'risk-badge risk-empty'; rb.textContent = '— validez';
+    document.getElementById('case-title').textContent = 'Procesando…';
+    document.getElementById('case-sub').textContent = '— · —';
+    document.getElementById('pct-score').textContent = '—';
+
+    const threadId = `psico-${inst}-${Date.now()}`;
+    const url = `${BASE}/api/stream?thread_id=${encodeURIComponent(threadId)}&instrument_id=${encodeURIComponent(inst)}`;
+
+    try {
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop();
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          try {
+            const msg = JSON.parse(line);
+            if (msg.type === 'snapshot') applySnapshot(msg.snapshot);
+            if (msg.type === 'error') body.innerHTML = `<div class="empty" style="color:var(--rojo)">Error: ${escapeHtml(msg.detail)}</div>`;
+          } catch {}
+        }
+      }
+    } catch (err) {
+      body.innerHTML = `<div class="empty" style="color:var(--rojo)">Error de conexión: ${escapeHtml(err.message)}</div>`;
+    } finally {
+      btn.disabled = false; btn.textContent = 'Iniciar análisis psicométrico →';
+    }
+  }
+</script>
+</body>
+</html>

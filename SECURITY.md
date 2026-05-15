@@ -1,13 +1,13 @@
 # Seguridad
 
 > [!NOTE]
-> **Version**: 4.10.0 | **Estado**: Auditado y endurecido | **Audiencia**: Auditores, CISO, Desarrolladores
+> **Version**: 4.11.0 | **Estado**: Auditado y endurecido | **Audiencia**: Auditores, CISO, Desarrolladores
 
-Este repositorio esta pensado para exploracion tecnica, demos y validacion local de patrones LangGraph. La seguridad implementada busca reducir riesgos reales sin romper quickstart, `index.html`, Hub CLI ni los 18 casos operativos 01-11, 13-15, 17, 19, 21 y 25.
+Este repositorio esta pensado para exploracion tecnica, demos y validacion local de patrones LangGraph. La seguridad implementada busca reducir riesgos reales sin romper quickstart, `index.html`, Hub CLI ni los 19 casos operativos 01-12, 13-15, 17, 19, 21 y 25.
 
 ---
 
-## Resultado de la auditoria de seguridad (v4.10.0)
+## Resultado de la auditoria de seguridad (v4.11.0)
 
 ### Capa 1 — Contenedor y proceso
 

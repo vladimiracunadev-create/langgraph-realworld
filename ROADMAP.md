@@ -1,6 +1,6 @@
 # Hoja de Ruta
 
-> **Versión**: 4.10.0 | **Estado**: Industrial | **Rama principal**: `main`
+> **Versión**: 4.11.0 | **Estado**: Industrial | **Rama principal**: `main`
 
 El estándar técnico del repositorio ya está definido. Antes de crear o modificar un caso, leer el skill directamente — no se rediseña lo que ya existe:
 
@@ -12,7 +12,7 @@ El estándar técnico del repositorio ya está definido. Antes de crear o modifi
 
 ## Estado de los 25 casos
 
-### Operativos e industriales (18)
+### Operativos e industriales (19)
 
 | ID | Caso | Nivel | UI web | Integraciones LIVE |
 |:---:|:---|:---:|:---:|:---|
@@ -27,6 +27,7 @@ El estándar técnico del repositorio ya está definido. Antes de crear o modifi
 | 09 | [RRHH Screening & Agenda](cases/09-rrhh-screening-agenda/README.md) | INDUSTRIAL | ✅ | LLM + MemorySaver |
 | 10 | [Onboarding de Empleados](cases/10-onboarding-empleados/README.md) | INDUSTRIAL | ✅ | HRIS, IAM, Slack (DEMO) |
 | 11 | [Tutor Adaptativo](cases/11-educacion-tutor-adaptativo/README.md) | OPERATIVO | ✅ | LLM opt-in, simulador IRT determinista, banco 15 ítems |
+| 12 | [Psicometría y Evaluaciones](cases/12-psicometria-evaluaciones/README.md) | OPERATIVO | ✅ | LLM opt-in, α Cronbach, discriminación item-total, DIF entre grupos, loop validez |
 | 13 | [Analista de Datos BI](cases/13-bi-analista-datos/README.md) | INDUSTRIAL | ✅ | SQL + Chart.js + LLM opt-in |
 | 14 | [Finanzas: Conciliación](cases/14-finanzas-conciliacion/README.md) | OPERATIVO | ✅ | LLM opt-in, z-score outliers, 3 escenarios DEMO |
 | 15 | [E-commerce Postventa](cases/15-ecommerce-postventa/README.md) | OPERATIVO | ✅ | LLM opt-in, 3 routers (intención · elegibilidad · stock), etiqueta SHA-256, 5 escenarios DEMO |
@@ -35,11 +36,10 @@ El estándar técnico del repositorio ya está definido. Antes de crear o modifi
 | 21 | [Documentación Automática](cases/21-docs-auto/README.md) | OPERATIVO | ✅ | LLM opt-in, outline adaptativo, loop QA |
 | 25 | [Supervisor + Workers](cases/25-supervisor-workers/README.md) | OPERATIVO | ✅ | 4 workers especializados (DEMO) |
 
-### Scaffold — listos para elevar (7)
+### Scaffold — listos para elevar (6)
 
 | ID | Caso | Dominio | Prioridad |
 |:---:|:---|:---|:---:|
-| 12 | [Psicometría y Evaluaciones](cases/12-psicometria-evaluaciones/README.md) | RRHH / Evaluación | 🟡 Ola 3 |
 | 18 | [Marketing con QA](cases/18-marketing-contenido-qa/README.md) | Marketing | 🟡 Ola 3 |
 | 22 | [Backoffice: Automatización](cases/22-backoffice-automatizacion/README.md) | Operaciones | 🟡 Ola 3 |
 | 24 | [Asistente PM](cases/24-pm-assistant/README.md) | Gestión de proyectos | 🟡 Ola 3 |
@@ -79,8 +79,9 @@ SCAFFOLD  →  (seguir SKILL.md)  →  OPERATIVO  →  (observabilidad + hardeni
 | ~~**07 — Compras y Abastecimiento**~~ | ✅ **COMPLETADO v4.8.0** — Pipeline procurement: validación PR → catálogo homologado → RFQs → cotizaciones → score multi-criterio (precio 40 / plazo 30 / riesgo 30) → router política (umbral comité 25M / no preferido 5M) → recomendación → aprobación → OC con SHA-256 | 10 nodos, 1 router (política), 3 escenarios DEMO, OC con hash inmutable |
 | ~~**11 — Tutor Adaptativo**~~ | ✅ **COMPLETADO v4.9.0** — Tutoría personalizada IRT: diagnóstico inicial (3 ítems), selección adaptativa por gap habilidad‑dificultad, router de desempeño 3 vías (dominio / remediación / frustración) con loop hasta tope, perfil actualizado y reporte ejecutivo | 10 nodos, 3 routers (diagnóstico / desempeño / continuar), 3 estudiantes DEMO, banco 15 ítems, simulador determinista por seed |
 | ~~**15 — E-commerce Postventa**~~ | ✅ **COMPLETADO v4.10.0** — Postventa para e-commerce: lookup OMS → clasificación intención → 3 caminos (tracking · devolución con elegibilidad · cambio con stock) → convergencia humano o resolución automática → respuesta empática + resumen | 11 nodos, 3 routers (intención / elegibilidad / stock), etiqueta retorno con SHA-256, 5 escenarios DEMO |
+| ~~**12 — Psicometría y Evaluaciones**~~ | ✅ **COMPLETADO v4.11.0** — Validación psicométrica de instrumentos: revisión experta → ensamblar → pilotaje simulado → análisis (α Cronbach, dificultad, discriminación item-total, DIF entre grupos) → router validez con loop tope → calibración baremos → informes individuales con percentil y banda → informe grupal ejecutivo | 10 nodos, 1 router (validez) + loop, 3 instrumentos DEMO (2 dicotómicos + 1 Likert), 29 tests |
 
-Elevar según disponibilidad y demanda: 12, 18, 22, 24, 16, 20, 23.
+Elevar según disponibilidad y demanda: 18, 22, 24, 16, 20, 23.
 
 ---
 

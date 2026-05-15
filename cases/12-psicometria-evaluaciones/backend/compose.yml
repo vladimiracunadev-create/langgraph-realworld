@@ -1,0 +1,11 @@
+services:
+  case12:
+    build: .
+    ports:
+      - "8012:8012"
+    environment:
+      - DATA_DIR=/app/data
+      - WEB_DIR=/app/web
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+    volumes:
+      - ../data:/app/data:ro

@@ -1,7 +1,7 @@
 ﻿# Requisitos del Sistema
 
 > [!NOTE]
-> **Version**: 4.10.0 | **Estado**: Estable | **Audiencia**: Infraestructura, DevOps, Reclutadores
+> **Version**: 4.11.0 | **Estado**: Estable | **Audiencia**: Infraestructura, DevOps, Reclutadores
 
 ## Requisitos minimos
 

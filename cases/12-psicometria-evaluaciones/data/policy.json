@@ -1,0 +1,18 @@
+{
+  "max_iteraciones_validez": 2,
+  "umbral_claridad_min": 0.70,
+  "umbral_sesgo_max": 0.15,
+  "umbral_representatividad_min": 0.70,
+  "bandas_percentiles": {
+    "bajo": 25,
+    "medio_bajo": 50,
+    "medio_alto": 75,
+    "alto": 100
+  },
+  "etiquetas_bandas": {
+    "bajo": "Por debajo de lo esperado",
+    "medio_bajo": "En desarrollo",
+    "medio_alto": "Sólido",
+    "alto": "Sobresaliente"
+  }
+}
