@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Caso 12 — Psicometría y Evaluaciones</title>
+  <style>
+    :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial; color-scheme: dark; }
+    body { margin: 0; background: #0b0f14; color: #e6edf3; }
+    header { padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,.08); }
+    main { max-width: 920px; margin: 0 auto; padding: 16px; }
+    .card { background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); border-radius: 16px; padding: 14px; margin-bottom: 12px; }
+    .muted { opacity: .85; line-height: 1.55; }
+    a { color: #79c0ff; }
+    .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; background: rgba(20,184,166,.15); color: #14b8a6; border: 1px solid rgba(20,184,166,.3); }
+  </style>
+</head>
+<body>
+  <header>
+    <div style="font-weight:800">Caso 12 — Psicometría y Evaluaciones <span class="pill">OPERATIVO</span></div>
+    <div style="opacity:.8">Este caso ya tiene un backend FastAPI + LangGraph operativo.</div>
+  </header>
+  <main>
+    <div class="card">
+      <h2>Cómo abrir la UI operativa</h2>
+      <p class="muted">
+        El backend operativo expone su propia interfaz web en <a href="http://localhost:8012/web/">http://localhost:8012/web/</a>.
+      </p>
+      <p class="muted">
+        Para levantarlo:
+      </p>
+      <pre style="background: rgba(0,0,0,.4); padding: 10px; border-radius: 8px; overflow-x: auto;">cd cases/12-psicometria-evaluaciones/backend
+docker compose up --build
+
+# o desde la raíz del repo
+docker compose up case12</pre>
+    </div>
+    <div class="card">
+      <h2>Qué hace el caso</h2>
+      <p class="muted">
+        Validación psicométrica de instrumentos: revisión experta, ensamblado balanceado por concepto,
+        pilotaje simulado (Rasch‐like dicotómico o Likert), análisis (α de Cronbach, dificultad,
+        discriminación item-total, DIF entre grupos), loop de revisión psicométrica con tope,
+        calibración de baremos, informes individuales por banda y reporte ejecutivo grupal.
+      </p>
+    </div>
+    <div class="card">
+      <p class="muted">
+        <a href="../../README.md">Volver al README del caso</a> ·
+        <a href="../../../../index.html">Volver al portal</a>
+      </p>
+    </div>
+  </main>
+</body>
+</html>
