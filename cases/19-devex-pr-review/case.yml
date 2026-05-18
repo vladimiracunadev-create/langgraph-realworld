@@ -1,7 +1,7 @@
 id: "19"
 slug: "19-devex-pr-review"
 name: "DevEx: PR Review"
-status: "operational"
+status: "operativo"
 version: "4.0.0"
 working_dir: backend
 entrypoint: python -m uvicorn src.api:app --host 0.0.0.0 --port 8019
