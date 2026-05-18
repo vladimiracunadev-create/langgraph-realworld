@@ -1,0 +1,53 @@
+[
+  {
+    "id": "SOL-001",
+    "canal": "formulario_web",
+    "solicitante_id": "EMP-1001",
+    "tipo_operacion": "alta_usuario_crm",
+    "datos": {
+      "nombre_completo": "Carla Pérez",
+      "email": "carla.perez@ejemplo.cl",
+      "rol": "vendedor",
+      "unidad": "comercial-norte"
+    },
+    "prioridad": "normal",
+    "descripcion": "Alta de nuevo vendedor en CRM con asignación a unidad norte."
+  },
+  {
+    "id": "SOL-002",
+    "canal": "email",
+    "solicitante_id": "EMP-1042",
+    "tipo_operacion": "modificacion_datos_cliente",
+    "datos": {
+      "cliente_id": "CLI-5599",
+      "campo": "direccion"
+    },
+    "prioridad": "alta",
+    "descripcion": "Cambio de dirección del cliente — falta nuevo_valor."
+  },
+  {
+    "id": "SOL-003",
+    "canal": "chatbot",
+    "solicitante_id": "EMP-2099",
+    "tipo_operacion": "baja_empleado_hris",
+    "datos": {
+      "empleado_id": "EMP-1500",
+      "motivo": "renuncia",
+      "fecha_efectiva": "2026-06-01"
+    },
+    "prioridad": "alta",
+    "descripcion": "Baja de empleado por renuncia. Solicitante sin rol RRHH."
+  },
+  {
+    "id": "SOL-004",
+    "canal": "formulario_web",
+    "solicitante_id": "EMP-1001",
+    "tipo_operacion": "reporte_ventas_mensual",
+    "datos": {
+      "periodo": "2026-04",
+      "unidad": "comercial-norte"
+    },
+    "prioridad": "normal",
+    "descripcion": "Solicitud que provocará error simulado en el sistema de reportes."
+  }
+]

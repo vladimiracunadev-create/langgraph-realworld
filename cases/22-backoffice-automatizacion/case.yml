@@ -1,10 +1,10 @@
 id: "22"
 slug: "22-backoffice-automatizacion"
 name: "Backoffice Automatizacion"
-status: "scaffold"
-version: "4.0.0"
-working_dir: demo
+status: "operativo"
+version: "4.13.0"
+working_dir: backend
 ports:
-  - 9022
-compose: demo/compose.yml
-dockerfile: demo/Dockerfile
+  - 8022
+compose: backend/compose.yml
+dockerfile: backend/Dockerfile

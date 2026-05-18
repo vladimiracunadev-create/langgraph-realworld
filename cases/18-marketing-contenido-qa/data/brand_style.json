@@ -1,0 +1,33 @@
+{
+  "marca": "Acme SaaS",
+  "voz_oficial": "profesional_cercano",
+  "palabras_prohibidas": [
+    "revolucionario",
+    "disruptivo",
+    "ninja",
+    "rockstar",
+    "el mejor del mundo",
+    "número 1",
+    "#1",
+    "garantizado",
+    "100% seguro",
+    "cero riesgos"
+  ],
+  "palabras_preferidas": {
+    "usuarios": "clientes",
+    "barato": "accesible",
+    "gratis": "sin costo",
+    "problema": "desafío"
+  },
+  "limites_estilo": {
+    "longitud_frase_max_palabras": 28,
+    "parrafo_max_lineas": 5,
+    "voz_pasiva_max_pct": 15
+  },
+  "cta_recomendados": [
+    "Solicita una demo",
+    "Habla con el equipo",
+    "Comienza tu prueba",
+    "Agenda una sesión"
+  ]
+}

@@ -2,12 +2,12 @@
 
 # 🤖 LangGraph Realworld
 
-### **25 casos de uso empresariales · 19 backends operativos · 100% DEMO sin APIs**
+### **25 casos de uso empresariales · 21 backends operativos · 100% DEMO sin APIs**
 
 **LangGraph · FastAPI · Python 3.11 · Docker · OAuth2 · LangSmith · uv (opcional)**
 
-[![Version](https://img.shields.io/badge/version-4.11.0-1f6feb?style=for-the-badge)](CHANGELOG.md)
-[![Operativos](https://img.shields.io/badge/operativos-19%2F25-3fb950?style=for-the-badge)](ROADMAP.md)
+[![Version](https://img.shields.io/badge/version-4.13.0-1f6feb?style=for-the-badge)](CHANGELOG.md)
+[![Operativos](https://img.shields.io/badge/operativos-21%2F25-3fb950?style=for-the-badge)](ROADMAP.md)
 [![Tests](https://img.shields.io/badge/tests-passing-3fb950?style=for-the-badge&logo=pytest&logoColor=white)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-MIT-yellow?style=for-the-badge)](LICENSE)
 
@@ -24,16 +24,16 @@
 </div>
 
 > Portafolio de **25 casos de uso empresariales** construidos con **LangGraph** y **FastAPI**:
-> **19 backends completamente operativos** (casos 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15, 17, 19, 21 y 25) con streaming, OAuth2/OIDC opt-in, observabilidad LangSmith, `/metrics` por servicio, logging JSON estructurado y reverse proxy nginx + TLS.
-> Los 9 casos restantes son scaffolds documentados listos para elevar al siguiente nivel.
+> **21 backends completamente operativos** (casos 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15, 17, 18, 19, 21, 22 y 25) con streaming, OAuth2/OIDC opt-in, observabilidad LangSmith, `/metrics` por servicio, logging JSON estructurado y reverse proxy nginx + TLS.
+> Los 4 casos restantes son scaffolds documentados listos para elevar al siguiente nivel.
 
 ### 📊 Estado del portfolio
 
 | 🎯 | Métrica | Valor |
 |:-:|:---|:---|
-| 🟢 | Casos operativos | **19 / 25** (76%) |
+| 🟢 | Casos operativos | **21 / 25** (84%) |
 | 🏭 | Casos industriales | **3** (09, 10, 13) |
-| 📋 | Scaffolds restantes | **9** (Ola 3) |
+| 📋 | Scaffolds restantes | **4** (Ola 3) |
 | 🧪 | Tests por caso | 18-30, todos verdes |
 | 🔌 | Modo DEMO | 100% sin APIs externas |
 | 🔑 | Modo LIVE | Opt-in con `OPENAI_API_KEY` |
@@ -50,19 +50,21 @@
 | **13** | 📊 BI | SQL agent endurecido + Chart.js + LLM opt-in |
 | **14** | 💰 Finanzas | Matching multi-criterio + z-score outliers determinista |
 | **17** | ⚖️ Legal | 3 especialidades + 3 plantillas + asignación de abogado |
+| **18** | 📣 Marketing | Doble loop QA: estilo de marca + fact-check con fuentes |
+| **22** | 🏢 Backoffice | 3 routers + loop completitud + log inmutable SHA-256 |
 | **21** | 📝 Docs | Loop QA condicional (tope 3 iter) + outline adaptativo |
 | **25** | 🤝 Multi-agent | Supervisor + 4 workers especializados (DEMO) |
 
 ---
 
-## 🏗️ Implementación Industrial — v4.11.0
+## 🏗️ Implementación Industrial — v4.13.0
 
 El estándar actual del repositorio se apoya en estos pilares:
 
 | # | Pilar | Descripción |
 |:-:|:---|:---|
 | 1 | 🌐 **Portal unificado** | `index.html` como entrada principal para navegar el portafolio |
-| 2 | ⚙️ **Casos de referencia reales** | Backends FastAPI y UIs activas en los casos 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 13, 14, 17, 19, 21 y 25 |
+| 2 | ⚙️ **Casos de referencia reales** | Backends FastAPI y UIs activas en los casos 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 13, 14, 17, 18, 19, 21, 22 y 25 |
 | 3 | 📐 **Estado tipado** | Contratos explícitos con `TypedDict` y flujos compatibles con LangGraph |
 | 4 | 🔭 **Observabilidad** | `/health`, `/ready`, `/metrics` con latencia, errores y modo; LangSmith opt-in |
 | 5 | 🔀 **Modo dual** | Demos offline + ruta clara para activar integraciones reales |
@@ -98,8 +100,10 @@ El estándar actual del repositorio se apoya en estos pilares:
 | **14** | [💰 Finanzas — Conciliación](cases/14-finanzas-conciliacion/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · matching multi-criterio · z-score outliers |
 | **15** | [🛍️ E-commerce Postventa](cases/15-ecommerce-postventa/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · 3 routers · Etiqueta SHA-256 · Convergencia humano |
 | **17** | [⚖️ Legal Intake](cases/17-legal-intake/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · 3 especialidades · 3 plantillas · Asignación |
+| **18** | [📣 Marketing con QA](cases/18-marketing-contenido-qa/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · Doble loop QA · Brand guard · Fact-check |
 | **19** | [🔍 DevEx: PR Review](cases/19-devex-pr-review/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · Security Analysis · Changelog |
 | **21** | [📝 Documentación Automática](cases/21-docs-auto/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · Outline adaptativo · Loop QA condicional |
+| **22** | [🏢 Backoffice Automatización](cases/22-backoffice-automatizacion/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · 3 routers · Loop completitud · Cadena SHA-256 |
 | **25** | [🤝 Supervisor + Workers](cases/25-supervisor-workers/README.md) | `✅ OPERATIVO` | FastAPI · LangGraph · Multi-agente · Due Diligence |
 
 ### 🔧 Casos scaffold — listos para elevar
@@ -107,9 +111,7 @@ El estándar actual del repositorio se apoya en estos pilares:
 | ID | Nombre | Dominio |
 |:---:|:---|:---|
 | 16 | [✈️ Planificador de Viajes](cases/16-viajes-planificador/README.md) | Travel |
-| 18 | [📣 Marketing con QA](cases/18-marketing-contenido-qa/README.md) | Marketing |
 | 20 | [🏛️ Migración Legacy](cases/20-migracion-legacy/README.md) | Arquitectura |
-| 22 | [🏢 Backoffice: Automatización](cases/22-backoffice-automatizacion/README.md) | Operaciones |
 | 23 | [🏥 Salud: Pre-triage](cases/23-salud-pretriage/README.md) | Salud |
 | 24 | [📋 Asistente PM](cases/24-pm-assistant/README.md) | Gestión de proyectos |
 

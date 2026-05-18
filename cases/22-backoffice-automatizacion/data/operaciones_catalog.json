@@ -1,0 +1,31 @@
+{
+  "alta_usuario_crm": {
+    "sistema": "CRM",
+    "endpoint_simulado": "POST /crm/users",
+    "campos_requeridos": ["nombre_completo", "email", "rol", "unidad"],
+    "permiso": "alta_usuario_crm",
+    "sla_minutos": 15
+  },
+  "modificacion_datos_cliente": {
+    "sistema": "CRM",
+    "endpoint_simulado": "PATCH /crm/customers/{cliente_id}",
+    "campos_requeridos": ["cliente_id", "campo", "nuevo_valor"],
+    "permiso": "modificacion_datos_cliente",
+    "sla_minutos": 30
+  },
+  "baja_empleado_hris": {
+    "sistema": "HRIS",
+    "endpoint_simulado": "POST /hris/employees/{empleado_id}/offboard",
+    "campos_requeridos": ["empleado_id", "motivo", "fecha_efectiva"],
+    "permiso": "baja_empleado_hris",
+    "sla_minutos": 60
+  },
+  "reporte_ventas_mensual": {
+    "sistema": "BI",
+    "endpoint_simulado": "GET /bi/reports/ventas?periodo={periodo}",
+    "campos_requeridos": ["periodo", "unidad"],
+    "permiso": "reporte_ventas_mensual",
+    "sla_minutos": 5,
+    "falla_simulada": true
+  }
+}

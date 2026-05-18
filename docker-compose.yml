@@ -226,9 +226,16 @@ services:
 
   case18:
     build:
-      context: cases/18-marketing-contenido-qa/demo
+      context: cases/18-marketing-contenido-qa/backend
     ports:
-      - "127.0.0.1:9018:80"
+      - "127.0.0.1:8018:8018"
+    environment:
+      - DATA_DIR=/app/data
+      - WEB_DIR=/app/web
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+    volumes:
+      - ./cases/18-marketing-contenido-qa/data:/app/data:ro
+      - ./cases/18-marketing-contenido-qa/backend/web:/app/web:ro
 
   case20:
     build:
@@ -250,9 +257,16 @@ services:
 
   case22:
     build:
-      context: cases/22-backoffice-automatizacion/demo
+      context: cases/22-backoffice-automatizacion/backend
     ports:
-      - "127.0.0.1:9022:80"
+      - "127.0.0.1:8022:8022"
+    environment:
+      - DATA_DIR=/app/data
+      - WEB_DIR=/app/web
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+    volumes:
+      - ./cases/22-backoffice-automatizacion/data:/app/data:ro
+      - ./cases/22-backoffice-automatizacion/backend/web:/app/web:ro
 
   case23:
     build:
