@@ -3,7 +3,7 @@
 > [!NOTE]
 > **Version**: 4.11.0 | **Estado**: Industrial | **Audiencia**: Senior Backend Engineers, SREs
 
-Stack actual del repo: 19 backends operativos con FastAPI + LangGraph (`cases/01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15, 17, 19, 21 y 25`). Casos 09, 10 y 13 están en nivel `Industrial` (logging JSON estructurado, OAuth2/OIDC opt-in verificado en tests, `compose.smoke.yml`). El resto está en `Operativo`.
+Stack actual del repo: 21 backends operativos con FastAPI + LangGraph (`cases/01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15, 17, 18, 19, 21, 22 y 25`). Casos 09, 10 y 13 están en nivel `Industrial` (logging JSON estructurado, OAuth2/OIDC opt-in verificado en tests, `compose.smoke.yml`). El resto está en `Operativo`.
 
 ## Stack Core
 

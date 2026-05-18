@@ -233,7 +233,7 @@ TRUST_PROXY_HEADERS=false
 
 ## 🛡️ Seguridad
 
-Este repositorio ha sido auditado por **8 capas de seguridad** (v4.11.0):
+Este repositorio ha sido auditado por **8 capas de seguridad** (v4.13.0):
 
 | Capa | Control | Estado |
 |:---|:---|:---:|

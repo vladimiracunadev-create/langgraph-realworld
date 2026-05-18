@@ -1,13 +1,13 @@
 # Seguridad
 
 > [!NOTE]
-> **Version**: 4.11.0 | **Estado**: Auditado y endurecido | **Audiencia**: Auditores, CISO, Desarrolladores
+> **Version**: 4.13.0 | **Estado**: Auditado y endurecido | **Audiencia**: Auditores, CISO, Desarrolladores
 
-Este repositorio esta pensado para exploracion tecnica, demos y validacion local de patrones LangGraph. La seguridad implementada busca reducir riesgos reales sin romper quickstart, `index.html`, Hub CLI ni los 19 casos operativos 01-12, 13-15, 17, 19, 21 y 25.
+Este repositorio esta pensado para exploracion tecnica, demos y validacion local de patrones LangGraph. La seguridad implementada busca reducir riesgos reales sin romper quickstart, `index.html`, Hub CLI ni los 21 casos operativos 01-12, 13-15, 17, 18, 19, 21, 22 y 25.
 
 ---
 
-## Resultado de la auditoria de seguridad (v4.11.0)
+## Resultado de la auditoria de seguridad (v4.13.0)
 
 ### Capa 1 — Contenedor y proceso
 
@@ -16,8 +16,8 @@ Este repositorio esta pensado para exploracion tecnica, demos y validacion local
 | Proceso no-root en todos los backends operativos | **RESUELTO** — `groupadd/useradd appuser` + `USER appuser` agregados |
 | Proceso no-root verificado en todos los Dockerfiles | OK — ya tenia `USER appuser` |
 | Proceso no-root en demos nginx (25 casos) | **RESUELTO** — `USER nginx` + chown de directorios en todos los demos |
-| Imagen Python pineada a version exacta | **RESUELTO** — `python:3.11-slim` en los 18 backends operativos |
-| Imagen nginx pineada a version exacta | **RESUELTO** — `nginx:1.27.3-alpine` en los 25 demos |
+| Imagen Python pineada a version exacta | **RESUELTO** — `python:3.11-slim` en los 21 backends operativos |
+| Imagen nginx pineada a version exacta | **RESUELTO** — `nginx:1.27.3-alpine` en los demos restantes |
 | Healthcheck con herramienta disponible | **RESUELTO** — demos usan `wget --spider` (BusyBox, incluido en Alpine); backends usan `curl` (instalado explicitamente) |
 | Directorios de log/PID accesibles por usuario no-root | OK — `chown` antes de `USER` en todos los Dockerfiles |
 
@@ -83,6 +83,27 @@ Este repositorio esta pensado para exploracion tecnica, demos y validacion local
 ---
 
 ## Controles implementados (historico)
+
+### Nuevos controles en v4.13.0
+
+- Caso 22 (Backoffice Automatizacion) elevado a OPERATIVO con el estandar del repo (FastAPI + LangGraph + Docker non-root + 33 tests + UI).
+- Cadena de custodia SHA-256 encadenada (`hash_n = SHA256(hash_{n-1} | sort_json(evento))`) sobre todos los eventos del pipeline — mismo patron auditable que casos 06/07/15.
+- Referencia de ejecucion determinista basada en `hashlib.sha256` (no `hash()` que es randomizado por PYTHONHASHSEED).
+- Total de backends operativos pasa de 19 a 21 (84% del portfolio).
+- Lista canonica de operativos: 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15, 17, 18, 19, 21, 22, 25.
+
+### Nuevos controles en v4.12.0
+
+- Caso 18 (Marketing Contenido QA) elevado a OPERATIVO con el estandar del repo (28 tests).
+- Fact-check determinista contra `fact_sources.json` con 6 fuentes autorizadas: retira alucinaciones (claims sin respaldo) e inyecta hechos obligatorios faltantes citando la fuente.
+- Brand guard determinista contra `brand_style.json` con 10 palabras prohibidas y limites de estilo.
+- Validacion estricta de `brief_id` y `solicitud_id` con regex `^[A-Za-z0-9._:-]{1,64}$` en casos 18 y 22.
+
+### Nuevos controles en v4.11.0
+
+- Caso 12 (Psicometria y Evaluaciones) elevado a OPERATIVO con el estandar del repo (29 tests).
+- Helpers psicometricos deterministas sin scipy/pingouin (alpha Cronbach, dificultad, discriminacion, DIF).
+- Simulador de pilotaje determinista via `crc32` por id (estable entre procesos, no usa `hash()`).
 
 ### Nuevos controles en v4.10.0
 

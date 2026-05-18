@@ -104,7 +104,7 @@ Ver guía dedicada en [CLOUD_AWS.md](CLOUD_AWS.md): PoC ~25 USD · Producción ~
 ## 6. Lo que **no** cuesta
 
 - Todos los stubs DEMO funcionan sin internet — útil para demos en cliente, talleres y CI.
-- El portfolio completo en local consume **~600 MB RAM** con todos los servicios levantados (medido v4.11.0).
+- El portfolio completo en local consume **~600 MB RAM** con todos los servicios levantados (medido v4.13.0).
 - No hay vendor lock-in: el cliente OpenAI se puede sustituir por un provider local (Ollama, vLLM, Anthropic, Mistral) cambiando 4 líneas en `_llm_invoke()` de cada caso.
 - No hay licencias propietarias: stack es Apache 2.0 / MIT (FastAPI, LangGraph, Pydantic).
 

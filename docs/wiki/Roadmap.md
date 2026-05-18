@@ -1,6 +1,6 @@
 # Hoja de Ruta
 
-> **Version**: 4.11.0 | **Estado**: Industrial
+> **Version**: 4.13.0 | **Estado**: Industrial
 
 El estandar tecnico del repositorio ya esta definido. Ver el [SKILL de creacion de casos](https://github.com/vladimiracunadev-create/langgraph-realworld/blob/main/.agents/skills/crear_caso/SKILL.md) antes de ejecutar cualquier tarea.
 
@@ -8,8 +8,8 @@ El estandar tecnico del repositorio ya esta definido. Ver el [SKILL de creacion 
 
 ## Estado actual
 
-19 casos operativos e industriales: 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15, 17, 19, 21, 25.
-6 casos scaffold listos para elevar.
+21 casos operativos e industriales: 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15, 17, 18, 19, 21, 22, 25.
+4 casos scaffold listos para elevar.
 
 ---
 
@@ -34,11 +34,20 @@ SCAFFOLD  →  (SKILL.md)  →  OPERATIVO  →  (observabilidad + hardening)  �
 | ~~08 — Ventas B2B + CRM~~ | Comercial | **COMPLETADO v4.4.0** — Pipeline outbound: ICP scoring, outreach por industria, CRM stage automatico |
 | ~~14 — Finanzas: Conciliacion~~ | Finanzas | **COMPLETADO v4.5.0** — Matching multi-criterio, z-score outliers, indicador verde/amarillo/rojo |
 | ~~06 — Compliance & Auditorias~~ | Gobernanza | **COMPLETADO v4.6.0** — Mapeo de controles ISO 27001/SOC 2/GDPR, recopilacion, escalacion, validacion y cadena de custodia SHA-256 encadenada |
-| ~~21 — Documentacion Automatica~~ | DevOps | **COMPLETADO v4.10.0** — Pipeline LangGraph con loop QA condicional (tope 3 iter), outline adaptativo, score por seccion, publicacion Markdown |
+| ~~21 — Documentacion Automatica~~ | DevOps | **COMPLETADO v4.7.0** — Pipeline LangGraph con loop QA condicional (tope 3 iter), outline adaptativo, score por seccion, publicacion Markdown |
 
 ### Ola 3 — Dominio especializado
 
-07, 11, 12, 15, 16, 18, 20, 22, 23, 24 — segun disponibilidad y demanda.
+| Caso | Dominio | Estado |
+|:---|:---|:---|
+| ~~07 — Compras y Abastecimiento~~ | Procurement | **COMPLETADO v4.8.0** — Score multi-criterio, router politica comite, OC SHA-256 |
+| ~~11 — Tutor Adaptativo~~ | Educacion | **COMPLETADO v4.9.0** — IRT, router 3 vias, loop adaptativo, banco 15 items |
+| ~~15 — E-commerce Postventa~~ | Retail | **COMPLETADO v4.10.0** — 3 routers (intencion/elegibilidad/stock), etiqueta SHA-256 |
+| ~~12 — Psicometria y Evaluaciones~~ | RRHH | **COMPLETADO v4.11.0** — alpha Cronbach, DIF, loop validez, 3 instrumentos DEMO |
+| ~~18 — Marketing con QA~~ | Marketing | **COMPLETADO v4.12.0** — Doble loop QA (estilo + hechos), fact-check con 6 fuentes |
+| ~~22 — Backoffice Automatizacion~~ | Operaciones | **COMPLETADO v4.13.0** — 3 routers + loop completitud + cadena custodia SHA-256 |
+
+Restantes: 16 (Viajes), 20 (Migracion Legacy), 23 (Salud Pre-triage), 24 (PM Assistant) — segun disponibilidad y demanda.
 
 ---
 
