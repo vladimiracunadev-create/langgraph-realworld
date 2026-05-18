@@ -1,0 +1,34 @@
+[
+  {
+    "id": "EMP-1001",
+    "nombre": "Ana Riquelme",
+    "email": "ana.riquelme@acme.cl",
+    "rol": "supervisor_comercial",
+    "permisos": ["alta_usuario_crm", "modificacion_datos_cliente", "reporte_ventas_mensual"],
+    "activo": true
+  },
+  {
+    "id": "EMP-1042",
+    "nombre": "Mateo Soto",
+    "email": "mateo.soto@acme.cl",
+    "rol": "operador_backoffice",
+    "permisos": ["modificacion_datos_cliente", "reporte_ventas_mensual"],
+    "activo": true
+  },
+  {
+    "id": "EMP-2099",
+    "nombre": "Lucas Vega",
+    "email": "lucas.vega@acme.cl",
+    "rol": "asistente_comercial",
+    "permisos": ["reporte_ventas_mensual"],
+    "activo": true
+  },
+  {
+    "id": "EMP-1500",
+    "nombre": "Marta Silva",
+    "email": "marta.silva@acme.cl",
+    "rol": "vendedor",
+    "permisos": [],
+    "activo": true
+  }
+]

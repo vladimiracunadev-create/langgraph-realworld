@@ -1,72 +1,126 @@
-# Caso 22: Backoffice — Automatización de Solicitudes
+# Caso 22 — Backoffice: Automatización de Solicitudes
 
 > [!NOTE]
-> **Estado**: `SCAFFOLD` | **Versión repo**: 4.0.0 | **Tipo**: Agente con estado y trazabilidad de operaciones
+> **Estado**: `✅ OPERATIVO` | **Versión repo**: 4.13.0 | **Puerto**: `8022`
+> **Patrón**: 3 routers + loop de completitud + cadena de custodia SHA-256
 
-Automatiza el ciclo completo de solicitudes de backoffice (altas, bajas, modificaciones, reportes) desde la recepción hasta la ejecución y el registro: verifica identidad y permisos, ejecuta la operación en los sistemas internos y deja un log de auditoría inmutable de cada acción. Reduce tiempos de respuesta de días a minutos y elimina errores de procesamiento manual en operaciones de alto volumen.
+Automatiza el ciclo completo de solicitudes de backoffice (altas, bajas, modificaciones,
+reportes): parsea la solicitud, verifica identidad y permisos, valida completitud con loop,
+ejecuta la operación en el sistema destino (CRM / HRIS / BI) y registra cada paso en un
+log inmutable encadenado por hash SHA-256 para auditoría regulatoria.
 
 ---
 
-## Objetivo de negocio
+## Flujo (LangGraph)
 
-Los equipos de backoffice de bancos, aseguradoras, retailers y utilities procesan cientos de solicitudes diarias (apertura de cuentas, cambios de datos, devoluciones, altas de empleados) que requieren verificación, acceso a múltiples sistemas y registro de cada operación para auditoría. Este agente recibe la solicitud vía formulario, chatbot o email, extrae y valida los datos, verifica la identidad del solicitante y sus permisos, ejecuta la operación en los sistemas internos (CRM, ERP, RRHH, core bancario) mediante APIs, confirma la ejecución al solicitante y registra toda la cadena de eventos con timestamp y hash para el log de auditoría regulatorio.
-
-## Flujo propuesto (LangGraph)
-
-```mermaid
-graph TD
-    A[Solicitud entrante / Formulario / Email] --> B[Nodo: parsear_solicitud]
-    B --> C[Nodo: clasificar_tipo_operacion]
-    C --> D[Nodo: verificar_identidad]
-    D --> E{Router: validacion_permisos}
-    E -->|Sin permisos| F[Nodo: rechazar_solicitud]
-    E -->|Con permisos| G[Nodo: validar_datos_operacion]
-    G --> H{Router: datos_completos}
-    H -->|Datos faltantes| I[Nodo: solicitar_informacion]
-    I --> G
-    H -->|Completos| J[Nodo: ejecutar_operacion]
-    J --> K{Router: resultado_ejecucion}
-    K -->|Error en sistema| L[Nodo: escalar_soporte]
-    K -->|Exitoso| M[Nodo: confirmar_solicitante]
-    M --> N[Nodo: registrar_log_auditoria]
-    F --> N
-    L --> N
-    N --> O[Salida: solicitud_procesada_y_auditada]
+```
+parsear_solicitud → clasificar_tipo_operacion → verificar_identidad
+     → permisos_router
+          ├─ sin_permisos → rechazar_solicitud ──┐
+          └─ con_permisos → validar_datos_operacion
+     → completitud_router
+          ├─ faltantes ∧ iter<2 → solicitar_informacion → validar_datos_operacion
+          └─ completos | tope  → ejecutar_operacion
+     → ejecucion_router
+          ├─ error_sistema → escalar_soporte ────┤
+          └─ exitoso       → confirmar_solicitante
+                                                 ├─→ registrar_log_auditoria → producir_resumen → END
 ```
 
-### Nodos principales
+### Nodos
 
-| Nodo | Descripción |
+| Nodo | Función |
 |---|---|
-| `parsear_solicitud` | Extrae el tipo de operación y los datos de la solicitud en cualquier formato |
-| `clasificar_tipo_operacion` | Determina la operación exacta y el sistema interno destino |
-| `verificar_identidad` | Valida la identidad del solicitante contra el directorio de empleados o clientes |
-| `validar_datos_operacion` | Verifica completitud y formato correcto de todos los datos requeridos |
-| `solicitar_informacion` | Pide los datos faltantes al solicitante por el canal original |
-| `ejecutar_operacion` | Invoca la API del sistema interno para realizar la operación |
-| `escalar_soporte` | Notifica al equipo de soporte técnico en caso de error en el sistema |
-| `confirmar_solicitante` | Envía la confirmación de ejecución al solicitante con los detalles |
-| `registrar_log_auditoria` | Persiste el registro inmutable de la operación con hash para auditoría |
+| `parsear_solicitud` | Carga la solicitud (canal, solicitante, tipo, datos, prioridad) |
+| `clasificar_tipo_operacion` | Resuelve sistema destino, endpoint y campos requeridos contra el catálogo |
+| `verificar_identidad` | Empleado activo + tiene el permiso requerido + operación catalogada |
+| `rechazar_solicitud` | Termina con `estado_final=rechazada` y motivo |
+| `validar_datos_operacion` | Calcula `campos_faltantes` contra `campos_requeridos` |
+| `solicitar_informacion` | Inyecta valores DEMO para los faltantes y reintenta (incrementa `iter_completitud`) |
+| `ejecutar_operacion` | Llamada simulada determinista al sistema destino |
+| `confirmar_solicitante` | Mensaje con referencia y SLA |
+| `escalar_soporte` | Mensaje a `soporte_email` con sistema y error |
+| `registrar_log_auditoria` | Construye cadena SHA-256 encadenada sobre todos los eventos |
+| `producir_resumen` | Texto ejecutivo (DEMO determinista / LIVE con OpenAI) |
 
-## Stack técnico previsto
+### Routers
+
+- `permisos_router`: `permisos_ok → validar_datos_operacion`; si no → `rechazar_solicitud`
+- `completitud_router`: faltantes y `iter<max_iter_completitud` → loop; si no → `ejecutar_operacion`
+- `ejecucion_router`: `resultado.ok → confirmar_solicitante`; si no → `escalar_soporte`
+
+---
+
+## Cadena de custodia SHA-256
+
+Cada eslabón del log de auditoría se calcula como:
+
+```
+hash_n = SHA256( hash_{n-1} | sort_json({idx, ts, solicitud_id, type, data}) )
+```
+
+Comenzando desde `hash_0 = "0"·64`. Cualquier alteración rompe la cadena. Mismo patrón que casos
+06 (Compliance), 07 (Compras OC) y 15 (E-commerce etiquetas).
+
+---
+
+## Stack
 
 | Capa | Tecnología |
 |---|---|
-| Orquestación | LangGraph `StateGraph` |
+| Orquestación | LangGraph `StateGraph` con `MemorySaver` |
 | API | FastAPI + uvicorn |
-| LLM | OpenAI GPT-4o-mini (modo LIVE) / respuestas mock (modo DEMO) |
-| Integraciones | SAP / Salesforce / Active Directory / Core bancario (via API REST) |
-| Canales de entrada | Email (IMAP), formulario web, chatbot (Teams/Slack) |
-| Almacenamiento | PostgreSQL (solicitudes), log append-only con SHA-256 |
+| LLM (opcional) | OpenAI GPT-4o-mini para resumen (LIVE opt-in con `OPENAI_API_KEY`) |
+| Auth | DEMO (sin token) + OAuth2/OIDC JWT opt-in (`USE_OAUTH2=true`) |
+| Observabilidad | `/health`, `/ready`, `/metrics`, logs JSON con `trace_id` |
 
-## Estado actual
+---
 
-Este caso es un **scaffold**: la estructura de la demo estática existe,
-la implementación del backend con LangGraph está pendiente.
+## Cómo correr
 
-Para contribuir o elevar este caso, consulta [CONTRIBUTING.md](../../CONTRIBUTING.md).
+```bash
+# Tests
+cd cases/22-backoffice-automatizacion/backend
+pip install -r requirements.txt
+pytest
+
+# Servidor (DEMO)
+uvicorn src.api:app --host 0.0.0.0 --port 8022
+
+# Con Docker
+docker compose -f cases/22-backoffice-automatizacion/backend/compose.yml up --build
+```
+
+### Endpoints
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| `GET`  | `/health` · `/healthz` · `/ready` · `/metrics` | Observabilidad |
+| `POST` | `/api/run` | Ejecuta el pipeline (`{thread_id, solicitud_id}`) |
+| `GET`  | `/api/stream` | Streaming NDJSON con snapshots por nodo |
+| `GET`  | `/` · `/web/` | UI mínima |
+
+### Solicitudes DEMO
+
+| ID | Tipo | Escenario | Resultado esperado |
+|---|---|---|---|
+| `SOL-001` | alta_usuario_crm | Brief limpio, permisos OK | `exitosa`, 0 iter completitud |
+| `SOL-002` | modificacion_datos_cliente | Falta `nuevo_valor` | `exitosa`, iter ≥ 1 |
+| `SOL-003` | baja_empleado_hris | Solicitante sin permiso | `rechazada` |
+| `SOL-004` | reporte_ventas_mensual | `falla_simulada=true` en catálogo | `escalada` a soporte |
+
+---
+
+## Datos (`data/`)
+
+| Archivo | Contenido |
+|---|---|
+| `solicitudes.json` | 4 solicitudes cubriendo los 3 caminos terminales |
+| `empleados.json` | 4 empleados con roles y matriz de permisos |
+| `operaciones_catalog.json` | 4 operaciones (CRM, HRIS, BI) con campos requeridos y SLA |
+| `policy.json` | `max_iter_completitud=2`, email de soporte, retención auditoría |
 
 ---
 
 > [!TIP]
-> Ver los casos **09**, **10** y **13** como referencia de implementación industrial.
+> Patrón análogo: casos **06** (Compliance, cadena de custodia) y **07** (Compras, OC inmutable).

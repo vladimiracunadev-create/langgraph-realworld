@@ -1,6 +1,6 @@
 # Hoja de Ruta
 
-> **Versión**: 4.11.0 | **Estado**: Industrial | **Rama principal**: `main`
+> **Versión**: 4.13.0 | **Estado**: Industrial | **Rama principal**: `main`
 
 El estándar técnico del repositorio ya está definido. Antes de crear o modificar un caso, leer el skill directamente — no se rediseña lo que ya existe:
 
@@ -12,7 +12,7 @@ El estándar técnico del repositorio ya está definido. Antes de crear o modifi
 
 ## Estado de los 25 casos
 
-### Operativos e industriales (19)
+### Operativos e industriales (21)
 
 | ID | Caso | Nivel | UI web | Integraciones LIVE |
 |:---:|:---|:---:|:---:|:---|
@@ -32,16 +32,16 @@ El estándar técnico del repositorio ya está definido. Antes de crear o modifi
 | 14 | [Finanzas: Conciliación](cases/14-finanzas-conciliacion/README.md) | OPERATIVO | ✅ | LLM opt-in, z-score outliers, 3 escenarios DEMO |
 | 15 | [E-commerce Postventa](cases/15-ecommerce-postventa/README.md) | OPERATIVO | ✅ | LLM opt-in, 3 routers (intención · elegibilidad · stock), etiqueta SHA-256, 5 escenarios DEMO |
 | 17 | [Legal Intake](cases/17-legal-intake/README.md) | OPERATIVO | ✅ | LLM opt-in (OpenAI), 3 especialidades, 3 plantillas |
+| 18 | [Marketing con QA](cases/18-marketing-contenido-qa/README.md) | OPERATIVO | ✅ | LLM opt-in, doble loop QA (estilo + hechos), fact-check con 6 fuentes |
 | 19 | [DevEx: PR Review](cases/19-devex-pr-review/README.md) | OPERATIVO | ✅ | GitHub API (DEMO) |
 | 21 | [Documentación Automática](cases/21-docs-auto/README.md) | OPERATIVO | ✅ | LLM opt-in, outline adaptativo, loop QA |
+| 22 | [Backoffice Automatización](cases/22-backoffice-automatizacion/README.md) | OPERATIVO | ✅ | LLM opt-in (resumen), 3 routers, loop completitud, cadena de custodia SHA-256, 4 solicitudes DEMO |
 | 25 | [Supervisor + Workers](cases/25-supervisor-workers/README.md) | OPERATIVO | ✅ | 4 workers especializados (DEMO) |
 
-### Scaffold — listos para elevar (6)
+### Scaffold — listos para elevar (4)
 
 | ID | Caso | Dominio | Prioridad |
 |:---:|:---|:---|:---:|
-| 18 | [Marketing con QA](cases/18-marketing-contenido-qa/README.md) | Marketing | 🟡 Ola 3 |
-| 22 | [Backoffice: Automatización](cases/22-backoffice-automatizacion/README.md) | Operaciones | 🟡 Ola 3 |
 | 24 | [Asistente PM](cases/24-pm-assistant/README.md) | Gestión de proyectos | 🟡 Ola 3 |
 | 16 | [Planificador de Viajes](cases/16-viajes-planificador/README.md) | Travel | 🟡 Ola 3 |
 | 20 | [Migración Legacy](cases/20-migracion-legacy/README.md) | Arquitectura | 🟡 Ola 3 |
@@ -81,7 +81,11 @@ SCAFFOLD  →  (seguir SKILL.md)  →  OPERATIVO  →  (observabilidad + hardeni
 | ~~**15 — E-commerce Postventa**~~ | ✅ **COMPLETADO v4.10.0** — Postventa para e-commerce: lookup OMS → clasificación intención → 3 caminos (tracking · devolución con elegibilidad · cambio con stock) → convergencia humano o resolución automática → respuesta empática + resumen | 11 nodos, 3 routers (intención / elegibilidad / stock), etiqueta retorno con SHA-256, 5 escenarios DEMO |
 | ~~**12 — Psicometría y Evaluaciones**~~ | ✅ **COMPLETADO v4.11.0** — Validación psicométrica de instrumentos: revisión experta → ensamblar → pilotaje simulado → análisis (α Cronbach, dificultad, discriminación item-total, DIF entre grupos) → router validez con loop tope → calibración baremos → informes individuales con percentil y banda → informe grupal ejecutivo | 10 nodos, 1 router (validez) + loop, 3 instrumentos DEMO (2 dicotómicos + 1 Likert), 29 tests |
 
-Elevar según disponibilidad y demanda: 18, 22, 24, 16, 20, 23.
+| ~~**18 — Marketing con QA**~~ | ✅ **COMPLETADO v4.12.0** — Pipeline marketing con doble loop QA: parseo de brief → borrador → revisión estilo de marca (tope 2 iter, palabras prohibidas / no preferidas / frases largas) → verificación de hechos (tope 2 iter, fact-check contra 6 fuentes, alucinaciones retiradas) → optimización SEO → aprobación editor (score ponderado hechos 0.5 / estilo 0.3 / SEO 0.2) → publicación → resumen | 10 nodos, 2 routers + 2 loops, 3 briefs DEMO (blog · email · landing), 28 tests |
+
+| ~~**22 — Backoffice Automatización**~~ | ✅ **COMPLETADO v4.13.0** — Pipeline ops: parseo de solicitud → clasificación contra catálogo de operaciones → verificación identidad/permisos → router permisos (rechaza o avanza) → validación de completitud con loop (tope 2 iter, autocompletado DEMO) → ejecución simulada en sistema destino (CRM/HRIS/BI) → router resultado (escalar soporte o confirmar) → log inmutable encadenado SHA-256 sobre todos los eventos | 11 nodos, 3 routers + 1 loop, 4 solicitudes DEMO (exitosa · loop · rechazo · escalada), 33 tests |
+
+Elevar según disponibilidad y demanda: 24, 16, 20, 23.
 
 ---
 

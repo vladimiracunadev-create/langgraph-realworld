@@ -1,0 +1,28 @@
+{
+  "max_iter_estilo": 2,
+  "max_iter_hechos": 2,
+  "umbral_estilo": 80,
+  "umbral_hechos": 90,
+  "umbral_seo": 70,
+  "umbral_riesgo": {
+    "verde_min_score": 88,
+    "amarillo_min_score": 70
+  },
+  "penalizaciones": {
+    "palabra_prohibida": 12,
+    "palabra_no_preferida": 4,
+    "frase_demasiado_larga": 5,
+    "claim_no_verificable": 18,
+    "alucinacion_detectada": 22,
+    "falta_hecho_obligatorio": 10,
+    "keyword_ausente": 6,
+    "sin_cta": 8,
+    "sin_h1": 5
+  },
+  "seo": {
+    "densidad_min_keyword_pct": 0.5,
+    "densidad_max_keyword_pct": 5.0,
+    "meta_description_min_chars": 80,
+    "meta_description_max_chars": 160
+  }
+}

@@ -1,0 +1,58 @@
+[
+  {
+    "id": "BR-001",
+    "titulo": "Lanzamiento plan Pro 2026",
+    "formato": "blog_post",
+    "audiencia": "PyMEs SaaS",
+    "tono": "profesional_cercano",
+    "objetivo": "anunciar el nuevo plan Pro con énfasis en ahorro y soporte 24/7",
+    "keywords": ["plan pro", "saas pymes", "soporte 24/7", "ahorro"],
+    "hechos_obligatorios": [
+      {"id": "F1", "claim": "El plan Pro cuesta 49 USD/mes", "source_id": "PRICING-2026"},
+      {"id": "F2", "claim": "Incluye soporte 24/7 por chat y email", "source_id": "SUPPORT-MATRIX"},
+      {"id": "F3", "claim": "Migración asistida sin costo en los primeros 30 días", "source_id": "ONBOARDING-POLICY"}
+    ],
+    "longitud_objetivo_palabras": 320,
+    "calidad_brief": "alta"
+  },
+  {
+    "id": "BR-002",
+    "titulo": "Email post-evento webinar IA",
+    "formato": "email",
+    "audiencia": "leads_marketing",
+    "tono": "casual_directo",
+    "objetivo": "convertir asistentes del webinar en demos agendadas",
+    "keywords": ["ia generativa", "demo", "casos de uso"],
+    "hechos_obligatorios": [
+      {"id": "F1", "claim": "El webinar tuvo 412 asistentes en vivo", "source_id": "EVENTS-2026"},
+      {"id": "F2", "claim": "La grabación está disponible 90 días", "source_id": "MEDIA-RETENTION"}
+    ],
+    "longitud_objetivo_palabras": 180,
+    "calidad_brief": "media",
+    "claims_riesgosos": [
+      "Garantizamos ROI del 300% en 60 días",
+      "Somos la plataforma #1 del mundo en IA generativa"
+    ]
+  },
+  {
+    "id": "BR-003",
+    "titulo": "Landing producto Legacy v1",
+    "formato": "landing",
+    "audiencia": "enterprise_legacy",
+    "tono": "formal_corporativo",
+    "objetivo": "reactivar cuentas enterprise inactivas con foco en cumplimiento",
+    "keywords": ["enterprise", "cumplimiento", "soc2", "iso27001"],
+    "hechos_obligatorios": [
+      {"id": "F1", "claim": "Cumple con SOC 2 Tipo II", "source_id": "COMPLIANCE-2026"},
+      {"id": "F2", "claim": "Cumple con ISO 27001", "source_id": "COMPLIANCE-2026"},
+      {"id": "F3", "claim": "Auditoría externa anual por Big4", "source_id": "COMPLIANCE-2026"}
+    ],
+    "longitud_objetivo_palabras": 260,
+    "calidad_brief": "baja",
+    "claims_riesgosos": [
+      "Cero brechas de seguridad en toda nuestra historia",
+      "El único producto enterprise verdaderamente seguro",
+      "Compatible con todos los sistemas legacy del mundo"
+    ]
+  }
+]

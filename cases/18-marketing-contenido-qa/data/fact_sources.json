@@ -1,0 +1,54 @@
+{
+  "PRICING-2026": {
+    "titulo": "Tabla de precios oficial 2026",
+    "vigencia": "2026-01-01..2026-12-31",
+    "claims_verificados": [
+      "El plan Pro cuesta 49 USD/mes",
+      "El plan Free incluye 3 usuarios",
+      "El plan Enterprise se cotiza por volumen"
+    ]
+  },
+  "SUPPORT-MATRIX": {
+    "titulo": "Matriz de soporte por plan",
+    "vigencia": "2026",
+    "claims_verificados": [
+      "Incluye soporte 24/7 por chat y email",
+      "Soporte telefónico solo en plan Enterprise",
+      "SLA de respuesta de 4 horas en Pro"
+    ]
+  },
+  "ONBOARDING-POLICY": {
+    "titulo": "Política de onboarding y migración",
+    "vigencia": "2026",
+    "claims_verificados": [
+      "Migración asistida sin costo en los primeros 30 días",
+      "Onboarding incluye sesión 1:1 de 60 minutos"
+    ]
+  },
+  "EVENTS-2026": {
+    "titulo": "Estadísticas de eventos 2026",
+    "vigencia": "2026",
+    "claims_verificados": [
+      "El webinar tuvo 412 asistentes en vivo",
+      "El NPS de los eventos fue 62 en 2026"
+    ]
+  },
+  "MEDIA-RETENTION": {
+    "titulo": "Política de retención de grabaciones",
+    "vigencia": "2026",
+    "claims_verificados": [
+      "La grabación está disponible 90 días",
+      "Los assets visuales se retienen 1 año"
+    ]
+  },
+  "COMPLIANCE-2026": {
+    "titulo": "Certificaciones de cumplimiento vigentes",
+    "vigencia": "2026",
+    "claims_verificados": [
+      "Cumple con SOC 2 Tipo II",
+      "Cumple con ISO 27001",
+      "Auditoría externa anual por Big4",
+      "Cumple con GDPR"
+    ]
+  }
+}

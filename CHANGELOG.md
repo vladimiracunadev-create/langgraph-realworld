@@ -5,6 +5,67 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/1.0.0/).
 
 ---
 
+## v4.13.0 — 2026-05-18
+
+### Agregado
+
+- **Caso 22 — Backoffice Automatización elevado a OPERATIVO**: backend FastAPI + LangGraph completo con modo DEMO/LIVE.
+  - `StateGraph` con 11 nodos: `parsear_solicitud → clasificar_tipo_operacion → verificar_identidad → {permisos_router} → validar_datos_operacion → {completitud_router} → ejecutar_operacion → {ejecucion_router} → confirmar_solicitante | escalar_soporte | rechazar_solicitud → registrar_log_auditoria → producir_resumen`.
+  - **3 routers** independientes con resultados terminales distintos:
+    - `permisos_router`: `permisos_ok=True → validar_datos_operacion`; si no → `rechazar_solicitud` (estado final `rechazada`).
+    - `completitud_router` con loop (`max_iter_completitud=2`): si hay campos faltantes y queda margen → `solicitar_informacion` (autocompletado DEMO determinista por nombre de campo) → reintenta `validar_datos_operacion`.
+    - `ejecucion_router`: `resultado.ok=True → confirmar_solicitante` (estado final `exitosa`); si no → `escalar_soporte` (estado final `escalada` a `soporte_email` de `policy.json`).
+  - **Cadena de custodia SHA-256** encadenada sobre todos los eventos del pipeline (`hash_n = SHA256(hash_{n-1} | sort_json(evento))` desde `hash_0 = "0"·64`). Mismo patrón que casos 06 (Compliance), 07 (Compras OC) y 15 (E-commerce etiquetas). Cualquier alteración rompe la cadena.
+  - Verificación de identidad determinista contra `empleados.json` (4 empleados con matriz de permisos por rol). La operación solicitada debe estar en `operaciones_catalog.json` (4 operaciones: CRM, HRIS, BI) y el empleado debe tener el permiso correspondiente activo.
+  - Referencia de ejecución determinista basada en `sha256(sort_json(datos))[:8]` — no depende de `PYTHONHASHSEED`, garantiza idempotencia.
+  - Modo DEMO: 4 solicitudes calibradas —
+    - `SOL-001` (alta_usuario_crm · brief limpio, permisos OK): `exitosa`, 0 iter.
+    - `SOL-002` (modificacion_datos_cliente · falta `nuevo_valor`): `exitosa`, iter ≥ 1.
+    - `SOL-003` (baja_empleado_hris · solicitante sin permiso): `rechazada` con motivo `sin_permiso_para_operacion`, no llega a ejecución.
+    - `SOL-004` (reporte_ventas_mensual · `falla_simulada=true` en catálogo): `escalada` a `soporte-it@acme.cl`.
+  - Modo LIVE: GPT-4o-mini sólo redacta el resumen ejecutivo final (≤ 120 palabras). El pipeline operativo permanece determinista en LIVE.
+  - 33 tests (18 graph flow + 15 API) — todos verdes. Cubren: helpers (`_hash_eslabon` cambia con payload y encadena), nodos (parseo / clasificación / identidad OK y sin permiso), 3 routers en sus 2 estados cada uno + loop de completitud, 4 flujos end-to-end por solicitud, eventos completos, integridad de la cadena de hashes, determinismo de la referencia entre dos compilaciones del grafo.
+  - Docker: `Dockerfile` non-root + `compose.yml` aislado (puerto 8022). Misma plantilla observable que casos 04/05/06/07/11/12/14/15/18/21 (8 capas de seguridad: rate limit, OAuth2/OIDC opt-in, trace IDs, JSON structured logging, `/metrics`, healthchecks, validación Pydantic, CORS controlado).
+  - UI dark theme acento sky (#38bdf8) con selector de solicitud, timeline de eventos, chips de estado/iteraciones/sistema, mensaje al solicitante, hash final de auditoría, panel de resumen, badge DEMO/LIVE.
+
+### Modificado
+
+- **`docker-compose.yml` raíz**: bloques `case18` y `case22` migrados de `demo/` (Nginx estático en :9018/:9022) al backend operativo (`backend/` en :8018/:8022) con volúmenes para `data` y `web`, env `OPENAI_API_KEY` opt-in.
+- **Portal raíz (`index.html`)**: cards 18 y 22 actualizadas de `LEGACY` → `OPERATIVO` apuntando a `http://localhost:8018/` y `http://localhost:8022/`; contador `18/25` → `21/25`, pill `18 Casos Activos` → `21 Casos Activos`, banner principal → v4.13.0.
+- **README raíz**: contador `20/25` → `21/25` (84%), scaffolds `5` → `4`, badge versión → 4.13.0, lista canónica de operativos incluye caso 22, nueva fila de destacados para caso 22.
+- **ROADMAP v4.13.0**: caso 22 movido de scaffold a operativos (21 casos totales). Scaffolds Ola 3 reducidos a 4 (24, 16, 20, 23).
+
+---
+
+## v4.12.0 — 2026-05-18
+
+### Agregado
+
+- **Caso 18 — Marketing de Contenido con QA elevado a OPERATIVO**: backend FastAPI + LangGraph completo con modo DEMO/LIVE.
+  - `StateGraph` con 10 nodos: `parsear_brief → generar_borrador → revisar_estilo_marca → {estilo_router} → verificar_hechos → {hechos_router} → optimizar_seo → aprobacion_editor → publicar_contenido → producir_resumen`.
+  - Dos loops condicionales independientes con topes (`max_iter_estilo=2`, `max_iter_hechos=2`):
+    - **Loop tono**: `revisar_estilo_marca → reescribir_tono → revisar_estilo_marca` cuando el score de estilo < 80 o se detectan palabras prohibidas.
+    - **Loop hechos**: `verificar_hechos → corregir_hechos → verificar_hechos` cuando hay alucinaciones (claims no respaldados) o hechos obligatorios faltantes.
+  - QA estilo determinista: detecta palabras prohibidas (10 entradas en `brand_style.json`: «revolucionario», «#1», «garantizado», etc.), palabras no preferidas (sustituciones tipo «usuarios»→«clientes»), frases por encima de 28 palabras.
+  - QA factual determinista: contrasta el borrador contra `fact_sources.json` (6 fuentes autorizadas: PRICING-2026, SUPPORT-MATRIX, ONBOARDING-POLICY, EVENTS-2026, MEDIA-RETENTION, COMPLIANCE-2026). Los `claims_riesgosos` del brief representan afirmaciones sin respaldo que el agente debe retirar; los `hechos_obligatorios` no presentes se inyectan citando la fuente.
+  - SEO determinista: densidad de keywords por frase, presencia de H1, presencia de CTA reconocible.
+  - Editor: score global ponderado (`hechos·0.5 + estilo·0.3 + seo·0.2`) → riesgo verde/amarillo/rojo y decisión aprobado / aprobado_con_observaciones / rechazado.
+  - Modo DEMO: 3 briefs calibrados —
+    - `BR-001` (blog_post · Plan Pro · brief limpio): verde, 0 iter. hechos.
+    - `BR-002` (email · webinar IA · 2 claims riesgosos): iter. hechos ≥ 1, alucinaciones retiradas.
+    - `BR-003` (landing · enterprise legacy · 3 claims riesgosos + tono formal): iter. hechos ≥ 1, riesgo medio/alto.
+  - Modo LIVE: GPT-4o-mini sólo redacta el resumen ejecutivo final (≤ 150 palabras, español). El pipeline QA permanece determinista en LIVE.
+  - 28 tests (17 graph flow + 11 API) — todos verdes. Cubren: helpers de render por formato, parseo de brief, routers en sus 3 estados, 3 flujos end-to-end por brief, eventos completos, consistencia de métricas, retiro efectivo de alucinaciones, alineación riesgo↔decisión editor.
+  - Docker: `Dockerfile` non-root + `compose.yml` aislado (puerto 8018). Misma plantilla observable que casos 04/05/06/07/11/12/14/15/21 (8 capas de seguridad: rate limit, OAuth2/OIDC opt-in, trace IDs, JSON structured logging, `/metrics`, healthchecks, validación Pydantic, CORS controlado).
+  - UI dark theme acento púrpura (#a78bfa) con selector de brief, timeline de eventos, KPIs (global · estilo · hechos · seo), chips de riesgo + decisión editor + iteraciones, panel de contenido final renderizado, badge DEMO/LIVE.
+
+### Modificado
+
+- **README raíz**: contador `19/25` → `20/25` (80%), scaffolds `9` → `5`, badge versión → 4.12.0, lista canónica de operativos incluye caso 18, fila de scaffolds reducida (16/20/22/23/24), nueva fila de destacados para caso 18.
+- **ROADMAP v4.12.0**: caso 18 movido de scaffold a operativos (20 casos totales). Scaffolds Ola 3 reducidos a 5 (22, 24, 16, 20, 23).
+
+---
+
 ## v4.11.0 — 2026-05-15
 
 ### Agregado

@@ -1,0 +1,9 @@
+{
+  "max_iter_completitud": 2,
+  "umbral_prioridad_escalada_inmediata": "alta",
+  "soporte_email": "soporte-it@acme.cl",
+  "auditoria": {
+    "retencion_dias": 365,
+    "hash_algorithm": "sha256"
+  }
+}

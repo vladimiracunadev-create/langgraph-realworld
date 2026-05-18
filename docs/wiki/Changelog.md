@@ -1,5 +1,39 @@
 # Changelog
 
+## v4.13.0 - 2026-05-18
+
+### Added
+
+- Caso 22 — Backoffice Automatizacion elevado a OPERATIVO: 11 nodos LangGraph + 3 routers (permisos · completitud con loop · ejecucion) y cadena de custodia SHA-256 encadenada sobre todos los eventos del pipeline (mismo patron que casos 06/07/15). Verificacion de identidad/permisos contra `empleados.json` (4 empleados, matriz de permisos), catalogo de 4 operaciones (CRM, HRIS, BI) con campos requeridos y SLA, ejecucion simulada determinista, 4 solicitudes DEMO: SOL-001 (alta CRM exitosa), SOL-002 (datos faltantes con loop), SOL-003 (sin permiso rechazada), SOL-004 (falla del sistema escalada a soporte). Resumen ejecutivo LIVE opt-in (GPT-4o-mini). Puerto 8022.
+- Suite de tests del caso 22: 33 tests (18 de grafo + 15 de API) todos en verde.
+- Referencia de ejecucion determinista basada en `sha256(sort_json(datos))[:8]` — no depende de PYTHONHASHSEED.
+- Reemplazo del demo legacy nginx por backend real LangGraph + FastAPI con UI dark theme acento sky.
+
+### Changed
+
+- Total de backends operativos: 21 (incorpora caso 22 — 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15, 17, 18, 19, 21, 22, 25).
+- Total de scaffolds: 4 (16, 20, 23, 24).
+- Version bumped a 4.13.0 en README, ROADMAP, CHANGELOG, portal, docs y wiki.
+- `docker-compose.yml` raiz: caso 22 movido de Nginx :9022 a backend :8022.
+
+---
+
+## v4.12.0 - 2026-05-18
+
+### Added
+
+- Caso 18 — Marketing Contenido QA elevado a OPERATIVO: 10 nodos LangGraph + 2 routers + 2 loops independientes (estilo de marca y verificacion factual, tope 2 iteraciones cada uno). QA estilo determinista (10 palabras prohibidas, palabras preferidas, limite de longitud por frase). QA factual contra `fact_sources.json` (6 fuentes autorizadas: PRICING-2026, SUPPORT-MATRIX, ONBOARDING-POLICY, EVENTS-2026, MEDIA-RETENTION, COMPLIANCE-2026): retira alucinaciones (claims sin respaldo) e inyecta hechos obligatorios faltantes citando la fuente. Optimizacion SEO (densidad de keywords, H1, CTA). Editor calcula score global ponderado (hechos·0.5 + estilo·0.3 + SEO·0.2) → riesgo + decision. 3 briefs DEMO: BR-001 (blog limpio verde), BR-002 (email con 2 alucinaciones), BR-003 (landing legacy con 3 alucinaciones). Resumen ejecutivo LIVE opt-in. Puerto 8018.
+- Suite de tests del caso 18: 28 tests (17 de grafo + 11 de API) todos en verde.
+- Reemplazo del demo legacy nginx por backend real LangGraph + FastAPI con UI dark theme acento purpura.
+
+### Changed
+
+- Total de backends operativos: 20 (incorpora caso 18 — 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15, 17, 18, 19, 21, 25).
+- Total de scaffolds: 5 (16, 20, 22, 23, 24).
+- Version bumped a 4.12.0.
+
+---
+
 ## v4.11.0 - 2026-05-15
 
 ### Added
