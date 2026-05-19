@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lgrw-common"
+version = "4.15.0"
+description = "Shared utilities for the 25 LangGraph Realworld backends (auth + settings)"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi",
+    "python-dotenv",
+]
+
+[tool.setuptools]
+packages = ["lgrw_common"]

@@ -32,6 +32,9 @@ jobs:
       - name: Tests (pytest)
         run: |
           pytest -q tests
+      - name: Verify shared/ canonical files in sync with all 25 cases
+        run: |
+          python scripts/sync_shared.py --check
 
   python_case:
     name: "Python checks (case ${{ matrix.case }})"
