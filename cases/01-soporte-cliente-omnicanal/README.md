@@ -1,7 +1,8 @@
-# Caso 01: Soporte Cliente Omnicanal
+# Caso 01 — Soporte Cliente Omnicanal
 
-> [!IMPORTANT]
-> **Estado**: `OPERATIVO` | **Versión**: 3.9.0 | **Referencia**: Routing condicional + DEMO/LIVE
+> [!NOTE]
+> **Estado**: `✅ OPERATIVO` | **Versión repo**: 4.0.0 | **Puerto**: `8001`
+> **Patrón**: Clasificación de intención + priorización + routing condicional (DEMO/LIVE)
 
 Agente de soporte omnicanal que clasifica tickets entrantes por canal (email, chat, llamada),
 enriquece el contexto con historial del cliente y aplica routing condicional hacia el flujo de resolución adecuado.

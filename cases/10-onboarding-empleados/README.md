@@ -10,6 +10,21 @@ Agente de onboarding que orquesta el proceso de incorporación de nuevos emplead
 provisionamiento de cuentas, asignación de accesos según rol (RBAC), notificaciones
 a equipos y seguimiento del checklist de tareas hasta completar la incorporación.
 
+## Flujo (LangGraph)
+
+```mermaid
+graph TD
+    A([START]) --> B[load_employee]
+    B --> C[classify_role]
+    C --> D[provision_tools]
+    D --> E[create_corporate_accounts]
+    E --> F[assign_permissions]
+    F --> G[generate_checklist]
+    G --> H[send_welcome_package]
+    H --> I[confirm_onboarding]
+    I --> J([END])
+```
+
 ---
 
 ## Integraciones opcionales

@@ -14,6 +14,25 @@ final con alertas de impedimentos o métricas de retrospectiva.
 
 ## Flujo (LangGraph)
 
+```mermaid
+graph TD
+    A([START]) --> B[clarificar_problema]
+    B --> C[definir_epica]
+    C --> D[descomponer_historias]
+    D --> E[estimar_complejidad]
+    E --> F[priorizar_backlog]
+    F --> G[crear_tickets]
+    G --> H[asignar_sprint]
+    H --> I[monitorear_progreso]
+    I --> J{estado_sprint_router}
+    J -->|impedimento| K[escalar_impedimento]
+    J -->|normal| L[generar_reporte_estado]
+    J -->|completado| M[retrospectiva_y_metricas]
+    K --> L
+    M --> L
+    L --> N([END])
+```
+
 ```
 clarificar_problema → definir_epica → descomponer_historias → estimar_complejidad
   → priorizar_backlog → crear_tickets → asignar_sprint → monitorear_progreso

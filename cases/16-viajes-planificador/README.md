@@ -14,6 +14,30 @@ iterativos del viajero hasta producir un brief final aprobado.
 
 ## Flujo (LangGraph)
 
+```mermaid
+graph TD
+    A([START]) --> B[parsear_requisitos]
+    B --> C[verificar_politica_viajes]
+    C --> D{politica_router}
+    D -->|violacion| E[rechazar_viaje]
+    D -->|politica_ok| F[buscar_vuelos]
+    F --> G[buscar_alojamiento]
+    G --> H[buscar_movilidad]
+    H --> I[ensamblar_itinerario]
+    I --> J[validar_presupuesto]
+    J --> K{cumple_restricciones_router}
+    K -->|fuera presupuesto ∧ iter<max| L[optimizar_costos]
+    K -->|cumple o tope| M[presentar_itinerario]
+    L --> I
+    M --> N{decision_viajero_router}
+    N -->|ajustar ∧ iter<max| O[aplicar_ajuste_iterativo]
+    N -->|aprobar o tope| P[generar_brief_viaje]
+    O --> G
+    E --> Q[registrar_auditoria]
+    P --> Q
+    Q --> R([END])
+```
+
 ```
 parsear_requisitos → verificar_politica_viajes
      → politica_router

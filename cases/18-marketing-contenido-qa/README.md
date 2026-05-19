@@ -12,6 +12,25 @@ hechos contra fuentes autorizadas, optimiza SEO y lo somete a aprobación editor
 
 ## Flujo (LangGraph)
 
+```mermaid
+graph TD
+    A([START]) --> B[parsear_brief]
+    B --> C[generar_borrador]
+    C --> D[revisar_estilo_marca]
+    D --> E{estilo_router}
+    E -->|ok=False ∧ iter<max| F[reescribir_tono]
+    E -->|ok o tope| G[verificar_hechos]
+    F --> D
+    G --> H{hechos_router}
+    H -->|ok=False ∧ iter<max| I[corregir_hechos]
+    H -->|ok o tope| J[optimizar_seo]
+    I --> G
+    J --> K[aprobacion_editor]
+    K --> L[publicar_contenido]
+    L --> M[producir_resumen]
+    M --> N([END])
+```
+
 ```
 parsear_brief → generar_borrador
      → revisar_estilo_marca

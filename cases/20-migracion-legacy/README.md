@@ -13,6 +13,25 @@ cuando fallan. Termina con una validación integral y un reporte ejecutivo deter
 
 ## Flujo (LangGraph)
 
+```mermaid
+graph TD
+    A([START]) --> B[analizar_codigo_legacy]
+    B --> C[mapear_dependencias]
+    C --> D[planificar_migracion]
+    D --> E[seleccionar_lote]
+    E --> F[refactorizar_modulo]
+    F --> G[generar_tests_equivalencia]
+    G --> H[ejecutar_tests]
+    H --> I{resultado_tests_router}
+    I -->|ok o tope regresion| J[registrar_progreso]
+    I -->|falla ∧ iter<max| K[analizar_regresion]
+    K --> F
+    J --> L{migracion_completa_router}
+    L -->|pendientes| E
+    L -->|sin pendientes| M[validacion_integral]
+    M --> N([END])
+```
+
 ```
 analizar_codigo_legacy → mapear_dependencias → planificar_migracion
      → seleccionar_lote → refactorizar_modulo → generar_tests_equivalencia

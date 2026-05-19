@@ -1,7 +1,22 @@
-# Caso 09: RRHH Screening + Agenda
+# Caso 09 — RRHH Screening y Agenda
 
-> [!IMPORTANT]
-> **Estado**: `INDUSTRIAL` | **Versión**: 3.9.0 | **Referencia**: Resiliencia y observabilidad
+> [!NOTE]
+> **Estado**: `🏭 INDUSTRIAL` | **Versión repo**: 4.0.0 | **Puerto**: `8009`
+> **Patrón**: Scoring iterativo por candidato + shortlist + agendamiento + notificaciones
+
+## Flujo (LangGraph)
+
+```mermaid
+graph TD
+    A([START]) --> B[load_inputs]
+    B --> C[score_one]
+    C --> D{should_keep_scoring}
+    D -->|cursor < total| C
+    D -->|terminado| E[build_shortlist]
+    E --> F[schedule_interviews]
+    F --> G[notify_candidates]
+    G --> H([END])
+```
 
 Agente de screening y agenda para RRHH que evalúa CVs, puntúa candidatos con criterios configurables
 y agenda entrevistas integrándose con Google Calendar y notificaciones por email.

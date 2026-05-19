@@ -13,6 +13,28 @@ log inmutable encadenado por hash SHA-256 para auditoría regulatoria.
 
 ## Flujo (LangGraph)
 
+```mermaid
+graph TD
+    A([START]) --> B[parsear_solicitud]
+    B --> C[clasificar_tipo_operacion]
+    C --> D[verificar_identidad]
+    D --> E{permisos_router}
+    E -->|sin_permisos| F[rechazar_solicitud]
+    E -->|con_permisos| G[validar_datos_operacion]
+    G --> H{completitud_router}
+    H -->|faltantes ∧ iter<max| I[solicitar_informacion]
+    H -->|completos o tope| J[ejecutar_operacion]
+    I --> G
+    J --> K{ejecucion_router}
+    K -->|error_sistema| L[escalar_soporte]
+    K -->|exitoso| M[confirmar_solicitante]
+    F --> N[registrar_log_auditoria]
+    L --> N
+    M --> N
+    N --> O[producir_resumen]
+    O --> P([END])
+```
+
 ```
 parsear_solicitud → clasificar_tipo_operacion → verificar_identidad
      → permisos_router

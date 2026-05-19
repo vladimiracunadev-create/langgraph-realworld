@@ -1,7 +1,8 @@
-# Caso 02: Mesa de Ayuda TI / SRE Helpdesk
+# Caso 02 — Mesa de Ayuda TI / Runbooks
 
-> [!IMPORTANT]
-> **Estado**: `OPERATIVO` | **Versión**: 3.9.0 | **Referencia**: FastAPI + LangGraph + SRE Terminal
+> [!NOTE]
+> **Estado**: `✅ OPERATIVO` | **Versión repo**: 4.0.0 | **Puerto**: `8002`
+> **Patrón**: Clasificación + ejecución de runbooks con doble router (categoría + aprobación)
 
 Sistema de respuesta autónoma para Helpdesk corporativo, MLOps e incidentes SRE.
 Combina enriquecimiento de contexto desde CMDB mock, clasificación guiada por LangGraph,

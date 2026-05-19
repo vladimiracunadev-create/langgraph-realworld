@@ -1,7 +1,8 @@
-# Caso 25: Supervisor y Workers — Orquestación Multi-agente
+# Caso 25 — Supervisor y Workers (Due Diligence)
 
 > [!NOTE]
-> **Estado**: `SCAFFOLD` | **Versión repo**: 3.9.0 | **Tipo**: Multi-agente con orquestación por subtareas paralelas
+> **Estado**: `✅ OPERATIVO` | **Versión repo**: 4.0.0 | **Puerto**: `8025`
+> **Patrón**: Supervisor + workers especializados (financial/legal/operational/reputational) + reconciliación con detección de conflictos
 
 Implementa el patrón Supervisor-Workers de LangGraph para descomponer tareas complejas en subtareas independientes que se ejecutan en paralelo por agentes especializados, con un supervisor que coordina la distribución del trabajo, agrega los resultados parciales y gestiona los fallos individuales sin interrumpir el flujo global. Demuestra cómo escalar la capacidad de procesamiento mediante especialización y paralelismo en flujos de agentes enterprise.
 
