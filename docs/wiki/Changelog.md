@@ -1,5 +1,23 @@
 # Changelog
 
+## v4.14.0 - 2026-05-19
+
+### Added
+
+- Caso 16 — Planificador de Viajes elevado a OPERATIVO: pipeline LangGraph (parseo de requerimiento → búsqueda de opciones vuelos · hospedaje · actividades DEMO → score multi-criterio precio · duración · calificación → armado de itinerario → resumen ejecutivo). LIVE opt-in (GPT-4o-mini). Puerto 8016. Tests verdes.
+- Caso 20 — Migración Legacy elevado a OPERATIVO: pipeline LangGraph (inventario del sistema legacy → análisis de dependencias → plan de migración multi-fase → estimación de riesgo → reporte ejecutivo). Misma plantilla observable que la familia operativa (rate limit, OAuth2 opt-in, trace IDs, JSON logging, `/metrics`). Puerto 8020. Tests verdes.
+- Caso 23 — Salud Pre-triage elevado a OPERATIVO: pipeline clínico determinista (ingesta de síntomas → clasificación de severidad → router triage urgente · ambulatorio · auto-cuidado → recomendaciones con disclaimer médico). LIVE opt-in sólo redacta el mensaje empático final. Puerto 8023. Tests verdes.
+- Caso 24 — Asistente PM elevado a OPERATIVO: pipeline LangGraph (ingesta de backlog → identificación de riesgos → priorización multi-criterio impacto · urgencia · esfuerzo → reporte ejecutivo). Puerto 8024. Tests verdes.
+
+### Changed
+
+- Total de backends operativos: 25 (01-25 sin omisiones, incluye industriales 09, 10, 13). Ola 3 cerrada.
+- Total de scaffolds: 0 — portfolio al 100%.
+- Version bumped a 4.14.0 en README, ROADMAP, CHANGELOG, portal, docs y wiki.
+- Portal raíz (`index.html`): cards 16, 20, 23, 24 migradas de LEGACY a OPERATIVO con enlace a sus backends (8016, 8020, 8023, 8024).
+
+---
+
 ## v4.13.0 - 2026-05-18
 
 ### Added
