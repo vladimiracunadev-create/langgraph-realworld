@@ -50,29 +50,47 @@ def client_identity(request: Request) -> str:
     return "unknown"
 
 
+
+import time
+
+_JWKS_CACHE: dict[str, tuple[float, dict]] = {}
+_JWKS_TTL_SECONDS = 300
+
+
+def _fetch_jwks(jwks_url: str) -> dict:
+    now = time.monotonic()
+    cached = _JWKS_CACHE.get(jwks_url)
+    if cached is not None and (now - cached[0]) < _JWKS_TTL_SECONDS:
+        return cached[1]
+    import urllib.request
+    import json as _json
+    with urllib.request.urlopen(jwks_url, timeout=5) as resp:  # noqa: S310
+        keys = _json.loads(resp.read())
+    _JWKS_CACHE[jwks_url] = (now, keys)
+    return keys
+
+
 def _validate_jwt(token: str) -> None:
     jwks_url = os.getenv("OAUTH2_JWKS_URL", "").strip()
     audience = os.getenv("OAUTH2_AUDIENCE", "").strip()
     issuer = os.getenv("OAUTH2_ISSUER", "").strip()
     if not jwks_url:
         raise ValueError("USE_OAUTH2=true pero OAUTH2_JWKS_URL no está configurado")
-    try:
-        import urllib.request
+    if not audience:
+        raise ValueError("USE_OAUTH2=true requiere OAUTH2_AUDIENCE configurado")
+    if not issuer:
+        raise ValueError("USE_OAUTH2=true requiere OAUTH2_ISSUER configurado")
 
+    try:
         from jose import jwt
-        with urllib.request.urlopen(jwks_url, timeout=5) as resp:  # noqa: S310
-            keys = __import__("json").loads(resp.read())
+        keys = _fetch_jwks(jwks_url)
         options: dict = {}
-        if not audience:
-            options["verify_aud"] = False
-        if not issuer:
-            options["verify_iss"] = False
         jwt.decode(token, keys, algorithms=["RS256", "ES256"],
                    audience=audience or None, issuer=issuer or None, options=options)
     except ImportError as exc:
         raise ValueError("python-jose no instalado") from exc
     except Exception as exc:  # noqa: BLE001
-        raise ValueError(f"Token OAuth2 inválido: {exc}") from exc
+        raise ValueError("Token OAuth2 invalido") from exc
 
 
 async def auth_middleware(
