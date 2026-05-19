@@ -16,9 +16,9 @@ anyio==4.13.0
     #   openai
     #   starlette
     #   watchfiles
-boto3==1.42.87
+boto3==1.43.11
     # via -r requirements.in
-botocore==1.42.87
+botocore==1.43.11
     # via
     #   boto3
     #   s3transfer
@@ -35,13 +35,6 @@ charset-normalizer==3.4.7
     #   requests
 click==8.3.2
     # via uvicorn
-colorama==0.4.6
-    # via
-    #   click
-    #   loguru
-    #   pytest
-    #   tqdm
-    #   uvicorn
 cryptography==46.0.7
     # via
     #   google-auth
@@ -240,7 +233,7 @@ rich==14.3.3
     # via -r requirements.in
 ruff==0.15.10
     # via -r requirements.in
-s3transfer==0.16.0
+s3transfer==0.17.0
     # via boto3
 sendgrid==6.12.5
     # via -r requirements.in
@@ -274,8 +267,6 @@ typing-inspection==0.4.2
     # via
     #   fastapi
     #   pydantic
-tzdata==2026.1
-    # via tzlocal
 tzlocal==5.3.1
     # via dateparser
 uritemplate==4.2.0
@@ -290,14 +281,14 @@ uuid-utils==0.14.1
     #   langsmith
 uvicorn[standard]==0.44.0
     # via -r requirements.in
+uvloop==0.22.1
+    # via uvicorn
 watchfiles==1.1.1
     # via uvicorn
 websockets==16.0
     # via uvicorn
 werkzeug==3.1.8
     # via sendgrid
-win32-setctime==1.2.0
-    # via loguru
 xxhash==3.6.0
     # via
     #   langgraph
