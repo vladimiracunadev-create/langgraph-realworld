@@ -1,0 +1,6 @@
+[
+  {"id": "EQ-AUTH", "nombre": "Squad Auth", "miembros": 4, "capacidad_puntos": 20},
+  {"id": "EQ-PAYMENTS", "nombre": "Squad Pagos", "miembros": 5, "capacidad_puntos": 25},
+  {"id": "EQ-DATA", "nombre": "Squad Data", "miembros": 3, "capacidad_puntos": 15},
+  {"id": "EQ-REPORTS", "nombre": "Squad Reportes", "miembros": 3, "capacidad_puntos": 12}
+]

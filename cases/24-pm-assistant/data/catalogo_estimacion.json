@@ -1,0 +1,7 @@
+{
+  "XS": {"puntos": 1, "ejemplos": ["fix de copy", "cambio de color"]},
+  "S": {"puntos": 2, "ejemplos": ["endpoint CRUD simple", "botón UI"]},
+  "M": {"puntos": 5, "ejemplos": ["pantalla con validaciones", "integración API conocida"]},
+  "L": {"puntos": 8, "ejemplos": ["nuevo flujo end-to-end", "integración con proveedor"]},
+  "XL": {"puntos": 13, "ejemplos": ["refactor de módulo", "rediseño arquitectónico"]}
+}

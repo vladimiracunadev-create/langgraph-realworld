@@ -1,0 +1,173 @@
+[
+  {
+    "id": "I-001",
+    "titulo": "Login con Google",
+    "contexto": "Permitir a los usuarios autenticarse con su cuenta de Google para reducir fricción en el alta.",
+    "stakeholders": ["growth", "ingenieria", "seguridad"],
+    "fuente": "idea",
+    "equipo_id": "EQ-AUTH",
+    "valor_negocio": 80,
+    "historias": [
+      {
+        "id": "H-001-1",
+        "como": "usuario nuevo",
+        "quiero": "registrarme con mi cuenta de Google",
+        "para": "no tener que crear otra contraseña",
+        "complejidad": "S",
+        "acceptance_criteria": ["botón Google visible", "callback OAuth valida correo"]
+      },
+      {
+        "id": "H-001-2",
+        "como": "usuario existente",
+        "quiero": "vincular mi cuenta Google",
+        "para": "iniciar sesión más rápido",
+        "complejidad": "M",
+        "acceptance_criteria": ["enlace funciona si emails coinciden"]
+      },
+      {
+        "id": "H-001-3",
+        "como": "administrador",
+        "quiero": "ver qué usuarios usan Google login",
+        "para": "auditar accesos",
+        "complejidad": "S",
+        "acceptance_criteria": ["dashboard muestra método de auth"]
+      }
+    ],
+    "progreso_sprint": {
+      "por_hacer": 0,
+      "en_progreso": 1,
+      "en_revision": 1,
+      "hecho": 1,
+      "bloqueado": 0
+    },
+    "impedimentos": []
+  },
+  {
+    "id": "I-002",
+    "titulo": "Refactor sistema de pagos",
+    "contexto": "El módulo de pagos tiene deuda técnica que impide agregar nuevos proveedores.",
+    "stakeholders": ["ingenieria", "finanzas"],
+    "fuente": "requerimiento",
+    "equipo_id": "EQ-PAYMENTS",
+    "valor_negocio": 60,
+    "historias": [
+      {
+        "id": "H-002-1",
+        "como": "ingeniero de plataforma",
+        "quiero": "abstraer la capa de proveedores",
+        "para": "agregar Stripe sin reescribir el core",
+        "complejidad": "XL",
+        "acceptance_criteria": ["interfaz PaymentGateway", "PayPal migrado a la interfaz"]
+      },
+      {
+        "id": "H-002-2",
+        "como": "ingeniero",
+        "quiero": "tests de contrato para gateways",
+        "para": "evitar regresiones",
+        "complejidad": "M",
+        "acceptance_criteria": ["suite contract-tests verde"]
+      }
+    ],
+    "progreso_sprint": {
+      "por_hacer": 1,
+      "en_progreso": 0,
+      "en_revision": 0,
+      "hecho": 0,
+      "bloqueado": 1
+    },
+    "impedimentos": [
+      {
+        "id": "IMP-002-1",
+        "descripcion": "Credenciales de sandbox de PayPal expiradas, bloquea integración",
+        "dias_abierto": 4,
+        "responsable": "ops-pagos"
+      }
+    ]
+  },
+  {
+    "id": "I-003",
+    "titulo": "Mejora dashboard analytics",
+    "contexto": "Stakeholders piden gráficos comparativos mes vs mes en el dashboard ejecutivo.",
+    "stakeholders": ["producto", "data"],
+    "fuente": "requerimiento",
+    "equipo_id": "EQ-DATA",
+    "valor_negocio": 50,
+    "historias": [
+      {
+        "id": "H-003-1",
+        "como": "ejecutivo",
+        "quiero": "ver evolución mensual de KPIs",
+        "para": "detectar tendencias",
+        "complejidad": "M",
+        "acceptance_criteria": ["gráfico de líneas con 6 meses"]
+      },
+      {
+        "id": "H-003-2",
+        "como": "analista",
+        "quiero": "exportar el gráfico a PNG",
+        "para": "compartirlo en reportes",
+        "complejidad": "S",
+        "acceptance_criteria": ["botón export funcional"]
+      }
+    ],
+    "progreso_sprint": {
+      "por_hacer": 0,
+      "en_progreso": 0,
+      "en_revision": 0,
+      "hecho": 2,
+      "bloqueado": 0
+    },
+    "impedimentos": []
+  },
+  {
+    "id": "I-004",
+    "titulo": "Exportar a Excel",
+    "contexto": "Feedback recurrente de usuarios: necesitan exportar reportes a Excel además de CSV.",
+    "stakeholders": ["soporte", "producto"],
+    "fuente": "feedback",
+    "equipo_id": "EQ-REPORTS",
+    "valor_negocio": 70,
+    "historias": [
+      {
+        "id": "H-004-1",
+        "como": "analista",
+        "quiero": "exportar reportes a XLSX",
+        "para": "manipularlos en Excel sin convertir CSV",
+        "complejidad": "M",
+        "acceptance_criteria": ["XLSX se descarga con formato"]
+      },
+      {
+        "id": "H-004-2",
+        "como": "analista",
+        "quiero": "incluir gráficos en el XLSX",
+        "para": "compartir el reporte completo",
+        "complejidad": "L",
+        "acceptance_criteria": ["gráfico embebido visible en Excel"]
+      },
+      {
+        "id": "H-004-3",
+        "como": "administrador",
+        "quiero": "limitar tamaño de exportación",
+        "para": "evitar saturar el servidor",
+        "complejidad": "M",
+        "acceptance_criteria": ["límite configurable por rol"]
+      },
+      {
+        "id": "H-004-4",
+        "como": "usuario",
+        "quiero": "elegir hojas a incluir",
+        "para": "exportar solo lo necesario",
+        "complejidad": "L",
+        "acceptance_criteria": ["UI de selección por hoja"]
+      }
+    ],
+    "progreso_sprint": {
+      "por_hacer": 2,
+      "en_progreso": 1,
+      "en_revision": 1,
+      "hecho": 0,
+      "bloqueado": 0
+    },
+    "impedimentos": []
+  }
+]
