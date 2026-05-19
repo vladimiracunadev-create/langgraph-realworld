@@ -383,7 +383,7 @@ def escalar_comite(state: CompraState) -> dict:
         f"Mejor oferta: {mejor.get('supplier_nombre', 'n/a')} · "
         f"{mejor.get('precio_total', 0):,.0f} CLP · {mejor.get('plazo_dias', 0)} días\n"
         f"Razones de escalación:\n" + "\n".join(f"  - {r}" for r in razones) + "\n"
-        f"Acción requerida: revisión por comité antes de la aprobación final."
+        "Acción requerida: revisión por comité antes de la aprobación final."
     )
 
     escalacion = {

@@ -1,4 +1,4 @@
-from src.graph import compile_graph, classify_severity, IncidentState
+from src.graph import IncidentState, classify_severity, compile_graph
 
 
 def test_graph_compiles():

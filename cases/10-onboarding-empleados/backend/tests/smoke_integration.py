@@ -1,7 +1,6 @@
 """Smoke integration test – Caso 10 (ejecutado en CI via compose.smoke.yml)."""
 import os
 import sys
-import time
 
 import requests
 

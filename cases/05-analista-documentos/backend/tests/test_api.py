@@ -1,6 +1,5 @@
 """Tests de la API FastAPI — Caso 05: Analista de Documentos."""
 from fastapi.testclient import TestClient
-
 from src.api import app
 
 

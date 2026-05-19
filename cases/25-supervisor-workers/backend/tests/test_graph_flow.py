@@ -1,7 +1,6 @@
 """
 test_graph_flow.py — Tests de compilación y ejecución del grafo del caso 25.
 """
-import pytest
 
 
 def test_graph_compiles():

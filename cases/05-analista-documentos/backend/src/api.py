@@ -5,7 +5,6 @@ import time
 import uuid
 from contextvars import ContextVar
 from functools import lru_cache
-from pathlib import Path
 from time import monotonic
 
 from fastapi import FastAPI, HTTPException, Query, Request
