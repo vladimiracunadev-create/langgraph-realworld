@@ -1,0 +1,8 @@
+{
+  "max_puntos_sprint_por_equipo": 15,
+  "umbral_impedimento_dias": 2,
+  "formato_historia": "Como ... quiero ... para ...",
+  "sistema_tickets": "JiraDemo",
+  "prefijo_ticket": "PROJ",
+  "slack_channel_impedimentos": "#pm-bloqueos"
+}
