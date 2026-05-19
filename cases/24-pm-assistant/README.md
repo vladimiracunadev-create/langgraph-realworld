@@ -1,71 +1,114 @@
-# Caso 24: Asistente de Product Manager
+# Caso 24 — Asistente de Product Manager
 
 > [!NOTE]
-> **Estado**: `SCAFFOLD` | **Versión repo**: 4.0.0 | **Tipo**: Agente con estado y memoria de proyecto
+> **Estado**: `✅ OPERATIVO` | **Versión repo**: 4.14.0 | **Puerto**: `8024`
+> **Patrón**: 1 router con 3 ramas + pipeline de gestión de producto end-to-end
 
-Automatiza el ciclo de gestión de producto desde la captura de ideas hasta el seguimiento de entregables: transforma ideas y requerimientos en épicas estructuradas, descompone épicas en historias de usuario y tareas técnicas, las registra en el sistema de gestión y hace seguimiento del progreso reportando impedimentos y riesgos. Permite que los PMs gestionen carteras de producto más grandes con mayor visibilidad y menor overhead administrativo.
+Automatiza el ciclo de gestión de producto: transforma ideas, requerimientos y feedback
+en épicas estructuradas, las descompone en historias de usuario con formato canónico,
+estima complejidad, prioriza el backlog, crea tickets en el sistema de gestión, asigna
+sprint según capacidad del equipo y monitorea el progreso emitiendo un reporte ejecutivo
+final con alertas de impedimentos o métricas de retrospectiva.
 
 ---
 
-## Objetivo de negocio
+## Flujo (LangGraph)
 
-Los Product Managers dedican una fracción excesiva de su tiempo a trabajo administrativo: redactar historias de usuario, estimar, crear tickets, actualizar el backlog y preparar reportes de estado. Este agente recibe ideas crudas, requerimientos de negocio o feedback de usuarios, los estructura en épicas con criterios de aceptación claros, las descompone en historias de usuario con el formato correcto, estima complejidad relativa, crea los tickets en la herramienta de gestión del equipo, y hace seguimiento automático del progreso generando reportes de estado, alertas de bloqueos y actualizaciones para stakeholders.
-
-## Flujo propuesto (LangGraph)
-
-```mermaid
-graph TD
-    A[Idea / Requerimiento / Feedback] --> B[Nodo: clarificar_problema]
-    B --> C[Nodo: definir_epica]
-    C --> D[Nodo: descomponer_historias]
-    D --> E[Nodo: estimar_complejidad]
-    E --> F[Nodo: priorizar_backlog]
-    F --> G[Nodo: crear_tickets]
-    G --> H[Nodo: asignar_sprint]
-    H --> I[Nodo: monitorear_progreso]
-    I --> J{Router: estado_sprint}
-    J -->|Impedimento detectado| K[Nodo: escalar_impedimento]
-    J -->|En progreso normal| L[Nodo: generar_reporte_estado]
-    J -->|Sprint completado| M[Nodo: retrospectiva_y_metricas]
-    K --> L
-    M --> L
-    L --> N[Salida: reporte_stakeholders_y_backlog_actualizado]
+```
+clarificar_problema → definir_epica → descomponer_historias → estimar_complejidad
+  → priorizar_backlog → crear_tickets → asignar_sprint → monitorear_progreso
+     → estado_sprint_router
+          ├─ impedimento → escalar_impedimento ────────┐
+          ├─ normal      ──────────────────────────────┤
+          └─ completado  → retrospectiva_y_metricas ───┤
+                                                       └─→ generar_reporte_estado → END
 ```
 
-### Nodos principales
+### Nodos
 
-| Nodo | Descripción |
+| Nodo | Función |
 |---|---|
-| `clarificar_problema` | Formula preguntas clarificadoras para entender el problema de negocio real |
+| `clarificar_problema` | Carga la iniciativa y genera preguntas/respuestas clarificadoras según `fuente` (idea / feedback / requerimiento) |
 | `definir_epica` | Estructura la épica con objetivo, criterios de aceptación y métricas de éxito |
-| `descomponer_historias` | Divide la épica en historias de usuario con formato "Como… quiero… para…" |
-| `estimar_complejidad` | Asigna puntos de historia o t-shirt sizes basándose en complejidad relativa |
-| `priorizar_backlog` | Ordena el backlog aplicando criterios de valor de negocio e impacto técnico |
-| `crear_tickets` | Crea los tickets en Jira/Linear/GitHub Projects con todos los campos necesarios |
-| `asignar_sprint` | Distribuye las historias en el sprint según capacidad del equipo |
-| `monitorear_progreso` | Consulta el estado de los tickets y detecta bloqueos o desvíos |
-| `escalar_impedimento` | Notifica al PM y al equipo sobre bloqueos que amenazan el sprint |
-| `retrospectiva_y_metricas` | Calcula velocidad, predictibilidad y genera el resumen del sprint |
+| `descomponer_historias` | Aplica el formato canónico "Como… quiero… para…" a las historias del fixture |
+| `estimar_complejidad` | Mapea t-shirt size (S/M/L/XL) a puntos vía `catalogo_estimacion.json` |
+| `priorizar_backlog` | Ordena por `valor_negocio` descendente y `puntos` ascendente |
+| `crear_tickets` | Genera IDs deterministas `PROJ-<sha6>` con URL del sistema configurado |
+| `asignar_sprint` | Llena el sprint hasta `min(capacidad_equipo, max_puntos_sprint_por_equipo)` |
+| `monitorear_progreso` | Calcula `estado_sprint` (`completado` / `impedimento` / `normal`) según progreso e impedimentos críticos (`dias_abierto ≥ umbral`) |
+| `escalar_impedimento` | Emite notificaciones al canal Slack configurado por cada impedimento abierto |
+| `retrospectiva_y_metricas` | Calcula velocidad, predictibilidad y action items |
+| `generar_reporte_estado` | Reporte markdown ejecutivo (DEMO determinista / LIVE con OpenAI) y `estado_final` |
 
-## Stack técnico previsto
+### Router
+
+`estado_sprint_router` evalúa `state["estado_sprint"]` tras `monitorear_progreso` y bifurca en 3 ramas:
+
+- `impedimento` → `escalar_impedimento` → `generar_reporte_estado` (cuando hay impedimentos con `dias_abierto ≥ umbral_impedimento_dias` o historias en estado `bloqueado`)
+- `normal` → `generar_reporte_estado` (sprint en curso sin bloqueos)
+- `completado` → `retrospectiva_y_metricas` → `generar_reporte_estado` (todas las historias en `hecho` y sin impedimentos críticos)
+
+El `estado_final` resultante es `sprint_con_impedimento`, `sprint_en_curso` o `sprint_completado`.
+
+---
+
+## Stack
 
 | Capa | Tecnología |
 |---|---|
-| Orquestación | LangGraph `StateGraph` |
+| Orquestación | LangGraph `StateGraph` con `MemorySaver` |
 | API | FastAPI + uvicorn |
-| LLM | OpenAI GPT-4o-mini (modo LIVE) / respuestas mock (modo DEMO) |
-| Gestión de proyectos | Jira API / Linear API / GitHub Projects API |
-| Comunicación | Slack API / Microsoft Teams (notificaciones y reportes) |
-| Almacenamiento | PostgreSQL (proyectos, épicas, historias, métricas) |
+| LLM (opcional) | OpenAI GPT-4o-mini para el reporte ejecutivo (LIVE opt-in con `OPENAI_API_KEY`) |
+| Auth | DEMO (sin token) + OAuth2/OIDC JWT opt-in (`USE_OAUTH2=true`) |
+| Observabilidad | `/health`, `/healthz`, `/ready`, `/metrics`, logs JSON con `trace_id` |
 
-## Estado actual
+---
 
-Este caso es un **scaffold**: la estructura de la demo estática existe,
-la implementación del backend con LangGraph está pendiente.
+## Cómo correr
 
-Para contribuir o elevar este caso, consulta [CONTRIBUTING.md](../../CONTRIBUTING.md).
+```bash
+# Tests
+cd cases/24-pm-assistant/backend
+pip install -r requirements.txt
+pytest
+
+# Servidor (DEMO)
+uvicorn src.api:app --host 0.0.0.0 --port 8024
+
+# Con Docker
+docker compose -f cases/24-pm-assistant/backend/compose.yml up --build
+```
+
+### Endpoints
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| `GET`  | `/health` · `/healthz` · `/ready` · `/metrics` | Observabilidad |
+| `POST` | `/api/run` | Ejecuta el pipeline (`{thread_id, iniciativa_id}`) |
+| `GET`  | `/api/stream` | Streaming NDJSON con snapshots por nodo |
+| `GET`  | `/` · `/web/` | UI mínima |
+
+### Iniciativas DEMO
+
+| ID | Título | Fuente / Escenario | Resultado esperado |
+|---|---|---|---|
+| `I-001` | Login con Google | Idea, equipo AUTH, progreso en curso sin bloqueos | `sprint_en_curso` (rama `normal`) |
+| `I-002` | Refactor sistema de pagos | Requerimiento con impedimento abierto 4 días + 1 historia bloqueada | `sprint_con_impedimento` (rama `impedimento`, notificación Slack) |
+| `I-003` | Mejora dashboard analytics | Requerimiento, todas las historias en `hecho`, sin impedimentos | `sprint_completado` (rama `completado` + retrospectiva con métricas) |
+| `I-004` | Exportar a Excel | Feedback recurrente, sprint en curso sin bloqueos | `sprint_en_curso` (rama `normal`) |
+
+---
+
+## Datos (`data/`)
+
+| Archivo | Contenido |
+|---|---|
+| `iniciativas.json` | 4 iniciativas cubriendo las 3 ramas del router (normal, impedimento, completado) |
+| `equipos.json` | Equipos con capacidad en puntos por sprint (AUTH, PAYMENTS, DATA, REPORTS) |
+| `catalogo_estimacion.json` | Mapeo t-shirt size → puntos de historia (S/M/L/XL) |
+| `policy.json` | `sistema_tickets`, `prefijo_ticket`, `max_puntos_sprint_por_equipo`, `umbral_impedimento_dias`, `slack_channel_impedimentos`, `formato_historia` |
 
 ---
 
 > [!TIP]
-> Ver los casos **09**, **10** y **13** como referencia de implementación industrial.
+> Patrón análogo: caso **16** (Viajes, routers + pipeline end-to-end) y caso **22** (Backoffice, router multi-rama + auditoría).
