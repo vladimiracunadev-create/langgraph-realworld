@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Caso 23 — Salud Pre-triage Administrativo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07111f;
+      --surface: rgba(20, 30, 48, 0.85);
+      --border: rgba(180, 200, 230, 0.1);
+      --accent: #38bdf8;
+      --accent-2: #0ea5e9;
+      --accent-dim: rgba(56, 189, 248, 0.15);
+      --text: #e6edf3;
+      --muted: #8b9cb3;
+      --verde: #34d399;
+      --amarillo: #fbbf24;
+      --rojo: #f87171;
+      font-family: 'Inter', system-ui, sans-serif;
+      color-scheme: dark;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); min-height: 100vh; }
+    header {
+      padding: 12px 20px; border-bottom: 1px solid var(--border);
+      display: flex; gap: 12px; align-items: center;
+      background: rgba(7,17,31,.85); backdrop-filter: blur(10px);
+      position: sticky; top: 0; z-index: 10;
+    }
+    header .title { font-weight: 800; font-size: 1rem; flex: 1; }
+    .pill {
+      font-family: 'JetBrains Mono', monospace;
+      padding: 4px 10px; border-radius: 999px; font-size: 10px;
+      font-weight: 600; text-transform: uppercase; letter-spacing: .5px;
+      border: 1px solid var(--border);
+    }
+    .pill-demo { color: var(--amarillo); border-color: rgba(251,191,36,.3); background: rgba(251,191,36,.1); }
+    .pill-live { color: var(--verde); border-color: rgba(52,211,153,.3); background: rgba(52,211,153,.1); }
+    .hero { max-width: 920px; margin: 28px auto 0; padding: 0 24px; }
+    .hero h2 { font-size: 1.55rem; font-weight: 800; margin-bottom: 10px; }
+    .hero p { color: var(--muted); line-height: 1.65; font-size: .92rem; }
+    .warning {
+      max-width: 920px; margin: 14px auto 0; padding: 12px 16px;
+      background: rgba(248,113,113,.07); border: 1px solid rgba(248,113,113,.25);
+      border-radius: 10px; color: #fca5a5; font-size: .82rem;
+    }
+    main {
+      max-width: 1320px; margin: 22px auto; padding: 0 24px 40px;
+      display: grid; grid-template-columns: 1fr 1.35fr; gap: 18px;
+    }
+    @media (max-width: 880px) { main { grid-template-columns: 1fr; } }
+    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+    .panel-header { padding: 14px 18px; border-bottom: 1px solid var(--border); font-weight: 700; font-size: .85rem; }
+    .panel-body { padding: 18px; }
+    label { font-size: .8rem; color: var(--muted); display: block; margin-bottom: 6px; }
+    select, button {
+      width: 100%; padding: 10px 14px; border-radius: 8px;
+      border: 1px solid var(--border); font-size: .88rem; font-family: inherit;
+    }
+    select { background: rgba(20,30,48,.95); color: var(--text); cursor: pointer; margin-bottom: 14px; }
+    button {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #0a0a1a; font-weight: 700; cursor: pointer; border: none;
+    }
+    button:disabled { opacity: .5; cursor: not-allowed; }
+    .events { max-height: 320px; overflow-y: auto; }
+    .event {
+      padding: 8px 12px; border-bottom: 1px solid var(--border);
+      font-family: 'JetBrains Mono', monospace; font-size: .75rem;
+      color: var(--muted);
+    }
+    .event b { color: var(--accent); }
+    .row { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+    .chip {
+      font-family: 'JetBrains Mono', monospace; font-size: .7rem;
+      padding: 3px 9px; border-radius: 999px; border: 1px solid var(--border); color: var(--muted);
+    }
+    .chip-inmediata { color: var(--rojo); border-color: rgba(248,113,113,.3); }
+    .chip-programable { color: var(--accent); border-color: rgba(56,189,248,.3); }
+    .chip-teleconsulta { color: var(--verde); border-color: rgba(52,211,153,.3); }
+    .chip-cobertura_pendiente { color: var(--amarillo); border-color: rgba(251,191,36,.3); }
+    pre {
+      background: rgba(7,17,31,.6); border: 1px solid var(--border); border-radius: 10px;
+      padding: 14px; font-family: 'JetBrains Mono', monospace; font-size: .78rem;
+      max-height: 360px; overflow: auto; white-space: pre-wrap;
+    }
+    .disclaimer {
+      font-family: 'JetBrains Mono', monospace; font-size: .7rem;
+      color: #fca5a5; word-break: break-word;
+      background: rgba(248,113,113,.07); border: 1px solid rgba(248,113,113,.25);
+      padding: 10px 12px; border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="title">🏥 Caso 23 — Salud Pre-triage Administrativo</div>
+    <span id="mode-pill" class="pill pill-demo">DEMO</span>
+  </header>
+
+  <section class="hero">
+    <h2>Clasificación administrativa — sin diagnóstico médico</h2>
+    <p>Recopila motivo de consulta, síntomas referidos, antecedentes y cobertura, y deriva al servicio correcto (urgencias, especialidad, teleconsulta o admisión de documentación) aplicando un protocolo administrativo determinista configurable. <b>No reemplaza la evaluación de un profesional de salud.</b></p>
+  </section>
+
+  <section class="warning">
+    ⚠ Este agente realiza clasificación administrativa. <b>No constituye diagnóstico médico ni indicación terapéutica.</b> Ante síntomas graves contacte al servicio de urgencias (131 SAMU).
+  </section>
+
+  <main>
+    <div class="panel">
+      <div class="panel-header">⚙️ Pre-triage</div>
+      <div class="panel-body">
+        <label for="sid">Sesión</label>
+        <select id="sid">
+          <option value="S-001">S-001 — 55a · Dolor torácico (urgencias)</option>
+          <option value="S-002">S-002 — 28a · Lumbalgia (programable)</option>
+          <option value="S-003">S-003 — 35a · Control HTA (teleconsulta)</option>
+          <option value="S-004">S-004 — 42a · Documentación faltante</option>
+        </select>
+        <button id="run">▶ Ejecutar pre-triage</button>
+
+        <div style="margin-top:18px">
+          <div style="font-weight:700;font-size:.82rem;margin-bottom:8px">Eventos</div>
+          <div id="events" class="events"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">📊 Derivación administrativa</div>
+      <div class="panel-body">
+        <div id="meta" class="row" style="display:none">
+          <span class="chip" id="m-nivel">—</span>
+          <span class="chip" id="m-puntaje">—</span>
+          <span class="chip" id="m-servicio">—</span>
+        </div>
+        <div id="disc-wrap" style="display:none;margin-bottom:14px">
+          <label>Disclaimer obligatorio</label>
+          <div class="disclaimer" id="disclaimer">—</div>
+        </div>
+        <label>Resumen de derivación</label>
+        <pre id="resumen">Selecciona una sesión y pulsa Ejecutar pre-triage.</pre>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    async function checkMode() {
+      try {
+        const r = await fetch('/health');
+        const d = await r.json();
+        const pill = document.getElementById('mode-pill');
+        pill.textContent = d.mode;
+        pill.className = 'pill ' + (d.mode === 'LIVE' ? 'pill-live' : 'pill-demo');
+      } catch (e) { /* noop */ }
+    }
+    checkMode();
+
+    function setText(id, v) { document.getElementById(id).textContent = v; }
+    function addEvent(e) {
+      const div = document.createElement('div');
+      div.className = 'event';
+      div.innerHTML = '<b>' + e.type + '</b> · ' + JSON.stringify(e).slice(0, 220);
+      document.getElementById('events').appendChild(div);
+    }
+
+    document.getElementById('run').addEventListener('click', async () => {
+      const sid = document.getElementById('sid').value;
+      const btn = document.getElementById('run');
+      btn.disabled = true; btn.textContent = 'Procesando…';
+      document.getElementById('events').innerHTML = '';
+      document.getElementById('resumen').textContent = 'Procesando…';
+      ['meta','disc-wrap'].forEach(id => document.getElementById(id).style.display = 'none');
+
+      try {
+        const resp = await fetch('/api/run', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ thread_id: 't-' + Date.now(), sesion_id: sid }),
+        });
+        const data = await resp.json();
+        if (!resp.ok) throw new Error(data.detail || 'error');
+
+        (data.events || []).forEach(addEvent);
+
+        const nivel = data.nivel_urgencia || '—';
+        const nivelChip = document.getElementById('m-nivel');
+        nivelChip.textContent = 'Nivel: ' + nivel;
+        nivelChip.className = 'chip chip-' + nivel;
+        setText('m-puntaje', 'Puntaje: ' + (data.puntaje_urgencia ?? 0));
+        setText('m-servicio', 'Servicio: ' + (data.derivacion?.servicio || '—'));
+        document.getElementById('meta').style.display = 'flex';
+
+        setText('disclaimer', data.disclaimer || '—');
+        document.getElementById('disc-wrap').style.display = 'block';
+
+        setText('resumen', data.resumen_derivacion || '(sin resumen)');
+      } catch (e) {
+        document.getElementById('resumen').textContent = 'Error: ' + e.message;
+      } finally {
+        btn.disabled = false; btn.textContent = '▶ Ejecutar pre-triage';
+      }
+    });
+  </script>
+</body>
+</html>

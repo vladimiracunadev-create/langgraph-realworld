@@ -1,0 +1,74 @@
+[
+  {
+    "id": "S-001",
+    "canal": "chat_web",
+    "paciente": {
+      "nombre": "María González",
+      "edad": 55,
+      "dni": "12345678",
+      "cobertura": "Fonasa C",
+      "documentacion": ["carnet_identidad", "credencial_cobertura"]
+    },
+    "motivo_consulta": "dolor torácico agudo de inicio reciente",
+    "sintomas": ["dolor_toracico", "sudoracion", "irradiacion_brazo_izq"],
+    "antecedentes": {
+      "medicamentos": ["losartan_50mg"],
+      "alergias": [],
+      "comorbilidades": ["hipertension"]
+    }
+  },
+  {
+    "id": "S-002",
+    "canal": "kiosco",
+    "paciente": {
+      "nombre": "Juan Pérez",
+      "edad": 28,
+      "dni": "23456789",
+      "cobertura": "Isapre Banmédica",
+      "documentacion": ["carnet_identidad", "credencial_cobertura"]
+    },
+    "motivo_consulta": "lumbalgia mecánica de dos semanas",
+    "sintomas": ["dolor_lumbar"],
+    "antecedentes": {
+      "medicamentos": [],
+      "alergias": [],
+      "comorbilidades": []
+    }
+  },
+  {
+    "id": "S-003",
+    "canal": "telefono",
+    "paciente": {
+      "nombre": "Ana Riquelme",
+      "edad": 35,
+      "dni": "34567890",
+      "cobertura": "Isapre Colmena",
+      "documentacion": ["carnet_identidad", "credencial_cobertura"]
+    },
+    "motivo_consulta": "consulta de control por hipertensión estable",
+    "sintomas": ["control_rutinario"],
+    "antecedentes": {
+      "medicamentos": ["enalapril_10mg"],
+      "alergias": [],
+      "comorbilidades": ["hipertension"]
+    }
+  },
+  {
+    "id": "S-004",
+    "canal": "chat_web",
+    "paciente": {
+      "nombre": "Pedro Soto",
+      "edad": 42,
+      "dni": "45678901",
+      "cobertura": "Fonasa B",
+      "documentacion": ["carnet_identidad"]
+    },
+    "motivo_consulta": "cefalea persistente desde ayer",
+    "sintomas": ["cefalea"],
+    "antecedentes": {
+      "medicamentos": [],
+      "alergias": ["penicilina"],
+      "comorbilidades": []
+    }
+  }
+]
