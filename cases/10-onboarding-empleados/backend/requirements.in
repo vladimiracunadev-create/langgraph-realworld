@@ -33,5 +33,5 @@ slack-sdk
 openai
 langchain-core
 langchain-openai>=1.1.14
-langsmith>=0.7.31
+langsmith>=0.8.5
 joserfc
