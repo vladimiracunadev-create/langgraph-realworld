@@ -165,9 +165,9 @@ def run(payload: RunIn):
         duration = round(time.time() - start_time, 3)
         logger.info(f"Ejecucion completada en {duration}s para thread_id: {payload.thread_id}")
         return JSONResponse(snapshot)
-    except Exception as e:
-        logger.error(f"Error en /api/run: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+    except Exception as exc:
+        logger.exception("Unhandled error in /api/run")
+        raise HTTPException(status_code=500, detail="Internal server error") from exc
 
 
 @app.get("/api/stream")

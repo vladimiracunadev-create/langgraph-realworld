@@ -160,9 +160,9 @@ def run(payload: TriageIn):
         logger.info(f"Triage completado en {duration}s: thread_id={payload.thread_id} "
                     f"risk={snapshot['risk_score']} decision={snapshot['triage_decision']}")
         return JSONResponse(snapshot)
-    except Exception as e:
-        logger.error(f"Error en /api/run: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+    except Exception as exc:
+        logger.exception("Unhandled error in /api/run")
+        raise HTTPException(status_code=500, detail="Internal server error") from exc
 
 
 @app.get("/api/stream")
