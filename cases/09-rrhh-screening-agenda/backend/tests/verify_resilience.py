@@ -1,8 +1,7 @@
-import sys
-import os
-import shutil
 import logging
-from unittest.mock import MagicMock, patch
+import os
+import sys
+from unittest.mock import MagicMock
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -50,8 +49,8 @@ def run_test():
     
     logger.info(">>> RUNNING IMPORT <<<")
     try:
-        from graph_test_copy import notify_candidates
         import integrations_mock
+        from graph_test_copy import notify_candidates
     except Exception as e:
         logger.error(f"Import failed: {e}")
         return

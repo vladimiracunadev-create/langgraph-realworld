@@ -1,6 +1,5 @@
 """Tests de la API FastAPI — Caso 04: SOC Triage de Alertas."""
 from fastapi.testclient import TestClient
-
 from src.api import app
 
 

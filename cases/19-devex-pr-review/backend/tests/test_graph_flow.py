@@ -4,7 +4,6 @@ test_graph_flow.py — Tests unitarios para el StateGraph del caso 19.
 Verifica que el grafo compila y que los nodos de análisis producen
 los resultados esperados en modo DEMO (basado en patrones de texto).
 """
-import pytest
 
 
 def test_graph_compiles():
@@ -175,8 +174,7 @@ def test_full_graph_run():
     Ejecuta el grafo completo en modo DEMO con el PR de muestra.
     Verifica que el estado final tiene los campos esperados.
     """
-    import os
-    from pathlib import Path
+
     from src.graph import compile_graph
 
     graph = compile_graph()

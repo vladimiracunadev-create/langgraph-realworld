@@ -1,5 +1,6 @@
-import pytest
 from importlib import import_module
+
+import pytest
 
 graph = import_module("backend.src.graph")
 

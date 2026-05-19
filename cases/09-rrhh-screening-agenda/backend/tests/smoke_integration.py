@@ -1,8 +1,8 @@
-import requests
 import json
-import time
-import sys
 import os
+import sys
+
+import requests
 
 BASE_URL = os.getenv("BASE_URL", "http://localhost:8009")
 

@@ -585,7 +585,7 @@ def producir_resumen_intake(state: IntakeState) -> dict:
         + f"\n### Estado del expediente\n"
         f"- Información: {completitud.upper()}\n"
         + (f"- Campos faltantes: {len(faltantes)} ({', '.join(faltantes)})\n" if faltantes else "")
-        + (f"- Preguntas a formular al cliente:\n" + "\n".join(f"  • {q}" for q in preguntas[:6]) + "\n" if preguntas else "")
+        + ("- Preguntas a formular al cliente:\n" + "\n".join(f"  • {q}" for q in preguntas[:6]) + "\n" if preguntas else "")
         + f"\n### Documentación inicial\n"
         f"- Tipo de documento generado: **{documento_tipo}**\n"
         f"- Borrador disponible en el panel de resultados (requiere revisión).\n\n"

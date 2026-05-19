@@ -1,5 +1,5 @@
-﻿from pathlib import Path
-import sys
+﻿import sys
+from pathlib import Path
 
 CASE_ROOT = Path(__file__).resolve().parents[2]
 if str(CASE_ROOT) not in sys.path:

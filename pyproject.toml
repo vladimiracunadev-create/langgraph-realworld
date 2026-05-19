@@ -1,9 +1,18 @@
 [tool.ruff]
-line-length = 120
+line-length = 140
 target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "I"]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests: tolerantes con prácticas comunes (E741 `l`, E702 imports en una línea, E501 fixtures largas)
+"cases/*/backend/tests/*.py" = ["E741", "E702", "E501"]
+"tests/*.py" = ["E741", "E702", "E501"]
+# Src de casos: F841 unused vars (algunas se mantienen por documentación/legibilidad);
+# E501 cuando excede 140 (raros casos de prompts largos en una sola línea);
+# E702 statements con ; (patrón inline en helpers de seed).
+"cases/*/backend/src/*.py" = ["F841", "E501", "E702"]
 
 [project]
 name = "langgraph-realworld"
