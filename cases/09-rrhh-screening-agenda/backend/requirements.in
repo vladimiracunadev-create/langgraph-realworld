@@ -43,6 +43,6 @@ boto3
 # LLM opcional (si luego quieres scoring/preguntas con modelos)
 openai
 langchain-core
-langchain-openai>=1.1.14
+langchain-openai>=1.2.1
 langsmith>=0.7.31
 joserfc
