@@ -5,6 +5,54 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/1.0.0/).
 
 ---
 
+## v4.15.0 — 2026-05-19
+
+Release de **hardening de seguridad y mantenibilidad**. Resultado de la
+auditoría adversarial v4.14.0 (PRs #63, #64, #65, #66).
+
+### Seguridad
+
+- **CRIT-1 JWKS cache con TTL 300s** (`shared/lgrw_common/auth.py`):
+  Antes cada request abría conexión HTTP al IdP — DoS amplification
+  contra el provider y timeout 5s bloqueando workers. Ahora 1 fetch /
+  5 min por URL.
+- **CRIT-2 OAUTH2_AUDIENCE y OAUTH2_ISSUER obligatorios** cuando
+  `USE_OAUTH2=true`. Antes podían quedar vacíos y se desactivaba la
+  verificación → cualquier token del mismo IdP pasaba (bypass
+  cross-tenant). Ahora falla con ValueError explícito.
+- **CRIT-3 HTTPException 500 sanitizada** en los 25 backends:
+  `str(exc)` (que filtraba paths, env vars, fragmentos de
+  OPENAI_API_KEY) → `"Internal server error"` + `logger.exception()`.
+- **CRIT-4 `pr_id` con `pattern=SAFE_ID_PATTERN`** en caso 19:
+  evita log poisoning vía caracteres de control inyectados.
+- **401 OAuth2 sin detalle del `exc` interno** en los 25 backends.
+- **Migración `python-jose+ecdsa` → `joserfc 1.6.5`**: elimina
+  `ecdsa==0.19.2` (abandonada, side-channel timing) y CVEs históricos
+  de `python-jose`. `joserfc` está activamente mantenida, con JWKS y
+  validación de claims nativos.
+
+### Refactor / mantenibilidad
+
+- **`shared/lgrw_common/`** como **fuente canónica** de `auth.py` y
+  `settings.py`. Antes: ~6.500 LOC duplicado entre 25 casos
+  (corrección de bug = editar 25 archivos). Ahora: editar 1 archivo +
+  correr `python scripts/sync_shared.py`. CI ejecuta `--check` y
+  bloquea PRs con drift.
+
+### CI / Tooling
+
+- **CI Python tests expandido a los 25 casos** (antes: 10/25 = 40%).
+  8 jobs `python_case_*` colapsados en un único matrix.
+- **`container_scan` grype expandido a los 25 casos** (antes: 9/25 = 36%).
+
+### Modificado
+
+- Versión repo `4.14.0 → 4.15.0` en README, ROADMAP, index.html, wiki, docs.
+- 50 archivos requirements modificados (22 .in regenerados + 25 .txt
+  recompilados con pip-compile + 3 casos sin .in fixed inline).
+
+---
+
 ## v4.14.0 — 2026-05-19
 
 ### Agregado

@@ -2,15 +2,15 @@
 
 [![CI](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml)
 [![Security Scan](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml/badge.svg?branch=main)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/security.yml)
-[![Version](https://img.shields.io/badge/version-4.14.0-blue.svg)](https://github.com/vladimiracunadev-create/langgraph-realworld/blob/main/CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-4.15.0-blue.svg)](https://github.com/vladimiracunadev-create/langgraph-realworld/blob/main/CHANGELOG.md)
 
 Portafolio de 25 casos de uso empresariales construidos con **LangGraph** y **FastAPI**.
 **25 backends completamente operativos** (01-25 sin omisiones) con streaming, OAuth2/OIDC opt-in, observabilidad LangSmith, `/metrics` por servicio, logging JSON estructurado y reverse proxy nginx + TLS.
-Ola 3 cerrada en v4.14.0 — portfolio al 100%.
+Ola 3 cerrada en v4.14.0 — portfolio al 100%. **v4.15.0**: release de hardening de seguridad y mantenibilidad (sin nuevos casos).
 
 ---
 
-## Implementacion Industrial — v4.14.0
+## Implementacion Industrial — v4.15.0
 
 | # | Pilar | Descripcion |
 |:-:|:---|:---|
@@ -60,7 +60,7 @@ Ola 3 cerrada en v4.14.0 — portfolio al 100%.
 
 ### Scaffold (0)
 
-Ola 3 cerrada en v4.14.0 — los 25 casos del portfolio están en nivel OPERATIVO o INDUSTRIAL. Ver [Roadmap](Roadmap) para detalle por ola.
+Ola 3 cerrada en v4.15.0 — los 25 casos del portfolio están en nivel OPERATIVO o INDUSTRIAL. Ver [Roadmap](Roadmap) para detalle por ola.
 
 ---
 

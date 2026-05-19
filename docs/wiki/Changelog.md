@@ -1,5 +1,28 @@
 # Changelog
 
+## v4.15.0 - 2026-05-19
+
+Release de **hardening de seguridad y mantenibilidad**. Resultado de la auditoria adversarial v4.14.0 (PRs #63, #64, #65, #66). Sin nuevos casos.
+
+### Security
+
+- **CRIT-1** JWKS cache TTL 300s en `shared/lgrw_common/auth.py` (antes: fetch HTTP al IdP en cada request → DoS amplification).
+- **CRIT-2** `OAUTH2_AUDIENCE` y `OAUTH2_ISSUER` obligatorios cuando `USE_OAUTH2=true` (antes: verificacion silenciosamente desactivada → bypass cross-tenant).
+- **CRIT-3** `HTTPException(500)` sanitizada en los 25 backends: `str(exc)` (filtraba paths, env vars, fragmentos de `OPENAI_API_KEY`) → `"Internal server error"` + `logger.exception()`.
+- **CRIT-4** `pr_id` con `pattern=SAFE_ID_PATTERN` en caso 19 (anti log poisoning).
+- 401 OAuth2 sin detalle del `exc` interno en los 25 backends.
+- Migracion `python-jose+ecdsa` → `joserfc 1.6.5` en los 25 casos: elimina `ecdsa==0.19.2` (abandonada, side-channel timing) y CVEs historicos de `python-jose`.
+
+### Changed
+
+- `shared/lgrw_common/auth.py` y `settings.py` como fuente canonica. `scripts/sync_shared.py` propaga a `cases/*/backend/src/`. CI bloquea drift con `--check`. Antes: ~6.500 LOC duplicado entre 25 casos.
+- CI Python tests expandido a los 25 casos (antes: 10/25 = 40%). 8 jobs `python_case_*` colapsados en un unico matrix.
+- `container_scan` grype expandido a los 25 casos (antes: 9/25 = 36%).
+- Version bumped a 4.15.0 en README, ROADMAP, CHANGELOG, portal, docs y wiki.
+- 50 archivos requirements modificados (22 .in regenerados + 25 .txt recompilados + 3 casos sin .in fixed inline).
+
+---
+
 ## v4.14.0 - 2026-05-19
 
 ### Added

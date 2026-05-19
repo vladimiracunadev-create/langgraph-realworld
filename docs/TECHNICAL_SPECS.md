@@ -1,9 +1,9 @@
 ﻿# Especificaciones Tecnicas
 
 > [!NOTE]
-> **Version**: 4.14.0 | **Estado**: Industrial | **Audiencia**: Senior Backend Engineers, SREs
+> **Version**: 4.15.0 | **Estado**: Industrial | **Audiencia**: Senior Backend Engineers, SREs
 
-Stack actual del repo: 25 backends operativos con FastAPI + LangGraph (`cases/01..25` sin omisiones). Casos 09, 10 y 13 están en nivel `Industrial` (logging JSON estructurado, OAuth2/OIDC opt-in verificado en tests, `compose.smoke.yml`). El resto está en `Operativo`. Ola 3 cerrada en v4.14.0.
+Stack actual del repo: 25 backends operativos con FastAPI + LangGraph (`cases/01..25` sin omisiones). Casos 09, 10 y 13 están en nivel `Industrial` (logging JSON estructurado, OAuth2/OIDC opt-in verificado en tests, `compose.smoke.yml`). El resto está en `Operativo`. Ola 3 cerrada en v4.14.0. v4.15.0 es un release de hardening (4 critical fixes inline, migración `python-jose` → `joserfc`, `shared/lgrw_common/` como fuente canónica, CI ampliado a los 25 casos) — sin cambios funcionales en los casos.
 
 ## Stack Core
 

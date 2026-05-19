@@ -1,13 +1,48 @@
 # Seguridad
 
 > [!NOTE]
-> **Version**: 4.14.0 | **Estado**: Auditado y endurecido | **Audiencia**: Auditores, CISO, Desarrolladores
+> **Version**: 4.15.0 | **Estado**: Auditado y endurecido (auditoria adversarial v4.14.0 cerrada con 4 critical fixes) | **Audiencia**: Auditores, CISO, Desarrolladores
 
 Este repositorio esta pensado para exploracion tecnica, demos y validacion local de patrones LangGraph. La seguridad implementada busca reducir riesgos reales sin romper quickstart, `index.html`, Hub CLI ni los 25 casos operativos (01-25 sin omisiones).
 
 ---
 
-## Resultado de la auditoria de seguridad (v4.14.0)
+## Hardening v4.15.0
+
+Resultado de la auditoria adversarial sobre v4.14.0. Cuatro PRs mergeados (#63, #64, #65, #66).
+
+### Critical fixes inline (PR #63)
+
+| ID | Antes | Despues | Riesgo mitigado |
+|:---|:---|:---|:---|
+| **CRIT-1** | JWKS fetch en cada request (`HTTPX` sin cache, timeout 5s) | TTL 300s por URL en `shared/lgrw_common/auth.py` | DoS amplification contra el IdP + workers bloqueados |
+| **CRIT-2** | `OAUTH2_AUDIENCE`/`OAUTH2_ISSUER` opcionales con `USE_OAUTH2=true` → verificacion silenciosamente desactivada | `ValueError` explicito en startup si faltan | Bypass cross-tenant: cualquier token valido del mismo IdP pasaba |
+| **CRIT-3** | `HTTPException(500, detail=str(exc))` en los 25 backends | `"Internal server error"` + `logger.exception()` | Information disclosure: paths, env vars, fragmentos de `OPENAI_API_KEY` en respuesta HTTP |
+| **CRIT-4** | `pr_id: str` sin pattern en caso 19 | `pr_id: str = Field(pattern=SAFE_ID_PATTERN, max_length=64)` | Log poisoning via caracteres de control |
+| Adicional | `HTTPException(401, detail=str(exc))` en handler OAuth2 | `detail="Token invalido"` + `logger.warning(...)` | Filtracion de detalle del flow JWT al cliente |
+
+### Migracion python-jose+ecdsa → joserfc (PR #66)
+
+- `python-jose==3.5.0` y `ecdsa==0.19.2` (ultimo commit 2022, side-channel timing en verificacion de firma) **eliminadas** de los 25 casos.
+- Reemplazadas por `joserfc==1.6.5` (activamente mantenida, JWKS + validacion de claims nativos).
+- Requirements regenerados con pip-compile.
+
+### Single source of truth para auth + settings (PR #65)
+
+- `shared/lgrw_common/auth.py` y `shared/lgrw_common/settings.py` = **fuente canonica**.
+- `scripts/sync_shared.py` propaga a los 25 `cases/*/backend/src/`.
+- CI ejecuta `python scripts/sync_shared.py --check` y bloquea PRs con drift.
+- Beneficio: corregir un bug en `auth.py` = editar 1 archivo + sync, vs. los 25 que habia que editar antes (~6.500 LOC duplicado).
+- Riesgo aceptado: la duplicacion fisica sigue presente en runtime (build context no migrado a la raiz). Resolucion completa en v4.16+ (ver ROADMAP "Pendientes tecnicos").
+
+### CI expandido (PR #64)
+
+- Tests Python por caso: 10/25 (40%) → **25/25 (100%)** via matrix unificado.
+- `container_scan` (grype): 9/25 (36%) → **25/25 (100%)**.
+
+---
+
+## Resultado de la auditoria de seguridad (v4.15.0)
 
 ### Capa 1 — Contenedor y proceso
 
@@ -83,6 +118,18 @@ Este repositorio esta pensado para exploracion tecnica, demos y validacion local
 ---
 
 ## Controles implementados (historico)
+
+### Nuevos controles en v4.15.0
+
+- JWKS cache con TTL 300s en `shared/lgrw_common/auth.py` (canonico, sincronizado a los 25 casos).
+- `OAUTH2_AUDIENCE` y `OAUTH2_ISSUER` validados como obligatorios cuando `USE_OAUTH2=true` (ValueError en startup).
+- `HTTPException(500, ...)` sanitizado en los 25 backends: `"Internal server error"` + `logger.exception()`.
+- `pr_id` con `pattern=SAFE_ID_PATTERN` en caso 19 (anti log poisoning).
+- 401 OAuth2 sin filtrar detalle del `exc` interno en los 25 backends.
+- `python-jose+ecdsa` reemplazada por `joserfc 1.6.5` en los 25 casos (eliminado side-channel timing y CVEs historicos).
+- `shared/lgrw_common/` como fuente canonica para `auth.py` y `settings.py` (sync vía `scripts/sync_shared.py`, CI bloquea drift).
+- Tests Python en CI ampliados a los 25 casos (40% → 100%).
+- `container_scan` grype ampliado a los 25 casos (36% → 100%).
 
 ### Nuevos controles en v4.14.0
 
