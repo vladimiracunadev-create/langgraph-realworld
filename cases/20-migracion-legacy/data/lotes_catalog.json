@@ -1,0 +1,129 @@
+{
+  "P-001": {
+    "auth": {
+      "complejidad": 4,
+      "riesgo": 3,
+      "loc": 800,
+      "codigo_origen": "Public Function Login(user, pwd)\n  If pwd = DBPwd(user) Then Login = True\nEnd Function",
+      "codigo_destino": "def login(user: str, pwd: str) -> bool:\n    return pwd == db_pwd(user)",
+      "tests_esperados": ["test_login_ok", "test_login_bad_password", "test_login_unknown_user"],
+      "falla_simulada": false,
+      "regresion_simulada": false
+    },
+    "clientes": {
+      "complejidad": 5,
+      "riesgo": 4,
+      "loc": 2200,
+      "codigo_origen": "Public Sub UpdateCliente(id, nombre)\n  rs.Open \"UPDATE clientes ...\"\nEnd Sub",
+      "codigo_destino": "def update_cliente(id: int, nombre: str) -> None:\n    db.execute('UPDATE clientes SET nombre=%s WHERE id=%s', nombre, id)",
+      "tests_esperados": ["test_update_cliente", "test_update_cliente_not_found"],
+      "falla_simulada": false,
+      "regresion_simulada": false
+    },
+    "facturacion": {
+      "complejidad": 7,
+      "riesgo": 5,
+      "loc": 5800,
+      "codigo_origen": "Public Function CalcularTotal(items)\n  ... loops VB6 ...\nEnd Function",
+      "codigo_destino": "def calcular_total(items: list[Item]) -> Decimal:\n    return sum((it.precio * it.cantidad for it in items), Decimal(0))",
+      "tests_esperados": ["test_calcular_total_vacio", "test_calcular_total_multi", "test_calcular_total_descuento"],
+      "falla_simulada": false,
+      "regresion_simulada": false
+    },
+    "reportes": {
+      "complejidad": 6,
+      "riesgo": 4,
+      "loc": 3700,
+      "codigo_origen": "Public Sub GenerarReporte(periodo)\n  ... \nEnd Sub",
+      "codigo_destino": "def generar_reporte(periodo: str) -> Reporte:\n    return Reporte.from_query(query_reportes(periodo))",
+      "tests_esperados": ["test_reporte_mensual", "test_reporte_vacio"],
+      "falla_simulada": false,
+      "regresion_simulada": false
+    }
+  },
+  "P-002": {
+    "auditoria": {
+      "complejidad": 3,
+      "riesgo": 2,
+      "loc": 2200,
+      "codigo_origen": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. AUDITORIA.",
+      "codigo_destino": "public class Auditoria { public void log(Event e) { repo.save(e); } }",
+      "tests_esperados": ["testAuditoriaLog", "testAuditoriaQuery"],
+      "falla_simulada": false,
+      "regresion_simulada": false
+    },
+    "cuentas": {
+      "complejidad": 6,
+      "riesgo": 5,
+      "loc": 8400,
+      "codigo_origen": "       PROGRAM-ID. CUENTAS.\n       PROCEDURE DIVISION.",
+      "codigo_destino": "public class Cuentas { public Cuenta abrir(...) { ... } }",
+      "tests_esperados": ["testAbrirCuenta", "testCerrarCuenta", "testSaldoDisponible"],
+      "falla_simulada": false,
+      "regresion_simulada": false
+    },
+    "transferencias": {
+      "complejidad": 9,
+      "riesgo": 8,
+      "loc": 11000,
+      "codigo_origen": "       PROGRAM-ID. TRANSFERENCIAS.",
+      "codigo_destino": "public class Transferencias { @Transactional public Result ejecutar(...) { ... } }",
+      "tests_esperados": ["testTransferenciaOk", "testTransferenciaSaldoInsuficiente", "testTransferenciaRollback"],
+      "falla_simulada": true,
+      "regresion_simulada": true
+    },
+    "intereses": {
+      "complejidad": 7,
+      "riesgo": 6,
+      "loc": 6500,
+      "codigo_origen": "       PROGRAM-ID. INTERESES.",
+      "codigo_destino": "public class Intereses { public BigDecimal calcular(...) { ... } }",
+      "tests_esperados": ["testInteresSimple", "testInteresCompuesto"],
+      "falla_simulada": false,
+      "regresion_simulada": false
+    },
+    "cierre_diario": {
+      "complejidad": 8,
+      "riesgo": 7,
+      "loc": 9900,
+      "codigo_origen": "       PROGRAM-ID. CIERRE.",
+      "codigo_destino": "public class CierreDiario { public Report run(LocalDate d) { ... } }",
+      "tests_esperados": ["testCierreDiarioOk", "testCierreDiarioFalla"],
+      "falla_simulada": false,
+      "regresion_simulada": false
+    }
+  },
+  "P-003": {
+    "catalogo": {
+      "complejidad": 5,
+      "riesgo": 3,
+      "loc": 2100,
+      "codigo_origen": "<?php class Catalogo { var $items; }",
+      "codigo_destino": "<?php declare(strict_types=1); final class Catalogo { public function __construct(private array $items) {} }",
+      "tests_esperados": ["testCatalogoList", "testCatalogoFiltro"],
+      "falla_simulada": false,
+      "regresion_simulada": false
+    },
+    "carrito": {
+      "complejidad": 6,
+      "riesgo": 4,
+      "loc": 2400,
+      "codigo_origen": "<?php class Carrito { function add($i) { ... } }",
+      "codigo_destino": "<?php declare(strict_types=1); final class Carrito { public function add(Item $i): void { ... } }",
+      "tests_esperados": ["testCarritoAdd", "testCarritoRemove", "testCarritoTotal"],
+      "falla_simulada": false,
+      "regresion_simulada": false
+    },
+    "pagos_legacy": {
+      "complejidad": 9,
+      "riesgo": 9,
+      "loc": 3700,
+      "codigo_origen": "<?php class PagosLegacy { /* usa mcrypt + globals */ }",
+      "codigo_destino": "<?php // No portable: requiere workaround con bridge a libreria externa.",
+      "tests_esperados": ["testPagoLegacy"],
+      "falla_simulada": true,
+      "regresion_simulada": false,
+      "no_migrable": true
+    }
+  }
+}

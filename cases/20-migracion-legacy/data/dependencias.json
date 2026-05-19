@@ -1,0 +1,20 @@
+{
+  "P-001": {
+    "auth": [],
+    "clientes": ["auth"],
+    "facturacion": ["clientes", "auth"],
+    "reportes": ["facturacion", "clientes"]
+  },
+  "P-002": {
+    "auditoria": [],
+    "cuentas": ["auditoria"],
+    "transferencias": ["cuentas", "auditoria"],
+    "intereses": ["cuentas"],
+    "cierre_diario": ["cuentas", "transferencias", "intereses", "auditoria"]
+  },
+  "P-003": {
+    "catalogo": [],
+    "carrito": ["catalogo"],
+    "pagos_legacy": ["carrito", "catalogo"]
+  }
+}
