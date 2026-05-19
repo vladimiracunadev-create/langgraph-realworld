@@ -1,13 +1,13 @@
 # Seguridad
 
 > [!NOTE]
-> **Version**: 4.13.0 | **Estado**: Auditado y endurecido | **Audiencia**: Auditores, CISO, Desarrolladores
+> **Version**: 4.14.0 | **Estado**: Auditado y endurecido | **Audiencia**: Auditores, CISO, Desarrolladores
 
-Este repositorio esta pensado para exploracion tecnica, demos y validacion local de patrones LangGraph. La seguridad implementada busca reducir riesgos reales sin romper quickstart, `index.html`, Hub CLI ni los 21 casos operativos 01-12, 13-15, 17, 18, 19, 21, 22 y 25.
+Este repositorio esta pensado para exploracion tecnica, demos y validacion local de patrones LangGraph. La seguridad implementada busca reducir riesgos reales sin romper quickstart, `index.html`, Hub CLI ni los 25 casos operativos (01-25 sin omisiones).
 
 ---
 
-## Resultado de la auditoria de seguridad (v4.13.0)
+## Resultado de la auditoria de seguridad (v4.14.0)
 
 ### Capa 1 — Contenedor y proceso
 
@@ -16,7 +16,7 @@ Este repositorio esta pensado para exploracion tecnica, demos y validacion local
 | Proceso no-root en todos los backends operativos | **RESUELTO** — `groupadd/useradd appuser` + `USER appuser` agregados |
 | Proceso no-root verificado en todos los Dockerfiles | OK — ya tenia `USER appuser` |
 | Proceso no-root en demos nginx (25 casos) | **RESUELTO** — `USER nginx` + chown de directorios en todos los demos |
-| Imagen Python pineada a version exacta | **RESUELTO** — `python:3.11-slim` en los 21 backends operativos |
+| Imagen Python pineada a version exacta | **RESUELTO** — `python:3.11-slim` en los 25 backends operativos |
 | Imagen nginx pineada a version exacta | **RESUELTO** — `nginx:1.27.3-alpine` en los demos restantes |
 | Healthcheck con herramienta disponible | **RESUELTO** — demos usan `wget --spider` (BusyBox, incluido en Alpine); backends usan `curl` (instalado explicitamente) |
 | Directorios de log/PID accesibles por usuario no-root | OK — `chown` antes de `USER` en todos los Dockerfiles |
@@ -83,6 +83,12 @@ Este repositorio esta pensado para exploracion tecnica, demos y validacion local
 ---
 
 ## Controles implementados (historico)
+
+### Nuevos controles en v4.14.0
+
+- Casos 16 (Viajes), 20 (Migracion Legacy), 23 (Salud Pre-triage) y 24 (PM Assistant) elevados a OPERATIVO con la misma plantilla de hardening (non-root, puertos 127.0.0.1, HTTP headers, rate limit opt-in, OAuth2/OIDC opt-in, validacion Pydantic).
+- Total de backends operativos pasa de 21 a 25 (100% del portfolio). Ola 3 cerrada.
+- Lista canonica de operativos: 01-25 sin omisiones (industriales 09, 10, 13 dentro del conteo).
 
 ### Nuevos controles en v4.13.0
 

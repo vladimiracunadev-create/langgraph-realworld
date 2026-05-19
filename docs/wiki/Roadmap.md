@@ -1,6 +1,6 @@
 # Hoja de Ruta
 
-> **Version**: 4.13.0 | **Estado**: Industrial
+> **Version**: 4.14.0 | **Estado**: Industrial
 
 El estandar tecnico del repositorio ya esta definido. Ver el [SKILL de creacion de casos](https://github.com/vladimiracunadev-create/langgraph-realworld/blob/main/.agents/skills/crear_caso/SKILL.md) antes de ejecutar cualquier tarea.
 
@@ -8,8 +8,8 @@ El estandar tecnico del repositorio ya esta definido. Ver el [SKILL de creacion 
 
 ## Estado actual
 
-21 casos operativos e industriales: 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15, 17, 18, 19, 21, 22, 25.
-4 casos scaffold listos para elevar.
+25 casos operativos e industriales: 01-25 sin omisiones (Ola 3 cerrada en v4.14.0).
+0 casos scaffold — portfolio al 100%.
 
 ---
 
@@ -46,8 +46,12 @@ SCAFFOLD  →  (SKILL.md)  →  OPERATIVO  →  (observabilidad + hardening)  �
 | ~~12 — Psicometria y Evaluaciones~~ | RRHH | **COMPLETADO v4.11.0** — alpha Cronbach, DIF, loop validez, 3 instrumentos DEMO |
 | ~~18 — Marketing con QA~~ | Marketing | **COMPLETADO v4.12.0** — Doble loop QA (estilo + hechos), fact-check con 6 fuentes |
 | ~~22 — Backoffice Automatizacion~~ | Operaciones | **COMPLETADO v4.13.0** — 3 routers + loop completitud + cadena custodia SHA-256 |
+| ~~16 — Planificador de Viajes~~ | Travel | **COMPLETADO v4.14.0** — Itinerario multi-criterio (precio · duración · calificación), puerto 8016 |
+| ~~20 — Migracion Legacy~~ | Arquitectura | **COMPLETADO v4.14.0** — Inventario + dependencias + plan multi-fase + estimación de riesgo, puerto 8020 |
+| ~~23 — Salud Pre-triage~~ | Salud | **COMPLETADO v4.14.0** — Triage clínico determinista + routers de severidad + disclaimer médico, puerto 8023 |
+| ~~24 — Asistente PM~~ | Gestión de proyectos | **COMPLETADO v4.14.0** — Backlog + riesgos + priorización multi-criterio + reporte ejecutivo, puerto 8024 |
 
-Restantes: 16 (Viajes), 20 (Migracion Legacy), 23 (Salud Pre-triage), 24 (PM Assistant) — segun disponibilidad y demanda.
+Ola 3 cerrada en v4.14.0 — portfolio al 100% (25/25 operativos).
 
 ---
 

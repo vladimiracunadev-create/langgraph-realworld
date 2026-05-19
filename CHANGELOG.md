@@ -5,6 +5,26 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es/1.0.0/).
 
 ---
 
+## v4.14.0 — 2026-05-19
+
+### Agregado
+
+- **Caso 16 — Planificador de Viajes elevado a OPERATIVO**: backend FastAPI + LangGraph con modo DEMO/LIVE en puerto 8016. Pipeline travel: parseo de requerimiento → búsqueda de opciones (vuelos · hospedaje · actividades DEMO) → score multi-criterio (precio · duración · calificación) → armado de itinerario → resumen ejecutivo. UI dark theme con selector de escenario y timeline de eventos. Tests verdes.
+- **Caso 20 — Migración Legacy elevado a OPERATIVO**: backend FastAPI + LangGraph con modo DEMO/LIVE en puerto 8020. Pipeline arquitectura: inventario de sistema legacy → análisis de dependencias → plan de migración multi-fase → estimación de riesgo → reporte ejecutivo. Misma plantilla observable que la familia 04/05/06/07/11/12/14/15/18/21/22 (rate limit, OAuth2 opt-in, trace IDs, JSON logging, `/metrics`, healthchecks). Tests verdes.
+- **Caso 23 — Salud Pre-triage elevado a OPERATIVO**: backend FastAPI + LangGraph con modo DEMO/LIVE en puerto 8023. Pipeline clínico determinista: ingesta de síntomas → clasificación de severidad → router triage (urgente · ambulatorio · auto-cuidado) → recomendaciones con disclaimer médico explícito. LIVE opt-in sólo redacta el mensaje empático final; el triage permanece determinista. Tests verdes.
+- **Caso 24 — Asistente PM elevado a OPERATIVO**: backend FastAPI + LangGraph con modo DEMO/LIVE en puerto 8024. Pipeline gestión: ingesta de backlog → identificación de riesgos → priorización multi-criterio (impacto · urgencia · esfuerzo) → reporte ejecutivo para stakeholders. UI dark theme con tablero de backlog y panel de riesgos. Tests verdes.
+- **Portfolio al 100%**: los 25 casos del catálogo están operativos (22 OPERATIVO + 3 INDUSTRIAL: 09, 10, 13). Ola 3 cerrada.
+
+### Modificado
+
+- **README raíz**: contador `21/25` (84%) → `25/25` (100%), scaffolds `4` → `0`, badge versión → 4.14.0, lista canónica de operativos incluye 16, 20, 23, 24. Sección "Casos scaffold" sustituida por nota de Ola 3 cerrada.
+- **ROADMAP v4.14.0**: casos 16, 20, 23, 24 movidos de scaffold a operativos (25 casos totales). Ola 3 cerrada — no quedan scaffolds en el catálogo.
+- **Portal raíz (`index.html`)**: banner principal → v4.14.0, badges `21/25` → `25/25`, pill `21 Casos Activos` → `25 Casos Activos`, listado de operativos actualizado, sección "Scaffolds restantes" eliminada.
+- **Wiki**: `Home.md`, `README.md`, `Roadmap.md`, `Changelog.md` y `Hub-CLI.md` alineadas a v4.14.0 y al portfolio 25/25.
+- **Docs**: `docs/HUB.md`, `docs/COSTS.md`, `docs/CLOUD_AWS.md` y `SECURITY.md` actualizados a v4.14.0.
+
+---
+
 ## v4.13.0 — 2026-05-18
 
 ### Agregado
