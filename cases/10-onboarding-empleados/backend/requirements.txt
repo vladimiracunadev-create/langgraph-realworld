@@ -33,13 +33,6 @@ charset-normalizer==3.4.7
     # via requests
 click==8.3.2
     # via uvicorn
-colorama==0.4.6
-    # via
-    #   click
-    #   loguru
-    #   pytest
-    #   tqdm
-    #   uvicorn
 cryptography==46.0.7
     # via
     #   google-auth
@@ -201,7 +194,7 @@ requests-oauthlib==2.0.0
     # via google-auth-oauthlib
 requests-toolbelt==1.0.0
     # via langsmith
-ruff==0.15.10
+ruff==0.15.13
     # via -r requirements.in
 s3transfer==0.16.0
     # via boto3
@@ -248,12 +241,12 @@ uuid-utils==0.14.1
     #   langsmith
 uvicorn[standard]==0.44.0
     # via -r requirements.in
+uvloop==0.22.1
+    # via uvicorn
 watchfiles==1.1.1
     # via uvicorn
 websockets==16.0
     # via uvicorn
-win32-setctime==1.2.0
-    # via loguru
 xxhash==3.6.0
     # via
     #   langgraph
