@@ -1,3 +1,10 @@
+"""
+lgrw_common.settings — Carga de .env y helpers de paths (case_root, data_dir, web_dir).
+
+Fuente canónica compartida entre los 25 backends. NO editar las copias por caso
+en `cases/*/backend/src/settings.py` directamente: editar este archivo y correr
+`python scripts/sync_shared.py` para propagar.
+"""
 from __future__ import annotations
 
 import os
@@ -7,45 +14,26 @@ from dotenv import load_dotenv
 
 
 def load_settings() -> None:
-    """Carga variables desde .env si existe."""
     load_dotenv()
 
 
 def case_root() -> Path:
-    """
-    Resuelve la ruta raíz del caso de uso.
-    Util para localizar archivos de datos y configuraciones específicas del módulo.
-    src/settings.py -> parents[2] = .../cases/19-devex-pr-review
-    """
     return Path(__file__).resolve().parents[2]
 
 
 def backend_root() -> Path:
-    """Ruta del backend del caso (cases/19-.../backend)."""
     return Path(__file__).resolve().parents[1]
 
 
-def pr_data_path() -> str:
-    """
-    Ruta al JSON del PR simulado.
-    Prioridad:
-    1. Si existe la variable PR_DATA_PATH (como en Docker), la usa.
-    2. Si no, busca sample_pr.json en la carpeta 'data' relativa a la raíz del caso.
-    """
-    env = os.getenv("PR_DATA_PATH")
+def data_dir() -> str:
+    env = os.getenv("DATA_DIR")
     if env:
         return env
-    return str(case_root() / "data" / "sample_pr.json")
+    return str(case_root() / "data")
 
 
-def checkpoint_db_path() -> str:
-    """Ruta del SQLite de checkpoints (LangGraph).
-
-    Prioridad:
-    1) env CHECKPOINT_DB
-    2) <backend_root>/checkpoints.sqlite
-    """
-    env = os.getenv("CHECKPOINT_DB")
+def web_dir() -> Path:
+    env = os.getenv("WEB_DIR")
     if env:
-        return env
-    return str(backend_root() / "checkpoints.sqlite")
+        return Path(env)
+    return backend_root() / "web"

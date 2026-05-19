@@ -1,15 +1,18 @@
 """
-auth.py — Middleware de autenticación y guardrails para Caso 13.
+lgrw_common.auth — Middleware de autenticación y guardrails compartido.
 
-Soporta dos modos (opt-in, backward-compatible):
-  - Modo DEMO (default): DEMO_AUTH_TOKEN opcional vía header X-Demo-Token.
-  - Modo OAuth2/OIDC:    USE_OAUTH2=true + Bearer JWT validado contra JWKS.
+Patrón unificado para los 25 backends: DEMO sin credenciales o
+OAuth2/OIDC con Bearer JWT (opt-in vía USE_OAUTH2=true).
 
-Nota: El endpoint protegido en este caso es /chat (no /api/).
+Hardening v4.15.0:
+- JWKS cache con TTL 300s (antes: fetch HTTP en cada request).
+- OAUTH2_AUDIENCE y OAUTH2_ISSUER obligatorios cuando USE_OAUTH2=true.
+- Mensaje 401 OAuth2 sin filtrar detalles internos del error.
 """
 from __future__ import annotations
 
 import os
+import time
 from collections import deque
 from hmac import compare_digest
 from time import monotonic
@@ -40,8 +43,7 @@ def use_oauth2() -> bool:
 
 
 def protected_path(path: str) -> bool:
-    # Caso 13 protege /chat en lugar de /api/
-    return path == "/chat"
+    return path.startswith("/api/")
 
 
 def client_identity(request: Request) -> str:
@@ -54,9 +56,6 @@ def client_identity(request: Request) -> str:
     return "unknown"
 
 
-
-import time
-
 _JWKS_CACHE: dict[str, tuple[float, dict]] = {}
 _JWKS_TTL_SECONDS = 300
 
@@ -66,8 +65,8 @@ def _fetch_jwks(jwks_url: str) -> dict:
     cached = _JWKS_CACHE.get(jwks_url)
     if cached is not None and (now - cached[0]) < _JWKS_TTL_SECONDS:
         return cached[1]
-    import urllib.request
     import json as _json
+    import urllib.request
     with urllib.request.urlopen(jwks_url, timeout=5) as resp:  # noqa: S310
         keys = _json.loads(resp.read())
     _JWKS_CACHE[jwks_url] = (now, keys)
@@ -88,9 +87,10 @@ def _validate_jwt(token: str) -> None:
     try:
         from jose import jwt
         keys = _fetch_jwks(jwks_url)
-        options: dict = {}
-        jwt.decode(token, keys, algorithms=["RS256", "ES256"],
-                   audience=audience or None, issuer=issuer or None, options=options)
+        jwt.decode(
+            token, keys, algorithms=["RS256", "ES256"],
+            audience=audience, issuer=issuer, options={},
+        )
     except ImportError as exc:
         raise ValueError("python-jose no instalado") from exc
     except Exception as exc:  # noqa: BLE001
