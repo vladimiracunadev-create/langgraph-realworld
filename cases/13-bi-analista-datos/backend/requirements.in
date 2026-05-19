@@ -8,4 +8,4 @@ python-dotenv
 sqlalchemy
 pytest
 langsmith>=0.7.31
-python-jose[cryptography]
+joserfc
