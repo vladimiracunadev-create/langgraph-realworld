@@ -1,6 +1,6 @@
 # Hoja de Ruta
 
-> **Version**: 4.14.0 | **Estado**: Industrial
+> **Version**: 4.15.0 | **Estado**: Industrial
 
 El estandar tecnico del repositorio ya esta definido. Ver el [SKILL de creacion de casos](https://github.com/vladimiracunadev-create/langgraph-realworld/blob/main/.agents/skills/crear_caso/SKILL.md) antes de ejecutar cualquier tarea.
 
@@ -10,6 +10,8 @@ El estandar tecnico del repositorio ya esta definido. Ver el [SKILL de creacion 
 
 25 casos operativos e industriales: 01-25 sin omisiones (Ola 3 cerrada en v4.14.0).
 0 casos scaffold — portfolio al 100%.
+
+**v4.15.0**: release de hardening de seguridad y mantenibilidad (auditoria adversarial v4.14.0). 4 critical fixes inline (PR #63), CI expandido a 25 casos (PR #64), `shared/lgrw_common/` como fuente canonica (PR #65), migracion `python-jose` → `joserfc` (PR #66). Ver [Changelog](Changelog) y [Security](Security).
 
 ---
 

@@ -1,6 +1,6 @@
 # Hoja de Ruta
 
-> **Versión**: 4.14.0 | **Estado**: Industrial | **Rama principal**: `main`
+> **Versión**: 4.15.0 | **Estado**: Industrial | **Rama principal**: `main`
 
 El estándar técnico del repositorio ya está definido. Antes de crear o modificar un caso, leer el skill directamente — no se rediseña lo que ya existe:
 
@@ -92,6 +92,23 @@ Ola 3 cerrada en v4.14.0 — portfolio al 100% (25/25 operativos).
 
 ---
 
+## Mantenimiento v4.15.0
+
+Release de hardening de seguridad y mantenibilidad — sin nuevos casos. Resultado
+de la auditoría adversarial v4.14.0 (4 PRs mergeados: #63, #64, #65, #66).
+
+| PR | Item | Cambio |
+|:---:|:---|:---|
+| #63 | CRIT-1..4 | JWKS cache TTL 300s, `aud`/`iss` obligatorios cuando `USE_OAUTH2=true`, HTTP 500 sanitizado (`"Internal server error"` + `logger.exception()`), `pr_id` con `pattern=SAFE_ID_PATTERN` en caso 19, 401 OAuth2 sin filtrar `exc` |
+| #64 | CI expansion | Tests Python expandidos de 10 → 25 casos (matrix único); `container_scan` grype expandido de 9 → 25 casos |
+| #65 | shared/ extraction | `shared/lgrw_common/auth.py` + `settings.py` = fuente canónica; `scripts/sync_shared.py` propaga a `cases/*/backend/src/`; CI bloquea drift con `--check` |
+| #66 | jose → joserfc | `python-jose+ecdsa` (abandonada, side-channel timing) reemplazada por `joserfc 1.6.5` en los 25 casos; requirements regenerados |
+
+Detalle completo en [CHANGELOG.md](CHANGELOG.md#v4150--2026-05-19) y
+[SECURITY.md](SECURITY.md#hardening-v4150).
+
+---
+
 ## Mejoras transversales pendientes
 
 ### v4.1.0 — SOC Triage operativo + integraciones reales
@@ -135,3 +152,52 @@ OPERATIVO  → backend real + interfaz web + DEMO/LIVE + Docker + tests + docs
 INDUSTRIAL → todo lo de OPERATIVO + compose.smoke + logging JSON estructurado
              + /metrics documentado + OAuth2 verificado en tests + docs operativas completas
 ```
+
+---
+
+## Pendientes técnicos para v4.16+
+
+Backlog identificado durante la auditoría adversarial v4.14.0 y la implementación
+v4.15.0. Ordenado por prioridad declarada (no asignada).
+
+### Alta
+
+1. **Migrar `shared/lgrw_common/` a paquete pip-instalable real** y cambiar el
+   build context de los 25 Dockerfile a la raíz del repo. Esto elimina por
+   completo la duplicación de `auth.py` y `settings.py` en `cases/*/backend/src/`
+   (hoy se mantienen sincronizadas vía script + CI, no por import real). Riesgo:
+   tocar 25 Dockerfile + 25 compose.yml simultáneamente.
+2. **Reemplazar `MemorySaver` de LangGraph** en producción por `SqliteSaver` o
+   `PostgresSaver` con TTL. Hoy 24/25 casos guardan estado de threads en RAM →
+   leak garantizado con `thread_id` controlado por cliente.
+3. **`rate_limit_buckets` con eviction**: hoy es un `dict` simple sin límite →
+   memory leak por cada IP única que acceda a `/api/`. Migrar a
+   `cachetools.TTLCache(maxsize=10000, ttl=120)`.
+4. **Mover `/metrics`, `/health`, `/ready` bajo `/api/` o protegerlos** con un
+   token separado. Hoy exponen modo (DEMO/LIVE), uptime, error rate, y en
+   algunos casos paths absolutos (caso 13 `/ready` filtra `settings.database_path`).
+   Total expuesto: ~150 endpoints públicos × 6 paths × 25 backends.
+
+### Media
+
+5. **Reemplazar `_metrics` dict global con `+=` por `prometheus_client.Counter`**:
+   thread-safe + formato Prometheus estándar (vs. el JSON custom actual). Mejora
+   adopción con stacks observabilidad estándar.
+6. **`DATA_DIR` con validación de path** (anti path-traversal). Hoy un env var
+   malicioso `DATA_DIR=../../etc` resultaría en lectura fuera del directorio
+   esperado.
+7. **Sanitización de prompt injection** en campos free-text que van directo al
+   LLM en modo LIVE (caso 01 `ticket.message`, caso 13 `question`).
+8. **Pin de SHA del digest de `python:3.11-slim`** y eliminar `apt-get upgrade -y`
+   de los 25 Dockerfile (no determinista).
+
+### Baja
+
+9. **Cobertura de tests medida con `--cov`** en CI (hoy: tests pasan/fallan, sin
+   métrica de cobertura por caso).
+10. **Consolidar `requirements.in` para los 3 casos sin él** (11, 12, 15) y
+    estandarizar el flujo pip-compile en los 25.
+11. **Migrar `dependabot` a `renovate`** o ajustar dependabot a abrir 1 PR
+    consolidado por bump (hoy: 1 PR × 25 casos × cada bump = ruido).
+12. **`audit_links.sh` sin trackear** en la raíz (script untracked desde sesiones
+    anteriores). Decidir si commitear o agregar a `.gitignore`.

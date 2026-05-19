@@ -1,7 +1,7 @@
 # ☁️ Migración a la Nube — AWS
 
 > [!NOTE]
-> **Versión**: 4.13.0 | **Estado**: Guía estratégica | **Audiencia**: Arquitectos Cloud, DevOps, CTO/Tech Leads, FinOps
+> **Versión**: 4.15.0 | **Estado**: Guía estratégica | **Audiencia**: Arquitectos Cloud, DevOps, CTO/Tech Leads, FinOps
 > **Alcance**: portar el portfolio (25 backends FastAPI + portal) desde Docker local a AWS, con análisis técnico, paso a paso, costos y trade-offs.
 
 ---

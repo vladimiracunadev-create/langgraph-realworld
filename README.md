@@ -6,7 +6,7 @@
 
 **LangGraph · FastAPI · Python 3.11 · Docker · OAuth2 · LangSmith · uv (opcional)**
 
-[![Version](https://img.shields.io/badge/version-4.14.0-1f6feb?style=for-the-badge)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-4.15.0-1f6feb?style=for-the-badge)](CHANGELOG.md)
 [![Operativos](https://img.shields.io/badge/operativos-25%2F25-3fb950?style=for-the-badge)](ROADMAP.md)
 [![Tests](https://img.shields.io/badge/tests-passing-3fb950?style=for-the-badge&logo=pytest&logoColor=white)](https://github.com/vladimiracunadev-create/langgraph-realworld/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-MIT-yellow?style=for-the-badge)](LICENSE)
@@ -25,7 +25,7 @@
 
 > Portafolio de **25 casos de uso empresariales** construidos con **LangGraph** y **FastAPI**:
 > **25 backends completamente operativos** (casos 01-25 sin omisiones) con streaming, OAuth2/OIDC opt-in, observabilidad LangSmith, `/metrics` por servicio, logging JSON estructurado y reverse proxy nginx + TLS.
-> Ola 3 cerrada en v4.14.0 — portfolio al 100%.
+> Ola 3 cerrada en v4.14.0 — portfolio al 100%. **v4.15.0**: release de hardening de seguridad y mantenibilidad (auditoría adversarial: 4 critical fixes inline + `shared/lgrw_common/` como fuente canónica + `python-jose` → `joserfc` + CI a los 25 casos).
 
 ### 📊 Estado del portfolio
 
@@ -57,7 +57,7 @@
 
 ---
 
-## 🏗️ Implementación Industrial — v4.14.0
+## 🏗️ Implementación Industrial — v4.15.0
 
 El estándar actual del repositorio se apoya en estos pilares:
 
@@ -230,7 +230,7 @@ TRUST_PROXY_HEADERS=false
 
 ## 🛡️ Seguridad
 
-Este repositorio ha sido auditado por **8 capas de seguridad** (v4.14.0):
+Este repositorio ha sido auditado por **8 capas de seguridad** (v4.15.0). El release v4.15.0 incorpora 4 fixes críticos identificados en la auditoría adversarial v4.14.0 (JWKS cache TTL, `aud`/`iss` obligatorios en OAuth2, sanitización HTTP 500, validación `pattern` en `pr_id` del caso 19), migración `python-jose+ecdsa` → `joserfc` (elimina dependencia abandonada con timing side-channel) y `shared/lgrw_common/` como fuente canónica para `auth.py` y `settings.py` (sync vía script + CI check). Detalle en [CHANGELOG.md](CHANGELOG.md) y [SECURITY.md](SECURITY.md).
 
 | Capa | Control | Estado |
 |:---|:---|:---:|

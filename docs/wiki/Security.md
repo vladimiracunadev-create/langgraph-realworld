@@ -1,9 +1,24 @@
 ﻿# Seguridad
 
 > [!NOTE]
-> **Version**: 4.11.0 | **Estado**: Endurecido para demo/local y exposicion externa controlada | **Audiencia**: Auditores, CISO, Desarrolladores
+> **Version**: 4.15.0 | **Estado**: Endurecido para demo/local y exposicion externa controlada | **Audiencia**: Auditores, CISO, Desarrolladores
 
-Este repositorio esta pensado para exploracion tecnica, demos y validacion local de patrones LangGraph. La seguridad implementada busca reducir riesgos reales sin romper quickstart, `index.html`, Hub CLI ni los 21 casos operativos 01-12, 13-15, 17, 19, 21 y 25.
+Este repositorio esta pensado para exploracion tecnica, demos y validacion local de patrones LangGraph. La seguridad implementada busca reducir riesgos reales sin romper quickstart, `index.html`, Hub CLI ni los 25 casos operativos (01-25 sin omisiones, Ola 3 cerrada en v4.14.0).
+
+---
+
+## Hardening v4.15.0
+
+Resultado de la auditoria adversarial sobre v4.14.0. Cuatro PRs mergeados (#63, #64, #65, #66).
+
+- **CRIT-1** JWKS cache TTL 300s en `shared/lgrw_common/auth.py` (antes: fetch HTTP al IdP en cada request → DoS amplification + workers bloqueados).
+- **CRIT-2** `OAUTH2_AUDIENCE` y `OAUTH2_ISSUER` obligatorios cuando `USE_OAUTH2=true`. ValueError explicito en startup si faltan (antes: bypass cross-tenant silencioso).
+- **CRIT-3** `HTTPException(500)` sanitizada en los 25 backends: `"Internal server error"` + `logger.exception()` (antes: `str(exc)` filtraba paths, env vars, fragmentos de `OPENAI_API_KEY`).
+- **CRIT-4** `pr_id` con `pattern=SAFE_ID_PATTERN` y `max_length=64` en caso 19 (anti log poisoning).
+- 401 OAuth2 sin detalle del `exc` interno en los 25 backends.
+- Migracion `python-jose+ecdsa` → `joserfc 1.6.5` en los 25 casos: elimina `ecdsa==0.19.2` (abandonada, side-channel timing) y CVEs historicos de `python-jose`.
+- `shared/lgrw_common/auth.py` y `settings.py` como fuente canonica; `scripts/sync_shared.py` propaga a los 25 casos; CI bloquea drift con `--check`.
+- CI Python tests expandido a los 25 casos (40% → 100%); `container_scan` grype expandido a los 25 casos (36% → 100%).
 
 ---
 
