@@ -1,0 +1,12 @@
+fastapi
+uvicorn[standard]
+python-dotenv
+langgraph>=0.2.0
+langchain-openai>=1.1.14
+langchain-core
+openai
+pydantic
+pytest
+httpx
+langsmith>=0.7.31
+python-jose[cryptography]

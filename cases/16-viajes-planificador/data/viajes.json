@@ -1,0 +1,58 @@
+[
+  {
+    "id": "V-001",
+    "viajero": "Ana Rivas",
+    "origen": "SCL",
+    "destino": "LIM",
+    "ciudad_destino": "lima",
+    "fecha_ida": "2026-06-10",
+    "fecha_vuelta": "2026-06-13",
+    "noches": 3,
+    "presupuesto_clp": 800000,
+    "preferencias": {"clase_vuelo": "economy", "categoria_hotel_min": 3},
+    "decision_viajero": "aprobar",
+    "ajuste_solicitado": ""
+  },
+  {
+    "id": "V-002",
+    "viajero": "Bruno Cárdenas",
+    "origen": "SCL",
+    "destino": "MAD",
+    "ciudad_destino": "madrid",
+    "fecha_ida": "2026-07-01",
+    "fecha_vuelta": "2026-07-06",
+    "noches": 5,
+    "presupuesto_clp": 1800000,
+    "preferencias": {"clase_vuelo": "economy", "categoria_hotel_min": 3},
+    "decision_viajero": "aprobar",
+    "ajuste_solicitado": ""
+  },
+  {
+    "id": "V-003",
+    "viajero": "Carla Torres",
+    "origen": "SCL",
+    "destino": "NYC",
+    "ciudad_destino": "nyc",
+    "fecha_ida": "2026-08-15",
+    "fecha_vuelta": "2026-08-19",
+    "noches": 4,
+    "presupuesto_clp": 2500000,
+    "preferencias": {"clase_vuelo": "economy", "categoria_hotel_min": 3},
+    "decision_viajero": "ajustar",
+    "ajuste_solicitado": "preferir hotel categoria 4"
+  },
+  {
+    "id": "V-004",
+    "viajero": "Diego Mora",
+    "origen": "SCL",
+    "destino": "CCS",
+    "ciudad_destino": "caracas",
+    "fecha_ida": "2026-09-01",
+    "fecha_vuelta": "2026-09-04",
+    "noches": 3,
+    "presupuesto_clp": 1200000,
+    "preferencias": {"clase_vuelo": "economy", "categoria_hotel_min": 3},
+    "decision_viajero": "aprobar",
+    "ajuste_solicitado": ""
+  }
+]

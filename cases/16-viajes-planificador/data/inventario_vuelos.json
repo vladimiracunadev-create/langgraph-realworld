@@ -1,0 +1,19 @@
+{
+  "SCL-LIM": [
+    {"id": "FL-001", "aerolinea": "LATAM", "clase": "economy", "precio_clp": 280000, "duracion_h": 4},
+    {"id": "FL-002", "aerolinea": "LATAM", "clase": "business", "precio_clp": 950000, "duracion_h": 4},
+    {"id": "FL-003", "aerolinea": "Sky", "clase": "economy", "precio_clp": 210000, "duracion_h": 4}
+  ],
+  "SCL-MAD": [
+    {"id": "FL-101", "aerolinea": "Iberia", "clase": "economy", "precio_clp": 1100000, "duracion_h": 14},
+    {"id": "FL-102", "aerolinea": "Iberia", "clase": "business", "precio_clp": 3500000, "duracion_h": 14},
+    {"id": "FL-103", "aerolinea": "LATAM", "clase": "economy", "precio_clp": 980000, "duracion_h": 14}
+  ],
+  "SCL-NYC": [
+    {"id": "FL-201", "aerolinea": "Delta", "clase": "economy", "precio_clp": 850000, "duracion_h": 11},
+    {"id": "FL-202", "aerolinea": "LATAM", "clase": "economy", "precio_clp": 780000, "duracion_h": 11}
+  ],
+  "SCL-CCS": [
+    {"id": "FL-301", "aerolinea": "Avianca", "clase": "economy", "precio_clp": 620000, "duracion_h": 6}
+  ]
+}
