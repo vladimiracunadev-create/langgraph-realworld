@@ -22,6 +22,27 @@ el profesional que atenderá.
 
 ## Flujo (LangGraph)
 
+```mermaid
+graph TD
+    A([START]) --> B[bienvenida_y_datos_basicos]
+    B --> C[recopilar_motivo_consulta]
+    C --> D[preguntar_sintomas_referidos]
+    D --> E[recopilar_antecedentes_relevantes]
+    E --> F[verificar_cobertura_documentacion]
+    F --> G[clasificar_nivel_urgencia]
+    G --> H{nivel_urgencia_router}
+    H -->|cobertura_pendiente| I[derivar_documentacion_pendiente]
+    H -->|inmediata| J[derivar_urgencias]
+    H -->|programable| K[derivar_especialidad]
+    H -->|teleconsulta| L[derivar_teleconsulta]
+    I --> M[generar_resumen_derivacion]
+    J --> M
+    K --> M
+    L --> M
+    M --> N[registrar_sesion]
+    N --> O([END])
+```
+
 ```
 bienvenida_y_datos_basicos
  → recopilar_motivo_consulta

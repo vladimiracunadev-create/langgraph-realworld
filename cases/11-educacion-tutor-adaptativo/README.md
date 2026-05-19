@@ -20,6 +20,28 @@ aprendizaje persistente.
 
 ## Flujo LangGraph
 
+```mermaid
+graph TD
+    A([START]) --> B[cargar_perfil]
+    B --> C{diagnostico_router}
+    C -->|sin_diagnostico| D[aplicar_diagnostico]
+    C -->|con_diagnostico| E[seleccionar_item]
+    D --> E
+    E --> F[presentar_actividad]
+    F --> G[evaluar_respuesta]
+    G --> H{desempeno_router}
+    H -->|domina| I[aumentar_dificultad]
+    H -->|error_conceptual| J[remediar_concepto]
+    H -->|frustracion| K[reducir_dificultad]
+    I --> L{continuar_router}
+    J --> L
+    K --> L
+    L -->|continuar| E
+    L -->|finalizar| M[actualizar_perfil]
+    M --> N[producir_reporte]
+    N --> O([END])
+```
+
 ```
 cargar_perfil
    │

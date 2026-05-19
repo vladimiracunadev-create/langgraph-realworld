@@ -1,7 +1,22 @@
-# Caso 13: Analista de Datos BI
+# Caso 13 — Analista de Datos BI
 
-> [!IMPORTANT]
-> **Estado**: `INDUSTRIAL` | **Versión**: 3.9.0 | **Referencia**: SQL seguro + Data Viz
+> [!NOTE]
+> **Estado**: `🏭 INDUSTRIAL` | **Versión repo**: 4.0.0 | **Puerto**: `8013`
+> **Patrón**: NL→SQL endurecido + ejecución read-only + narración de resultados
+
+## Flujo (LangGraph)
+
+```mermaid
+graph LR
+    A([START]) --> B[sql_generator]
+    B --> C[sql_executor]
+    C --> D[narrator]
+    D --> E([END])
+```
+
+`sql_generator` produce SQL (LLM en LIVE, plantillas en DEMO). `sql_executor` sanitiza
+(solo SELECT/CTE, sin comentarios, sin objetos `sqlite_*`, LIMIT máximo) y ejecuta en modo
+read-only. `narrator` redacta la respuesta y arma el `chart_data` para Chart.js.
 
 Agente conversacional de Business Intelligence que permite consultar una base de datos SQLite
 mediante lenguaje natural, generando SQL validado, visualizaciones con Chart.js y respuestas

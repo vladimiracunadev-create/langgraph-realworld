@@ -16,6 +16,29 @@ equipo para casos complejos que requieren juicio humano.
 
 ## Flujo LangGraph
 
+```mermaid
+graph TD
+    A([START]) --> B[recibir_solicitud]
+    B --> C[lookup_pedido]
+    C --> D[clasificar_intencion]
+    D --> E{intencion_router}
+    E -->|seguimiento| F[consultar_tracking]
+    E -->|devolucion| G[verificar_elegibilidad]
+    E -->|cambio| H[verificar_stock]
+    G --> I{elegibilidad_router}
+    I -->|elegible| J[generar_etiqueta]
+    I -->|no_elegible| K[derivar_humano]
+    H --> L{stock_router}
+    L -->|disponible| M[procesar_cambio]
+    L -->|agotado| K
+    F --> N[redactar_respuesta]
+    J --> N
+    M --> N
+    K --> N
+    N --> O[producir_resumen]
+    O --> P([END])
+```
+
 ```
 recibir_solicitud → lookup_pedido → clasificar_intencion
                                             │

@@ -1,7 +1,8 @@
-# Caso 03: Incident Response SRE
+# Caso 03 — Incident Response SRE
 
 > [!NOTE]
-> **Estado**: `SCAFFOLD` | **Versión repo**: 3.9.0 | **Tipo**: Agente reactivo con aprobación humana
+> **Estado**: `✅ OPERATIVO` | **Versión repo**: 4.0.0 | **Puerto**: `8003`
+> **Patrón**: Router por severidad (P1→PagerDuty) + remediación con aprobación + postmortem
 
 Automatiza la respuesta a incidentes de infraestructura coordinando la ingesta de métricas y logs, la clasificación de severidad y la ejecución de acciones de remediación con validación humana obligatoria antes de cualquier cambio en producción. Reduce el tiempo medio de resolución (MTTR) al eliminar el trabajo manual repetitivo del runbook y permite que los equipos SRE se concentren en análisis de causa raíz.
 
