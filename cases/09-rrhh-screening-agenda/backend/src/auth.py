@@ -8,6 +8,7 @@ Hardening v4.15.0:
 - JWKS cache con TTL 300s (antes: fetch HTTP en cada request).
 - OAUTH2_AUDIENCE y OAUTH2_ISSUER obligatorios cuando USE_OAUTH2=true.
 - Mensaje 401 OAuth2 sin filtrar detalles internos del error.
+- Verificación JWT con joserfc (reemplaza python-jose+ecdsa abandonada).
 """
 from __future__ import annotations
 
@@ -85,14 +86,19 @@ def _validate_jwt(token: str) -> None:
         raise ValueError("USE_OAUTH2=true requiere OAUTH2_ISSUER configurado")
 
     try:
-        from jose import jwt
-        keys = _fetch_jwks(jwks_url)
-        jwt.decode(
-            token, keys, algorithms=["RS256", "ES256"],
-            audience=audience, issuer=issuer, options={},
+        from joserfc import jwt
+        from joserfc.jwk import KeySet
+        keys_dict = _fetch_jwks(jwks_url)
+        key_set = KeySet.import_key_set(keys_dict)
+        decoded = jwt.decode(token, key_set, algorithms=["RS256", "ES256"])
+        claims_registry = jwt.JWTClaimsRegistry(
+            aud={"essential": True, "value": audience},
+            iss={"essential": True, "value": issuer},
+            exp={"essential": True},
         )
+        claims_registry.validate(decoded.claims)
     except ImportError as exc:
-        raise ValueError("python-jose no instalado") from exc
+        raise ValueError("joserfc no instalado") from exc
     except Exception as exc:  # noqa: BLE001
         raise ValueError("Token OAuth2 invalido") from exc
 
