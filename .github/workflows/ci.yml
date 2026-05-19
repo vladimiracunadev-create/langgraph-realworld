@@ -1,4 +1,4 @@
-﻿name: CI
+name: CI
 
 on:
   push:
@@ -33,10 +33,39 @@ jobs:
         run: |
           pytest -q tests
 
-  python_case02:
-    name: "Python checks (case 02)"
+  python_case:
+    name: "Python checks (case ${{ matrix.case }})"
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        case:
+          - "01-soporte-cliente-omnicanal"
+          - "02-mesa-ayuda-ti-runbooks"
+          - "03-incident-response-sre"
+          - "04-soc-triage-alertas"
+          - "05-analista-documentos"
+          - "06-compliance-auditorias"
+          - "07-compras-abastecimiento"
+          - "08-ventas-b2b-crm"
+          - "09-rrhh-screening-agenda"
+          - "10-onboarding-empleados"
+          - "11-educacion-tutor-adaptativo"
+          - "12-psicometria-evaluaciones"
+          - "13-bi-analista-datos"
+          - "14-finanzas-conciliacion"
+          - "15-ecommerce-postventa"
+          - "16-viajes-planificador"
+          - "17-legal-intake"
+          - "18-marketing-contenido-qa"
+          - "19-devex-pr-review"
+          - "20-migracion-legacy"
+          - "21-docs-auto"
+          - "22-backoffice-automatizacion"
+          - "23-salud-pretriage"
+          - "24-pm-assistant"
+          - "25-supervisor-workers"
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
@@ -48,201 +77,36 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install ruff pytest
-          python -m pip install -r cases/02-mesa-ayuda-ti-runbooks/backend/requirements.txt --only-binary=:all: || python -m pip install -r cases/02-mesa-ayuda-ti-runbooks/backend/requirements.txt
-      - name: Lint (ruff)
-        run: |
-          ruff check cases/02-mesa-ayuda-ti-runbooks/backend/src cases/02-mesa-ayuda-ti-runbooks/backend/tests
-      - name: Compile (syntax check)
-        run: |
-          python -m compileall cases/02-mesa-ayuda-ti-runbooks/backend/src cases/02-mesa-ayuda-ti-runbooks/backend/tests -q
-      - name: Tests (pytest)
-        run: |
-          pytest -q cases/02-mesa-ayuda-ti-runbooks/backend/tests
-
-  python_case09:
-    name: "Python checks (case 09)"
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-        with:
-          persist-credentials: false
-      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
-        with:
-          python-version: "3.11"
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install ruff pytest pydantic tenacity
-          python -m pip install -r cases/09-rrhh-screening-agenda/backend/requirements.txt --only-binary=:all: || python -m pip install -r cases/09-rrhh-screening-agenda/backend/requirements.txt
-      - name: Lint (ruff)
-        run: |
-          ruff check cases/09-rrhh-screening-agenda/backend/src
-      - name: Compile (syntax check)
-        run: |
-          python -m compileall cases/09-rrhh-screening-agenda/backend/src -q
-      - name: Tests (pytest)
-        run: |
-          pytest -q cases/09-rrhh-screening-agenda/backend/tests
-
-  python_case13:
-    name: "Python checks (case 13)"
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-        with:
-          persist-credentials: false
-      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
-        with:
-          python-version: "3.11"
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install ruff pytest
-          python -m pip install -r cases/13-bi-analista-datos/backend/requirements.txt --only-binary=:all: || python -m pip install -r cases/13-bi-analista-datos/backend/requirements.txt
-      - name: Seed demo database
+          # Extras requeridos por algunos casos antes del freeze
+          if [ "${{ matrix.case }}" = "09-rrhh-screening-agenda" ]; then
+            python -m pip install pydantic tenacity
+          fi
+          if [ "${{ matrix.case }}" = "13-bi-analista-datos" ]; then
+            python -m pip install pydantic-settings
+          fi
+          python -m pip install -r cases/${{ matrix.case }}/backend/requirements.txt --only-binary=:all: || \
+            python -m pip install -r cases/${{ matrix.case }}/backend/requirements.txt
+      - name: Seed demo database (case 13)
+        if: matrix.case == '13-bi-analista-datos'
         run: |
           python cases/13-bi-analista-datos/data/init_db.py
       - name: Lint (ruff)
         run: |
-          ruff check cases/13-bi-analista-datos/backend/src
+          if [ -d cases/${{ matrix.case }}/backend/tests ]; then
+            ruff check cases/${{ matrix.case }}/backend/src cases/${{ matrix.case }}/backend/tests
+          else
+            ruff check cases/${{ matrix.case }}/backend/src
+          fi
       - name: Compile (syntax check)
         run: |
-          python -m compileall cases/13-bi-analista-datos/backend/src -q
+          if [ -d cases/${{ matrix.case }}/backend/tests ]; then
+            python -m compileall cases/${{ matrix.case }}/backend/src cases/${{ matrix.case }}/backend/tests -q
+          else
+            python -m compileall cases/${{ matrix.case }}/backend/src -q
+          fi
       - name: Tests (pytest)
         run: |
-          pytest -q cases/13-bi-analista-datos/backend/tests
-
-  python_case03:
-    name: "Python checks (case 03)"
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-        with:
-          persist-credentials: false
-      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
-        with:
-          python-version: "3.11"
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install ruff pytest
-          python -m pip install -r cases/03-incident-response-sre/backend/requirements.txt --only-binary=:all: || python -m pip install -r cases/03-incident-response-sre/backend/requirements.txt
-      - name: Lint (ruff)
-        run: |
-          ruff check cases/03-incident-response-sre/backend/src
-      - name: Compile (syntax check)
-        run: |
-          python -m compileall cases/03-incident-response-sre/backend/src -q
-      - name: Tests (pytest)
-        run: |
-          pytest -q cases/03-incident-response-sre/backend/tests
-
-  python_case19:
-    name: "Python checks (case 19)"
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-        with:
-          persist-credentials: false
-      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
-        with:
-          python-version: "3.11"
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install ruff pytest
-          python -m pip install -r cases/19-devex-pr-review/backend/requirements.txt --only-binary=:all: || python -m pip install -r cases/19-devex-pr-review/backend/requirements.txt
-      - name: Lint (ruff)
-        run: |
-          ruff check cases/19-devex-pr-review/backend/src
-      - name: Compile (syntax check)
-        run: |
-          python -m compileall cases/19-devex-pr-review/backend/src -q
-      - name: Tests (pytest)
-        run: |
-          pytest -q cases/19-devex-pr-review/backend/tests
-
-  python_case25:
-    name: "Python checks (case 25)"
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-        with:
-          persist-credentials: false
-      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
-        with:
-          python-version: "3.11"
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install ruff pytest
-          python -m pip install -r cases/25-supervisor-workers/backend/requirements.txt --only-binary=:all: || python -m pip install -r cases/25-supervisor-workers/backend/requirements.txt
-      - name: Lint (ruff)
-        run: |
-          ruff check cases/25-supervisor-workers/backend/src
-      - name: Compile (syntax check)
-        run: |
-          python -m compileall cases/25-supervisor-workers/backend/src -q
-      - name: Tests (pytest)
-        run: |
-          pytest -q cases/25-supervisor-workers/backend/tests
-
-  python_case01:
-    name: "Python checks (case 01)"
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-        with:
-          persist-credentials: false
-      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
-        with:
-          python-version: "3.11"
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install ruff pytest
-          python -m pip install -r cases/01-soporte-cliente-omnicanal/backend/requirements.txt --only-binary=:all: || python -m pip install -r cases/01-soporte-cliente-omnicanal/backend/requirements.txt
-      - name: Lint (ruff)
-        run: |
-          ruff check cases/01-soporte-cliente-omnicanal/backend/src
-      - name: Compile (syntax check)
-        run: |
-          python -m compileall cases/01-soporte-cliente-omnicanal/backend/src -q
-      - name: Tests (pytest)
-        run: |
-          pytest -q cases/01-soporte-cliente-omnicanal/backend/tests
-
-  python_case10:
-    name: "Python checks (case 10)"
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-        with:
-          persist-credentials: false
-      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
-        with:
-          python-version: "3.11"
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install ruff pytest
-          python -m pip install -r cases/10-onboarding-empleados/backend/requirements.txt --only-binary=:all: || python -m pip install -r cases/10-onboarding-empleados/backend/requirements.txt
-      - name: Lint (ruff)
-        run: |
-          ruff check cases/10-onboarding-empleados/backend/src
-      - name: Compile (syntax check)
-        run: |
-          python -m compileall cases/10-onboarding-empleados/backend/src -q
-      - name: Tests (pytest)
-        run: |
-          pytest -q cases/10-onboarding-empleados/backend/tests
+          pytest -q cases/${{ matrix.case }}/backend/tests
 
   docker_build_all_cases:
     name: "Docker build (all cases)"
