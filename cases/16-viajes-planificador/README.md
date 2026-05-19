@@ -1,72 +1,136 @@
-# Caso 16: Planificador de Viajes
+# Caso 16 — Planificador de Viajes
 
 > [!NOTE]
-> **Estado**: `SCAFFOLD` | **Versión repo**: 4.0.0 | **Tipo**: Agente con estado y refinamiento iterativo
+> **Estado**: `✅ OPERATIVO` | **Versión repo**: 4.14.0 | **Puerto**: `8016`
+> **Patrón**: 2 routers + loop de optimización de costos + loop de ajuste iterativo del viajero
 
-Automatiza la planificación de itinerarios de viaje corporativos y personales respetando restricciones de presupuesto, política de viajes, preferencias del viajero y disponibilidad en tiempo real, con capacidad de ajuste iterativo ante cambios. Reduce el tiempo de planificación de viajes complejos de horas a minutos y garantiza el cumplimiento de la política de viajes corporativos.
+Automatiza la planificación de itinerarios de viaje corporativos y personales respetando
+restricciones de presupuesto, política de viajes y preferencias del viajero. El agente parsea
+los requisitos, valida la política corporativa, busca vuelos / alojamiento / movilidad,
+ensambla el itinerario, optimiza costos si excede el presupuesto e incorpora ajustes
+iterativos del viajero hasta producir un brief final aprobado.
 
 ---
 
-## Objetivo de negocio
+## Flujo (LangGraph)
 
-Los travel managers y los propios viajeros invierten horas planificando itinerarios que concilien vuelos, hoteles, movilidad, reuniones y restricciones presupuestarias. En entornos corporativos, el incumplimiento de la política de viajes genera costos ocultos y problemas de reembolso. Este agente recibe las restricciones del viaje (origen, destino, fechas, presupuesto, política corporativa, preferencias del viajero), busca opciones en tiempo real, construye el itinerario óptimo, lo presenta para revisión y permite ajustes iterativos en lenguaje natural hasta que el viajero quede satisfecho, generando el brief de viaje final y los expedientes para reserva.
-
-## Flujo propuesto (LangGraph)
-
-```mermaid
-graph TD
-    A[Solicitud de viaje con restricciones] --> B[Nodo: parsear_requisitos]
-    B --> C[Nodo: verificar_politica_viajes]
-    C --> D[Nodo: buscar_vuelos]
-    D --> E[Nodo: buscar_alojamiento]
-    E --> F[Nodo: buscar_movilidad]
-    F --> G[Nodo: ensamblar_itinerario]
-    G --> H[Nodo: validar_presupuesto]
-    H --> I{Router: cumple_restricciones}
-    I -->|Fuera de presupuesto| J[Nodo: optimizar_costos]
-    J --> G
-    I -->|Cumple| K[Nodo: presentar_itinerario]
-    K --> L{Router: decision_viajero}
-    L -->|Solicita ajuste| M[Nodo: aplicar_ajuste_iterativo]
-    M --> G
-    L -->|Aprobado| N[Nodo: generar_brief_viaje]
-    N --> O[Salida: itinerario_confirmado]
+```
+parsear_requisitos → verificar_politica_viajes
+     → politica_router
+          ├─ violación  → rechazar_viaje ─────────────────────┐
+          └─ política ok → buscar_vuelos → buscar_alojamiento → buscar_movilidad
+                         → ensamblar_itinerario → validar_presupuesto
+     → cumple_restricciones_router
+          ├─ fuera ∧ iter<2 → optimizar_costos → ensamblar_itinerario
+          └─ cumple | tope  → presentar_itinerario
+     → decision_viajero_router
+          ├─ ajustar ∧ iter<2 → aplicar_ajuste_iterativo → buscar_alojamiento
+          └─ aprobar | tope   → generar_brief_viaje
+                                                           ├─→ registrar_auditoria → END
 ```
 
-### Nodos principales
+### Nodos
 
-| Nodo | Descripción |
+| Nodo | Función |
 |---|---|
-| `parsear_requisitos` | Extrae origen, destino, fechas, presupuesto, preferencias y restricciones |
-| `verificar_politica_viajes` | Valida que las opciones cumplan la política corporativa de viajes |
-| `buscar_vuelos` | Consulta disponibilidad y precios en GDS o APIs de viaje |
-| `buscar_alojamiento` | Busca hoteles según categoría, ubicación y política corporativa |
-| `buscar_movilidad` | Planifica traslados: aeropuerto, reuniones y desplazamientos locales |
-| `ensamblar_itinerario` | Combina vuelos, hoteles y movilidad en un itinerario coherente |
-| `validar_presupuesto` | Verifica que el total no supere el presupuesto autorizado |
-| `optimizar_costos` | Propone alternativas más económicas manteniendo las restricciones clave |
-| `aplicar_ajuste_iterativo` | Incorpora cambios solicitados en lenguaje natural por el viajero |
-| `generar_brief_viaje` | Produce el documento de viaje completo con confirmaciones y contactos |
+| `parsear_requisitos` | Carga del viaje (origen, destino, fechas, presupuesto, preferencias) |
+| `verificar_politica_viajes` | Valida ciudad permitida + clase de vuelo + presupuesto máximo corporativo |
+| `rechazar_viaje` | Termina con `estado_final=rechazado` y motivo |
+| `buscar_vuelos` | Selecciona el vuelo más barato dentro de la clase autorizada |
+| `buscar_alojamiento` | Hotel más barato dentro del rango de categoría permitido |
+| `buscar_movilidad` | Transfer aeropuerto + transporte local × noches |
+| `ensamblar_itinerario` | Calcula desglose y aplica descuento corporativo si hubo optimizaciones |
+| `validar_presupuesto` | Compara costo total contra presupuesto autorizado |
+| `optimizar_costos` | Aplica descuento corporativo simulado (DEMO determinista) y reintenta |
+| `presentar_itinerario` | Snapshot final antes de la decisión del viajero |
+| `aplicar_ajuste_iterativo` | Sube categoría de hotel según ajuste pedido y re-ensambla |
+| `generar_brief_viaje` | Brief markdown (DEMO determinista / LIVE con OpenAI) |
+| `registrar_auditoria` | Audit trail no regulatorio con timestamps y métricas |
 
-## Stack técnico previsto
+### Routers
+
+- `politica_router`: `politica_ok → buscar_vuelos`; si no → `rechazar_viaje`
+- `cumple_restricciones_router`: fuera ∧ `iter_optimizacion < max` → loop; si no → `presentar_itinerario`
+- `decision_viajero_router`: `decision_viajero == "ajustar"` ∧ `iter_ajuste < max` → loop; si no → `generar_brief_viaje`
+
+---
+
+## Política corporativa (DEMO)
+
+`data/politica_viajes.json`:
+
+| Regla | Valor |
+|---|---|
+| Clase de vuelo máxima | `economy` |
+| Categoría máxima hotel | `4` |
+| Presupuesto máximo corporativo | `CLP 3.000.000` |
+| Per diem | `CLP 80.000` |
+| Ciudades restringidas | `caracas`, `pyongyang` |
+| Max iter optimización | `2` |
+| Max iter ajuste viajero | `2` |
+
+El descuento corporativo aplicado por `optimizar_costos` es 30% por iteración (multiplicativo).
+
+---
+
+## Stack
 
 | Capa | Tecnología |
 |---|---|
-| Orquestación | LangGraph `StateGraph` |
+| Orquestación | LangGraph `StateGraph` con `MemorySaver` |
 | API | FastAPI + uvicorn |
-| LLM | OpenAI GPT-4o-mini (modo LIVE) / respuestas mock (modo DEMO) |
-| APIs de viaje | Amadeus, Skyscanner, Booking.com, Google Flights API |
-| Política corporativa | Reglas configurables por empresa en base de datos |
-| Almacenamiento | PostgreSQL (itinerarios, preferencias, política de viajes) |
+| LLM (opcional) | OpenAI GPT-4o-mini para brief (LIVE opt-in con `OPENAI_API_KEY`) |
+| Auth | DEMO (sin token) + OAuth2/OIDC JWT opt-in (`USE_OAUTH2=true`) |
+| Observabilidad | `/health`, `/ready`, `/metrics`, logs JSON con `trace_id` |
 
-## Estado actual
+---
 
-Este caso es un **scaffold**: la estructura de la demo estática existe,
-la implementación del backend con LangGraph está pendiente.
+## Cómo correr
 
-Para contribuir o elevar este caso, consulta [CONTRIBUTING.md](../../CONTRIBUTING.md).
+```bash
+# Tests
+cd cases/16-viajes-planificador/backend
+pip install -r requirements.txt
+pytest
+
+# Servidor (DEMO)
+uvicorn src.api:app --host 0.0.0.0 --port 8016
+
+# Con Docker
+docker compose -f cases/16-viajes-planificador/backend/compose.yml up --build
+```
+
+### Endpoints
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| `GET`  | `/health` · `/healthz` · `/ready` · `/metrics` | Observabilidad |
+| `POST` | `/api/run` | Ejecuta el pipeline (`{thread_id, viaje_id}`) |
+| `GET`  | `/api/stream` | Streaming NDJSON con snapshots por nodo |
+| `GET`  | `/` · `/web/` | UI mínima |
+
+### Viajes DEMO
+
+| ID | Destino | Escenario | Resultado esperado |
+|---|---|---|---|
+| `V-001` | Lima | Presupuesto holgado, política OK | `aprobado`, 0 optimizaciones |
+| `V-002` | Madrid | Presupuesto ajustado, requiere optimización | `aprobado`, 1 optimización (descuento 30%) |
+| `V-003` | NYC | Viajero solicita ajuste (subir categoría hotel) | `aprobado`, 1 ajuste iterativo |
+| `V-004` | Caracas | Ciudad restringida por política | `rechazado` (`ciudad_restringida_por_politica`) |
+
+---
+
+## Datos (`data/`)
+
+| Archivo | Contenido |
+|---|---|
+| `viajes.json` | 4 viajes cubriendo los 3 caminos del grafo |
+| `politica_viajes.json` | Reglas corporativas (clase, categoría, presupuesto, ciudades restringidas) |
+| `inventario_vuelos.json` | Vuelos por ruta con precios deterministas |
+| `inventario_hoteles.json` | Hoteles por ciudad con tarifa noche y categoría |
+| `inventario_movilidad.json` | Transfer aeropuerto + transporte local por ciudad |
 
 ---
 
 > [!TIP]
-> Ver los casos **09**, **10** y **13** como referencia de implementación industrial.
+> Patrón análogo: caso **22** (Backoffice, routers + loop) y caso **18** (refinamiento iterativo).

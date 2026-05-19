@@ -1,0 +1,17 @@
+{
+  "lima": [
+    {"id": "MV-LIM-01", "tipo": "transfer_aeropuerto", "precio_clp": 18000},
+    {"id": "MV-LIM-02", "tipo": "transporte_local_dia", "precio_clp": 25000}
+  ],
+  "madrid": [
+    {"id": "MV-MAD-01", "tipo": "transfer_aeropuerto", "precio_clp": 35000},
+    {"id": "MV-MAD-02", "tipo": "transporte_local_dia", "precio_clp": 18000}
+  ],
+  "nyc": [
+    {"id": "MV-NYC-01", "tipo": "transfer_aeropuerto", "precio_clp": 60000},
+    {"id": "MV-NYC-02", "tipo": "transporte_local_dia", "precio_clp": 40000}
+  ],
+  "caracas": [
+    {"id": "MV-CCS-01", "tipo": "transfer_aeropuerto", "precio_clp": 20000}
+  ]
+}

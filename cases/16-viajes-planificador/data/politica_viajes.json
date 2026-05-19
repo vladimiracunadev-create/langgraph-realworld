@@ -1,0 +1,9 @@
+{
+  "clase_vuelo_maxima": "economy",
+  "categoria_hotel_maxima": 4,
+  "presupuesto_maximo_clp": 3000000,
+  "per_diem_clp": 80000,
+  "ciudades_restringidas": ["caracas", "pyongyang"],
+  "max_iter_optimizacion": 2,
+  "max_iter_ajuste": 2
+}

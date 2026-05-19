@@ -1,0 +1,19 @@
+{
+  "lima": [
+    {"id": "HT-LIM-01", "nombre": "Hotel Miraflores Plaza", "categoria": 4, "tarifa_noche_clp": 95000},
+    {"id": "HT-LIM-02", "nombre": "Lima Business Suites", "categoria": 3, "tarifa_noche_clp": 65000},
+    {"id": "HT-LIM-03", "nombre": "Gran Lima Luxury", "categoria": 5, "tarifa_noche_clp": 220000}
+  ],
+  "madrid": [
+    {"id": "HT-MAD-01", "nombre": "Madrid Centro Hotel", "categoria": 4, "tarifa_noche_clp": 140000},
+    {"id": "HT-MAD-02", "nombre": "Hostal Gran Vía", "categoria": 3, "tarifa_noche_clp": 85000},
+    {"id": "HT-MAD-03", "nombre": "Palacio Real Suites", "categoria": 5, "tarifa_noche_clp": 320000}
+  ],
+  "nyc": [
+    {"id": "HT-NYC-01", "nombre": "Midtown Business Hotel", "categoria": 4, "tarifa_noche_clp": 250000},
+    {"id": "HT-NYC-02", "nombre": "Brooklyn Inn", "categoria": 3, "tarifa_noche_clp": 160000}
+  ],
+  "caracas": [
+    {"id": "HT-CCS-01", "nombre": "Caracas Plaza", "categoria": 3, "tarifa_noche_clp": 70000}
+  ]
+}
