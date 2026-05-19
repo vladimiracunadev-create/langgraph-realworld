@@ -1,0 +1,37 @@
+{
+  "cardiologia": {
+    "profesional_sugerido": "Dr. R. Vargas",
+    "agenda_proxima": "2026-05-22 10:00",
+    "modalidad": "presencial"
+  },
+  "traumatologia": {
+    "profesional_sugerido": "Dra. P. Soto",
+    "agenda_proxima": "2026-05-21 11:30",
+    "modalidad": "presencial"
+  },
+  "neurologia": {
+    "profesional_sugerido": "Dr. M. Aravena",
+    "agenda_proxima": "2026-05-23 09:00",
+    "modalidad": "presencial"
+  },
+  "dermatologia": {
+    "profesional_sugerido": "Dra. C. Núñez",
+    "agenda_proxima": "2026-05-25 16:00",
+    "modalidad": "presencial"
+  },
+  "medicina_general": {
+    "profesional_sugerido": "Dr. L. Fuentes",
+    "agenda_proxima": "2026-05-20 12:00",
+    "modalidad": "mixta"
+  },
+  "urgencias": {
+    "profesional_sugerido": "Equipo de Urgencias",
+    "agenda_proxima": "inmediata",
+    "modalidad": "presencial"
+  },
+  "teleconsulta_general": {
+    "profesional_sugerido": "Dr. S. Bravo (telemedicina)",
+    "agenda_proxima": "2026-05-20 19:00",
+    "modalidad": "telemedicina"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "sintomas_criticos": {
+    "dolor_toracico": 50,
+    "disnea_severa": 50,
+    "perdida_conciencia": 60,
+    "sangrado_activo": 55,
+    "irradiacion_brazo_izq": 25,
+    "sudoracion": 10,
+    "convulsiones": 60,
+    "fiebre_alta_persistente": 20
+  },
+  "factores_edad": [
+    {"min": 0, "max": 4, "puntaje": 15},
+    {"min": 5, "max": 49, "puntaje": 0},
+    {"min": 50, "max": 64, "puntaje": 10},
+    {"min": 65, "max": 200, "puntaje": 20}
+  ],
+  "comorbilidades_riesgo": {
+    "hipertension": 5,
+    "diabetes": 5,
+    "epoc": 10,
+    "insuficiencia_cardiaca": 15,
+    "inmunosupresion": 15
+  },
+  "ventanas_temporales": {
+    "agudo_<24h_extra": 10,
+    "cronico_>14d_descuento": -10
+  },
+  "motivos_teleconsulta": [
+    "consulta de control",
+    "control rutinario",
+    "renovacion de receta"
+  ],
+  "motivos_programables_especialidad": {
+    "lumbalgia": "traumatologia",
+    "dolor_lumbar": "traumatologia",
+    "cefalea": "neurologia",
+    "control hipertension": "cardiologia",
+    "hipertension": "cardiologia",
+    "dermatitis": "dermatologia"
+  }
+}

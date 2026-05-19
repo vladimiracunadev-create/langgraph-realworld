@@ -1,0 +1,8 @@
+{
+  "umbral_urgencia_inmediata": 70,
+  "umbral_teleconsulta": 30,
+  "documentos_requeridos": ["carnet_identidad", "credencial_cobertura"],
+  "disclaimer_obligatorio": "Esta clasificación es administrativa y no constituye diagnóstico ni indicación médica. Ante síntomas graves contacte al servicio de urgencias (131 SAMU).",
+  "max_iter": 1,
+  "version_protocolo": "2026.05"
+}
