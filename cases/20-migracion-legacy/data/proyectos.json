@@ -1,0 +1,35 @@
+[
+  {
+    "id": "P-001",
+    "nombre": "Sistema de Facturacion VB6",
+    "lenguaje_origen": "VB6",
+    "lenguaje_destino": "Python",
+    "modulos": ["facturacion", "clientes", "reportes", "auth"],
+    "loc_total": 12500,
+    "complejidad_promedio": 5,
+    "deuda_tecnica_score": 6,
+    "descripcion": "Migracion limpia de un monolito VB6 a Python 3.11."
+  },
+  {
+    "id": "P-002",
+    "nombre": "Core Bancario COBOL",
+    "lenguaje_origen": "COBOL",
+    "lenguaje_destino": "Java",
+    "modulos": ["cuentas", "transferencias", "intereses", "cierre_diario", "auditoria"],
+    "loc_total": 48000,
+    "complejidad_promedio": 8,
+    "deuda_tecnica_score": 9,
+    "descripcion": "Core bancario con un modulo que requiere ciclo de regresion."
+  },
+  {
+    "id": "P-003",
+    "nombre": "Portal PHP5 Legacy",
+    "lenguaje_origen": "PHP5",
+    "lenguaje_destino": "PHP8",
+    "modulos": ["catalogo", "carrito", "pagos_legacy"],
+    "loc_total": 8200,
+    "complejidad_promedio": 6,
+    "deuda_tecnica_score": 7,
+    "descripcion": "Portal con modulo de pagos legacy que no se puede migrar limpiamente (workaround)."
+  }
+]

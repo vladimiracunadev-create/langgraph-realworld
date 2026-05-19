@@ -1,71 +1,98 @@
-# Caso 20: Migración de Sistemas Legacy
+# Caso 20 — Migración de Sistemas Legacy
 
 > [!NOTE]
-> **Estado**: `SCAFFOLD` | **Versión repo**: 4.0.0 | **Tipo**: Agente con estado y ejecución por lotes
+> **Estado**: `✅ OPERATIVO` | **Versión repo**: 4.14.0 | **Puerto**: `8020`
+> **Patrón**: 2 routers + loop de regresión por lote + loop de avance de lotes
 
-Automatiza la migración de sistemas legacy coordinando el análisis del código fuente, la planificación del refactor por módulos, la transformación por lotes con validación continua y la verificación de equivalencia funcional mediante tests automáticos. Reduce el riesgo y el tiempo de proyectos de modernización que normalmente toman meses, permitiendo una migración incremental y auditable.
+Automatiza la migración incremental de sistemas legacy. El agente analiza el código fuente, mapea
+dependencias entre módulos, planifica un orden topológico de lotes, refactoriza cada módulo al
+lenguaje destino, genera tests de equivalencia, los ejecuta y reintenta con análisis de regresión
+cuando fallan. Termina con una validación integral y un reporte ejecutivo determinista.
 
 ---
 
-## Objetivo de negocio
+## Flujo (LangGraph)
 
-Las empresas con sistemas críticos en tecnologías obsoletas (COBOL, VB6, Delphi, PHP 5, monolitos sin tests) enfrentan un riesgo creciente de falla y costos de mantenimiento exponenciales, pero la migración total es percibida como demasiado arriesgada. Este agente analiza el código legado para identificar dependencias, módulos y puntos de entrada, genera un plan de migración incremental priorizado por impacto y riesgo, ejecuta el refactor módulo a módulo usando el LLM para transformar el código, genera tests automáticos para verificar la equivalencia funcional y valida cada paso antes de continuar, produciendo un informe de progreso y los artefactos de código modernizados.
-
-## Flujo propuesto (LangGraph)
-
-```mermaid
-graph TD
-    A[Repositorio legacy / Scope de migración] --> B[Nodo: analizar_codigo_legacy]
-    B --> C[Nodo: mapear_dependencias]
-    C --> D[Nodo: planificar_migracion]
-    D --> E[Nodo: seleccionar_lote]
-    E --> F[Nodo: refactorizar_modulo]
-    F --> G[Nodo: generar_tests_equivalencia]
-    G --> H[Nodo: ejecutar_tests]
-    H --> I{Router: resultado_tests}
-    I -->|Tests fallando| J[Nodo: analizar_regresion]
-    J --> F
-    I -->|Tests pasando| K[Nodo: registrar_progreso]
-    K --> L{Router: migracion_completa}
-    L -->|Quedan lotes| E
-    L -->|Completa| M[Nodo: validacion_integral]
-    M --> N[Salida: codigo_modernizado_y_reporte]
+```
+analizar_codigo_legacy → mapear_dependencias → planificar_migracion
+     → seleccionar_lote → refactorizar_modulo → generar_tests_equivalencia
+     → ejecutar_tests
+          → resultado_tests_router
+                ├─ ok               → registrar_progreso
+                ├─ falla∧iter<max   → analizar_regresion → refactorizar_modulo
+                └─ falla∧tope       → registrar_progreso (workaround)
+     → migracion_completa_router
+          ├─ pendientes → seleccionar_lote
+          └─ vacío      → validacion_integral → END
 ```
 
-### Nodos principales
+### Nodos
 
-| Nodo | Descripción |
+| Nodo | Función |
 |---|---|
-| `analizar_codigo_legacy` | Parsea el código fuente y extrae métricas de complejidad, deuda y cobertura |
-| `mapear_dependencias` | Construye el grafo de dependencias entre módulos y capas del sistema |
-| `planificar_migracion` | Genera el plan de migración incremental ordenado por dependencias y riesgo |
-| `seleccionar_lote` | Elige el próximo módulo o conjunto de funciones a migrar |
-| `refactorizar_modulo` | Transforma el código legacy al lenguaje/framework objetivo |
-| `generar_tests_equivalencia` | Produce tests de caracterización que verifican el comportamiento original |
-| `ejecutar_tests` | Corre la suite de tests y captura el resultado |
-| `analizar_regresion` | Identifica la causa de los tests fallidos y propone corrección |
-| `registrar_progreso` | Actualiza el estado del plan de migración y genera el diff del módulo |
-| `validacion_integral` | Ejecuta tests de integración end-to-end sobre el sistema completo migrado |
+| `analizar_codigo_legacy` | Carga proyecto y métricas (LOC, complejidad, deuda) |
+| `mapear_dependencias` | Construye el grafo de dependencias por módulo |
+| `planificar_migracion` | Ordena los módulos por orden topológico de Kahn |
+| `seleccionar_lote` | Toma el siguiente lote pendiente |
+| `refactorizar_modulo` | Aplica la transformación al lenguaje destino |
+| `generar_tests_equivalencia` | Genera la suite de tests de caracterización |
+| `ejecutar_tests` | Corre la suite simulada y captura el resultado |
+| `analizar_regresion` | Identifica la causa y propone fix, incrementa `iter_regresion` |
+| `registrar_progreso` | Marca lote como `ok` o `fallido_con_workaround`, avanza |
+| `validacion_integral` | Reporte final: `exitosa`, `parcial` o `sin_lotes` |
 
-## Stack técnico previsto
+### Routers
 
-| Capa | Tecnología |
-|---|---|
-| Orquestación | LangGraph `StateGraph` |
-| API | FastAPI + uvicorn |
-| LLM | OpenAI GPT-4o-mini (modo LIVE) / respuestas mock (modo DEMO) |
-| Análisis de código | tree-sitter, ast (Python), Understand (para COBOL/C) |
-| Tests | pytest, jest, junit (según lenguaje objetivo) |
-| Almacenamiento | PostgreSQL (plan de migración, progreso), Git (versionado de artefactos) |
+- **`resultado_tests_router`** — `ok` → `registrar_progreso`; fallo con `iter_regresion < max` → `analizar_regresion`; fallo con tope → `registrar_progreso` (workaround).
+- **`migracion_completa_router`** — `lotes_pendientes` vacío → `validacion_integral`; quedan → `seleccionar_lote`.
 
-## Estado actual
+## Modos
 
-Este caso es un **scaffold**: la estructura de la demo estática existe,
-la implementación del backend con LangGraph está pendiente.
+- **DEMO** (sin `OPENAI_API_KEY`) — Resultados deterministas a partir de fixtures locales en `data/`.
+- **LIVE** (`OPENAI_API_KEY` set) — Mismos pasos, sólo el reporte ejecutivo final pasa por LLM.
 
-Para contribuir o elevar este caso, consulta [CONTRIBUTING.md](../../CONTRIBUTING.md).
+## Fixtures (`data/`)
 
----
+- `proyectos.json` — P-001 (VB6→Python, limpio), P-002 (COBOL→Java, 1 regresión), P-003 (PHP5→PHP8, 1 workaround).
+- `dependencias.json` — grafo por proyecto.
+- `lotes_catalog.json` — por módulo: complejidad, riesgo, código simulado origen/destino, tests, flags.
+- `policy.json` — `max_regresiones_por_lote=2`, umbrales, lenguajes soportados.
 
-> [!TIP]
-> Ver los casos **09**, **10** y **13** como referencia de implementación industrial.
+## Endpoints
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| GET | `/` | UI HTML |
+| GET | `/health` `/healthz` | health check |
+| GET | `/ready` | readiness (compila grafo) |
+| GET | `/metrics` | métricas JSON |
+| POST | `/api/run` | `{thread_id, proyecto_id}` → snapshot final |
+| GET | `/api/stream` | NDJSON stream de snapshots |
+
+## Levantar localmente
+
+```bash
+cd cases/20-migracion-legacy/backend
+pip install -r requirements.txt
+uvicorn src.api:app --host 0.0.0.0 --port 8020
+```
+
+O con Docker Compose:
+
+```bash
+cd cases/20-migracion-legacy/backend
+docker compose up --build
+```
+
+## Tests
+
+```bash
+cd cases/20-migracion-legacy/backend
+pytest -x -q
+```
+
+## Seguridad
+
+Mismo patrón que casos 04/05/14/21/22: DEMO sin credenciales o **OAuth2/OIDC** Bearer JWT opt-in
+con `USE_OAUTH2=true` (`OAUTH2_JWKS_URL`, `OAUTH2_AUDIENCE`, `OAUTH2_ISSUER`).
+Rate limiting opcional vía `RATE_LIMIT_RPM`.

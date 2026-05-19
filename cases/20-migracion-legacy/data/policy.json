@@ -1,0 +1,6 @@
+{
+  "max_regresiones_por_lote": 2,
+  "umbral_complejidad_alta": 7,
+  "lenguajes_soportados": ["VB6", "COBOL", "PHP5", "PHP8", "Python", "Java", "Delphi"],
+  "soporte_email": "migraciones@empresa.cl"
+}
