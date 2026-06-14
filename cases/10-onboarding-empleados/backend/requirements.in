@@ -3,7 +3,7 @@ uvicorn[standard]
 python-dotenv
 
 # LangGraph
-langgraph>=0.2.0
+langgraph>=1.2.0
 
 # Calidad y pruebas
 ruff
