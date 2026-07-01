@@ -25,16 +25,11 @@ charset-normalizer==3.4.7
     # via requests
 click==8.3.2
     # via uvicorn
-colorama==0.4.6
-    # via
-    #   click
-    #   tqdm
-    #   uvicorn
 cryptography==46.0.7
     # via joserfc
 distro==1.9.0
     # via openai
-fastapi==0.135.3
+fastapi==0.136.1
     # via -r requirements.in
 h11==0.16.0
     # via
@@ -160,6 +155,8 @@ uuid-utils==0.14.1
     #   langsmith
 uvicorn[standard]==0.44.0
     # via -r requirements.in
+uvloop==0.22.1
+    # via uvicorn
 watchfiles==1.1.1
     # via uvicorn
 websockets==16.0
