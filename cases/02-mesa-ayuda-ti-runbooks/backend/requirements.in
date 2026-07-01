@@ -3,6 +3,6 @@ uvicorn[standard]
 python-dotenv
 langgraph>=0.2.0
 langchain-core
-langchain-openai>=1.1.14
+langchain-openai>=1.2.1
 langsmith>=0.7.31
 joserfc
