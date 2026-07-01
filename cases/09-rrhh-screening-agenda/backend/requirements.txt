@@ -194,7 +194,7 @@ pygments==2.20.0
     #   rich
 pyparsing==3.3.2
     # via httplib2
-pypdf==6.13.0
+pypdf==6.13.3
     # via -r requirements.in
 pytest==9.0.3
     # via -r requirements.in
