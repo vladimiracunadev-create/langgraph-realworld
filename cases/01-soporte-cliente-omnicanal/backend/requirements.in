@@ -8,5 +8,5 @@ openai
 pydantic
 pytest
 httpx
-langsmith>=0.7.31
+langsmith>=0.8.5
 joserfc
