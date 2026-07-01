@@ -27,6 +27,14 @@ FILE_MAP = [
     ("settings.py", "settings.py"),
 ]
 
+# Casos exentos por archivo (settings.py con forma distinta al shared).
+# case 13 usa pydantic BaseSettings + singleton `settings` con atributos
+# case-específicos (DATABASE_URL, database_path) que no encajan en el shared
+# funcional. Su settings.py se mantiene case-owned.
+EXEMPT: dict[str, set[str]] = {
+    "13-bi-analista-datos": {"settings.py"},
+}
+
 
 def iter_case_backends():
     for case_dir in sorted(CASES_DIR.iterdir()):
@@ -47,7 +55,10 @@ def main() -> int:
     synced = []
 
     for case_name, backend_src in iter_case_backends():
+        exempt = EXEMPT.get(case_name, set())
         for src_name, dest_name in FILE_MAP:
+            if dest_name in exempt:
+                continue
             source = SHARED / src_name
             target = backend_src / dest_name
             if not source.is_file():
@@ -73,7 +84,11 @@ def main() -> int:
             for d in drift:
                 print(f"  - {d}")
             return 1
-        print(f"OK — todos los casos están sincronizados con shared/ ({sum(1 for _ in iter_case_backends())} casos × {len(FILE_MAP)} archivos).")
+        n_cases = sum(1 for _ in iter_case_backends())
+        print(
+            f"OK — todos los casos están sincronizados con shared/ "
+            f"({n_cases} casos × {len(FILE_MAP)} archivos, con exenciones)."
+        )
         return 0
 
     if synced:
