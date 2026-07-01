@@ -33,20 +33,13 @@ charset-normalizer==3.4.7
     # via requests
 click==8.3.2
     # via uvicorn
-colorama==0.4.6
-    # via
-    #   click
-    #   loguru
-    #   pytest
-    #   tqdm
-    #   uvicorn
 cryptography==46.0.7
     # via
     #   google-auth
     #   joserfc
 distro==1.9.0
     # via openai
-fastapi==0.135.3
+fastapi==0.136.1
     # via -r requirements.in
 google-api-core==2.30.3
     # via google-api-python-client
@@ -248,12 +241,12 @@ uuid-utils==0.14.1
     #   langsmith
 uvicorn[standard]==0.44.0
     # via -r requirements.in
+uvloop==0.22.1
+    # via uvicorn
 watchfiles==1.1.1
     # via uvicorn
 websockets==16.0
     # via uvicorn
-win32-setctime==1.2.0
-    # via loguru
 xxhash==3.6.0
     # via
     #   langgraph
