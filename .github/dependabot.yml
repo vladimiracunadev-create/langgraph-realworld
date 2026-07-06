@@ -9,66 +9,26 @@ updates:
     labels:
       - "dependencies"
       - "security"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
 
-  # Python — raíz
+  # Python — raíz + los 25 casos (glob cubre cases/01..25/backend)
   - package-ecosystem: "pip"
-    directory: "/"
+    directories:
+      - "/"
+      - "/cases/*/backend"
     schedule:
       interval: "weekly"
       day: "monday"
     labels:
       - "dependencies"
       - "security"
-
-  # Python — caso 01
-  - package-ecosystem: "pip"
-    directory: "/cases/01-soporte-cliente-omnicanal/backend"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-    labels:
-      - "dependencies"
-      - "security"
-
-  # Python — caso 02
-  - package-ecosystem: "pip"
-    directory: "/cases/02-mesa-ayuda-ti-runbooks/backend"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-    labels:
-      - "dependencies"
-      - "security"
-
-  # Python — caso 09
-  - package-ecosystem: "pip"
-    directory: "/cases/09-rrhh-screening-agenda/backend"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-    labels:
-      - "dependencies"
-      - "security"
-
-  # Python — caso 10
-  - package-ecosystem: "pip"
-    directory: "/cases/10-onboarding-empleados/backend"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-    labels:
-      - "dependencies"
-      - "security"
-
-  # Python — caso 13
-  - package-ecosystem: "pip"
-    directory: "/cases/13-bi-analista-datos/backend"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-    labels:
-      - "dependencies"
-      - "security"
+    groups:
+      python:
+        patterns:
+          - "*"
 
   # Docker — raíz
   - package-ecosystem: "docker"
@@ -79,3 +39,7 @@ updates:
     labels:
       - "dependencies"
       - "security"
+    groups:
+      docker:
+        patterns:
+          - "*"
