@@ -60,7 +60,7 @@ iniconfig==2.3.0
     # via pytest
 jiter==0.14.0
     # via openai
-joserfc==1.6.7
+joserfc==1.6.8
     # via -r requirements.in
 jsonpatch==1.33
     # via langchain-core
