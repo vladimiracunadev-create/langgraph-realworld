@@ -23,7 +23,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Sync wiki
-        uses: Andrew-Chen-Wang/github-wiki-action@6448478bd55f1f3f752c93af8ac03207eccc3213
+        uses: Andrew-Chen-Wang/github-wiki-action@1bbb4280446f9630e8e21a18012cbacf3b0f992e
         with:
           path: docs/wiki
           commit-message: "Sync docs/wiki to Wiki"
