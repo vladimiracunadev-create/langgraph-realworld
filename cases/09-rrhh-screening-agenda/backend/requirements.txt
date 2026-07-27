@@ -79,7 +79,7 @@ h11==0.16.0
     #   uvicorn
 httpcore==1.0.9
     # via httpx
-httplib2==0.31.2
+httplib2==0.32.0
     # via
     #   google-api-python-client
     #   google-auth-httplib2
@@ -173,7 +173,7 @@ protobuf==7.34.1
     #   google-api-core
     #   googleapis-common-protos
     #   proto-plus
-pyasn1==0.6.3
+pyasn1==0.6.4
     # via pyasn1-modules
 pyasn1-modules==0.4.2
     # via google-auth
@@ -194,7 +194,7 @@ pygments==2.20.0
     #   rich
 pyparsing==3.3.2
     # via httplib2
-pypdf==6.13.3
+pypdf==6.14.2
     # via -r requirements.in
 pytest==9.0.3
     # via -r requirements.in
