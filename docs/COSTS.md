@@ -1,6 +1,6 @@
 # Costos de operación — DEMO vs LIVE
 
-> **Versión**: 4.11.0 | **Filosofía**: DEMO-first. Todos los casos funcionan sin claves externas. LIVE es **opt-in caso por caso**.
+> **Versión**: 4.15.0 | **Filosofía**: DEMO-first. Todos los casos funcionan sin claves externas. LIVE es **opt-in caso por caso**.
 
 Este documento responde a una pregunta concreta: *"el repo está operativo por DEMOs — ¿qué hace falta y cuánto cuesta para llevarlo a producción real?"*. La respuesta corta: la mayoría de casos cruza a LIVE con solo `OPENAI_API_KEY`. Hay tres casos con stubs de proveedores SaaS que requieren contratos enterprise.
 

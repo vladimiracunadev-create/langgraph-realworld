@@ -1,7 +1,7 @@
 ﻿# Especificaciones Tecnicas
 
 > [!NOTE]
-> **Version**: 4.2.0 | **Estado**: Industrial | **Audiencia**: Senior Backend Engineers, SREs
+> **Version**: 4.15.0 | **Estado**: Industrial | **Audiencia**: Senior Backend Engineers, SREs
 
 ## Stack Core
 

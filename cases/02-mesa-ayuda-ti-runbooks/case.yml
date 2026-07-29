@@ -1,7 +1,7 @@
 ﻿id: "02"
 slug: "02-mesa-ayuda-ti-runbooks"
 name: "Mesa de Ayuda TI / Runbooks"
-description: "DiagnÃ³stico y ejecuciÃ³n de runbooks automatizados con verificaciÃ³n. Modo DEMO/LIVE."
+description: "Diagnóstico y ejecución de runbooks automatizados con verificación. Modo DEMO/LIVE."
 ports:
   - 8002
 dependencies: []
