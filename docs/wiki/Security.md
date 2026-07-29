@@ -53,7 +53,7 @@ Resultado de la auditoria adversarial sobre v4.14.0. Cuatro PRs mergeados (#63, 
 
 ### Exposicion externa opcional
 
-- Los 21 casos operativos aceptan `DEMO_AUTH_TOKEN` para exigir el header `X-Demo-Token` en sus endpoints operativos.
+- Los 25 casos operativos aceptan `DEMO_AUTH_TOKEN` para exigir el header `X-Demo-Token` en sus endpoints operativos.
 - Los mismos casos aceptan `RATE_LIMIT_RPM` para aplicar rate limiting en memoria por cliente.
 - `TRUST_PROXY_HEADERS=false` por defecto evita confiar en `X-Forwarded-For` salvo despliegue detras de un proxy controlado.
 - Estos controles son opt-in para no romper la experiencia local ni los ejemplos pedagogicos.

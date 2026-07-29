@@ -4,7 +4,7 @@ lgrw_common.settings — Carga de .env y helpers compartidos entre los 25 backen
 Fuente canónica. NO editar las copias por caso en `cases/*/backend/src/settings.py`
 directamente: editar este archivo y correr `python scripts/sync_shared.py`.
 
-v4.15.2: superset de helpers que consumen los distintos casos (paths, LLM,
+v4.15.0: superset de helpers que consumen los distintos casos (paths, LLM,
 puertos, CORS, checkpoint DB, fechas y datos case-specific). Los casos con un
 `settings.py` con forma radicalmente distinta (p.ej. case 13 con pydantic
 BaseSettings) quedan exentos del sync.

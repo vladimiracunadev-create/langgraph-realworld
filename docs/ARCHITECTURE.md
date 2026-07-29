@@ -1,7 +1,7 @@
 ﻿# Arquitectura del Sistema
 
 > [!NOTE]
-> **Version**: 4.11.0 | **Estado**: Industrial | **Audiencia**: Arquitectos Cloud, System Designers, DevOps
+> **Version**: 4.15.0 | **Estado**: Industrial | **Audiencia**: Arquitectos Cloud, System Designers, DevOps
 
 ## Vision General
 
@@ -13,7 +13,7 @@
 - **Backends operativos**: casos 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15, 17, 18, 19, 21, 22 y 25 con endpoints reales, modo DEMO/LIVE y contratos de estado.
 - **Orquestacion agentica**: LangGraph con `TypedDict`, edges condicionales, checkpoints y herramientas acotadas por dominio.
 - **Operacion local**: Docker Compose, Hub CLI y arranque directo por `uvicorn`.
-- **Seguridad automatizada**: GitHub Actions con pinning, CodeQL, `detect-secrets`, `pip-audit` y validacion dedicada de los 21 casos operativos.
+- **Seguridad automatizada**: GitHub Actions con pinning, CodeQL, `detect-secrets`, `pip-audit` y validacion dedicada de los 25 casos operativos.
 
 ## Modelo de seguridad integrado
 
