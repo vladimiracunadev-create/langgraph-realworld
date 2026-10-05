@@ -4,13 +4,13 @@
 #
 #    pip-compile --no-strip-extras --output-file=requirements.txt requirements.in
 #
-aiosmtplib==5.1.1
+aiosmtplib==5.1.2
     # via -r requirements.in
 annotated-doc==0.0.4
     # via fastapi
 annotated-types==0.7.0
     # via pydantic
-anyio==4.13.0
+anyio==4.14.2
     # via
     #   httpx
     #   openai
@@ -131,7 +131,7 @@ langsmith==0.8.18
     #   langchain-core
 loguru==0.7.3
     # via -r requirements.in
-oauthlib==3.3.1
+oauthlib==4.0.0
     # via requests-oauthlib
 openai==2.31.0
     # via
@@ -238,7 +238,7 @@ typing-inspection==0.4.2
     #   pydantic
 uritemplate==4.2.0
     # via google-api-python-client
-urllib3==2.7.0
+urllib3==2.8.0
     # via
     #   botocore
     #   requests
